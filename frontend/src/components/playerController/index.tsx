@@ -1,13 +1,41 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Player } from '@/components'
 import { EpisodeCover } from './components/episodeCover'
 import { VolumeController } from './components/volumeController'
 import { PlayerButtons } from './components/playerButtons'
 import { Slider } from '@radix-ui/themes'
 import './index.modules.scss'
+import UserStore from '@/store/user'
 
 export const PlayController = () => {
   const [open, setOpen] = React.useState<boolean>(false)
+  const [progress, setProgress] = React.useState<number>(0)
+
+  useEffect(() => {
+    UserStore.initSetMusic()
+  }, [])
+
+  const handleMusic = (type: string, time: number = 0) => {
+    console.log('handleMusic', type)
+    switch (type) {
+      case 'play':
+        UserStore.musicInfo.play()
+        break
+      case 'pause':
+        UserStore.musicInfo.pause()
+        break
+      case 'next':
+        UserStore.musicInfo.playNext()
+        break
+      case 'prev':
+        UserStore.musicInfo.playPre()
+        break
+      case 'progres':
+        UserStore.musicInfo.seek(time)
+      default:
+        break
+    }
+  }
 
   return (
     <>
@@ -16,11 +44,23 @@ export const PlayController = () => {
           <Slider
             className="progress-slider"
             size="1"
+            step={1}
+            min={0}
+            max={100}
             radius="none"
-            defaultValue={[30]}
+            value={[progress]}
+            onValueChange={(value) => {
+              setProgress(value[0])
+              // UserStore.musicInfo.curProgress = value[0]
+            }}
+            onValueCommit={(value) => {
+              console.log("结算=", value)
+              handleMusic('progres',value[0])
+            }}
+            defaultValue={[0]}
           />
         </div>
-
+        
         <div className="left">
           <EpisodeCover
             onOpen={() => {
@@ -30,7 +70,7 @@ export const PlayController = () => {
         </div>
 
         <div className="middle">
-          <PlayerButtons />
+          <PlayerButtons onHandleMusic={(e: string) => handleMusic(e)} />
         </div>
 
         <div className="right">
