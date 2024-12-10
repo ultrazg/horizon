@@ -2,13 +2,15 @@ type userType = {
   uid: string
   avatar?: string
   nickname?: string
-  gender?: string
+  gender?: genderType
   industry?: string
   mobilePhoneNumber?: string
   ipLoc?: string
   wechatUserInfo?: wechatUserInfoType
   jikeUserInfo?: jikeUserInfoType
 }
+
+type genderType = 'MALE' | 'FEMALE'
 
 type wechatUserInfoType = {
   nickName?: string
@@ -43,4 +45,4 @@ export const USER_PREFERENCE_ENUM = {
   rejectRecommendation: 'rejectRecommendation',
 }
 
-export type { userType, userStats, userPreferenceType }
+export type { userType, userStats, userPreferenceType, genderType }

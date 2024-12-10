@@ -12,10 +12,13 @@ import { PlayedList } from './components/playedList'
 import './index.modules.scss'
 
 export const Profile: React.FC = () => {
+  const userInfo: userType = Storage.get('user_info')
   const [followModal, setFollowModal] = useState<{
+    uid: string
     type: 'FOLLOWING' | 'FOLLOWER'
     open: boolean
   }>({
+    uid: '',
     type: 'FOLLOWING',
     open: false,
   })
@@ -25,13 +28,10 @@ export const Profile: React.FC = () => {
     subscriptionCount: 0,
     totalPlayedSeconds: 0,
   })
-
-  const userInfo: userType = Storage.get('user_info')
-
   const goMySubscribe = useNavigateTo('/subscription')
-
   const onFollowHandle = (type: 'FOLLOWING' | 'FOLLOWER') => {
     setFollowModal({
+      uid: userInfo.uid,
       type,
       open: true,
     })
@@ -71,13 +71,13 @@ export const Profile: React.FC = () => {
           <div className="profile-nickname">
             {userInfo.nickname}
             <span className="gender">
-              {userInfo.gender === 'MALE' ? (
+              {userInfo?.gender === 'MALE' ? (
                 <SlSymbolMale
                   fontSize="18"
                   color="royalblue"
                 />
               ) : null}
-              {userInfo.gender === 'FEMALE' ? (
+              {userInfo?.gender === 'FEMALE' ? (
                 <SlSymbleFemale
                   fontSize="18"
                   color="pink"
@@ -145,10 +145,12 @@ export const Profile: React.FC = () => {
       <PlayedList />
 
       <FollowModal
+        uid={followModal.uid}
         type={followModal.type}
         open={followModal.open}
         onClose={() => {
           setFollowModal({
+            uid: '',
             type: 'FOLLOWING',
             open: false,
           })

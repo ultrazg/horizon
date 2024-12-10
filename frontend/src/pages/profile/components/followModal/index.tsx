@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Modal, ProfileModal } from '@/components'
 import { modalType } from '@/types/modal'
 import {
@@ -10,17 +10,24 @@ import {
   Grid,
   Text,
   ScrollArea,
+  Spinner,
 } from '@radix-ui/themes'
-import { CheckIcon } from '@radix-ui/react-icons'
+import { following, follower } from '@/api/follow'
 import { useDisplayInfo } from '@/hooks'
 import './index.modules.scss'
+import { imageType } from '@/types/image'
+import { toast } from '@/utils'
+import { SlSymbleFemale, SlSymbolMale } from 'react-icons/sl'
+import { genderType } from '@/types/user'
 
 type IProps = {
+  uid: string
   type: 'FOLLOWING' | 'FOLLOWER'
 } & modalType
 
-export const FollowModal: React.FC<IProps> = ({ type, onClose, open }) => {
+export const FollowModal: React.FC<IProps> = ({ uid, type, onClose, open }) => {
   const [height] = useState<number>(useDisplayInfo().Height * 0.4)
+  const [loading, setLoading] = useState<boolean>(false)
   const [profileModal, setProfileModal] = useState<{
     open: boolean
     uid: string
@@ -28,68 +35,156 @@ export const FollowModal: React.FC<IProps> = ({ type, onClose, open }) => {
     open: false,
     uid: '',
   })
-  const count = [1]
+  const [lists, setLists] = useState<
+    {
+      avatar: { picture: imageType }
+      nickname: string
+      uid: string
+      gender?: genderType
+      relation: 'STRANGE' | 'FOLLOWING'
+    }[]
+  >([])
+
+  /**
+   * 获取关注列表
+   */
+  const getFollowingList = () => {
+    setLoading(true)
+    const params = {
+      uid,
+    }
+    following(params)
+      .then((res) => setLists(res.data.data))
+      .catch(() => {
+        toast('获取关注列表失败')
+      })
+      .finally(() => {
+        setLoading(false)
+      })
+  }
+
+  /**
+   * 获取粉丝列表
+   */
+  const getFollowerList = () => {
+    setLoading(true)
+    const params = {
+      uid,
+    }
+    follower(params)
+      .then((res) => setLists(res.data.data))
+      .catch(() => {
+        toast('获取粉丝列表失败')
+      })
+      .finally(() => {
+        setLoading(false)
+      })
+  }
+
+  useEffect(() => {
+    if (open) {
+      if (type === 'FOLLOWING') {
+        getFollowingList()
+      }
+      if (type === 'FOLLOWER') {
+        getFollowerList()
+      }
+    }
+
+    return () => {
+      setLists([])
+    }
+  }, [open])
 
   return (
     <Modal
-      title={type === 'FOLLOWING' ? '我的关注' : '我的粉丝'}
+      title={`我的${type === 'FOLLOWING' ? '关注' : '粉丝'}${lists.length > 0 ? `(${lists.length})` : ''}`}
       open={open}
       onClose={onClose}
     >
-      <div className="follow-modal">
-        <ScrollArea
-          type="hover"
-          scrollbars="vertical"
-          style={{ height }}
-        >
-          <Grid
-            columns="2"
-            mt="3"
-            mr="4"
-            gap="4"
-            width="auto"
+      <Spinner loading={loading}>
+        <div className="follow-modal">
+          <ScrollArea
+            type="hover"
+            scrollbars="vertical"
+            style={{ height }}
           >
-            {count.map((item: any, index: number) => (
-              <Box
-                className="chunk"
-                mb="4"
-                key={index}
-              >
-                <Flex gap="2">
-                  <Avatar
-                    className="avatar"
-                    src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?&w=256&h=256&q=70&crop=focalpoint&fp-x=0.5&fp-y=0.3&fp-z=1&fit=crop"
-                    fallback="A"
-                    onClick={() => {
-                      setProfileModal({
-                        open: true,
-                        uid: '123',
-                      })
-                    }}
-                  />
-                  <Box>
-                    <Text
-                      className="nickname"
-                      mb="1"
-                      size="3"
-                    >
-                      不开玩笑 Jokes Aside
-                    </Text>
-                  </Box>
-                  <Button
-                    variant="soft"
-                    color="gray"
-                    size="1"
+            <Grid
+              columns="2"
+              mt="3"
+              mr="4"
+              gap="4"
+              width="auto"
+            >
+              {lists.map(
+                (
+                  item: {
+                    avatar: { picture: imageType }
+                    nickname: string
+                    uid: string
+                    gender?: genderType
+                    relation: 'STRANGE' | 'FOLLOWING'
+                  },
+                  index: number,
+                ) => (
+                  <Box
+                    className="chunk"
+                    mb="4"
+                    key={index}
                   >
-                    <CheckIcon />
-                    已关注
-                  </Button>
-                </Flex>
-              </Box>
-            ))}
-          </Grid>
-        </ScrollArea>
-      </div>
+                    <Flex gap="2">
+                      <Avatar
+                        className="avatar"
+                        src={item.avatar.picture.picUrl}
+                        fallback={item.nickname}
+                        onClick={() => {
+                          setProfileModal({
+                            open: true,
+                            uid: item.uid,
+                          })
+                        }}
+                      />
+                      <Box>
+                        <Text
+                          className="nickname"
+                          mb="1"
+                          size="3"
+                          title={item.nickname}
+                        >
+                          {item.nickname}
+                        </Text>
+                        <Text>
+                          {item?.gender === 'MALE' ? (
+                            <SlSymbolMale
+                              fontSize="12"
+                              color="royalblue"
+                            />
+                          ) : null}
+                          {item?.gender === 'FEMALE' ? (
+                            <SlSymbleFemale
+                              fontSize="12"
+                              color="pink"
+                            />
+                          ) : null}
+                        </Text>
+                      </Box>
+                      <Box>
+                        <Button
+                          variant="soft"
+                          color="gray"
+                          size="1"
+                        >
+                          {item.relation === 'FOLLOWING' ? '已关注' : '关注'}
+                        </Button>
+                      </Box>
+                    </Flex>
+                  </Box>
+                ),
+              )}
+            </Grid>
+          </ScrollArea>
+        </div>
+      </Spinner>
 
       <Flex
         gap="3"

@@ -27,7 +27,6 @@ import {
   UpdateConfig,
   Storage,
 } from '@/utils'
-import { ping } from '@/api/ping'
 import { getUserPreference, updateUserPreference } from '@/api/user'
 import { useNavigateTo } from '@/hooks'
 import APP_ICON from '@/assets/images/logo.png'
@@ -58,13 +57,6 @@ export const Setting: React.FC = () => {
 
   const checkUpdate = () => {
     // TODO:  check update
-    ping()
-      .then((res) => {
-        console.log('res', res)
-      })
-      .catch((err) => {
-        console.error('error', err)
-      })
   }
 
   /**
