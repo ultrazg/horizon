@@ -103,87 +103,102 @@ export const FollowModal: React.FC<IProps> = ({ uid, type, onClose, open }) => {
       onClose={onClose}
     >
       <Spinner loading={loading}>
-        <div className="follow-modal">
-          <ScrollArea
-            type="hover"
-            scrollbars="vertical"
-            style={{ height }}
-          >
-            <Grid
-              columns="2"
-              mt="3"
-              mr="4"
-              gap="4"
-              width="auto"
+        {lists.length > 0 ? (
+          <div className="follow-modal">
+            <ScrollArea
+              type="hover"
+              scrollbars="vertical"
+              style={{ height }}
             >
-              {lists.map(
-                (
-                  item: {
-                    avatar: { picture: imageType }
-                    nickname: string
-                    uid: string
-                    gender?: genderType
-                    relation: 'STRANGE' | 'FOLLOWING'
-                  },
-                  index: number,
-                ) => (
-                  <Box
-                    className="chunk"
-                    mb="4"
-                    key={index}
-                  >
-                    <Flex gap="2">
-                      <Avatar
-                        className="avatar"
-                        src={item.avatar.picture.picUrl}
-                        fallback={item.nickname}
-                        onClick={() => {
-                          setProfileModal({
-                            open: true,
-                            uid: item.uid,
-                          })
-                        }}
-                      />
-                      <Box>
-                        <Text
-                          className="nickname"
-                          mb="1"
-                          size="3"
-                          title={item.nickname}
-                        >
-                          {item.nickname}
-                        </Text>
-                        <Text>
-                          {item?.gender === 'MALE' ? (
-                            <SlSymbolMale
-                              fontSize="12"
-                              color="royalblue"
-                            />
-                          ) : null}
-                          {item?.gender === 'FEMALE' ? (
-                            <SlSymbleFemale
-                              fontSize="12"
-                              color="pink"
-                            />
-                          ) : null}
-                        </Text>
-                      </Box>
-                      <Box>
-                        <Button
-                          variant="soft"
-                          color="gray"
-                          size="1"
-                        >
-                          {item.relation === 'FOLLOWING' ? '已关注' : '关注'}
-                        </Button>
-                      </Box>
-                    </Flex>
-                  </Box>
-                ),
-              )}
-            </Grid>
-          </ScrollArea>
-        </div>
+              <Grid
+                columns="2"
+                mt="3"
+                mr="4"
+                gap="4"
+                width="auto"
+              >
+                {lists.map(
+                  (
+                    item: {
+                      avatar: { picture: imageType }
+                      nickname: string
+                      uid: string
+                      gender?: genderType
+                      relation: 'STRANGE' | 'FOLLOWING'
+                    },
+                    index: number,
+                  ) => (
+                    <Box
+                      className="chunk"
+                      mb="4"
+                      key={index}
+                    >
+                      <Flex gap="2">
+                        <Avatar
+                          className="avatar"
+                          src={item.avatar.picture.picUrl}
+                          fallback={item.nickname}
+                          onClick={() => {
+                            setProfileModal({
+                              open: true,
+                              uid: item.uid,
+                            })
+                          }}
+                        />
+                        <Box>
+                          <Text
+                            className="nickname"
+                            mb="1"
+                            size="3"
+                            title={item.nickname}
+                          >
+                            {item.nickname}
+                          </Text>
+                          <Text>
+                            {item?.gender === 'MALE' ? (
+                              <SlSymbolMale
+                                fontSize="12"
+                                color="royalblue"
+                              />
+                            ) : null}
+                            {item?.gender === 'FEMALE' ? (
+                              <SlSymbleFemale
+                                fontSize="12"
+                                color="pink"
+                              />
+                            ) : null}
+                          </Text>
+                        </Box>
+                        <Box>
+                          <Button
+                            variant="soft"
+                            color="gray"
+                            size="1"
+                          >
+                            {item.relation === 'FOLLOWING' ? '已关注' : '关注'}
+                          </Button>
+                        </Box>
+                      </Flex>
+                    </Box>
+                  ),
+                )}
+              </Grid>
+            </ScrollArea>
+          </div>
+        ) : (
+          <div
+            style={{
+              width: '100%',
+              height: '80%',
+              color: 'gray',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            暂无数据
+          </div>
+        )}
       </Spinner>
 
       <Flex
