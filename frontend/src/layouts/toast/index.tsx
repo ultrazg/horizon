@@ -25,27 +25,32 @@ export const useToast = () => useContext(ToastContext)
 export const ToastProvider = ({ children }: { children: any }) => {
   const [toasts, setToasts] = useState<any>([])
 
-  const addToast = useCallback((message: string, options?: ToastOptions) => {
-    const id = Date.now() // 唯一 ID
-    const newToast = { id, message, ...options }
+  const addToast = useCallback(
+    (message: string, options?: ToastOptions, cb?: () => void) => {
+      const id = Date.now() // 唯一 ID
+      const newToast = { id, message, ...options }
 
-    setToasts((prevToasts: any) => [...prevToasts, newToast])
+      setToasts((prevToasts: any) => [...prevToasts, newToast])
 
-    if (!options?.duration || options?.duration > 0) {
-      setTimeout(() => {
-        const toastElement = document.getElementById(`toast-${id}`)
-        if (toastElement) {
-          toastElement.classList.remove('show')
-        }
-
+      if (!options?.duration || options?.duration > 0) {
         setTimeout(() => {
-          setToasts((prevToasts: any) =>
-            prevToasts.filter((toast: any) => toast.id !== id),
-          )
-        }, 300)
-      }, options?.duration || 3000)
-    }
-  }, [])
+          const toastElement = document.getElementById(`toast-${id}`)
+          if (toastElement) {
+            toastElement.classList.remove('show')
+          }
+
+          cb && cb()
+
+          setTimeout(() => {
+            setToasts((prevToasts: any) =>
+              prevToasts.filter((toast: any) => toast.id !== id),
+            )
+          }, 300)
+        }, options?.duration || 3000)
+      }
+    },
+    [],
+  )
 
   const removeToast = useCallback((id: number) => {
     setToasts((prevToasts: any) =>
