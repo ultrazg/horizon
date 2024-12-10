@@ -35,6 +35,7 @@ import {
   userPreferenceType,
   USER_PREFERENCE_ENUM,
 } from '@/types/user'
+import { BlockedModal } from './components/blockedModal'
 import './index.modules.scss'
 
 export const Setting: React.FC = () => {
@@ -52,6 +53,7 @@ export const Setting: React.FC = () => {
     rejectRecommendation: false,
   })
   const userInfo: userType = Storage.get('user_info')
+  const [blockedModal, setBlockedModal] = useState<boolean>(false)
 
   const goAbout = useNavigateTo('/about')
 
@@ -284,12 +286,37 @@ export const Setting: React.FC = () => {
             />
           </Box>
         </Flex>
+        <Separator
+          my="3"
+          size="4"
+        />
+        <Flex
+          style={{ cursor: 'pointer' }}
+          onClick={() => {
+            setBlockedModal(true)
+          }}
+        >
+          <Box width="100%">
+            小黑屋
+            <Tooltip content="已拉黑的用户">
+              <QuestionMarkCircledIcon
+                style={{
+                  marginLeft: '6px',
+                  cursor: 'help',
+                }}
+              />
+            </Tooltip>
+          </Box>
+          <Box>
+            <ChevronRightIcon />
+          </Box>
+        </Flex>
       </Card>
 
       <h4>其他</h4>
       <Card>
         <Flex>
-          <Box width="100%">更新</Box>
+          <Box width="100%">软件更新</Box>
           <Box>
             <Button
               size={'1'}
@@ -374,6 +401,13 @@ export const Setting: React.FC = () => {
           v{APP_VERSION}_{envInfo?.platform}_{envInfo?.arch}
         </p>
       </div>
+
+      <BlockedModal
+        open={blockedModal}
+        onClose={() => {
+          setBlockedModal(false)
+        }}
+      />
     </div>
   )
 }
