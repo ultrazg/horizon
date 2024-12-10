@@ -1,7 +1,7 @@
 import React from 'react'
 import { ColorfulShadow } from '@/components'
 import { QuoteIcon, UpdateIcon } from '@radix-ui/react-icons'
-import { Button, Spinner } from '@radix-ui/themes'
+import { Button, Skeleton } from '@radix-ui/themes'
 import './index.modules.scss'
 import { PopularType, TargetType } from '@/pages/home'
 
@@ -20,9 +20,7 @@ const PopularPart: React.FC<IProps> = ({ data, loading, onRefresh }) => {
     <div className="popular-layout">
       <h3>大家都在听</h3>
 
-      {loading ? (
-        <Spinner />
-      ) : (
+      <Skeleton loading={loading}>
         <div className="popular-content">
           {data?.target?.map((item: TargetType) => (
             <div
@@ -53,7 +51,7 @@ const PopularPart: React.FC<IProps> = ({ data, loading, onRefresh }) => {
             </div>
           ))}
         </div>
-      )}
+      </Skeleton>
 
       <div className="reload-button">
         <Button
