@@ -10,5 +10,5 @@ type playedListType = {
 }
 
 /** 查询收听历史 */
-export const playedList = (params: playedListType) =>
+export const playedList = (params: playedListType): Promise<responseType> =>
   httpRequest.post(api.playedList, params)

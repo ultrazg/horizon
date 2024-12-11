@@ -34,6 +34,9 @@ import { userStats } from '@/types/user'
 import { formatTime } from '@/pages/profile/components/mileageDuration'
 import { stickerType } from '@/types/sticker'
 import { sticker } from '@/api/sticker'
+import { playedList } from '@/api/played'
+import { EpisodeType } from '@/types/episode'
+import dayjs from 'dayjs'
 
 type IProps = {
   uid: string
@@ -66,9 +69,25 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
     records: [],
     total: 0,
   })
+  const [playedLists, setPlayedLists] = useState<EpisodeType[]>([])
 
   const avoidDefaultDomBehavior = (e: Event) => {
     e.preventDefault()
+  }
+
+  /**
+   * 获取最近听过列表
+   */
+  const onGetPlayedList = () => {
+    const params = {
+      uid,
+    }
+
+    playedList(params)
+      .then((res) => setPlayedLists(res.data.data))
+      .catch((err) => {
+        console.error(err)
+      })
   }
 
   /**
@@ -130,6 +149,7 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
       getUserProfile()
       onGetUserStats()
       onGetSticker()
+      onGetPlayedList()
     }
   }, [open])
 
@@ -198,7 +218,7 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
                 className="background-image"
                 style={{
                   background: `url(${profileData?.avatar.picture.picUrl}) no-repeat center center / cover`,
-                  filter: 'blur(12px)',
+                  filter: 'blur(30px)',
                 }}
               />
               <Avatar
@@ -327,6 +347,12 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
                     setStickerModalOpen(true)
                   }}
                 >
+                  <div
+                    className="sticker-bgi"
+                    style={{
+                      backgroundImage: `url(${stickerData.records.length === 0 ? '' : stickerData.records[0].image.picUrl})`,
+                    }}
+                  />
                   <div>
                     {stickerData.total}张贴纸
                     <ChevronRightIcon />
@@ -346,31 +372,56 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
             <div className="pm-history-content">
               <h3>最近听过</h3>
 
-              <div className="pm-history-episode-item">
-                <div className="left">
-                  <ColorfulShadow
-                    className="episode-cover"
-                    curPointer
-                    mask
-                    src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?&w=256&h=256&q=70&crop=focalpoint&fp-x=0.5&fp-y=0.3&fp-z=1&fit=crop"
-                  />
+              {playedLists.length === 0 && (
+                <div
+                  style={{
+                    width: '100%',
+                    height: '5rem',
+                    color: 'gray',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  暂无数据
                 </div>
-                <div className="right">
-                  <p>小米SU7营销复盘：你所知道的为什么都是错的-Vol 46</p>
-                  <p>
-                    本期节目关注风口上的小米汽车，主播借助在营销、产品上的经验解答。欢迎在评论区留言发表你对小米汽车的感受与看法，对于节目话题的更多观点，获取更多未呈现在节目中的扩展阅读，欢迎加群讨论
-                  </p>
-                  <p>
-                    <span>30分钟 · 03/29</span>
-                    <span>
-                      <SlEarphones />
-                      4.3万+
-                      <SlBubble />
-                      349
-                    </span>
-                  </p>
+              )}
+
+              {playedLists.map((item) => (
+                <div
+                  className="pm-history-episode-item"
+                  key={item.eid}
+                >
+                  <div className="left">
+                    <ColorfulShadow
+                      className="episode-cover"
+                      curPointer
+                      mask
+                      src={
+                        item.image
+                          ? item.image.picUrl
+                          : item.podcast.image.picUrl
+                      }
+                    />
+                  </div>
+                  <div className="right">
+                    <p>{item.title}</p>
+                    <p title={item.description}>{item.description}</p>
+                    <p>
+                      <span>
+                        {Math.floor(item.duration / 60)}分钟 ·{' '}
+                        {dayjs(item.pubDate).format('MM/DD')}
+                      </span>
+                      <span>
+                        <SlEarphones />
+                        {item.playCount}
+                        <SlBubble />
+                        {item.commentCount}
+                      </span>
+                    </p>
+                  </div>
                 </div>
-              </div>
+              ))}
             </div>
           </div>
 
