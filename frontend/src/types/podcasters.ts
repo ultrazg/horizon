@@ -1,19 +1,5 @@
-import { imageType } from '@/types/image'
+import { baseUserType } from '@/types/user'
 
-type PodcasterType = {
-  avatar: {
-    picture: imageType
-  }
-  bio: string
-  ipLoc: string
-  isBlockedByViewer: boolean
-  isCancelled: boolean
-  isNicknameSet: boolean
-  nickname: string
-  readTrackInfo: any
-  relation: string
-  type: string
-  uid: string
-}
+type PodcasterType = baseUserType
 
 export type { PodcasterType }

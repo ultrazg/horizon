@@ -13,12 +13,52 @@ import {
   Spinner,
   Text,
 } from '@radix-ui/themes'
-import { blockedUserLists, blockedUserRemove } from '@/api/blocked'
+import {
+  blockedUserLists,
+  blockedUserRemove,
+  blockedUserCreate,
+} from '@/api/blocked'
 import { imageType } from '@/types/image'
 import { genderType } from '@/types/user'
 import { toast } from '@/utils'
 import { SlSymbleFemale, SlSymbolMale } from 'react-icons/sl'
 import { useDisplayInfo } from '@/hooks'
+
+/**
+ * 取消黑名单用户
+ * @param uid 用户uid
+ * @param cb 回调函数
+ */
+export const onBlockedUserRemove = (uid: string, cb?: () => void) => {
+  const params = {
+    uid,
+  }
+  blockedUserRemove(params)
+    .then((res) => {
+      toast(res.data.toast, {}, cb)
+    })
+    .catch(() => {
+      toast('操作失败')
+    })
+}
+
+/**
+ * 添加黑名单用户
+ * @param uid 用户uid
+ * @param cb 回调函数
+ */
+export const onBlockedUserCreate = (uid: string, cb?: () => void) => {
+  const params = {
+    uid,
+  }
+  blockedUserCreate(params)
+    .then((res) => {
+      toast(res.data.toast, {}, cb)
+    })
+    .catch(() => {
+      toast('操作失败')
+    })
+}
 
 export const BlockedModal: React.FC<modalType> = ({ open, onClose }) => {
   const [height] = useState<number>(useDisplayInfo().Height * 0.4)
@@ -52,25 +92,6 @@ export const BlockedModal: React.FC<modalType> = ({ open, onClose }) => {
       })
       .finally(() => {
         setLoading(false)
-      })
-  }
-
-  /**
-   * 取消拉黑用户
-   * @param uid
-   */
-  const onBlockedUserRemove = (uid: string) => {
-    const params = {
-      uid,
-    }
-    blockedUserRemove(params)
-      .then((res) => {
-        toast(res.data.toast, {}, () => {
-          getLists()
-        })
-      })
-      .catch(() => {
-        toast('操作失败')
       })
   }
 
@@ -157,7 +178,7 @@ export const BlockedModal: React.FC<modalType> = ({ open, onClose }) => {
                             color="gray"
                             size="1"
                             onClick={() => {
-                              onBlockedUserRemove(item.uid)
+                              onBlockedUserRemove(item.uid, getLists)
                             }}
                           >
                             解除

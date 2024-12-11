@@ -36,12 +36,12 @@
       -webkit-user-select: none;
       cursor: default;
       z-index: 10;
-      font-size: 0.7rem;
+      font-size: 0.8rem;
       position: absolute;
       top: 1rem;
       right: 1rem;
-      color: rgba(215, 215, 215, 0.6);
-      text-shadow: 0 0 0 #3f3f3f;
+      color: rgba(255, 255, 255, 0.7);
+      text-shadow: 0 0 6px #3f3f3f;
     }
   }
 
@@ -132,10 +132,20 @@
               color: $secondary-font-color;
               overflow: hidden;
               display: -webkit-box;
-              line-clamp: 3;
+              line-clamp: 2;
               box-orient: vertical;
               -webkit-box-orient: vertical;
-              -webkit-line-clamp: 3;
+              -webkit-line-clamp: 2;
+            }
+
+            &:nth-child(3) {
+              color: $secondary-font-color;
+              overflow: hidden;
+              display: -webkit-box;
+              line-clamp: 1;
+              box-orient: vertical;
+              -webkit-box-orient: vertical;
+              -webkit-line-clamp: 1;
             }
           }
         }

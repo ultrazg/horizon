@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Dialog,
   Avatar,
@@ -19,21 +19,89 @@ import { modalType } from '@/types/modal'
 import { useDisplayInfo } from '@/hooks'
 import './index.modules.scss'
 import { ColorfulShadow, MyDropdownMenu, StickerModal } from '@/components'
-import { SlBubble, SlEarphones } from 'react-icons/sl'
+import {
+  SlBubble,
+  SlEarphones,
+  SlSymbleFemale,
+  SlSymbolMale,
+} from 'react-icons/sl'
+import { getProfile } from '@/api/profile'
+import { getUserStats } from '@/api/user'
+import { toast } from '@/utils'
+import { UserProfileType } from '@/types/profile'
+import { renderGender } from '@/utils/string'
+import { userStats } from '@/types/user'
+import { formatTime } from '@/pages/profile/components/mileageDuration'
 
 type IProps = {
   uid: string
 } & modalType
 
+/**
+ * 个人信息弹窗
+ * @param uid
+ * @param open
+ * @param onClose
+ * @constructor
+ */
 export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
   const [width] = useState<number>(useDisplayInfo().Width * 0.5)
   const [height] = useState<number>(useDisplayInfo().Height * 0.7)
   const [stickerModalOpen, setStickerModalOpen] = useState<boolean>(false)
   const [dropDownMenuOpen, setDropDownMenuOpen] = useState<boolean>(false)
+  const [profileData, setProfileData] = useState<UserProfileType>()
+  const [stats, setStats] = useState<userStats>({
+    followerCount: 0,
+    followingCount: 0,
+    subscriptionCount: 0,
+    totalPlayedSeconds: 0,
+  })
+  const [time, setTime] = useState<number[]>([0, 0, 0])
 
   const avoidDefaultDomBehavior = (e: Event) => {
     e.preventDefault()
   }
+
+  /**
+   * 获取用户的统计信息
+   */
+  const onGetUserStats = () => {
+    const params = {
+      uid,
+    }
+
+    getUserStats(params)
+      .then((res) => {
+        const total: number = res.data.data.totalPlayedSeconds
+
+        setTime(formatTime(total))
+        setStats(res.data.data)
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+
+  /**
+   * 获取用户个人信息
+   */
+  const getUserProfile = () => {
+    const params = {
+      uid,
+    }
+    getProfile(params)
+      .then((res) => setProfileData(res.data.data))
+      .catch(() => {
+        toast('获取用户信息失败')
+      })
+  }
+
+  useEffect(() => {
+    if (open) {
+      getUserProfile()
+      onGetUserStats()
+    }
+  }, [open])
 
   return (
     <Dialog.Root
@@ -85,25 +153,29 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
                   </IconButton>
                 }
               >
-                <MyDropdownMenu.Item>取消关注</MyDropdownMenu.Item>
+                <MyDropdownMenu.Item>
+                  {profileData?.relation === 'FOLLOWING'
+                    ? '取消关注'
+                    : `关注${renderGender(profileData?.gender)}`}
+                </MyDropdownMenu.Item>
                 <MyDropdownMenu.Item danger>加入黑名单</MyDropdownMenu.Item>
               </MyDropdownMenu>
             </div>
 
             <div className="profile-avatar-layout">
-              <div className="pm-ip-loc">IP属地：河北</div>
+              <div className="pm-ip-loc">IP属地：{profileData?.ipLoc}</div>
               <div
                 className="background-image"
                 style={{
-                  background: `url(https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png) no-repeat center center / cover`,
+                  background: `url(${profileData?.avatar.picture.picUrl}) no-repeat center center / cover`,
                   filter: 'blur(12px)',
                 }}
               />
               <Avatar
                 radius="full"
                 className="profile-avatar"
-                src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-                fallback="A"
+                src={profileData?.avatar.picture.picUrl}
+                fallback="avatar"
               />
             </div>
 
@@ -114,7 +186,21 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
                   align="center"
                   size="6"
                 >
-                  晚上吃桃子
+                  {profileData?.nickname}
+                  {profileData?.gender === 'MALE' ? (
+                    <SlSymbolMale
+                      fontSize="16"
+                      color="royalblue"
+                      style={{ marginLeft: '6px' }}
+                    />
+                  ) : null}
+                  {profileData?.gender === 'FEMALE' ? (
+                    <SlSymbleFemale
+                      fontSize="16"
+                      color="pink"
+                      style={{ marginLeft: '6px' }}
+                    />
+                  ) : null}
                 </Text>
                 <Text
                   as="div"
@@ -122,7 +208,7 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
                   size="2"
                   mt="2"
                 >
-                  还没有设置签名
+                  {profileData?.bio || '这个人很懒，什么都没有留下'}
                 </Text>
               </div>
 
@@ -132,7 +218,7 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
                   align="center"
                 >
                   <div className="chunk">
-                    <p>1</p>
+                    <p>{stats.followingCount}</p>
                     <p>关注</p>
                   </div>
                   <Separator
@@ -141,7 +227,7 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
                     orientation="vertical"
                   />
                   <div className="chunk">
-                    <p>0</p>
+                    <p>{stats.followerCount}</p>
                     <p>粉丝</p>
                   </div>
                   <Separator
@@ -150,7 +236,7 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
                     orientation="vertical"
                   />
                   <div className="chunk">
-                    <p>9</p>
+                    <p>{stats.subscriptionCount}</p>
                     <p>订阅</p>
                   </div>
                   <Separator
@@ -160,7 +246,10 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
                   />
                   <div className="chunk">
                     <p>
-                      405<span>时</span>22<span>分</span>
+                      {time[0]}
+                      <span>时</span>
+                      {time[1]}
+                      <span>分</span>
                     </p>
                     <p>收听时长</p>
                   </div>
@@ -168,29 +257,39 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
               </div>
             </div>
 
-            <div className="pm-podcast-layout">
-              <div className="pm-podcast-content">
-                <h3>她的播客</h3>
+            {profileData?.authorship.length !== 0 && (
+              <div className="pm-podcast-layout">
+                <div className="pm-podcast-content">
+                  <h3>{renderGender(profileData?.gender)}的播客</h3>
 
-                <div className="pm-podcast-item">
-                  <div className="left">
-                    <ColorfulShadow
-                      className="episode-cover"
-                      curPointer
-                      src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?&w=256&h=256&q=70&crop=focalpoint&fp-x=0.5&fp-y=0.3&fp-z=1&fit=crop"
-                    />
-                  </div>
-                  <div className="right">
-                    <p>昭运酒馆</p>
-                    <p>更新至第138期</p>
-                  </div>
+                  {profileData?.authorship.map((item) => (
+                    <div
+                      className="pm-podcast-item"
+                      key={item.pid}
+                    >
+                      <div className="left">
+                        <ColorfulShadow
+                          className="episode-cover"
+                          curPointer
+                          src={item.image.picUrl}
+                        />
+                      </div>
+                      <div className="right">
+                        <p>{item.title}</p>
+                        <p>{item.brief}</p>
+                        {item.episodeCount !== 0 && (
+                          <p>更新至第{item.episodeCount}期</p>
+                        )}
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
-            </div>
+            )}
 
             <div className="pm-sticker-layout">
               <div className="pm-sticker-content">
-                <h3>她的贴纸库</h3>
+                <h3>{renderGender(profileData?.gender)}的贴纸库</h3>
 
                 <Card
                   className="sticker-card"
@@ -206,6 +305,8 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
                 </Card>
               </div>
             </div>
+
+            {/* TODO: TA的喜欢 */}
 
             <div className="pm-history-content">
               <h3>最近听过</h3>

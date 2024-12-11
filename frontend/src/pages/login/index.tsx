@@ -63,6 +63,7 @@ export const Login: React.FC = () => {
 
         const data: userType = {
           uid: res.data.data.data.user.uid,
+          bio: res.data.data.data.user?.bio,
           avatar: res.data.data.data.user.avatar.picture.picUrl,
           nickname: res.data.data.data.user.nickname,
           mobilePhoneNumber:
@@ -83,6 +84,7 @@ export const Login: React.FC = () => {
         goHome()
       })
       .catch((err) => {
+        // TODO: 更好的提示
         toast('登录失败')
         console.error('error', err)
       })

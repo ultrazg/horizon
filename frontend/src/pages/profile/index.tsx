@@ -133,7 +133,7 @@ export const Profile: React.FC = () => {
               </div>
             </Flex>
           </div>
-          <div className="profile-bio">还没有设置签名</div>
+          <div className="profile-bio">{userInfo.bio || '还没有设置签名'}</div>
           <div className="profile-ip">IP属地：{userInfo.ipLoc}</div>
         </div>
       </div>

@@ -8,6 +8,7 @@ type myDropdownMenuType = {
 }
 
 type myDropdownMenuItem = {
+  onClick?: (data?: any) => void
   children: React.ReactNode
   danger?: boolean
 }

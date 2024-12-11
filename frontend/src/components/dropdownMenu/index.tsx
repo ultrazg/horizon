@@ -25,8 +25,11 @@ export const MyDropdownMenu: React.FC<myDropdownMenuType> & {
   )
 }
 
-MyDropdownMenu.Item = ({ children, danger }) => (
-  <DropdownMenu.Item color={danger ? 'red' : undefined}>
+MyDropdownMenu.Item = ({ children, danger, onClick }) => (
+  <DropdownMenu.Item
+    onClick={onClick}
+    color={danger ? 'red' : undefined}
+  >
     {children}
   </DropdownMenu.Item>
 )
