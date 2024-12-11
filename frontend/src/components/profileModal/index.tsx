@@ -32,6 +32,8 @@ import { UserProfileType } from '@/types/profile'
 import { renderGender } from '@/utils/string'
 import { userStats } from '@/types/user'
 import { formatTime } from '@/pages/profile/components/mileageDuration'
+import { stickerType } from '@/types/sticker'
+import { sticker } from '@/api/sticker'
 
 type IProps = {
   uid: string
@@ -57,9 +59,36 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
     totalPlayedSeconds: 0,
   })
   const [time, setTime] = useState<number[]>([0, 0, 0])
+  const [stickerData, setStickerData] = useState<{
+    records: stickerType[]
+    total: number
+  }>({
+    records: [],
+    total: 0,
+  })
 
   const avoidDefaultDomBehavior = (e: Event) => {
     e.preventDefault()
+  }
+
+  /**
+   * 获取用户的贴纸数据
+   */
+  const onGetSticker = () => {
+    const params = {
+      uid,
+    }
+
+    sticker(params)
+      .then((res) =>
+        setStickerData({
+          records: res.data.data,
+          total: res.data.total,
+        }),
+      )
+      .catch((err) => {
+        console.error(err)
+      })
   }
 
   /**
@@ -100,6 +129,7 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
     if (open) {
       getUserProfile()
       onGetUserStats()
+      onGetSticker()
     }
   }, [open])
 
@@ -298,10 +328,15 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
                   }}
                 >
                   <div>
-                    7张贴纸
+                    {stickerData.total}张贴纸
                     <ChevronRightIcon />
                   </div>
-                  <div>最新：过了一个播客日</div>
+                  <div>
+                    最新：
+                    {stickerData.records.length === 0
+                      ? '-'
+                      : stickerData.records[0].name}
+                  </div>
                 </Card>
               </div>
             </div>
@@ -340,8 +375,8 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
           </div>
 
           <StickerModal
-            stickerLists={[]}
-            perspective="她"
+            stickerLists={stickerData.records}
+            perspective={renderGender(profileData?.gender)}
             open={stickerModalOpen}
             onClose={() => {
               setStickerModalOpen(false)
