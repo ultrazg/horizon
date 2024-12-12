@@ -1,0 +1,61 @@
+@import '@/assets/global/_variables.scss';
+
+.favorites-comment-item {
+  margin-bottom: 1.7rem;
+  .top {
+    display: flex;
+
+    .comment-avatar{
+      cursor: pointer;
+    }
+
+    .comment-info {
+      flex: 12;
+      padding-left: 0.7em;
+
+      p {
+        &:first-child {
+          cursor: pointer;
+          font-weight: bold;
+        }
+
+        &:nth-child(2) {
+          font-weight: 300;
+          font-size: 0.8rem;
+          color: $secondary-font-color;
+        }
+      }
+    }
+    .comment-like {
+      cursor: pointer;
+      color: $main-color;
+
+      svg {
+        font-size: 1.2rem;
+        padding-right: 0.5rem;
+      }
+    }
+  }
+
+  .bottom {
+    display: flex;
+    cursor: pointer;
+
+    .episode-info {
+      padding-left: 0.7em;
+
+      p {
+        font-size: 0.7rem;
+        font-weight: 300;
+        &:last-child {
+          color: $secondary-font-color;
+        }
+      }
+    }
+  }
+}
+
+.load-more-button{
+  width: 100%;
+  text-align: center;
+}
