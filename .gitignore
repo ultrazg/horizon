@@ -1,0 +1,21 @@
+build/bin
+node_modules
+frontend/dist
+.DS_Store
+.Thumbs.db
+wailsjs
+config.yaml
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+.idea
+.vscode
+
+/frontend/package.json.md5

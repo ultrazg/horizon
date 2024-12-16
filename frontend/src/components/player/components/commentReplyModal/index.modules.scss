@@ -1,0 +1,61 @@
+@import '@/assets/global/_variables.scss';
+
+.comment-reply-modal-layout {
+  padding-right: 1rem;
+
+  .comment-reply-wrapper {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+
+    .comment-reply-author {
+      display: flex;
+      align-items: center;
+      cursor: default;
+
+      div {
+        &:first-child {
+          margin-right: 10px;
+        }
+
+        &:nth-child(2) {
+          flex: 1;
+
+          p {
+            &:last-child {
+              font-size: 0.7rem;
+              color: $secondary-font-color;
+            }
+          }
+        }
+
+        &:last-child {
+          cursor: pointer;
+          font-size: 0.9rem;
+
+          svg {
+            margin-right: 10px;
+          }
+        }
+      }
+    }
+
+    .comment-reply-body {
+      margin: 0.3rem 0;
+    }
+  }
+}
+
+.comment-reply-bottom {
+  display: flex;
+  margin-top: 1rem;
+
+  div {
+    &:first-child {
+      flex: 1;
+    }
+
+    &:nth-child(2) {
+      margin: 0 0.7rem;
+    }
+  }
+}

@@ -1,0 +1,20 @@
+.cover-box-layout {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .cover-box {
+    position: relative;
+
+    img {
+      position: absolute;
+      border-radius: 12px;
+      box-shadow: var(--shadow-4);
+      transition: 0.3s ease;
+      user-select: none;
+      -webkit-user-select: none;
+      cursor: default;
+    }
+  }
+}

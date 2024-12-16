@@ -1,0 +1,27 @@
+/**
+ * https://github.com/animate-css/animate.css
+ */
+
+/* shakeX */
+@keyframes shakeX {
+  from,
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+
+  10%,
+  50%,
+  90% {
+    transform: translate3d(-10px, 0, 0);
+  }
+
+  30%,
+  70% {
+    transform: translate3d(10px, 0, 0);
+  }
+}
+
+.shakeX {
+  animation-name: shakeX;
+  animation-duration: 0.5s;
+}

@@ -1,0 +1,17 @@
+.volume-layout {
+  display: flex;
+  width: 85%;
+  height: 85%;
+  justify-content: center;
+  align-items: center;
+
+  .volume-value {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .volume-slider {
+    flex: 4;
+  }
+}

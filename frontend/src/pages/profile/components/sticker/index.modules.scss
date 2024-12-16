@@ -1,0 +1,37 @@
+@import '@/assets/global/_variables.scss';
+
+.sticker-content {
+  margin-top: 1.7rem;
+
+  h3 {
+    font-size: 1.8rem;
+    margin-bottom: 0.7rem;
+    color: $secondary-font-color;
+  }
+
+  .sticker-card {
+    font-size: 1.2rem;
+    padding: 2rem 4rem;
+    cursor: pointer;
+    overflow: hidden;
+
+    .sticker-bgi {
+      position: absolute;
+      top: 0;
+      left: -10rem;
+      width: 120rem;
+      height: 120rem;
+      background-size: 90px 90px;
+      background-position: 100% 0;
+      background-repeat: repeat;
+      opacity: 0.3;
+      transform: rotate(-45deg);
+    }
+
+    div {
+      &:last-child {
+        color: $secondary-font-color;
+      }
+    }
+  }
+}

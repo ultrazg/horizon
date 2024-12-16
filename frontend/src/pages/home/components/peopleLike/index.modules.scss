@@ -1,0 +1,137 @@
+@import '@/assets/global/_common.scss';
+@import '@/assets/global/_variables.scss';
+
+.people-like-layout {
+  @include no-select;
+
+  margin-top: 2rem;
+
+  h3 {
+    font-size: 1.8rem;
+  }
+
+  .people-like-content {
+    height: 16rem;
+    margin-top: 0.7rem;
+    margin-bottom: 0.8rem;
+
+    .card {
+      width: 25rem;
+      height: 15rem;
+
+      .user-info {
+        display: flex;
+        height: 3rem;
+
+        .l {
+          width: 3rem;
+        }
+
+        .m {
+          flex: 3;
+          padding-left: 0.5rem;
+
+          p {
+            &:last-child {
+              color: var(--white-a5);
+              font-weight: 300;
+            }
+          }
+        }
+
+        .r {
+          flex: 1;
+          height: 3rem;
+          display: flex;
+          align-items: center;
+          justify-content: right;
+          font-size: 0.9rem;
+          font-weight: 300;
+
+          svg {
+            width: 1.3rem;
+            height: 1.3rem;
+            padding-right: 0.3rem;
+          }
+        }
+      }
+
+      .comment {
+        margin-top: 0.5rem;
+        font-weight: 300;
+        height: 6rem;
+        overflow: hidden;
+        display: -webkit-box;
+        line-clamp: 4;
+        box-orient: vertical;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 4;
+      }
+
+      .episode_info {
+        margin-top: 0.5rem;
+        padding-top: 0.5rem;
+        height: 3rem;
+        border-top: 1px solid var(--white-a3);
+        display: flex;
+
+        .l {
+          width: 3rem;
+          background: rgba(255, 0, 0, 0.236);
+        }
+
+        .m {
+          flex: 1;
+          padding-left: 0.5rem;
+
+          p {
+            overflow: hidden;
+            display: -webkit-box;
+            line-clamp: 1;
+            box-orient: vertical;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;
+            font-size: 0.9rem;
+
+            &:last-child {
+              color: var(--white-a5);
+              font-weight: 300;
+            }
+          }
+        }
+
+        .r {
+          width: 3rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          .play_button {
+            width: 80%;
+            height: 80%;
+            background: var(--white-a2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: 0.2s;
+
+            &:hover {
+              background: var(--white-a4);
+            }
+
+            &:active {
+              background: var(--white-a1);
+            }
+
+            svg {
+              width: 1.5rem;
+              height: 1.5rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}

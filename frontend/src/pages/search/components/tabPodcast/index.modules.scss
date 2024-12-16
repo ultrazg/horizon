@@ -1,0 +1,57 @@
+@import '@/assets/global/_variables.scss';
+
+.search-result-podcast-layout {
+  .search-result-podcast-item {
+    display: flex;
+    height: 10rem;
+    margin-bottom: 1.7rem;
+
+    .left {
+      flex: 1;
+      display: flex;
+
+      .podcast-cover {
+        width: 10rem;
+        height: 10rem;
+      }
+
+      .podcast-info {
+        flex: 1;
+        padding-left: 0.7rem;
+        padding-right: 0.7rem;
+        position: relative;
+
+        p {
+          &:first-child {
+            font-size: 1.2rem;
+            font-weight: bold;
+          }
+
+          &:nth-child(2) {
+            color: $secondary-font-color;
+            overflow: hidden;
+            display: -webkit-box;
+            line-clamp: 4;
+            box-orient: vertical;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 4;
+          }
+
+          &:last-child {
+            position: absolute;
+            bottom: 0;
+            color: $secondary-font-color;
+          }
+        }
+      }
+    }
+
+    .right {
+      width: 7rem;
+
+      button {
+        width: 100%;
+      }
+    }
+  }
+}

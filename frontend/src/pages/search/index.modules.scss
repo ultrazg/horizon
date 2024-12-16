@@ -1,0 +1,136 @@
+@import '@/assets/global/_common.scss';
+@import '@/assets/global/_variables.scss';
+
+.search-layout {
+  @include no-select;
+
+  padding: 0 14px;
+  height: 100%;
+
+  h3 {
+    font-size: 1.8rem;
+  }
+
+  .search-content {
+    padding: 0 5rem;
+
+    .search-input {
+      display: flex;
+      justify-items: center;
+      padding: 1rem 0;
+
+      .left {
+        flex: 5;
+      }
+
+      .right {
+        margin-left: 1rem;
+        flex: 1;
+
+        button {
+          width: 100%;
+        }
+      }
+    }
+
+    .search-result {
+      display: block;
+
+      .search-result-episode-layout {
+        height: 30rem;
+
+        .search-result-episode-item {
+          height: 10rm;
+          display: flex;
+          margin-bottom: 1.7rem;
+
+          .left {
+            .episode-cover {
+              width: 10rem;
+              height: 10rem;
+            }
+          }
+
+          .right {
+            padding-left: 0.7rem;
+            position: relative;
+
+            p {
+              &:first-child {
+                font-size: 1.2rem;
+                font-weight: bold;
+                overflow: hidden;
+                display: -webkit-box;
+                line-clamp: 2;
+                box-orient: vertical;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 2;
+              }
+
+              &:nth-child(2) {
+                color: $secondary-font-color;
+                overflow: hidden;
+                display: -webkit-box;
+                line-clamp: 3;
+                box-orient: vertical;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 3;
+              }
+
+              &:last-child {
+                position: absolute;
+                bottom: 0;
+                color: $secondary-font-color;
+                display: flex;
+                width: 100%;
+
+                span {
+                  &:first-child {
+                    flex: 1;
+                  }
+
+                  &:last-child {
+                    flex: 1;
+                    display: flex;
+                    align-items: center;
+
+                    svg {
+                      margin-left: 0.8rem;
+                      margin-right: 0.5rem;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .search-result-user-layout {
+        height: 30rem;
+
+        .search-result-user-item {
+          display: flex;
+          height: 7rem;
+          margin-bottom: 1.7rem;
+
+          .user-avatar {
+            width: 7rem;
+
+            .avatar-box {
+              width: 7rem;
+              height: 7rem;
+              cursor: pointer;
+            }
+          }
+
+          .user-info {
+            flex: 1;
+            padding-left: 0.7rem;
+            font-size: 1.2rem;
+          }
+        }
+      }
+    }
+  }
+}

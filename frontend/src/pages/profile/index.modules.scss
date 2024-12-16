@@ -1,0 +1,56 @@
+@import '@/assets/global/_variables.scss';
+
+.profile-layout {
+  padding: 0 14px;
+  height: 100%;
+
+  .profile-content {
+    display: flex;
+
+    .profile-info {
+      flex: 2;
+      padding-left: 1rem;
+
+      .profile-nickname {
+        font-size: 1.5rem;
+        font-weight: bold;
+
+        .gender {
+          margin-left: 0.7rem;
+        }
+      }
+
+      .profile-bio {
+        margin-top: 0.7rem;
+      }
+
+      .profile-ip {
+        color: $secondary-font-color;
+        font-weight: 300;
+      }
+
+      .profile-follow {
+        display: flex;
+
+        .chunk {
+          cursor: pointer;
+
+          p {
+            &:first-child {
+              font-size: 1.3rem;
+              font-weight: bold;
+            }
+
+            &:last-child {
+              color: $secondary-font-color;
+            }
+          }
+        }
+
+        .separator {
+          margin: 0 0.5rem;
+        }
+      }
+    }
+  }
+}

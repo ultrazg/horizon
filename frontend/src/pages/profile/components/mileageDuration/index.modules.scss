@@ -1,0 +1,23 @@
+@import '@/assets/global/_variables.scss';
+
+.time-content {
+  margin-top: 1.7rem;
+
+  h3 {
+    font-size: 1.8rem;
+    margin-bottom: 0.7rem;
+    color: $secondary-font-color;
+  }
+
+  .time-card {
+    font-size: 1.2rem;
+    padding: 2rem 4rem;
+    cursor: pointer;
+    color: $secondary-font-color;
+
+    .num {
+      font-size: 2.5rem;
+      color: $primary-font-color;
+    }
+  }
+}

@@ -1,0 +1,17 @@
+@import '@/assets/global/_common.scss';
+@import '@/assets/global/_variables.scss';
+
+.favorites-layout {
+  @include no-select;
+
+  padding: 0 14px;
+  height: 100%;
+
+  h3 {
+    font-size: 1.8rem;
+  }
+
+  .favorites-content {
+    padding: 0 5rem;
+  }
+}

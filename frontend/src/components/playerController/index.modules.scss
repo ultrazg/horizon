@@ -1,0 +1,69 @@
+.play-controller-layout {
+  width: 100vw;
+  height: 69px;
+  position: fixed;
+  // box-shadow: 0 -2px 2px -2px #cecece;
+  border-top: 1px solid #646464;
+  bottom: 0;
+  // background: #646464a0;
+  // background: rgba(22, 22, 23, 0.4);
+  background: var(--black-a6);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  display: flex;
+  // position: relative;
+
+  .left {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .middle {
+    flex: 2;
+  }
+
+  .right {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .progress-layout {
+    z-index: 4;
+    position: absolute;
+    top: -3px;
+    //background: rgba(255, 0, 0, 0.15);
+    width: 100%;
+    height: 2px;
+
+    .progress-slider {
+      cursor: pointer;
+
+      .rt-SliderTrack {
+        height: 2px;
+        border: none;
+        box-shadow: none;
+      }
+
+      .rt-SliderThumb {
+        width: 6px;
+        height: 6px;
+        display: none;
+        cursor: ew-resize;
+
+        &::after {
+          cursor: ew-resize;
+        }
+      }
+
+      &:hover {
+        .rt-SliderThumb {
+          display: block;
+        }
+      }
+    }
+  }
+}

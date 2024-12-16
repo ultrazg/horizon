@@ -1,0 +1,33 @@
+.live-count-layout {
+  padding: 0.5rem 1rem;
+  margin-left: 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: default;
+  font-weight: 300;
+
+  .live-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 25px;
+    margin-right: 10px;
+    animation: light 2s infinite alternate;
+  }
+}
+
+@keyframes light {
+  from {
+    box-shadow: 0 0 2px #5b8c00;
+    background: #5b8c00;
+  }
+
+  to {
+    box-shadow: 0 0 12px 4px #d3f261;
+    background: #d3f261;
+  }
+}

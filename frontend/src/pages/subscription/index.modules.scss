@@ -1,0 +1,44 @@
+@import '@/assets/global/_common.scss';
+@import '@/assets/global/_variables.scss';
+
+.subscription-layout {
+  @include no-select;
+
+  padding: 0 14px;
+  height: 100%;
+
+  h3 {
+    font-size: 1.8rem;
+    margin-bottom: 0.7rem;
+  }
+
+  .podcast-cover {
+    cursor: pointer;
+    transition: 0.2s;
+
+    &:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: var(--shadow-4);
+    }
+
+    .podcast-img {
+      width: 100%;
+      height: 100%;
+      border-radius: 6px;
+    }
+
+    .podcast-title {
+      font-weight: bold;
+      overflow: hidden;
+      display: -webkit-box;
+      line-clamp: 1;
+      box-orient: vertical;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 1;
+    }
+
+    .podcast-update-time {
+      color: $secondary-font-color;
+    }
+  }
+}

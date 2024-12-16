@@ -1,0 +1,56 @@
+@import '@/assets/global/_common.scss';
+@import '@/assets/global/_variables.scss';
+
+.recommended-layout {
+  @include no-select;
+
+  margin-top: 2rem;
+
+  h3 {
+    font-size: 1.8rem;
+  }
+
+  .recommended-content {
+    height: 13.8rem;
+    margin-top: 0.7rem;
+
+    .recommended-item {
+      width: 12rem;
+      height: 13rem;
+      margin-right: 1rem;
+
+      .cover-box {
+        width: 12rem;
+        height: 10rem;
+        display: flex;
+        justify-content: center;
+
+        .cover {
+          width: 9rem;
+          height: 9rem;
+        }
+      }
+
+      .podcast-info {
+        width: 12rem;
+        display: flex;
+        justify-content: center;
+
+        .podcast-title {
+          width: 9rem;
+          overflow: hidden;
+          font-size: 1rem;
+          display: -webkit-box;
+          line-clamp: 1;
+          box-orient: vertical;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 1;
+        }
+      }
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+}
