@@ -155,9 +155,9 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
     ShowMessageDialog(
       DialogType.QUESTION,
       '提示',
-      `确定要拉黑「${nickname}」吗？`,
+      `确定要将「${nickname}」加入黑名单吗？\n对方将无法与你互动，也无法关注你`,
     ).then((res) => {
-      if (res === 'Yes') {
+      if (res === 'Yes' || res === '是') {
         onBlockedUserCreate(uid, () => {
           onGetUserStats()
           getUserProfile()

@@ -50,7 +50,7 @@ export const onRelationUpdate = (
       '提示',
       `确定不再关注「${nickname}」吗？`,
     ).then((res) => {
-      if (res === 'Yes') {
+      if (res === 'Yes' || res === '是') {
         relationUpdata(params)
           .then(() => {
             cb?.()
@@ -197,6 +197,12 @@ export const FollowModal: React.FC<IProps> = ({ uid, type, onClose, open }) => {
                             mb="1"
                             size="3"
                             title={item.nickname}
+                            onClick={() => {
+                              setProfileModal({
+                                open: true,
+                                uid: item.uid,
+                              })
+                            }}
                           >
                             {item.nickname}
                           </Text>

@@ -3,6 +3,7 @@ package bridge
 import (
 	"context"
 	"fmt"
+	"runtime"
 
 	"github.com/ultrazg/xyz/service"
 )
@@ -30,4 +31,12 @@ func (a *App) IsStartup() bool {
 	}
 
 	return false
+}
+
+func IsWindows() bool {
+	return runtime.GOOS == "windows"
+}
+
+func IsMacOS() bool {
+	return runtime.GOOS == "darwin"
 }
