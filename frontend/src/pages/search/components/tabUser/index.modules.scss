@@ -1,0 +1,37 @@
+@import '@/assets/global/_variables.scss';
+
+.search-result-user-layout {
+  height: 30rem;
+
+  .search-result-user-item {
+    display: flex;
+    height: 7rem;
+    margin-bottom: 1.7rem;
+
+    .user-avatar {
+      width: 7rem;
+
+      .avatar-box {
+        width: 7rem;
+        height: 7rem;
+        cursor: pointer;
+      }
+    }
+
+    .user-info {
+      flex: 1;
+      padding-left: 0.7rem;
+      font-size: 1.2rem;
+
+      .user-bio{
+        color: $secondary-font-color;
+        font-size: 1rem;
+      }
+    }
+  }
+
+  .user-load-more-button{
+    padding-bottom: 3rem;
+    text-align: center;
+  }
+}

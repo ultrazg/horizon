@@ -14,6 +14,20 @@ type IProps = {
 export const TabPodcast: React.FC<IProps> = ({ data, onLoadMore }) => {
   return (
     <div className="search-result-podcast-layout">
+      {data.records.length === 0 && (
+        <div
+          style={{
+            width: '100%',
+            height: '80%',
+            color: 'gray',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          暂无数据
+        </div>
+      )}
       {data.records.map((item) => (
         <div
           className="search-result-podcast-item"
@@ -23,7 +37,7 @@ export const TabPodcast: React.FC<IProps> = ({ data, onLoadMore }) => {
             <ColorfulShadow
               className="podcast-cover"
               curPointer
-              src={item.image.picUrl}
+              src={item?.image?.picUrl}
             />
 
             <div className="podcast-info">

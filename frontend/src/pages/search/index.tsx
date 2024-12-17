@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Button, Tabs, TextField, Avatar } from '@radix-ui/themes'
+import { Box, Button, Tabs, TextField } from '@radix-ui/themes'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
-import { SlEarphones, SlBubble } from 'react-icons/sl'
-import { ColorfulShadow, ProfileModal } from '@/components'
 import { search } from '@/api/search'
-import { PodcastType } from '@/types/podcast'
-import { EpisodeType } from '@/types/episode'
 import { TabPodcast } from './components/tabPodcast'
+import { TabEpisode } from './components/tabEpisode'
+import { TabUser } from './components/tabUser'
 import './index.modules.scss'
 
 export const Search: React.FC = () => {
@@ -18,14 +16,6 @@ export const Search: React.FC = () => {
     records: [],
     loadMoreKey: {},
   })
-  const [profileModal, setProfileModal] = useState<{
-    open: boolean
-    uid: string
-  }>({
-    open: false,
-    uid: '',
-  })
-  const [currentTab, setCurrentTab] = useState('PODCAST')
 
   /**
    * 搜索
@@ -35,7 +25,7 @@ export const Search: React.FC = () => {
       .then((res) =>
         setData({
           records: res.data.data,
-          loadMoreKey: res.data.loadMoreKey,
+          loadMoreKey: res.data?.loadMoreKey,
         }),
       )
       .catch((err) => {
@@ -55,8 +45,13 @@ export const Search: React.FC = () => {
       ...searchParams,
       type: value,
     })
-    setCurrentTab(value)
   }
+
+  useEffect(() => {
+    if (searchParams.keyword) {
+      onSearch()
+    }
+  }, [searchParams.type])
 
   return (
     <div className="search-layout">
@@ -94,7 +89,7 @@ export const Search: React.FC = () => {
 
         <div className="search-result">
           <Tabs.Root
-            value={currentTab}
+            value={searchParams.type}
             onValueChange={onTabChangeHandle}
           >
             <Tabs.List size="2">
@@ -114,247 +109,26 @@ export const Search: React.FC = () => {
               </Tabs.Content>
 
               <Tabs.Content value="EPISODE">
-                <div className="search-result-episode-layout">
-                  <div className="search-result-episode-item">
-                    <div className="left">
-                      <ColorfulShadow
-                        className="episode-cover"
-                        curPointer
-                        mask
-                        src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?&w=256&h=256&q=70&crop=focalpoint&fp-x=0.5&fp-y=0.3&fp-z=1&fit=crop"
-                      />
-                    </div>
-                    <div className="right">
-                      <p>小米SU7营销复盘：你所知道的为什么都是错的-Vol 46</p>
-                      <p>
-                        本期节目关注风口上的小米汽车，主播借助在营销、产品上的经验解答。欢迎在评论区留言发表你对小米汽车的感受与看法，对于节目话题的更多观点，获取更多未呈现在节目中的扩展阅读，欢迎加群讨论
-                      </p>
-                      <p>
-                        <span>30分钟 · 03/29</span>
-                        <span>
-                          <SlEarphones />
-                          4.3万+
-                          <SlBubble />
-                          349
-                        </span>
-                      </p>
-                    </div>
-                  </div>
-                  <div className="search-result-episode-item">
-                    <div className="left">
-                      <ColorfulShadow
-                        className="episode-cover"
-                        curPointer
-                        mask
-                        src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?&w=256&h=256&q=70&crop=focalpoint&fp-x=0.5&fp-y=0.3&fp-z=1&fit=crop"
-                      />
-                    </div>
-                    <div className="right">
-                      <p>小米SU7营销复盘：你所知道的为什么都是错的-Vol 46</p>
-                      <p>
-                        本期节目关注风口上的小米汽车，主播借助在营销、产品上的经验解答。欢迎在评论区留言发表你对小米汽车的感受与看法，对于节目话题的更多观点，获取更多未呈现在节目中的扩展阅读，欢迎加群讨论
-                      </p>
-                      <p>
-                        <span>30分钟 · 03/29</span>
-                        <span>
-                          <SlEarphones />
-                          4.3万+
-                          <SlBubble />
-                          349
-                        </span>
-                      </p>
-                    </div>
-                  </div>
-                  <div className="search-result-episode-item">
-                    <div className="left">
-                      <ColorfulShadow
-                        className="episode-cover"
-                        curPointer
-                        mask
-                        src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?&w=256&h=256&q=70&crop=focalpoint&fp-x=0.5&fp-y=0.3&fp-z=1&fit=crop"
-                      />
-                    </div>
-                    <div className="right">
-                      <p>小米SU7营销复盘：你所知道的为什么都是错的-Vol 46</p>
-                      <p>
-                        本期节目关注风口上的小米汽车，主播借助在营销、产品上的经验解答。欢迎在评论区留言发表你对小米汽车的感受与看法，对于节目话题的更多观点，获取更多未呈现在节目中的扩展阅读，欢迎加群讨论
-                      </p>
-                      <p>
-                        <span>30分钟 · 03/29</span>
-                        <span>
-                          <SlEarphones />
-                          4.3万+
-                          <SlBubble />
-                          349
-                        </span>
-                      </p>
-                    </div>
-                  </div>
-                  <div className="search-result-episode-item">
-                    <div className="left">
-                      <ColorfulShadow
-                        className="episode-cover"
-                        curPointer
-                        mask
-                        src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?&w=256&h=256&q=70&crop=focalpoint&fp-x=0.5&fp-y=0.3&fp-z=1&fit=crop"
-                      />
-                    </div>
-                    <div className="right">
-                      <p>小米SU7营销复盘：你所知道的为什么都是错的-Vol 46</p>
-                      <p>
-                        本期节目关注风口上的小米汽车，主播借助在营销、产品上的经验解答。欢迎在评论区留言发表你对小米汽车的感受与看法，对于节目话题的更多观点，获取更多未呈现在节目中的扩展阅读，欢迎加群讨论
-                      </p>
-                      <p>
-                        <span>30分钟 · 03/29</span>
-                        <span>
-                          <SlEarphones />
-                          4.3万+
-                          <SlBubble />
-                          349
-                        </span>
-                      </p>
-                    </div>
-                  </div>
-                  <div className="search-result-episode-item">
-                    <div className="left">
-                      <ColorfulShadow
-                        className="episode-cover"
-                        curPointer
-                        mask
-                        src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?&w=256&h=256&q=70&crop=focalpoint&fp-x=0.5&fp-y=0.3&fp-z=1&fit=crop"
-                      />
-                    </div>
-                    <div className="right">
-                      <p>小米SU7营销复盘：你所知道的为什么都是错的-Vol 46</p>
-                      <p>
-                        本期节目关注风口上的小米汽车，主播借助在营销、产品上的经验解答。欢迎在评论区留言发表你对小米汽车的感受与看法，对于节目话题的更多观点，获取更多未呈现在节目中的扩展阅读，欢迎加群讨论
-                      </p>
-                      <p>
-                        <span>30分钟 · 03/29</span>
-                        <span>
-                          <SlEarphones />
-                          4.3万+
-                          <SlBubble />
-                          349
-                        </span>
-                      </p>
-                    </div>
-                  </div>
-                  <div className="search-result-episode-item">
-                    <div className="left">
-                      <ColorfulShadow
-                        className="episode-cover"
-                        curPointer
-                        mask
-                        src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?&w=256&h=256&q=70&crop=focalpoint&fp-x=0.5&fp-y=0.3&fp-z=1&fit=crop"
-                      />
-                    </div>
-                    <div className="right">
-                      <p>小米SU7营销复盘：你所知道的为什么都是错的-Vol 46</p>
-                      <p>
-                        本期节目关注风口上的小米汽车，主播借助在营销、产品上的经验解答。欢迎在评论区留言发表你对小米汽车的感受与看法，对于节目话题的更多观点，获取更多未呈现在节目中的扩展阅读，欢迎加群讨论
-                      </p>
-                      <p>
-                        <span>30分钟 · 03/29</span>
-                        <span>
-                          <SlEarphones />
-                          4.3万+
-                          <SlBubble />
-                          349
-                        </span>
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                <TabEpisode
+                  data={data}
+                  onLoadMore={() => {
+                    console.log('more')
+                  }}
+                />
               </Tabs.Content>
 
               <Tabs.Content value="USER">
-                <div className="search-result-user-layout">
-                  <div
-                    className="search-result-user-item"
-                    onClick={() => {
-                      setProfileModal({
-                        open: true,
-                        uid: '123',
-                      })
-                    }}
-                  >
-                    <div className="user-avatar">
-                      <Avatar
-                        className="avatar-box"
-                        src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?&w=256&h=256&q=70&crop=focalpoint&fp-x=0.5&fp-y=0.3&fp-z=1&fit=crop"
-                        fallback="A"
-                      />
-                    </div>
-                    <div className="user-info">小米</div>
-                  </div>
-                  <div className="search-result-user-item">
-                    <div className="user-avatar">
-                      <Avatar
-                        className="avatar-box"
-                        src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?&w=256&h=256&q=70&crop=focalpoint&fp-x=0.5&fp-y=0.3&fp-z=1&fit=crop"
-                        fallback="A"
-                      />
-                    </div>
-                    <div className="user-info">小米</div>
-                  </div>
-                  <div className="search-result-user-item">
-                    <div className="user-avatar">
-                      <Avatar
-                        className="avatar-box"
-                        src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?&w=256&h=256&q=70&crop=focalpoint&fp-x=0.5&fp-y=0.3&fp-z=1&fit=crop"
-                        fallback="A"
-                      />
-                    </div>
-                    <div className="user-info">小米</div>
-                  </div>
-                  <div className="search-result-user-item">
-                    <div className="user-avatar">
-                      <Avatar
-                        className="avatar-box"
-                        src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?&w=256&h=256&q=70&crop=focalpoint&fp-x=0.5&fp-y=0.3&fp-z=1&fit=crop"
-                        fallback="A"
-                      />
-                    </div>
-                    <div className="user-info">小米</div>
-                  </div>
-                  <div className="search-result-user-item">
-                    <div className="user-avatar">
-                      <Avatar
-                        className="avatar-box"
-                        src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?&w=256&h=256&q=70&crop=focalpoint&fp-x=0.5&fp-y=0.3&fp-z=1&fit=crop"
-                        fallback="A"
-                      />
-                    </div>
-                    <div className="user-info">小米</div>
-                  </div>
-                  <div className="search-result-user-item">
-                    <div className="user-avatar">
-                      <Avatar
-                        className="avatar-box"
-                        src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?&w=256&h=256&q=70&crop=focalpoint&fp-x=0.5&fp-y=0.3&fp-z=1&fit=crop"
-                        fallback="A"
-                      />
-                    </div>
-                    <div className="user-info">小米</div>
-                  </div>
-                </div>
+                <TabUser
+                  data={data}
+                  onLoadMore={() => {
+                    console.log('more')
+                  }}
+                />
               </Tabs.Content>
             </Box>
           </Tabs.Root>
         </div>
       </div>
-
-      <ProfileModal
-        uid={profileModal.uid}
-        open={profileModal.open}
-        onClose={() => {
-          setProfileModal({
-            open: false,
-            uid: '',
-          })
-        }}
-      />
     </div>
   )
 }

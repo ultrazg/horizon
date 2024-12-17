@@ -1,0 +1,71 @@
+@import '@/assets/global/_variables.scss';
+
+.search-result-episode-layout {
+  height: 30rem;
+
+  .search-result-episode-item {
+    height: 10rm;
+    display: flex;
+    margin-bottom: 1.7rem;
+
+    .left {
+      .episode-cover {
+        width: 10rem;
+        height: 10rem;
+      }
+    }
+
+    .right {
+      padding-left: 0.7rem;
+      position: relative;
+
+      p {
+        &:first-child {
+          font-size: 1.2rem;
+          font-weight: bold;
+          overflow: hidden;
+          display: -webkit-box;
+          line-clamp: 2;
+          box-orient: vertical;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
+        }
+
+        &:nth-child(2) {
+          color: $secondary-font-color;
+          overflow: hidden;
+          display: -webkit-box;
+          line-clamp: 3;
+          box-orient: vertical;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 3;
+        }
+
+        &:last-child {
+          position: absolute;
+          bottom: 0;
+          color: $secondary-font-color;
+          display: flex;
+          width: 100%;
+
+          span {
+            &:first-child {
+              flex: 1;
+            }
+
+            &:last-child {
+              flex: 1;
+              display: flex;
+              align-items: center;
+
+              svg {
+                margin-left: 0.8rem;
+                margin-right: 0.5rem;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
