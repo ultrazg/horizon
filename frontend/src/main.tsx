@@ -14,15 +14,15 @@ const root = createRoot(container!)
 
 root.render(
   <React.StrictMode>
-    <Theme
-      hasBackground={false}
-      radius="medium"
-      appearance="dark"
-      accentColor="purple"
-    >
-      <ToastProvider>
+    <ToastProvider>
+      <Theme
+        hasBackground={false}
+        radius="medium"
+        appearance="dark"
+        accentColor="purple"
+      >
         <App />
-      </ToastProvider>
-    </Theme>
+      </Theme>
+    </ToastProvider>
   </React.StrictMode>,
 )

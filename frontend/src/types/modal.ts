@@ -4,7 +4,7 @@ type modalType = {
   title?: string
   width?: string
   open: boolean
-  onClose: (data?: any) => void
+  onClose: (refresh?: boolean) => void
   onOk?: (data?: any) => void
   children?: React.ReactNode
 }

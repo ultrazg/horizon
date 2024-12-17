@@ -284,11 +284,20 @@ export const FollowModal: React.FC<IProps> = ({ uid, type, onClose, open }) => {
       <ProfileModal
         uid={profileModal.uid}
         open={profileModal.open}
-        onClose={() => {
+        onClose={(refresh) => {
           setProfileModal({
             open: false,
             uid: '',
           })
+
+          if (refresh) {
+            if (type === 'FOLLOWING') {
+              getFollowingList()
+            }
+            if (type === 'FOLLOWER') {
+              getFollowerList()
+            }
+          }
         }}
       />
     </Modal>

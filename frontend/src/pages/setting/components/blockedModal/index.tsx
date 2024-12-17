@@ -35,7 +35,7 @@ export const onBlockedUserRemove = (uid: string, cb?: () => void) => {
   }
   blockedUserRemove(params)
     .then((res) => {
-      toast(res.data.toast, {}, cb)
+      toast(res.data.toast, { duration: 1500 }, cb)
     })
     .catch(() => {
       toast('操作失败')
@@ -53,7 +53,7 @@ export const onBlockedUserCreate = (uid: string, cb?: () => void) => {
   }
   blockedUserCreate(params)
     .then((res) => {
-      toast(res.data.toast, {}, cb)
+      toast(res.data.toast, { duration: 1500 }, cb)
     })
     .catch(() => {
       toast('操作失败')

@@ -159,8 +159,9 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
     ).then((res) => {
       if (res === 'Yes' || res === '是') {
         onBlockedUserCreate(uid, () => {
-          onGetUserStats()
-          getUserProfile()
+          // onGetUserStats()
+          // getUserProfile()
+          onClose(true)
         })
       }
     })
@@ -198,7 +199,9 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
           <div className="profile-modal-layout">
             <div className="pm-action-button">
               <IconButton
-                onClick={onClose}
+                onClick={() => {
+                  onClose()
+                }}
                 variant="soft"
                 radius="full"
                 color="gray"
