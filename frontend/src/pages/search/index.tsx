@@ -6,30 +6,50 @@ import { TabPodcast } from './components/tabPodcast'
 import { TabEpisode } from './components/tabEpisode'
 import { TabUser } from './components/tabUser'
 import './index.modules.scss'
+import { isEmpty } from 'lodash'
+import { toast } from '@/utils'
 
 export const Search: React.FC = () => {
   const [searchParams, setSearchParams] = useState({
     keyword: '',
     type: 'PODCAST',
   })
-  const [data, setData] = useState({
+  const [data, setData] = useState<{ records: any[]; loadMoreKey: {} }>({
     records: [],
     loadMoreKey: {},
   })
+  const [loading, setLoading] = useState<boolean>(false)
 
   /**
    * 搜索
    */
-  const onSearch = () => {
-    search(searchParams)
-      .then((res) =>
-        setData({
-          records: res.data.data,
-          loadMoreKey: res.data?.loadMoreKey,
-        }),
-      )
-      .catch((err) => {
-        console.error(err)
+  const onSearch = (loadMoreKey?: {}) => {
+    setLoading(true)
+
+    const params = {
+      ...searchParams,
+      loadMoreKey,
+    }
+
+    search(params)
+      .then((res) => {
+        if (isEmpty(loadMoreKey)) {
+          setData({
+            records: res.data.data,
+            loadMoreKey: res.data?.loadMoreKey,
+          })
+        } else {
+          setData({
+            records: [...data.records, ...res.data.data],
+            loadMoreKey: res.data?.loadMoreKey,
+          })
+        }
+      })
+      .catch(() => {
+        toast('搜索失败')
+      })
+      .finally(() => {
+        setLoading(false)
       })
   }
 
@@ -81,6 +101,7 @@ export const Search: React.FC = () => {
                 onSearch()
               }}
               disabled={!searchParams.keyword}
+              loading={loading}
             >
               搜索
             </Button>
@@ -102,27 +123,30 @@ export const Search: React.FC = () => {
               <Tabs.Content value="PODCAST">
                 <TabPodcast
                   data={data}
-                  onLoadMore={() => {
-                    console.log('onLoadMore')
+                  onLoadMore={(loadMoreKey) => {
+                    onSearch(loadMoreKey)
                   }}
+                  loading={loading}
                 />
               </Tabs.Content>
 
               <Tabs.Content value="EPISODE">
                 <TabEpisode
                   data={data}
-                  onLoadMore={() => {
-                    console.log('more')
+                  onLoadMore={(loadMoreKey) => {
+                    onSearch(loadMoreKey)
                   }}
+                  loading={loading}
                 />
               </Tabs.Content>
 
               <Tabs.Content value="USER">
                 <TabUser
                   data={data}
-                  onLoadMore={() => {
-                    console.log('more')
+                  onLoadMore={(loadMoreKey) => {
+                    onSearch(loadMoreKey)
                   }}
+                  loading={loading}
                 />
               </Tabs.Content>
             </Box>

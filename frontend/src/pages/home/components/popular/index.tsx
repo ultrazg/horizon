@@ -57,7 +57,9 @@ const PopularPart: React.FC<IProps> = ({ data, loading, onRefresh }) => {
         <Button
           size="1"
           variant="soft"
+          color="gray"
           onClick={() => onRefresh()}
+          loading={loading}
         >
           <UpdateIcon />
           换一换

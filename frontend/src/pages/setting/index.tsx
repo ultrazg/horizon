@@ -19,6 +19,7 @@ import {
   ChevronRightIcon,
   ExitIcon,
   QuestionMarkCircledIcon,
+  SymbolIcon,
 } from '@radix-ui/react-icons'
 import {
   APP_NAME,
@@ -324,6 +325,7 @@ export const Setting: React.FC = () => {
               style={{ width: '100px' }}
               onClick={checkUpdate}
             >
+              <SymbolIcon />
               检查更新...
             </Button>
           </Box>

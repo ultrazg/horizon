@@ -5,20 +5,21 @@ import { Button } from '@radix-ui/themes'
 import { PlusIcon } from '@radix-ui/react-icons'
 import { PodcastType } from '@/types/podcast'
 import dayjs from 'dayjs'
+import { isEmpty } from 'lodash'
 
 type IProps = {
   data: { records: PodcastType[]; loadMoreKey: {} }
-  onLoadMore: () => void
+  onLoadMore: (loadMoreKey: {}) => void
+  loading: boolean
 }
 
-export const TabPodcast: React.FC<IProps> = ({ data, onLoadMore }) => {
+export const TabPodcast: React.FC<IProps> = ({ data, onLoadMore, loading }) => {
   return (
     <div className="search-result-podcast-layout">
       {data.records.length === 0 && (
         <div
           style={{
             width: '100%',
-            height: '80%',
             color: 'gray',
             display: 'flex',
             justifyContent: 'center',
@@ -66,6 +67,20 @@ export const TabPodcast: React.FC<IProps> = ({ data, onLoadMore }) => {
           </div>
         </div>
       ))}
+
+      <div className="podcast-load-more-button">
+        {!isEmpty(data.loadMoreKey) && (
+          <Button
+            color="gray"
+            onClick={() => {
+              onLoadMore(data.loadMoreKey)
+            }}
+            loading={loading}
+          >
+            加载更多
+          </Button>
+        )}
+      </div>
     </div>
   )
 }

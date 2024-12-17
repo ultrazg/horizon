@@ -261,7 +261,9 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
             </div>
 
             <div className="profile-avatar-layout">
-              <div className="pm-ip-loc">IP属地：{profileData?.ipLoc}</div>
+              <div className="pm-ip-loc">
+                IP属地：{profileData?.ipLoc || '未知'}
+              </div>
               <div
                 className="background-image"
                 style={{
@@ -392,7 +394,13 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
                 <Card
                   className="sticker-card"
                   onClick={() => {
-                    setStickerModalOpen(true)
+                    if (stickerData.records.length !== 0) {
+                      setStickerModalOpen(true)
+                    } else {
+                      toast(
+                        `${renderGender(profileData?.gender)}还没有获得贴纸`,
+                      )
+                    }
                   }}
                 >
                   <div

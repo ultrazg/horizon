@@ -4,15 +4,31 @@ import { SlBubble, SlEarphones } from 'react-icons/sl'
 import { EpisodeType } from '@/types/episode'
 import dayjs from 'dayjs'
 import './index.modules.scss'
+import { isEmpty } from 'lodash'
+import { Button } from '@radix-ui/themes'
 
 type IProps = {
   data: { records: EpisodeType[]; loadMoreKey: {} }
-  onLoadMore: () => void
+  onLoadMore: (loadMoreKey: {}) => void
+  loading: boolean
 }
 
-export const TabEpisode: React.FC<IProps> = ({ data, onLoadMore }) => {
+export const TabEpisode: React.FC<IProps> = ({ data, onLoadMore, loading }) => {
   return (
     <div className="search-result-episode-layout">
+      {data.records.length === 0 && (
+        <div
+          style={{
+            width: '100%',
+            color: 'gray',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          暂无数据
+        </div>
+      )}
       {data.records.map((item) => (
         <div
           key={item.eid}
@@ -44,6 +60,20 @@ export const TabEpisode: React.FC<IProps> = ({ data, onLoadMore }) => {
           </div>
         </div>
       ))}
+
+      <div className="episode-load-more-button">
+        {!isEmpty(data.loadMoreKey) && (
+          <Button
+            color="gray"
+            onClick={() => {
+              onLoadMore(data.loadMoreKey)
+            }}
+            loading={loading}
+          >
+            加载更多
+          </Button>
+        )}
+      </div>
     </div>
   )
 }

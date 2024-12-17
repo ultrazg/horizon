@@ -8,10 +8,11 @@ import './index.modules.scss'
 
 type IProps = {
   data: { records: baseUserType[]; loadMoreKey: {} }
-  onLoadMore: () => void
+  onLoadMore: (loadMoreKey: {}) => void
+  loading: boolean
 }
 
-export const TabUser: React.FC<IProps> = ({ data, onLoadMore }) => {
+export const TabUser: React.FC<IProps> = ({ data, onLoadMore, loading }) => {
   const [profileModal, setProfileModal] = useState<{
     open: boolean
     uid: string
@@ -27,7 +28,6 @@ export const TabUser: React.FC<IProps> = ({ data, onLoadMore }) => {
           <div
             style={{
               width: '100%',
-              height: '80%',
               color: 'gray',
               display: 'flex',
               justifyContent: 'center',
@@ -79,7 +79,17 @@ export const TabUser: React.FC<IProps> = ({ data, onLoadMore }) => {
         ))}
 
         <div className="user-load-more-button">
-          {!isEmpty(data.loadMoreKey) && <Button color="gray">加载更多</Button>}
+          {!isEmpty(data.loadMoreKey) && (
+            <Button
+              color="gray"
+              onClick={() => {
+                onLoadMore(data.loadMoreKey)
+              }}
+              loading={loading}
+            >
+              加载更多
+            </Button>
+          )}
         </div>
       </div>
 
