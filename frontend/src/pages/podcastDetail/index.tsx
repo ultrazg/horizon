@@ -1,12 +1,34 @@
+import React, { useEffect } from 'react'
 import { ColorfulShadow, NavBackButton } from '@/components'
 import { useLocation } from 'react-router-dom'
 import { AspectRatio, Box, Button, Heading, Text } from '@radix-ui/themes'
 import { CheckIcon } from '@radix-ui/react-icons'
 import { SlBubble, SlEarphones } from 'react-icons/sl'
+import { podcastDetail } from '@/api/podcast'
 import './index.modules.scss'
 
-export const PodcastDetail = () => {
+export const PodcastDetail: React.FC = () => {
   const { id } = useLocation().state
+
+  const getDetail = () => {
+    const params = {
+      uid: id,
+    }
+
+    podcastDetail(params)
+      .then((res) => {
+        console.log(res.data)
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+
+  useEffect(() => {
+    if (id) {
+      getDetail()
+    }
+  }, [id])
 
   return (
     <div className="podcast-detail-layout">

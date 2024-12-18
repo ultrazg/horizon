@@ -27,10 +27,10 @@ import {
 } from 'react-icons/sl'
 import { getProfile } from '@/api/profile'
 import { getUserStats } from '@/api/user'
-import { DialogType, ShowMessageDialog, toast } from '@/utils'
+import { DialogType, ShowMessageDialog, Storage, toast } from '@/utils'
 import { UserProfileType } from '@/types/profile'
 import { renderGender } from '@/utils/string'
-import { userStats } from '@/types/user'
+import { userStats, userType } from '@/types/user'
 import { formatTime } from '@/pages/profile/components/mileageDuration'
 import { stickerType } from '@/types/sticker'
 import { sticker } from '@/api/sticker'
@@ -39,6 +39,7 @@ import { EpisodeType } from '@/types/episode'
 import dayjs from 'dayjs'
 import { onRelationUpdate } from '@/pages/profile/components/followModal'
 import { onBlockedUserCreate } from '@/pages/setting/components/blockedModal'
+import { CONSTANT } from '@/types/constant'
 
 type IProps = {
   uid: string
@@ -52,6 +53,7 @@ type IProps = {
  * @constructor
  */
 export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
+  const userInfo: userType = Storage.get('user_info')
   const [width] = useState<number>(useDisplayInfo().Width * 0.5)
   const [height] = useState<number>(useDisplayInfo().Height * 0.7)
   const [stickerModalOpen, setStickerModalOpen] = useState<boolean>(false)
@@ -152,6 +154,10 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
    * @param nickname 用户的昵称
    */
   const onBlockHandle = (uid: string, nickname: string) => {
+    if (uid === userInfo.uid) {
+      return toast(CONSTANT.BLOCK_YOURSELF)
+    }
+
     ShowMessageDialog(
       DialogType.QUESTION,
       '提示',

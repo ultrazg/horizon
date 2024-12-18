@@ -1,4 +1,5 @@
 export enum CONSTANT {
   BLOCKED_BY_VIEWER = '该用户已被拉黑，无法查看',
-  RESOPNSE_CODE_500 = '服务器开小差了',
+  BLOCK_YOURSELF = '你无法拉黑自己',
+  RESPONSE_CODE_500 = '服务器开小差了',
 }

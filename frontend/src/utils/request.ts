@@ -90,7 +90,7 @@ httpRequest.interceptors.response.use(
     }
 
     if (statusCode && statusCode >= 500) {
-      toast(CONSTANT.RESOPNSE_CODE_500)
+      toast(CONSTANT.RESPONSE_CODE_500)
     }
 
     if (response) {
