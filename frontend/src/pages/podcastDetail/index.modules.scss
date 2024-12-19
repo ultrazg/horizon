@@ -33,13 +33,14 @@
         }
 
         .layout {
-          display: flex;
-          justify-content: center;
+          display: grid;
+          grid-template-columns: repeat(6, 1fr);
 
           .podcaster {
             width: 6rem;
             height: 7.3rem;
-            margin-right: 0.7rem;
+            margin-right: 1rem;
+            margin-bottom: 1rem;
             cursor: pointer;
 
             .top {
@@ -76,6 +77,11 @@
       .episode-lists {
         margin-top: 4rem;
         padding: 0 10rem;
+
+        .label {
+          text-align: center;
+          margin-bottom: 0.7rem;
+        }
 
         .episode-item {
           height: 10rm;

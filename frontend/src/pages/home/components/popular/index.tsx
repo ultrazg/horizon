@@ -9,13 +9,19 @@ type IProps = {
   data: PopularType
   loading: boolean
   onRefresh: () => void
+  onDetail: (pid: string) => void
 }
 
 /**
  * 发现-大家都在听
  * @constructor
  */
-const PopularPart: React.FC<IProps> = ({ data, loading, onRefresh }) => {
+const PopularPart: React.FC<IProps> = ({
+  data,
+  loading,
+  onRefresh,
+  onDetail,
+}) => {
   return (
     <div className="popular-layout">
       <h3>大家都在听</h3>
@@ -40,7 +46,13 @@ const PopularPart: React.FC<IProps> = ({ data, loading, onRefresh }) => {
                   />
                 </div>
                 <div className="info-box">
-                  <p>{item.episode.podcast.title}</p>
+                  <p
+                    onClick={() => {
+                      onDetail(item.episode.podcast.pid)
+                    }}
+                  >
+                    {item.episode.podcast.title}
+                  </p>
                   <p>{item.episode.title}</p>
                   <p>
                     <QuoteIcon />

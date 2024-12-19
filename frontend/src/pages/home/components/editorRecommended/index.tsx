@@ -7,9 +7,10 @@ import { Box, Flex, HoverCard, Text, Spinner } from '@radix-ui/themes'
 type IProps = {
   data: any
   loading: boolean
+  onDetail: (pid: string) => void
 }
 
-const EditorRecommended: React.FC<IProps> = ({ data, loading }) => {
+const EditorRecommended: React.FC<IProps> = ({ data, loading, onDetail }) => {
   return (
     <div className="editor-recommended-layout">
       <h3>编辑精选</h3>
@@ -39,7 +40,13 @@ const EditorRecommended: React.FC<IProps> = ({ data, loading }) => {
                   <HoverCard.Root>
                     <HoverCard.Trigger>
                       <div className="info-box">
-                        <p>{item.episode.podcast.title}</p>
+                        <p
+                          onClick={() => {
+                            onDetail(item.episode.podcast.pid)
+                          }}
+                        >
+                          {item.episode.podcast.title}
+                        </p>
                         <p>{item.episode.title}</p>
                         <p>
                           <span>

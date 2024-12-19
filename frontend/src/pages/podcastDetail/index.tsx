@@ -1,34 +1,84 @@
-import React, { useEffect } from 'react'
-import { ColorfulShadow, NavBackButton } from '@/components'
+import React, { useEffect, useState } from 'react'
+import { ColorfulShadow, NavBackButton, ProfileModal } from '@/components'
 import { useLocation } from 'react-router-dom'
 import { AspectRatio, Box, Button, Heading, Text } from '@radix-ui/themes'
-import { CheckIcon } from '@radix-ui/react-icons'
+import { CheckIcon, PlusIcon } from '@radix-ui/react-icons'
 import { SlBubble, SlEarphones } from 'react-icons/sl'
 import { podcastDetail } from '@/api/podcast'
+import { episodeList } from '@/api/episode'
+import { PodcastType } from '@/types/podcast'
 import './index.modules.scss'
+import { EpisodeType } from '@/types/episode'
+import { isEmpty } from 'lodash'
+import dayjs from 'dayjs'
 
 export const PodcastDetail: React.FC = () => {
-  const { id } = useLocation().state
+  const { pid } = useLocation().state
+  const [podcastDetailData, setPodcastDetailData] = useState<PodcastType>()
+  const [profileModal, setProfileModal] = useState<{
+    open: boolean
+    uid: string
+  }>({
+    open: false,
+    uid: '',
+  })
+  const [episodeData, setEpisodeData] = useState<{
+    records: EpisodeType[]
+    loadMoreKey: {}
+  }>({
+    records: [],
+    loadMoreKey: {},
+  })
 
+  /**
+   * 获取播客详情
+   */
   const getDetail = () => {
     const params = {
-      uid: id,
+      pid,
     }
 
     podcastDetail(params)
-      .then((res) => {
-        console.log(res.data)
+      .then((res) => setPodcastDetailData(res.data.data))
+      .catch((err) => {
+        console.error(err)
       })
+  }
+
+  /**
+   * 获取播客单集列表
+   * @param loadMoreKey
+   */
+  const getEpisodeList = (loadMoreKey = {}) => {
+    let params: { pid: string; loadMoreKey?: {} } = {
+      pid,
+    }
+
+    if (!isEmpty(loadMoreKey)) {
+      params = {
+        ...params,
+        loadMoreKey,
+      }
+    }
+
+    episodeList(params)
+      .then((res) =>
+        setEpisodeData({
+          records: res.data.data,
+          loadMoreKey: res.data?.loadMoreKey,
+        }),
+      )
       .catch((err) => {
         console.error(err)
       })
   }
 
   useEffect(() => {
-    if (id) {
+    if (pid) {
       getDetail()
+      getEpisodeList()
     }
-  }, [id])
+  }, [pid])
 
   return (
     <div className="podcast-detail-layout">
@@ -38,8 +88,8 @@ export const PodcastDetail: React.FC = () => {
         <div className="pdi-top">
           <Box className="pdi-top-cover">
             <img
-              src="https://images.unsplash.com/photo-1479030160180-b1860951d696?&auto=format&fit=crop&w=1200&q=80"
-              alt="A house in a forest"
+              src={podcastDetailData?.image.picUrl}
+              alt={podcastDetailData?.title}
               style={{
                 objectFit: 'cover',
                 width: '20rem',
@@ -54,8 +104,9 @@ export const PodcastDetail: React.FC = () => {
               <Heading
                 size="9"
                 align="left"
+                style={{ color: podcastDetailData?.color.dark }}
               >
-                忽左忽右
+                {podcastDetailData?.title}
               </Heading>
               <Text
                 align="left"
@@ -65,7 +116,7 @@ export const PodcastDetail: React.FC = () => {
                 size="5"
                 style={{ fontWeight: '300' }}
               >
-                “忽左忽右”是一档文化沙龙类播客节目，试图为中文播客听众提供基于经验视角的话题和内容。本节目由JustPod出品
+                {podcastDetailData?.description}
               </Text>
               <div className="sub">
                 <Text
@@ -73,12 +124,23 @@ export const PodcastDetail: React.FC = () => {
                   mr="5"
                   style={{ fontWeight: '300' }}
                 >
-                  758554订阅
+                  {podcastDetailData?.subscriptionCount} 订阅
                 </Text>
-                <Button variant="soft">
-                  <CheckIcon />
-                  已订阅
-                </Button>
+                {podcastDetailData?.subscriptionStatus === 'ON' && (
+                  <Button
+                    variant="soft"
+                    color="gray"
+                  >
+                    <CheckIcon />
+                    已订阅
+                  </Button>
+                )}
+                {podcastDetailData?.subscriptionStatus === 'OFF' && (
+                  <Button variant="soft">
+                    <PlusIcon />
+                    订阅
+                  </Button>
+                )}
               </div>
             </div>
           </div>
@@ -94,175 +156,88 @@ export const PodcastDetail: React.FC = () => {
               <div className="label">节目主播</div>
 
               <div className="layout">
-                <div className="podcaster">
-                  <div className="top">
-                    <AspectRatio ratio={1}>
-                      <img
-                        src="https://images.unsplash.com/photo-1479030160180-b1860951d696?&auto=format&fit=crop&w=1200&q=80"
-                        alt="A house in a forest"
-                      />
-                    </AspectRatio>
+                {podcastDetailData?.podcasters.map((item) => (
+                  <div
+                    key={item.uid}
+                    className="podcaster"
+                    onClick={() => {
+                      setProfileModal({
+                        open: true,
+                        uid: item.uid,
+                      })
+                    }}
+                  >
+                    <div className="top">
+                      <AspectRatio ratio={1}>
+                        <img
+                          src={item.avatar.picture.picUrl}
+                          alt={item.nickname}
+                        />
+                      </AspectRatio>
+                    </div>
+                    <div className="bottom">{item.nickname}</div>
                   </div>
-                  <div className="bottom">JustPod</div>
-                </div>
+                ))}
               </div>
             </div>
 
             <div className="episode-lists">
-              <div className="episode-item">
-                <div className="left">
-                  <ColorfulShadow
-                    className="episode-cover"
-                    curPointer
-                    mask
-                    src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?&w=256&h=256&q=70&crop=focalpoint&fp-x=0.5&fp-y=0.3&fp-z=1&fit=crop"
-                  />
+              <div className="label">节目列表</div>
+
+              {episodeData.records.map((item) => (
+                <div className="episode-item">
+                  <div className="left">
+                    <ColorfulShadow
+                      className="episode-cover"
+                      curPointer
+                      mask
+                      src={
+                        item?.image
+                          ? item.image.picUrl
+                          : item.podcast.image.picUrl
+                      }
+                    />
+                  </div>
+                  <div className="right">
+                    <p>{item.title}</p>
+                    <p>{item.description}</p>
+                    <p>
+                      <span>
+                        {Math.floor(item.duration / 60)}分钟 ·{' '}
+                        {dayjs(item.pubDate).format('MM/DD')}
+                      </span>
+                      <span>
+                        <SlEarphones />
+                        {item.playCount}
+                        <SlBubble />
+                        {item.commentCount}
+                      </span>
+                    </p>
+                  </div>
                 </div>
-                <div className="right">
-                  <p>小米SU7营销复盘：你所知道的为什么都是错的-Vol 46</p>
-                  <p>
-                    本期节目关注风口上的小米汽车，主播借助在营销、产品上的经验解答。欢迎在评论区留言发表你对小米汽车的感受与看法，对于节目话题的更多观点，获取更多未呈现在节目中的扩展阅读，欢迎加群讨论
-                  </p>
-                  <p>
-                    <span>30分钟 · 03/29</span>
-                    <span>
-                      <SlEarphones />
-                      4.3万+
-                      <SlBubble />
-                      349
-                    </span>
-                  </p>
-                </div>
-              </div>
-              <div className="episode-item">
-                <div className="left">
-                  <ColorfulShadow
-                    className="episode-cover"
-                    curPointer
-                    mask
-                    src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?&w=256&h=256&q=70&crop=focalpoint&fp-x=0.5&fp-y=0.3&fp-z=1&fit=crop"
-                  />
-                </div>
-                <div className="right">
-                  <p>小米SU7营销复盘：你所知道的为什么都是错的-Vol 46</p>
-                  <p>
-                    本期节目关注风口上的小米汽车，主播借助在营销、产品上的经验解答。欢迎在评论区留言发表你对小米汽车的感受与看法，对于节目话题的更多观点，获取更多未呈现在节目中的扩展阅读，欢迎加群讨论
-                  </p>
-                  <p>
-                    <span>30分钟 · 03/29</span>
-                    <span>
-                      <SlEarphones />
-                      4.3万+
-                      <SlBubble />
-                      349
-                    </span>
-                  </p>
-                </div>
-              </div>
-              <div className="episode-item">
-                <div className="left">
-                  <ColorfulShadow
-                    className="episode-cover"
-                    curPointer
-                    mask
-                    src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?&w=256&h=256&q=70&crop=focalpoint&fp-x=0.5&fp-y=0.3&fp-z=1&fit=crop"
-                  />
-                </div>
-                <div className="right">
-                  <p>小米SU7营销复盘：你所知道的为什么都是错的-Vol 46</p>
-                  <p>
-                    本期节目关注风口上的小米汽车，主播借助在营销、产品上的经验解答。欢迎在评论区留言发表你对小米汽车的感受与看法，对于节目话题的更多观点，获取更多未呈现在节目中的扩展阅读，欢迎加群讨论
-                  </p>
-                  <p>
-                    <span>30分钟 · 03/29</span>
-                    <span>
-                      <SlEarphones />
-                      4.3万+
-                      <SlBubble />
-                      349
-                    </span>
-                  </p>
-                </div>
-              </div>
-              <div className="episode-item">
-                <div className="left">
-                  <ColorfulShadow
-                    className="episode-cover"
-                    curPointer
-                    mask
-                    src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?&w=256&h=256&q=70&crop=focalpoint&fp-x=0.5&fp-y=0.3&fp-z=1&fit=crop"
-                  />
-                </div>
-                <div className="right">
-                  <p>小米SU7营销复盘：你所知道的为什么都是错的-Vol 46</p>
-                  <p>
-                    本期节目关注风口上的小米汽车，主播借助在营销、产品上的经验解答。欢迎在评论区留言发表你对小米汽车的感受与看法，对于节目话题的更多观点，获取更多未呈现在节目中的扩展阅读，欢迎加群讨论
-                  </p>
-                  <p>
-                    <span>30分钟 · 03/29</span>
-                    <span>
-                      <SlEarphones />
-                      4.3万+
-                      <SlBubble />
-                      349
-                    </span>
-                  </p>
-                </div>
-              </div>
-              <div className="episode-item">
-                <div className="left">
-                  <ColorfulShadow
-                    className="episode-cover"
-                    curPointer
-                    mask
-                    src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?&w=256&h=256&q=70&crop=focalpoint&fp-x=0.5&fp-y=0.3&fp-z=1&fit=crop"
-                  />
-                </div>
-                <div className="right">
-                  <p>小米SU7营销复盘：你所知道的为什么都是错的-Vol 46</p>
-                  <p>
-                    本期节目关注风口上的小米汽车，主播借助在营销、产品上的经验解答。欢迎在评论区留言发表你对小米汽车的感受与看法，对于节目话题的更多观点，获取更多未呈现在节目中的扩展阅读，欢迎加群讨论
-                  </p>
-                  <p>
-                    <span>30分钟 · 03/29</span>
-                    <span>
-                      <SlEarphones />
-                      4.3万+
-                      <SlBubble />
-                      349
-                    </span>
-                  </p>
-                </div>
-              </div>
-              <div className="episode-item">
-                <div className="left">
-                  <ColorfulShadow
-                    className="episode-cover"
-                    curPointer
-                    mask
-                    src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?&w=256&h=256&q=70&crop=focalpoint&fp-x=0.5&fp-y=0.3&fp-z=1&fit=crop"
-                  />
-                </div>
-                <div className="right">
-                  <p>小米SU7营销复盘：你所知道的为什么都是错的-Vol 46</p>
-                  <p>
-                    本期节目关注风口上的小米汽车，主播借助在营销、产品上的经验解答。欢迎在评论区留言发表你对小米汽车的感受与看法，对于节目话题的更多观点，获取更多未呈现在节目中的扩展阅读，欢迎加群讨论
-                  </p>
-                  <p>
-                    <span>30分钟 · 03/29</span>
-                    <span>
-                      <SlEarphones />
-                      4.3万+
-                      <SlBubble />
-                      349
-                    </span>
-                  </p>
-                </div>
+              ))}
+
+              <div
+                style={{ paddingBottom: '3rem' }}
+                className="load-more-button"
+              >
+                <Button color="gray">加载更多</Button>
               </div>
             </div>
           </Box>
         </div>
       </div>
+
+      <ProfileModal
+        uid={profileModal.uid}
+        open={profileModal.open}
+        onClose={() => {
+          setProfileModal({
+            open: false,
+            uid: '',
+          })
+        }}
+      />
     </div>
   )
 }

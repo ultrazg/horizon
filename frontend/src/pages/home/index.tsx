@@ -9,6 +9,7 @@ import './index.modules.scss'
 import { EpisodeType } from '@/types/episode'
 import { PodcastType } from '@/types/podcast'
 import { imageType } from '@/types/image'
+import { useNavigate } from 'react-router-dom'
 
 export type PopularType = {
   target?: TargetType[]
@@ -77,6 +78,15 @@ export const Home: React.FC = () => {
     records: [],
     loading: false,
   }) // TA 们的喜欢
+
+  const navigateTo = useNavigate()
+  const goPodcastDetail = (pid: string) => {
+    navigateTo('/podcast/detail', {
+      state: {
+        pid,
+      },
+    })
+  }
 
   const onRefreshEpisodeCommend = () => {
     setPopular({
@@ -195,18 +205,30 @@ export const Home: React.FC = () => {
         onRefresh={() => {
           onRefreshEpisodeCommend()
         }}
+        onDetail={(pid) => {
+          goPodcastDetail(pid)
+        }}
       />
       <Recommended
         data={recommended.records}
         loading={recommended.loading}
+        onDetail={(pid) => {
+          goPodcastDetail(pid)
+        }}
       />
       <EditorRecommended
         data={editorRecommended.records}
         loading={editorRecommended.loading}
+        onDetail={(pid) => {
+          goPodcastDetail(pid)
+        }}
       />
       <PeopleLike
         data={peopleLike.records}
         loading={peopleLike.loading}
+        onDetail={(pid) => {
+          goPodcastDetail(pid)
+        }}
       />
     </div>
   )

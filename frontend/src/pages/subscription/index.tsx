@@ -3,11 +3,20 @@ import { AspectRatio, Box, Card, Grid, Text, Spinner } from '@radix-ui/themes'
 import { subscription } from '@/api/subscription'
 import dayjs from 'dayjs'
 import './index.modules.scss'
+import { useNavigate } from 'react-router-dom'
 
 // TODO: 分页
 export const Subscription: React.FC = () => {
   const [lists, setLists] = useState<any>([])
   const [loading, setLoading] = useState<boolean>(false)
+  const navigateTo = useNavigate()
+  const goPodcastDetail = (pid: string) => {
+    navigateTo('/podcast/detail', {
+      state: {
+        pid,
+      },
+    })
+  }
 
   /**
    * 获取订阅列表数据
@@ -57,6 +66,9 @@ export const Subscription: React.FC = () => {
               <Card
                 className="podcast-cover"
                 title={item.title}
+                onClick={() => {
+                  goPodcastDetail(item.pid)
+                }}
               >
                 <AspectRatio ratio={8 / 8}>
                   <img
