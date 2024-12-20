@@ -193,6 +193,90 @@
     }
   }
 
+  .pm-like-content {
+    margin-top: 1.7rem;
+    padding-left: 4rem;
+    padding-right: 4rem;
+
+    h3 {
+      font-size: 1rem;
+      margin-bottom: 0.7rem;
+      color: $secondary-font-color;
+      cursor: pointer;
+    }
+
+    .pm-like-item {
+      margin-bottom: 1.7rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      .top {
+        display: flex;
+        font-weight: 300;
+
+        span {
+          flex: 1;
+
+          &:first-child {
+            text-align: left;
+          }
+
+          &:last-child {
+            text-align: right;
+          }
+        }
+      }
+
+      .middle {
+        padding: 0.7rem 0;
+        text-align: center;
+        overflow: hidden;
+        display: -webkit-box;
+        line-clamp: 4;
+        box-orient: vertical;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 4;
+      }
+
+      .bottom {
+        display: flex;
+        height: 3rem;
+
+        .left {
+          .episode-cover {
+            width: 3rem;
+            height: 3rem;
+          }
+        }
+
+        .right {
+          margin-left: 0.7rem;
+
+          p {
+            overflow: hidden;
+            display: -webkit-box;
+            line-clamp: 1;
+            box-orient: vertical;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 300;
+
+            &:first-child {
+            }
+
+            &:last-child {
+              color: $secondary-font-color;
+            }
+          }
+        }
+      }
+    }
+  }
+
   .pm-history-content {
     margin-top: 1.7rem;
     padding-left: 4rem;

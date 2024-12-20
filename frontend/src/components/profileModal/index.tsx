@@ -40,6 +40,8 @@ import dayjs from 'dayjs'
 import { onRelationUpdate } from '@/pages/profile/components/followModal'
 import { onBlockedUserCreate } from '@/pages/setting/components/blockedModal'
 import { CONSTANT } from '@/types/constant'
+import { pickListRecent } from '@/api/pick'
+import { PickRecentType } from '@/types/pick'
 
 type IProps = {
   uid: string
@@ -74,6 +76,13 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
     total: 0,
   })
   const [playedLists, setPlayedLists] = useState<EpisodeType[]>([])
+  const [pickRecentList, setPickRecentList] = useState<{
+    records: PickRecentType[]
+    total: number
+  }>({
+    records: [],
+    total: 0,
+  })
 
   const avoidDefaultDomBehavior = (e: Event) => {
     e.preventDefault()
@@ -173,12 +182,33 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
     })
   }
 
+  /**
+   * 查询用户的喜欢（片段）
+   */
+  const getPickRecentList = () => {
+    const params = {
+      uid,
+    }
+
+    pickListRecent(params)
+      .then((res) =>
+        setPickRecentList({
+          records: res.data.data,
+          total: res.data.total,
+        }),
+      )
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+
   useEffect(() => {
     if (open) {
       getUserProfile()
       onGetUserStats()
       onGetSticker()
       onGetPlayedList()
+      getPickRecentList()
     }
   }, [open])
 
@@ -393,6 +423,53 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
               </div>
             )}
 
+            {/* TODO: TA的喜欢 */}
+            {pickRecentList.total !== 0 && (
+              <div className="pm-like-content">
+                <h3>
+                  {renderGender(profileData?.gender)}的喜欢
+                  {pickRecentList.total !== 0
+                    ? `(${pickRecentList.total})`
+                    : null}
+                  <ChevronRightIcon />
+                </h3>
+
+                {pickRecentList.records.map((item) => (
+                  <Card
+                    className="pm-like-item"
+                    key={item.id}
+                  >
+                    <div className="top">
+                      <span>{dayjs(item.pickedAt).format('MM/DD')}</span>
+                      <span>123</span>
+                    </div>
+                    <div className="middle">{item.story.text}</div>
+                    <Separator
+                      my="3"
+                      size="4"
+                    />
+                    <div className="bottom">
+                      <div className="left">
+                        <ColorfulShadow
+                          className="episode-cover"
+                          curPointer
+                          src={
+                            item.episode?.image
+                              ? item.episode.image.picUrl
+                              : item.episode.podcast.image.picUrl
+                          }
+                        />
+                      </div>
+                      <div className="right">
+                        <p>{item.episode.title}</p>
+                        <p>{item.episode.podcast.title}</p>
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            )}
+
             <div className="pm-sticker-layout">
               <div className="pm-sticker-content">
                 <h3>{renderGender(profileData?.gender)}的贴纸库</h3>
@@ -428,8 +505,6 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
                 </Card>
               </div>
             </div>
-
-            {/* TODO: TA的喜欢 */}
 
             <div className="pm-history-content">
               <h3>最近听过</h3>
