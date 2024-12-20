@@ -29,6 +29,7 @@ export const PodcastDetail: React.FC = () => {
     records: [],
     loadMoreKey: {},
   })
+  const [loading, setLoading] = useState<boolean>(false)
 
   /**
    * 获取播客详情
@@ -55,6 +56,8 @@ export const PodcastDetail: React.FC = () => {
     }
 
     if (!isEmpty(loadMoreKey)) {
+      setLoading(true)
+
       params = {
         ...params,
         loadMoreKey,
@@ -62,14 +65,24 @@ export const PodcastDetail: React.FC = () => {
     }
 
     episodeList(params)
-      .then((res) =>
-        setEpisodeData({
-          records: res.data.data,
-          loadMoreKey: res.data?.loadMoreKey,
-        }),
-      )
+      .then((res) => {
+        if (isEmpty(loadMoreKey)) {
+          setEpisodeData({
+            records: res.data.data,
+            loadMoreKey: res.data?.loadMoreKey,
+          })
+        } else {
+          setEpisodeData({
+            records: [...episodeData.records, ...res.data.data],
+            loadMoreKey: res.data?.loadMoreKey,
+          })
+        }
+      })
       .catch((err) => {
         console.error(err)
+      })
+      .finally(() => {
+        setLoading(false)
       })
   }
 
@@ -218,10 +231,22 @@ export const PodcastDetail: React.FC = () => {
               ))}
 
               <div
-                style={{ paddingBottom: '3rem' }}
+                style={
+                  isEmpty(episodeData.loadMoreKey)
+                    ? { display: 'none' }
+                    : { paddingBottom: '3rem' }
+                }
                 className="load-more-button"
               >
-                <Button color="gray">加载更多</Button>
+                <Button
+                  color="gray"
+                  onClick={() => {
+                    getEpisodeList(episodeData.loadMoreKey)
+                  }}
+                  loading={loading}
+                >
+                  加载更多
+                </Button>
               </div>
             </div>
           </Box>
