@@ -10,6 +10,7 @@ import { EpisodeType } from '@/types/episode'
 import { PodcastType } from '@/types/podcast'
 import { imageType } from '@/types/image'
 import { useNavigate } from 'react-router-dom'
+import { baseUserType } from '@/types/user'
 
 export type PopularType = {
   target?: TargetType[]
@@ -41,12 +42,7 @@ type pick = {
     iconUrl: string
     text: string
   }
-  user: {
-    avatar: {
-      picture: imageType
-    }
-    nickname: string
-  }
+  user: baseUserType
 }
 
 export const Home: React.FC = () => {

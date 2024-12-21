@@ -7,11 +7,11 @@ import {
   HoverCard,
   Skeleton,
 } from '@radix-ui/themes'
-import { HeartFilledIcon, PlayIcon } from '@radix-ui/react-icons'
+import { PlayIcon } from '@radix-ui/react-icons'
 import './index.modules.scss'
-import { ColorfulShadow } from '@/components'
+import { ColorfulShadow, ProfileModal } from '@/components'
 import { PeopleLikeType } from '@/pages/home'
-import React from 'react'
+import React, { useState } from 'react'
 import dayjs from 'dayjs'
 
 type IProps = {
@@ -21,6 +21,14 @@ type IProps = {
 }
 
 const PeopleLike: React.FC<IProps> = ({ data, loading, onDetail }) => {
+  const [profileModal, setProfileModal] = useState<{
+    open: boolean
+    uid: string
+  }>({
+    open: false,
+    uid: '',
+  })
+
   return (
     <div className="people-like-layout">
       <h3>TA们的喜欢</h3>
@@ -41,11 +49,19 @@ const PeopleLike: React.FC<IProps> = ({ data, loading, onDetail }) => {
                 <Box key={item.pick.id}>
                   <Card className="card">
                     <div className="user-info">
-                      <div className="l">
+                      <div
+                        className="l"
+                        onClick={() => {
+                          setProfileModal({
+                            open: true,
+                            uid: item.pick.user.uid,
+                          })
+                        }}
+                      >
                         <Avatar
                           radius="full"
                           size="4"
-                          fallback
+                          fallback={item.pick.user.nickname}
                           src={item.pick.user.avatar.picture.picUrl}
                         />
                       </div>
@@ -54,8 +70,11 @@ const PeopleLike: React.FC<IProps> = ({ data, loading, onDetail }) => {
                         <p>{dayjs(item.pick.pickedAt).format('MM/DD')}</p>
                       </div>
                       <div className="r">
-                        <HeartFilledIcon />
                         {item.pick.likeCount}
+                        <img
+                          src={item.pick.story.iconUrl}
+                          alt="like_icon"
+                        />
                       </div>
                     </div>
 
@@ -105,6 +124,17 @@ const PeopleLike: React.FC<IProps> = ({ data, loading, onDetail }) => {
           </ScrollArea>
         </div>
       </Skeleton>
+
+      <ProfileModal
+        uid={profileModal.uid}
+        open={profileModal.open}
+        onClose={() => {
+          setProfileModal({
+            open: false,
+            uid: '',
+          })
+        }}
+      />
     </div>
   )
 }

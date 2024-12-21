@@ -202,7 +202,6 @@
       font-size: 1rem;
       margin-bottom: 0.7rem;
       color: $secondary-font-color;
-      cursor: pointer;
     }
 
     .pm-like-item {
@@ -225,12 +224,21 @@
 
           &:last-child {
             text-align: right;
+            cursor: default;
+
+            img {
+              margin-left: .3rem;
+              cursor: pointer;
+              vertical-align: middle;
+              width: 1.2rem;
+              height: 1.2rem;
+            }
           }
         }
       }
 
       .middle {
-        padding: 0.7rem 0;
+        margin-top: 0.7rem;
         text-align: center;
         overflow: hidden;
         display: -webkit-box;

@@ -423,15 +423,16 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
               </div>
             )}
 
-            {/* TODO: TA的喜欢 */}
             {pickRecentList.total !== 0 && (
               <div className="pm-like-content">
-                <h3>
+                <h3
+                  style={pickRecentList.total > 4 ? { cursor: 'pointer' } : {}}
+                >
                   {renderGender(profileData?.gender)}的喜欢
                   {pickRecentList.total !== 0
                     ? `(${pickRecentList.total})`
                     : null}
-                  <ChevronRightIcon />
+                  {pickRecentList.total > 4 && <ChevronRightIcon />}
                 </h3>
 
                 {pickRecentList.records.map((item) => (
@@ -441,9 +442,20 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
                   >
                     <div className="top">
                       <span>{dayjs(item.pickedAt).format('MM/DD')}</span>
-                      <span>123</span>
+                      <span>
+                        <span>{item.likeCount}</span>
+                        <img
+                          src={item.story.iconUrl}
+                          alt="like_icon"
+                        />
+                      </span>
                     </div>
-                    <div className="middle">{item.story.text}</div>
+                    <div
+                      className="middle"
+                      title={item.story.text}
+                    >
+                      {item.story.text}
+                    </div>
                     <Separator
                       my="3"
                       size="4"
@@ -474,35 +486,43 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
               <div className="pm-sticker-content">
                 <h3>{renderGender(profileData?.gender)}的贴纸库</h3>
 
-                <Card
-                  className="sticker-card"
-                  onClick={() => {
-                    if (stickerData.records.length !== 0) {
-                      setStickerModalOpen(true)
-                    } else {
-                      toast(
-                        `${renderGender(profileData?.gender)}还没有获得贴纸`,
-                      )
-                    }
-                  }}
-                >
+                {stickerData.total === 0 ? (
                   <div
-                    className="sticker-bgi"
                     style={{
-                      backgroundImage: `url(${stickerData.records.length === 0 ? '' : stickerData.records[0].image.picUrl})`,
+                      width: '100%',
+                      color: 'gray',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
                     }}
-                  />
-                  <div>
-                    {stickerData.total}张贴纸
-                    <ChevronRightIcon />
+                  >
+                    暂无数据
                   </div>
-                  <div>
-                    最新：
-                    {stickerData.records.length === 0
-                      ? '-'
-                      : stickerData.records[0].name}
-                  </div>
-                </Card>
+                ) : (
+                  <Card
+                    className="sticker-card"
+                    onClick={() => {
+                      setStickerModalOpen(true)
+                    }}
+                  >
+                    <div
+                      className="sticker-bgi"
+                      style={{
+                        backgroundImage: `url(${stickerData.total === 0 ? '' : stickerData.records[0].image.picUrl})`,
+                      }}
+                    />
+                    <div>
+                      {stickerData.total}张贴纸
+                      <ChevronRightIcon />
+                    </div>
+                    <div>
+                      最新：
+                      {stickerData.total === 0
+                        ? '-'
+                        : stickerData.records[0].name}
+                    </div>
+                  </Card>
+                )}
               </div>
             </div>
 
