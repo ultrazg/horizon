@@ -252,6 +252,15 @@
         display: flex;
         height: 3rem;
 
+        .episode-removed {
+          cursor: default;
+          user-select: none;
+          -webkit-user-select: none;
+          width: 100%;
+          color: $secondary-font-color;
+          text-align: center;
+        }
+
         .left {
           .episode-cover {
             width: 3rem;
@@ -315,6 +324,7 @@
 
         p {
           &:first-child {
+            height: 1.5rem;
             font-size: 1.2rem;
             font-weight: bold;
             overflow: hidden;

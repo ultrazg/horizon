@@ -461,21 +461,29 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
                       size="4"
                     />
                     <div className="bottom">
-                      <div className="left">
-                        <ColorfulShadow
-                          className="episode-cover"
-                          curPointer
-                          src={
-                            item.episode?.image
-                              ? item.episode.image.picUrl
-                              : item.episode.podcast.image.picUrl
-                          }
-                        />
-                      </div>
-                      <div className="right">
-                        <p>{item.episode.title}</p>
-                        <p>{item.episode.podcast.title}</p>
-                      </div>
+                      {item.episode.status === 'REMOVED' ? (
+                        <div className="episode-removed">
+                          {CONSTANT.EPISODE_STATUS_REMOVED}
+                        </div>
+                      ) : (
+                        <>
+                          <div className="left">
+                            <ColorfulShadow
+                              className="episode-cover"
+                              curPointer
+                              src={
+                                item.episode?.image
+                                  ? item.episode.image.picUrl
+                                  : item.episode.podcast.image.picUrl
+                              }
+                            />
+                          </div>
+                          <div className="right">
+                            <p>{item.episode.title}</p>
+                            <p>{item.episode.podcast.title}</p>
+                          </div>
+                        </>
+                      )}
                     </div>
                   </Card>
                 ))}
