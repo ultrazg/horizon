@@ -149,6 +149,8 @@ github.com/ugorji/go/codec v1.2.12 h1:9LC83zGrHhuUA9l16C9AHXAqEV/2wBQ4nkvumAE65E
 github.com/ugorji/go/codec v1.2.12/go.mod h1:UNopzCgEMSXjBc6AOMqYvWC1ktqTAfzJZUZgYf6w6lg=
 github.com/ultrazg/xyz v1.7.1 h1:TmeqYivllgw2c5QrwqETpjkJM3kQlf4YGMQZirL9QX8=
 github.com/ultrazg/xyz v1.7.1/go.mod h1:DsGTQPafglbNqto/UM9nyBhhWFow011O18diUvnBPV8=
+github.com/ultrazg/xyz v1.8.0 h1:9K2TTbYslDffQOHV4zOmkoFzIBc/pTOLbs7Uv9u8/cQ=
+github.com/ultrazg/xyz v1.8.0/go.mod h1:DsGTQPafglbNqto/UM9nyBhhWFow011O18diUvnBPV8=
 github.com/valyala/bytebufferpool v1.0.0 h1:GqA5TC/0021Y/b9FG4Oi9Mr3q7XYx6KllzawFIhcdPw=
 github.com/valyala/bytebufferpool v1.0.0/go.mod h1:6bBcMArwyJ5K/AmCkWv1jt77kVWyCJ6HpOuEn7z0Csc=
 github.com/valyala/fasttemplate v1.2.1/go.mod h1:KHLXt3tVN2HBp8eijSv/kGJopbvo7S+qRAEEKiv+SiQ=
