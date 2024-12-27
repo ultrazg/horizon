@@ -11,10 +11,12 @@ import './index.modules.scss'
 import { EpisodeType } from '@/types/episode'
 import { isEmpty } from 'lodash'
 import dayjs from 'dayjs'
+import { DialogType, ShowMessageDialog, toast } from '@/utils'
+import { updateSubscription } from '@/api/subscription'
 
 export const PodcastDetail: React.FC = () => {
   const { pid } = useLocation().state
-  const [podcastDetailData, setPodcastDetailData] = useState<PodcastType>()
+  const [podcastDetailData, setPodcastDetailData] = useState<PodcastType>({})
   const [profileModal, setProfileModal] = useState<{
     open: boolean
     uid: string
@@ -91,6 +93,55 @@ export const PodcastDetail: React.FC = () => {
       })
   }
 
+  /**
+   * 更新订阅
+   * @param pid 节目id
+   * @param podcastTitle 节目标题
+   * @param mode 是否订阅
+   */
+  const onUpdateSubscription = (
+    pid: string,
+    podcastTitle: string,
+    mode: 'ON' | 'OFF',
+  ) => {
+    const params = {
+      pid,
+      mode,
+    }
+    let toastText = '订阅成功'
+
+    if (mode === 'OFF') {
+      toastText = '取消订阅成功'
+      ShowMessageDialog(
+        DialogType.QUESTION,
+        '提示',
+        `确定不再订阅「${podcastTitle}」吗？`,
+      ).then((res) => {
+        if (res === 'Yes' || res === '是') {
+          updateSubscription(params)
+            .then(() =>
+              toast(toastText, { duration: 1000 }, () => {
+                getDetail()
+              }),
+            )
+            .catch(() => {
+              toast('操作失败')
+            })
+        }
+      })
+    } else {
+      updateSubscription(params)
+        .then((res) => {
+          toast(toastText, { duration: 1000 }, () => {
+            getDetail()
+          })
+        })
+        .catch(() => {
+          toast('操作失败')
+        })
+    }
+  }
+
   useEffect(() => {
     if (pid) {
       getDetail()
@@ -106,7 +157,7 @@ export const PodcastDetail: React.FC = () => {
         <div className="pdi-top">
           <Box className="pdi-top-cover">
             <img
-              src={podcastDetailData?.image.picUrl}
+              src={podcastDetailData?.image?.picUrl}
               alt={podcastDetailData?.title}
               style={{
                 objectFit: 'cover',
@@ -122,7 +173,7 @@ export const PodcastDetail: React.FC = () => {
               <Heading
                 size="9"
                 align="left"
-                style={{ color: podcastDetailData?.color.dark }}
+                style={{ color: podcastDetailData?.color?.dark }}
               >
                 {podcastDetailData?.title}
               </Heading>
@@ -144,21 +195,30 @@ export const PodcastDetail: React.FC = () => {
                 >
                   {podcastDetailData?.subscriptionCount} 订阅
                 </Text>
-                {podcastDetailData?.subscriptionStatus === 'ON' && (
-                  <Button
-                    variant="soft"
-                    color="gray"
-                  >
-                    <CheckIcon />
-                    已订阅
-                  </Button>
-                )}
-                {podcastDetailData?.subscriptionStatus === 'OFF' && (
-                  <Button variant="soft">
+                <Button
+                  variant="soft"
+                  color={
+                    podcastDetailData?.subscriptionStatus === 'ON'
+                      ? 'gray'
+                      : undefined
+                  }
+                  onClick={() => {
+                    onUpdateSubscription(
+                      podcastDetailData?.pid,
+                      podcastDetailData?.title,
+                      podcastDetailData?.subscriptionStatus === 'ON'
+                        ? 'OFF'
+                        : 'ON',
+                    )
+                  }}
+                >
+                  {podcastDetailData?.subscriptionStatus === 'ON' ? null : (
                     <PlusIcon />
-                    订阅
-                  </Button>
-                )}
+                  )}
+                  {podcastDetailData?.subscriptionStatus === 'ON'
+                    ? '已订阅'
+                    : '订阅'}
+                </Button>
               </div>
             </div>
           </div>
@@ -174,7 +234,7 @@ export const PodcastDetail: React.FC = () => {
               <div className="label">节目主播</div>
 
               <div className="layout">
-                {podcastDetailData?.podcasters.map((item) => (
+                {podcastDetailData?.podcasters?.map((item) => (
                   <div
                     key={item.uid}
                     className="podcaster"
