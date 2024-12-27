@@ -53,7 +53,9 @@ export const onRelationUpdate = (
       if (res === 'Yes' || res === '是') {
         relationUpdata(params)
           .then(() => {
-            cb?.()
+            toast('操作成功', { duration: 1000 }, () => {
+              cb?.()
+            })
           })
           .catch(() => {
             toast('操作失败')
@@ -63,7 +65,9 @@ export const onRelationUpdate = (
   } else {
     relationUpdata(params)
       .then(() => {
-        cb?.()
+        toast('操作成功', { duration: 1000 }, () => {
+          cb?.()
+        })
       })
       .catch(() => {
         toast('操作失败')

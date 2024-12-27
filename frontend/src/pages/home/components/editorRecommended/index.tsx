@@ -2,7 +2,7 @@ import React from 'react'
 import './index.modules.scss'
 import { ColorfulShadow } from '@/components'
 import { ChatBubbleIcon, PlayIcon } from '@radix-ui/react-icons'
-import { Box, Flex, HoverCard, Text, Spinner } from '@radix-ui/themes'
+import { Box, Flex, HoverCard, Text, Skeleton } from '@radix-ui/themes'
 
 type IProps = {
   data: any
@@ -15,9 +15,7 @@ const EditorRecommended: React.FC<IProps> = ({ data, loading, onDetail }) => {
     <div className="editor-recommended-layout">
       <h3>编辑精选</h3>
 
-      {loading ? (
-        <Spinner />
-      ) : (
+      <Skeleton loading={loading}>
         <div className="editor-recommended-content">
           {data?.picks?.map((item: any) => {
             return (
@@ -93,7 +91,7 @@ const EditorRecommended: React.FC<IProps> = ({ data, loading, onDetail }) => {
             )
           })}
         </div>
-      )}
+      </Skeleton>
     </div>
   )
 }

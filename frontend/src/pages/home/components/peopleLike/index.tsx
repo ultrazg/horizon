@@ -65,7 +65,15 @@ const PeopleLike: React.FC<IProps> = ({ data, loading, onDetail }) => {
                           src={item.pick.user.avatar.picture.picUrl}
                         />
                       </div>
-                      <div className="m">
+                      <div
+                        className="m"
+                        onClick={() => {
+                          setProfileModal({
+                            open: true,
+                            uid: item.pick.user.uid,
+                          })
+                        }}
+                      >
                         <p>{item.pick.user.nickname}</p>
                         <p>{dayjs(item.pick.pickedAt).format('MM/DD')}</p>
                       </div>
