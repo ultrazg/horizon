@@ -24,9 +24,11 @@ export const PodcastDetail: React.FC = () => {
   })
   const [episodeData, setEpisodeData] = useState<{
     records: EpisodeType[]
+    total: number
     loadMoreKey: {}
   }>({
     records: [],
+    total: 0,
     loadMoreKey: {},
   })
   const [loading, setLoading] = useState<boolean>(false)
@@ -50,9 +52,10 @@ export const PodcastDetail: React.FC = () => {
    * 获取播客单集列表
    * @param loadMoreKey
    */
-  const getEpisodeList = (loadMoreKey = {}) => {
-    let params: { pid: string; loadMoreKey?: {} } = {
+  const getEpisodeList = (loadMoreKey = {}, order = 'desc') => {
+    let params: { pid: string; order: string; loadMoreKey?: {} } = {
       pid,
+      order,
     }
 
     if (!isEmpty(loadMoreKey)) {
@@ -69,11 +72,13 @@ export const PodcastDetail: React.FC = () => {
         if (isEmpty(loadMoreKey)) {
           setEpisodeData({
             records: res.data.data,
+            total: res.data.total,
             loadMoreKey: res.data?.loadMoreKey,
           })
         } else {
           setEpisodeData({
             records: [...episodeData.records, ...res.data.data],
+            total: res.data.total,
             loadMoreKey: res.data?.loadMoreKey,
           })
         }
@@ -195,7 +200,7 @@ export const PodcastDetail: React.FC = () => {
             </div>
 
             <div className="episode-lists">
-              <div className="label">节目列表</div>
+              <div className="label">节目列表({episodeData.total})</div>
 
               {episodeData.records.map((item) => (
                 <div className="episode-item">
