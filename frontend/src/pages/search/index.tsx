@@ -126,6 +126,9 @@ export const Search: React.FC = () => {
                   onLoadMore={(loadMoreKey) => {
                     onSearch(loadMoreKey)
                   }}
+                  onRefresh={() => {
+                    onSearch()
+                  }}
                   loading={loading}
                 />
               </Tabs.Content>

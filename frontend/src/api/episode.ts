@@ -7,6 +7,7 @@ const api = {
 
 type episodeListType = {
   pid: string
+  order: string
   loadMoreKey?: {}
 }
 
