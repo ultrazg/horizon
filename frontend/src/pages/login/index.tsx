@@ -19,6 +19,7 @@ import UserStore from '@/store/user'
 import { userType } from '@/types/user'
 import '@/assets/global/animate.css'
 import './index.modules.scss'
+import { CONSTANT } from '@/types/constant'
 
 export const Login: React.FC = () => {
   const [animate, setAnimate] = React.useState<boolean>(false)
@@ -151,7 +152,7 @@ export const Login: React.FC = () => {
             <div className="form">
               <Text style={{ display: 'flex', alignItems: 'center' }}>
                 手机验证登录
-                <Tooltip content="使用小宇宙 APP 绑定的手机号登录">
+                <Tooltip content={CONSTANT.LOGIN_TOOLTIP}>
                   <QuestionMarkCircledIcon style={{ marginLeft: 4 }} />
                 </Tooltip>
               </Text>

@@ -16,7 +16,47 @@ import { updateSubscription } from '@/api/subscription'
 
 export const PodcastDetail: React.FC = () => {
   const { pid } = useLocation().state
-  const [podcastDetailData, setPodcastDetailData] = useState<PodcastType>({})
+  const [podcastDetailData, setPodcastDetailData] = useState<PodcastType>({
+    author: '',
+    brief: '',
+    color: {
+      dark: '',
+      light: '',
+      original: '',
+    },
+    contacts: [],
+    description: '',
+    episodeCount: 0,
+    hasPopularEpisodes: false,
+    image: {
+      format: '',
+      height: 0,
+      width: 0,
+      largePicUrl: '',
+      middlePicUrl: '',
+      picUrl: '',
+      smallPicUrl: '',
+      thumbnaiUrl: '',
+    },
+    isCustomized: false,
+    latestEpisodePubDate: new Date(),
+    payEpisodeCount: 0,
+    payType: '',
+    permissions: null,
+    pid: '',
+    podcasters: [],
+    readTrackInfo: {},
+    status: '',
+    subscriptionCount: 0,
+    subscriptionPush: false,
+    subscriptionPushPriority: '',
+    subscriptionStar: false,
+    subscriptionStatus: '',
+    syncMode: '',
+    title: '',
+    topicLabels: null,
+    type: '',
+  })
   const [profileModal, setProfileModal] = useState<{
     open: boolean
     uid: string
@@ -204,9 +244,9 @@ export const PodcastDetail: React.FC = () => {
                   }
                   onClick={() => {
                     onUpdateSubscription(
-                      podcastDetailData?.pid,
-                      podcastDetailData?.title,
-                      podcastDetailData?.subscriptionStatus === 'ON'
+                      podcastDetailData.pid,
+                      podcastDetailData.title,
+                      podcastDetailData.subscriptionStatus === 'ON'
                         ? 'OFF'
                         : 'ON',
                     )
