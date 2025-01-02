@@ -85,8 +85,7 @@ export const Login: React.FC = () => {
         goHome()
       })
       .catch((err) => {
-        // TODO: 更好的提示
-        toast('登录失败')
+        toast(CONSTANT.LOGIN_FAILED, { duration: 3000 })
         console.error('error', err)
       })
       .finally(() => {

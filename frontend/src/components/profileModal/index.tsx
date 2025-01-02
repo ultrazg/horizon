@@ -18,7 +18,12 @@ import {
 import { modalType } from '@/types/modal'
 import { useDisplayInfo } from '@/hooks'
 import './index.modules.scss'
-import { ColorfulShadow, MyDropdownMenu, StickerModal } from '@/components'
+import {
+  ColorfulShadow,
+  MyDropdownMenu,
+  StickerModal,
+  PickModal,
+} from '@/components'
 import {
   SlBubble,
   SlEarphones,
@@ -82,6 +87,10 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
   }>({
     records: [],
     total: 0,
+  })
+  const [pickModal, setPickModal] = useState({
+    open: false,
+    uid: '',
   })
 
   const avoidDefaultDomBehavior = (e: Event) => {
@@ -344,7 +353,7 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
                   size="2"
                   mt="2"
                 >
-                  {profileData?.bio || '这个人很懒，什么都没有留下'}
+                  {profileData?.bio || CONSTANT.NO_BIO}
                 </Text>
               </div>
 
@@ -427,6 +436,14 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
               <div className="pm-like-content">
                 <h3
                   style={pickRecentList.total > 4 ? { cursor: 'pointer' } : {}}
+                  onClick={() => {
+                    if (pickRecentList.total > 4 && profileData?.uid) {
+                      setPickModal({
+                        open: true,
+                        uid: profileData.uid,
+                      })
+                    }
+                  }}
                 >
                   {renderGender(profileData?.gender)}的喜欢
                   {pickRecentList.total !== 0
@@ -596,6 +613,16 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
             open={stickerModalOpen}
             onClose={() => {
               setStickerModalOpen(false)
+            }}
+          />
+
+          <PickModal
+            perspective={renderGender(profileData?.gender)}
+            total={pickRecentList.total}
+            uid={pickModal.uid}
+            open={pickModal.open}
+            onClose={() => {
+              setPickModal({ open: false, uid: '' })
             }}
           />
         </ScrollArea>

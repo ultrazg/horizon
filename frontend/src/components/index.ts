@@ -10,6 +10,7 @@ import { ProfileModal } from './profileModal'
 import { MyDropdownMenu } from './dropdownMenu'
 import { StickerModal } from './stickerModal'
 import { EpisodeDetailModal } from '@/components/episodeDetailModal'
+import { PickModal } from '@/components/pickModal'
 
 export {
   PlayController,
@@ -24,4 +25,5 @@ export {
   MyDropdownMenu,
   StickerModal,
   EpisodeDetailModal,
+  PickModal,
 }
