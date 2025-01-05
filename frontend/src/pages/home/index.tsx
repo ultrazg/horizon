@@ -8,7 +8,6 @@ import { DISCOVERY_TYPE_ENUM } from '@/types/discovery'
 import './index.modules.scss'
 import { EpisodeType } from '@/types/episode'
 import { PodcastType } from '@/types/podcast'
-import { imageType } from '@/types/image'
 import { useNavigate } from 'react-router-dom'
 import { baseUserType } from '@/types/user'
 

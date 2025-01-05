@@ -18,7 +18,7 @@ const Storage = {
    * @param {string} key - 存储的键名
    * @returns {any|null} - 返回解析后的值，如果键不存在返回 null
    */
-  get(key: string) {
+  get(key: string): any | null {
     try {
       const serializedValue = localStorage.getItem(key)
       return serializedValue ? JSON.parse(serializedValue) : null

@@ -27,6 +27,8 @@ import {
   ReadConfig,
   UpdateConfig,
   Storage,
+  ShowMessageDialog,
+  DialogType,
 } from '@/utils'
 import { getUserPreference, updateUserPreference } from '@/api/user'
 import { useNavigateTo } from '@/hooks'
@@ -38,6 +40,7 @@ import {
 } from '@/types/user'
 import { BlockedModal } from './components/blockedModal'
 import './index.modules.scss'
+import { CONSTANT } from '@/types/constant'
 
 export const Setting: React.FC = () => {
   const [envInfo, setEnvInfo] = useState<envType>()
@@ -57,9 +60,34 @@ export const Setting: React.FC = () => {
   const [blockedModal, setBlockedModal] = useState<boolean>(false)
 
   const goAbout = useNavigateTo('/about')
+  const goLogin = useNavigateTo('/login')
 
   const checkUpdate = () => {
     // TODO:  check update
+  }
+
+  /**
+   * 退出登录
+   */
+  const logout = () => {
+    ShowMessageDialog(DialogType.QUESTION, '提示', '确定要退出登录吗？').then(
+      async (res) => {
+        if (res === 'Yes' || res === '是') {
+          try {
+            await Promise.all([
+              UpdateConfig(USER_CONFIG_ENUM.accessToken, '').then(),
+              UpdateConfig(USER_CONFIG_ENUM.refreshToken, '').then(),
+            ])
+
+            Storage.clear()
+            goLogin()
+            // TODO: 停止播放
+          } catch (err) {
+            console.error(err)
+          }
+        }
+      },
+    )
   }
 
   /**
@@ -155,7 +183,7 @@ export const Setting: React.FC = () => {
       <h4>隐私设置</h4>
       <Card>
         <Flex>
-          <Box width="100%">不让他人看到我的收听记录</Box>
+          <Box width="100%">{CONSTANT.RECENT_PLAYED_HIDDEN}</Box>
           <Box>
             <Switch
               checked={preferenceLists.isRecentPlayedHidden}
@@ -173,7 +201,7 @@ export const Setting: React.FC = () => {
           size="4"
         />
         <Flex>
-          <Box width="100%">不在评论区展示收听时长标签</Box>
+          <Box width="100%">{CONSTANT.LISTEN_MILEAGE_HIDDEN_IN_COMMENT}</Box>
           <Box>
             <Switch
               checked={preferenceLists.isListenMileageHiddenInComment}
@@ -191,7 +219,7 @@ export const Setting: React.FC = () => {
           size="4"
         />
         <Flex>
-          <Box width="100%">不让他人看到我的贴纸库</Box>
+          <Box width="100%">{CONSTANT.STICKER_LIBRARY_HIDDEN}</Box>
           <Box>
             <Switch
               checked={preferenceLists.isStickerLibraryHidden}
@@ -209,7 +237,7 @@ export const Setting: React.FC = () => {
           size="4"
         />
         <Flex>
-          <Box width="100%">不让他人看到我的贴纸装扮</Box>
+          <Box width="100%">{CONSTANT.STICKER_BOARD_HIDDEN}</Box>
           <Box>
             <Switch
               checked={preferenceLists.isStickerBoardHidden}
@@ -227,7 +255,7 @@ export const Setting: React.FC = () => {
           size="4"
         />
         <Flex>
-          <Box width="100%">接受热门内容推送</Box>
+          <Box width="100%">{CONSTANT.REJECT_HOT_PUSH}</Box>
           <Box>
             <Switch
               checked={preferenceLists.rejectHotPush}
@@ -245,7 +273,7 @@ export const Setting: React.FC = () => {
           size="4"
         />
         <Flex>
-          <Box width="100%">个性化推荐</Box>
+          <Box width="100%">{CONSTANT.REJECT_RECOMMEND_ACTION}</Box>
           <Box>
             <Switch
               checked={preferenceLists.rejectRecommendation}
@@ -264,7 +292,7 @@ export const Setting: React.FC = () => {
         />
         <Flex>
           <Box width="100%">
-            不展示 IP 属地信息
+            {CONSTANT.IP_LOC_HIDDEN}
             <Tooltip content="关闭后将不显示自己与他人的 IP 属地信息">
               <QuestionMarkCircledIcon
                 style={{
@@ -377,8 +405,7 @@ export const Setting: React.FC = () => {
               variant="soft"
               style={{ width: '100px' }}
               onClick={() => {
-                UpdateConfig(USER_CONFIG_ENUM.accessToken, '').then()
-                UpdateConfig(USER_CONFIG_ENUM.refreshToken, '').then()
+                logout()
               }}
               color="red"
             >

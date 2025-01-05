@@ -23,7 +23,7 @@ const Recommended: React.FC<IProps> = ({ data, loading, onDetail }) => {
             scrollbars="horizontal"
           >
             <Flex
-              gap="1"
+              gap="7"
               width="700px"
             >
               {data?.target?.map((item) => (
