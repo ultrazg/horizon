@@ -1,3 +1,4 @@
+@import '@/assets/global/_common.scss';
 @import '@/assets/global/_variables.scss';
 
 .podcast-detail-layout {
@@ -146,6 +147,60 @@
                 }
               }
             }
+          }
+        }
+      }
+    }
+
+    .recommended-layout {
+      @include no-select;
+
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+
+      .label {
+        text-align: center;
+        margin-bottom: 0.7rem;
+      }
+
+      .recommended-content {
+        height: 16.8rem;
+        margin-top: 0.7rem;
+
+        .recommended-item {
+          width: 12rem;
+          height: 13rem;
+          margin-right: 1rem;
+
+          .cover-box {
+            width: 16rem;
+            height: 14rem;
+            display: flex;
+            justify-content: center;
+
+            .cover {
+              width: 13rem;
+              height: 13rem;
+            }
+          }
+
+          .podcast-info {
+            width: 16rem;
+
+            .podcast-title {
+              width: 13rem;
+              overflow: hidden;
+              font-size: 1rem;
+              display: -webkit-box;
+              line-clamp: 1;
+              box-orient: vertical;
+              -webkit-box-orient: vertical;
+              -webkit-line-clamp: 1;
+            }
+          }
+
+          &:last-child {
+            margin-right: 0;
           }
         }
       }

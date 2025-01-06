@@ -1,10 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import { ColorfulShadow, NavBackButton, ProfileModal } from '@/components'
 import { useLocation } from 'react-router-dom'
-import { AspectRatio, Box, Button, Heading, Text } from '@radix-ui/themes'
+import {
+  AspectRatio,
+  Box,
+  Button,
+  Flex,
+  Heading,
+  ScrollArea,
+  Text,
+} from '@radix-ui/themes'
 import { CheckIcon, PlusIcon } from '@radix-ui/react-icons'
 import { SlBubble, SlEarphones } from 'react-icons/sl'
-import { podcastDetail } from '@/api/podcast'
+import { podcastDetail, podcastRelated } from '@/api/podcast'
 import { episodeList } from '@/api/episode'
 import { PodcastType } from '@/types/podcast'
 import './index.modules.scss'
@@ -74,6 +82,27 @@ export const PodcastDetail: React.FC = () => {
     loadMoreKey: {},
   })
   const [loading, setLoading] = useState<boolean>(false)
+  const [podcastRelatedList, setPodcastRelatedList] = useState<
+    {
+      podcast: PodcastType
+      recommendation: string
+    }[]
+  >([])
+
+  /**
+   * 获取相关节目推荐
+   */
+  const getPodcastRelated = () => {
+    const params = {
+      pid,
+    }
+
+    podcastRelated(params)
+      .then((res) => setPodcastRelatedList(res.data.data))
+      .catch((err) => {
+        console.error(err)
+      })
+  }
 
   /**
    * 获取播客详情
@@ -186,6 +215,7 @@ export const PodcastDetail: React.FC = () => {
     if (pid) {
       getDetail()
       getEpisodeList()
+      getPodcastRelated()
     }
   }, [pid])
 
@@ -357,7 +387,43 @@ export const PodcastDetail: React.FC = () => {
           </Box>
         </div>
 
-        {/*TODO: 推荐的节目*/}
+        <div className="recommended-layout">
+          <div className="label">相关节目推荐</div>
+
+          <div className="recommended-content">
+            <ScrollArea
+              size="2"
+              type="hover"
+              scrollbars="horizontal"
+            >
+              <Flex
+                gap="7"
+                width="700px"
+              >
+                {podcastRelatedList?.map((item) => (
+                  <Box key={item.podcast.pid}>
+                    <div className="recommended-item">
+                      <div className="cover-box">
+                        <ColorfulShadow
+                          className="cover"
+                          src={item.podcast.image.picUrl}
+                          curPointer
+                          onClick={() => {
+                            // onDetail(item.podcast.pid)
+                          }}
+                        />
+                      </div>
+
+                      <div className="podcast-info">
+                        <p className="podcast-title">{item.podcast.title}</p>
+                      </div>
+                    </div>
+                  </Box>
+                ))}
+              </Flex>
+            </ScrollArea>
+          </div>
+        </div>
       </div>
 
       <ProfileModal

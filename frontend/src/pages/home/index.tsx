@@ -194,6 +194,7 @@ export const Home: React.FC = () => {
 
   return (
     <div className="home-layout">
+      {/* 大家都在听 */}
       <Popular
         data={popular.records}
         loading={popular.loading}
@@ -204,6 +205,7 @@ export const Home: React.FC = () => {
           goPodcastDetail(pid)
         }}
       />
+      {/* 精选节目 */}
       <Recommended
         data={recommended.records}
         loading={recommended.loading}
@@ -211,6 +213,7 @@ export const Home: React.FC = () => {
           goPodcastDetail(pid)
         }}
       />
+      {/* 编辑精选 */}
       <EditorRecommended
         data={editorRecommended.records}
         loading={editorRecommended.loading}
@@ -218,6 +221,7 @@ export const Home: React.FC = () => {
           goPodcastDetail(pid)
         }}
       />
+      {/* TA 们的喜欢 */}
       <PeopleLike
         data={peopleLike.records}
         loading={peopleLike.loading}

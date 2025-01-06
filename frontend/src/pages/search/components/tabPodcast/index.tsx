@@ -8,6 +8,7 @@ import dayjs from 'dayjs'
 import { isEmpty } from 'lodash'
 import { updateSubscription } from '@/api/subscription'
 import { DialogType, ShowMessageDialog, toast } from '@/utils'
+import { useNavigate } from 'react-router-dom'
 
 type IProps = {
   data: { records: PodcastType[]; loadMoreKey: {} }
@@ -22,6 +23,8 @@ export const TabPodcast: React.FC<IProps> = ({
   loading,
   onRefresh,
 }) => {
+  const navigateTo = useNavigate()
+
   /**
    * 更新订阅
    * @param pid 节目id
@@ -71,6 +74,14 @@ export const TabPodcast: React.FC<IProps> = ({
     }
   }
 
+  const goPodcastDetail = (pid: string) => {
+    navigateTo('/podcast/detail', {
+      state: {
+        pid,
+      },
+    })
+  }
+
   return (
     <div className="search-result-podcast-layout">
       {data.records.length === 0 && (
@@ -96,6 +107,9 @@ export const TabPodcast: React.FC<IProps> = ({
               className="podcast-cover"
               curPointer
               src={item?.image?.picUrl}
+              onClick={() => {
+                goPodcastDetail(item.pid)
+              }}
             />
 
             <div className="podcast-info">

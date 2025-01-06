@@ -9,8 +9,8 @@ import { NavBackButton } from './navBackButton'
 import { ProfileModal } from './profileModal'
 import { MyDropdownMenu } from './dropdownMenu'
 import { StickerModal } from './stickerModal'
-import { EpisodeDetailModal } from '@/components/episodeDetailModal'
-import { PickModal } from '@/components/pickModal'
+import { EpisodeDetailModal } from './episodeDetailModal'
+import { PickModal } from './pickModal'
 
 export {
   PlayController,
