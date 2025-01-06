@@ -39,6 +39,7 @@ import {
   USER_PREFERENCE_ENUM,
 } from '@/types/user'
 import { BlockedModal } from './components/blockedModal'
+import { ProxyModal } from './components/proxyModal'
 import './index.modules.scss'
 import { CONSTANT } from '@/types/constant'
 
@@ -58,6 +59,7 @@ export const Setting: React.FC = () => {
   })
   const userInfo: userType = Storage.get('user_info')
   const [blockedModal, setBlockedModal] = useState<boolean>(false)
+  const [proxyModal, setProxyModal] = useState<boolean>(false)
 
   const goAbout = useNavigateTo('/about')
   const goLogin = useNavigateTo('/login')
@@ -395,6 +397,31 @@ export const Setting: React.FC = () => {
         </Flex>
       </Card>
 
+      <h4>代理</h4>
+      <Card>
+        <Flex
+          style={{ cursor: 'pointer' }}
+          onClick={() => {
+            setProxyModal(true)
+          }}
+        >
+          <Box width="100%">
+            HTTP 代理
+            <Tooltip content="连接 Github 时启用 HTTP 代理">
+              <QuestionMarkCircledIcon
+                style={{
+                  marginLeft: '6px',
+                  cursor: 'help',
+                }}
+              />
+            </Tooltip>
+          </Box>
+          <Box>
+            <ChevronRightIcon />
+          </Box>
+        </Flex>
+      </Card>
+
       <h4>账户</h4>
       <Card>
         <Flex>
@@ -435,6 +462,13 @@ export const Setting: React.FC = () => {
         open={blockedModal}
         onClose={() => {
           setBlockedModal(false)
+        }}
+      />
+
+      <ProxyModal
+        open={proxyModal}
+        onClose={() => {
+          setProxyModal(false)
         }}
       />
     </div>
