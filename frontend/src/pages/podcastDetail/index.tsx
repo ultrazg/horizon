@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { ColorfulShadow, NavBackButton, ProfileModal } from '@/components'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import {
   AspectRatio,
   Box,
@@ -10,7 +10,7 @@ import {
   ScrollArea,
   Text,
 } from '@radix-ui/themes'
-import { CheckIcon, PlusIcon } from '@radix-ui/react-icons'
+import { PlusIcon } from '@radix-ui/react-icons'
 import { SlBubble, SlEarphones } from 'react-icons/sl'
 import { podcastDetail, podcastRelated } from '@/api/podcast'
 import { episodeList } from '@/api/episode'
@@ -88,6 +88,15 @@ export const PodcastDetail: React.FC = () => {
       recommendation: string
     }[]
   >([])
+
+  const navigateTo = useNavigate()
+  const goPodcastDetail = (pid: string) => {
+    navigateTo('/podcast/detail', {
+      state: {
+        pid,
+      },
+    })
+  }
 
   /**
    * 获取相关节目推荐
@@ -409,7 +418,7 @@ export const PodcastDetail: React.FC = () => {
                           src={item.podcast.image.picUrl}
                           curPointer
                           onClick={() => {
-                            // onDetail(item.podcast.pid)
+                            goPodcastDetail(item.podcast.pid)
                           }}
                         />
                       </div>
