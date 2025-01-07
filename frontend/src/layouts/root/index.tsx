@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import {
   MagnifyingGlassIcon,
   GlobeIcon,
@@ -7,19 +7,17 @@ import {
   GearIcon,
 } from '@radix-ui/react-icons'
 import { ScrollArea } from '@radix-ui/themes'
-import { NavLink, Outlet } from 'react-router-dom'
+import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import { PlayController, NavUser } from '@/components'
 import { useNavigateTo } from '@/hooks'
 import { ReadConfig, IsStartup } from '@/utils'
 import { Launch } from '@/pages'
 import './index.modules.scss'
-// import { useEffect, useState } from 'react'
-// import { envType } from '@/types/env'
-// import { Environment } from 'wailsjs/runtime'
 
 export const Root: React.FC = () => {
-  // const [envInfo, setEnvInfo] = useState<envType>()
+  const scrollRef = useRef<HTMLDivElement | null>(null)
   const [loading, setLoading] = useState<boolean>(true)
+  const location = useLocation()
 
   const goLogin = useNavigateTo('/login')
   const goHome = useNavigateTo('/')
@@ -53,6 +51,12 @@ export const Root: React.FC = () => {
       }
     })
   }, [])
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTo({ top: 0 })
+    }
+  }, [location])
 
   return (
     <>
@@ -134,7 +138,10 @@ export const Root: React.FC = () => {
             </nav>
 
             <div className="outlet-layout">
-              <ScrollArea type="hover">
+              <ScrollArea
+                type="hover"
+                ref={scrollRef}
+              >
                 <Outlet />
               </ScrollArea>
             </div>

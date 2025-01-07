@@ -8,7 +8,7 @@ import './index.modules.scss'
  * 启动界面
  * @constructor
  */
-export const Launch = () => {
+export const Launch: React.FC = () => {
   return (
     <div className="launch-layout">
       <div className="launch-wrapper">
