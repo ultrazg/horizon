@@ -28,7 +28,7 @@ type EpisodeType = {
   podcast: PodcastType
   pubDate: Date
   readTrackInfo?: any
-  shownotes: string
+  shownotes: any
   sponsors?: Array<any>
   status: string
   title: string

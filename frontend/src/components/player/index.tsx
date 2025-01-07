@@ -323,6 +323,7 @@ export const Player: React.FC<IProps> = ({ open, onClose }) => {
       />
 
       <EpisodeDetailModal
+        eid="662b664a8a089719b7f6bbd3" // FIXME
         open={episodeDetailModal}
         onClose={() => {
           setEpisodeDetailModal(false)

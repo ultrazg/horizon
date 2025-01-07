@@ -1,9 +1,15 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Modal } from '@/components'
 import { modalType } from '@/types/modal'
-import { Button, Dialog, Flex } from '@radix-ui/themes'
+import { Button, Dialog, Flex, ScrollArea, Spinner } from '@radix-ui/themes'
 import { useDisplayInfo } from '@/hooks'
+import { episodeDetail } from '@/api/episode'
 import './index.moduless.scss'
+import { EpisodeType } from '@/types/episode'
+
+type IProps = {
+  eid: string
+} & modalType
 
 /**
  * 单集详情弹窗
@@ -12,12 +18,42 @@ import './index.moduless.scss'
  * @param width   宽度
  * @constructor
  */
-export const EpisodeDetailModal: React.FC<modalType> = ({
+export const EpisodeDetailModal: React.FC<IProps> = ({
   open,
   onClose,
   width,
+  eid,
 }) => {
   const [height] = React.useState<number>(useDisplayInfo().Height)
+  const [loading, setLoading] = useState<boolean>(false)
+  const [detailData, setDetailData] = useState<EpisodeType>()
+
+  /**
+   * 获取单集详情
+   */
+  const getEpisodeDetail = () => {
+    setLoading(true)
+    const params = { eid }
+
+    episodeDetail(params)
+      .then((res) => setDetailData(res.data.data))
+      .catch((err) => {
+        console.log(err)
+      })
+      .finally(() => {
+        setLoading(false)
+      })
+  }
+
+  useEffect(() => {
+    if (open) {
+      getEpisodeDetail()
+    }
+
+    return () => {
+      setDetailData(undefined)
+    }
+  }, [open])
 
   return (
     <Modal
@@ -26,7 +62,17 @@ export const EpisodeDetailModal: React.FC<modalType> = ({
       onClose={onClose}
       width={width}
     >
-      <div style={{ height: `${height * 0.6}px` }}>123</div>
+      <Spinner loading={loading}>
+        <ScrollArea
+          type="scroll"
+          scrollbars="vertical"
+          style={{ height: `${height * 0.7}px` }}
+        >
+          <div className="episode-detail-modal-wrapper">
+            <div dangerouslySetInnerHTML={{ __html: detailData?.shownotes }} />
+          </div>
+        </ScrollArea>
+      </Spinner>
 
       <Flex
         gap="3"
