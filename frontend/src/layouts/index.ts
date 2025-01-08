@@ -1,5 +1,5 @@
 import { Root } from './root'
 import { ToastProvider } from './toast'
-import { TestModalPovider } from './testModal'
+import { EpisodeDetailModalPovider } from './episodeDetailModal'
 
-export { Root, ToastProvider, TestModalPovider }
+export { Root, ToastProvider, EpisodeDetailModalPovider }

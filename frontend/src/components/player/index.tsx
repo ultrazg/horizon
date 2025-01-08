@@ -13,7 +13,7 @@ import { useDisplayInfo } from '@/hooks'
 import { CoverBox } from './components/coverBox'
 import { LiveCount } from './components/liveCount'
 import { CommentReplyModal } from './components/commentReplyModal'
-import { EpisodeDetailModal, ProfileModal } from '@/components'
+import { ProfileModal } from '@/components'
 import './index.modules.scss'
 import {
   BsPlayFill,
@@ -37,8 +37,6 @@ export const Player: React.FC<IProps> = ({ open, onClose }) => {
     id: '0',
     open: false,
   })
-  const [episodeDetailModal, setEpisodeDetailModal] = useState<boolean>(false)
-  const [dropDownMenuOpen, setDropDownMenuOpen] = useState<boolean>(false)
   const [profileModal, setProfileModal] = useState<{
     open: boolean
     uid: string
@@ -124,9 +122,6 @@ export const Player: React.FC<IProps> = ({ open, onClose }) => {
                     variant="ghost"
                     radius="large"
                     className="control-button"
-                    onClick={() => {
-                      setEpisodeDetailModal(true)
-                    }}
                   >
                     <IoMdInformationCircleOutline />
                   </IconButton>
@@ -320,15 +315,6 @@ export const Player: React.FC<IProps> = ({ open, onClose }) => {
             open: false,
           })
         }}
-      />
-
-      <EpisodeDetailModal
-        eid="662b664a8a089719b7f6bbd3" // FIXME
-        open={episodeDetailModal}
-        onClose={() => {
-          setEpisodeDetailModal(false)
-        }}
-        width={`${width * 0.7}px`}
       />
 
       <ProfileModal

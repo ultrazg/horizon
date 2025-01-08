@@ -9,7 +9,6 @@ import { NavBackButton } from './navBackButton'
 import { ProfileModal } from './profileModal'
 import { MyDropdownMenu } from './dropdownMenu'
 import { StickerModal } from './stickerModal'
-import { EpisodeDetailModal } from './episodeDetailModal'
 import { PickModal } from './pickModal'
 
 export {
@@ -24,6 +23,5 @@ export {
   ProfileModal,
   MyDropdownMenu,
   StickerModal,
-  EpisodeDetailModal,
   PickModal,
 }

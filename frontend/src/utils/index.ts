@@ -5,7 +5,7 @@ import { toast } from './toast'
 import Storage from '@/utils/storage'
 import { UpdateConfig, ReadConfig, IsStartup } from 'wailsjs/go/bridge/App'
 import { ShowMessageDialog, DialogType } from './dialog'
-import { modal } from './modal'
+import { showEpisodeDetailModal } from './showEpisodeDetailModal'
 
 export {
   httpRequest,
@@ -19,5 +19,5 @@ export {
   IsStartup,
   ShowMessageDialog,
   DialogType,
-  modal,
+  showEpisodeDetailModal,
 }
