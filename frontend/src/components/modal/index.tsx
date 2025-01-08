@@ -11,6 +11,7 @@ import { modalType } from '@/types/modal'
  * @param onClose 关闭回调
  * @param children 子元素
  * @param width 宽度
+ * @param options 附加操作
  * @constructor
  */
 export const Modal: React.FC<modalType> = ({
