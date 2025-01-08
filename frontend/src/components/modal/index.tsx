@@ -1,5 +1,6 @@
 import React from 'react'
-import { Dialog } from '@radix-ui/themes'
+import { Button, Dialog, Flex } from '@radix-ui/themes'
+import { MinusCircledIcon } from '@radix-ui/react-icons'
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden'
 import { modalType } from '@/types/modal'
 
@@ -18,6 +19,7 @@ export const Modal: React.FC<modalType> = ({
   onClose,
   children,
   width,
+  options,
 }) => {
   // https://github.com/radix-ui/primitives/discussions/1997
   const avoidDefaultDomBehavior = (e: Event) => {
@@ -57,6 +59,24 @@ export const Modal: React.FC<modalType> = ({
         </VisuallyHidden.Root>
 
         {children}
+
+        <Flex
+          gap="3"
+          mt="4"
+          justify="end"
+        >
+          <Dialog.Close>
+            <Button
+              variant="soft"
+              color="gray"
+            >
+              <MinusCircledIcon />
+              关闭
+            </Button>
+          </Dialog.Close>
+
+          {options}
+        </Flex>
       </Dialog.Content>
     </Dialog.Root>
   )

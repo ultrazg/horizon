@@ -270,21 +270,6 @@ export const FollowModal: React.FC<IProps> = ({ uid, type, onClose, open }) => {
         )}
       </Spinner>
 
-      <Flex
-        gap="3"
-        mt="4"
-        justify="end"
-      >
-        <Dialog.Close>
-          <Button
-            variant="soft"
-            color="gray"
-          >
-            关闭
-          </Button>
-        </Dialog.Close>
-      </Flex>
-
       <ProfileModal
         uid={profileModal.uid}
         open={profileModal.open}

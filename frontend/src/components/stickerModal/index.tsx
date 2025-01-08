@@ -192,21 +192,6 @@ export const StickerModal: React.FC<IProps> = ({
           </div>
         </div>
       )}
-
-      <Flex
-        gap="3"
-        mt="4"
-        justify="end"
-      >
-        <Dialog.Close>
-          <Button
-            variant="soft"
-            color="gray"
-          >
-            关闭
-          </Button>
-        </Dialog.Close>
-      </Flex>
     </Modal>
   )
 }

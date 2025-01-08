@@ -7,6 +7,7 @@ type modalType = {
   onClose: (refresh?: boolean) => void
   onOk?: (data?: any) => void
   children?: React.ReactNode
+  options?: React.ReactNode
 }
 
 export type { modalType }
