@@ -4,6 +4,7 @@ import { QuoteIcon, UpdateIcon } from '@radix-ui/react-icons'
 import { Button, Skeleton } from '@radix-ui/themes'
 import './index.modules.scss'
 import { PopularType, TargetType } from '@/pages/home'
+import { showEpisodeDetailModal } from '@/utils'
 
 type IProps = {
   data: PopularType
@@ -53,7 +54,14 @@ const PopularPart: React.FC<IProps> = ({
                   >
                     {item.episode.podcast.title}
                   </p>
-                  <p>{item.episode.title}</p>
+                  <p
+                    title={item.episode.title}
+                    onClick={() => {
+                      showEpisodeDetailModal(item.episode.eid)
+                    }}
+                  >
+                    {item.episode.title}
+                  </p>
                   <p>
                     <QuoteIcon />
                     {item.recommendation}
