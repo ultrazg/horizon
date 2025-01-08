@@ -1,6 +1,10 @@
 .episode-detail-modal-wrapper {
   padding: 0 1rem;
 
+  a {
+    color: var(--purple-indicator);
+  }
+
   figure {
     display: flex;
     justify-content: center;
