@@ -1,4 +1,10 @@
-import { createContext, useCallback, useEffect, useState } from 'react'
+import React, {
+  createContext,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import { Modal } from '@/components'
 import { ScrollArea, Spinner } from '@radix-ui/themes'
 import { setModalFunction } from '@/utils/showEpisodeDetailModal'
@@ -24,6 +30,8 @@ export const EpisodeDetailModalProvider = ({ children }: { children: any }) => {
   const [height] = useState<number>(useDisplayInfo().Height)
   const [loading, setLoading] = useState<boolean>(false)
   const [detailData, setDetailData] = useState<EpisodeType>()
+
+  const containerRef = useRef<HTMLDivElement>(null)
 
   const handleClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     const target = event.target as HTMLElement
@@ -75,6 +83,23 @@ export const EpisodeDetailModalProvider = ({ children }: { children: any }) => {
     setModalFunction(showEpisodeDetailModal)
   }, [showEpisodeDetailModal])
 
+  useEffect(() => {
+    /**
+     * 处理 shownotes 中的字体颜色
+     */
+    const container = containerRef.current
+    if (container) {
+      const elementsWithStyle = container.querySelectorAll('[style]')
+      elementsWithStyle.forEach((element) => {
+        const style = element.getAttribute('style')
+        if (style) {
+          const newStyle = style.replace(/color\s*:\s*[^;]+;\s*/gi, '')
+          element.setAttribute('style', newStyle)
+        }
+      })
+    }
+  }, [detailData])
+
   return (
     <EpisodeDetailModalContext.Provider value={{ showEpisodeDetailModal }}>
       {children}
@@ -101,6 +126,7 @@ export const EpisodeDetailModalProvider = ({ children }: { children: any }) => {
 
               <div className="episode-detail-html-content">
                 <div
+                  ref={containerRef}
                   dangerouslySetInnerHTML={{ __html: detailData?.shownotes }}
                   onClick={handleClick}
                 />
