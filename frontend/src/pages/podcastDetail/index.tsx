@@ -7,12 +7,13 @@ import {
   Button,
   Flex,
   Heading,
+  IconButton,
   ScrollArea,
   Text,
 } from '@radix-ui/themes'
-import { PlusIcon } from '@radix-ui/react-icons'
+import { InfoCircledIcon, PlusIcon } from '@radix-ui/react-icons'
 import { SlBubble, SlEarphones } from 'react-icons/sl'
-import { podcastDetail, podcastRelated } from '@/api/podcast'
+import { podcastDetail, podcastGetInfo, podcastRelated } from '@/api/podcast'
 import { episodeList } from '@/api/episode'
 import { PodcastType } from '@/types/podcast'
 import './index.modules.scss'
@@ -82,6 +83,7 @@ export const PodcastDetail: React.FC = () => {
     loadMoreKey: {},
   })
   const [loading, setLoading] = useState<boolean>(false)
+  const [infoLoading, setInfoLoading] = useState<boolean>(false)
   const [podcastRelatedList, setPodcastRelatedList] = useState<
     {
       podcast: PodcastType
@@ -96,6 +98,31 @@ export const PodcastDetail: React.FC = () => {
         pid,
       },
     })
+  }
+
+  /**
+   * 获取节目信息
+   */
+  const getPodcastInfo = () => {
+    setInfoLoading(true)
+    const params = {
+      pid,
+    }
+
+    podcastGetInfo(params)
+      .then((res) => {
+        ShowMessageDialog(
+          DialogType.INFO,
+          '关于节目',
+          `IP属地：${res.data.data.ipLoc}（代表该节目运营账号的所在地，信息来自网络运营商）\r\n账号主体：${res.data.data.subject}`,
+        ).then()
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+      .finally(() => {
+        setInfoLoading(false)
+      })
   }
 
   /**
@@ -130,7 +157,8 @@ export const PodcastDetail: React.FC = () => {
 
   /**
    * 获取播客单集列表
-   * @param loadMoreKey
+   * @param loadMoreKey 加载更多
+   * @param order 排序
    */
   const getEpisodeList = (loadMoreKey = {}, order = 'desc') => {
     let params: { pid: string; order: string; loadMoreKey?: {} } = {
@@ -298,6 +326,17 @@ export const PodcastDetail: React.FC = () => {
                     ? '已订阅'
                     : '订阅'}
                 </Button>
+                <IconButton
+                  variant="soft"
+                  color="gray"
+                  style={{ marginLeft: 12 }}
+                  onClick={() => {
+                    getPodcastInfo()
+                  }}
+                  loading={infoLoading}
+                >
+                  <InfoCircledIcon />
+                </IconButton>
               </div>
             </div>
           </div>

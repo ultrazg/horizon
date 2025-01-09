@@ -4,6 +4,7 @@ import { responseType } from '@/types/response'
 const api = {
   podcastDetail: 'podcast_detail',
   podcastRelated: 'podcast_related',
+  podcastGetInfo: 'podcast_get_info',
 }
 
 type podcastDetailType = {
@@ -11,6 +12,10 @@ type podcastDetailType = {
 }
 
 type podcastRelatedType = {
+  pid: string
+}
+
+type podcastGetInfoType = {
   pid: string
 }
 
@@ -23,3 +28,8 @@ export const podcastDetail = (
 export const podcastRelated = (
   params: podcastRelatedType,
 ): Promise<responseType> => httpRequest.post(api.podcastRelated, params)
+
+/** 获取节目信息 */
+export const podcastGetInfo = (
+  params: podcastGetInfoType,
+): Promise<responseType> => httpRequest.post(api.podcastGetInfo, params)
