@@ -117,7 +117,7 @@ export const TabPodcast: React.FC<IProps> = ({
               <p>{item.description}</p>
               <p>
                 {item.author} ·{' '}
-                {dayjs(item.latestEpisodePubDate).format('MM/DD')}更新
+                {dayjs(item.latestEpisodePubDate).format('YYYY/MM/DD')}更新
               </p>
             </div>
           </div>
