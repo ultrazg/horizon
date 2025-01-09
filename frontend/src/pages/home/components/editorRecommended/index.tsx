@@ -26,11 +26,7 @@ const EditorRecommended: React.FC<IProps> = ({ data, loading, onDetail }) => {
                 <div className="editor-recommended-info">
                   <div className="cover-box">
                     <ColorfulShadow
-                      src={
-                        item.episode?.image
-                          ? item.episode.image.picUrl
-                          : item.episode.podcast.image.picUrl
-                      }
+                      src={item.episode.podcast.image.picUrl}
                       mask
                       curPointer
                     />
@@ -68,19 +64,24 @@ const EditorRecommended: React.FC<IProps> = ({ data, loading, onDetail }) => {
                     >
                       <Flex gap="1">
                         <Box>
-                          <Text
-                            as="div"
-                            size="4"
-                            color="gray"
-                            mb="1"
-                          >
-                            @{item.comment.author.nickname}：
-                          </Text>
+                          {item.comment && (
+                            <Text
+                              as="div"
+                              size="4"
+                              color="gray"
+                              mb="1"
+                            >
+                              @{item.comment.author.nickname}：
+                            </Text>
+                          )}
+
                           <Text
                             as="div"
                             size="3"
                           >
-                            {item.comment.text}
+                            {item.comment
+                              ? item.comment.text
+                              : item.recommendation}
                           </Text>
                         </Box>
                       </Flex>
