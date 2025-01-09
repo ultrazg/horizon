@@ -1,12 +1,13 @@
 import { createContext, useCallback, useEffect, useState } from 'react'
 import { Modal } from '@/components'
-import { Button, Dialog, Flex, ScrollArea, Spinner } from '@radix-ui/themes'
+import { ScrollArea, Spinner } from '@radix-ui/themes'
 import { setModalFunction } from '@/utils/showEpisodeDetailModal'
 import { EpisodeType } from '@/types/episode'
 import { episodeDetail } from '@/api/episode'
 import { useDisplayInfo } from '@/hooks'
 import { DialogType, ShowMessageDialog } from '@/utils'
 import { BrowserOpenURL } from 'wailsjs/runtime'
+import dayjs from 'dayjs'
 import './index.modules.scss'
 
 type EpisodeDetailModalType = {
@@ -17,7 +18,7 @@ const EpisodeDetailModalContext = createContext<
   EpisodeDetailModalType | undefined
 >(undefined)
 
-export const EpisodeDetailModalPovider = ({ children }: { children: any }) => {
+export const EpisodeDetailModalProvider = ({ children }: { children: any }) => {
   const [open, setOpen] = useState<boolean>(false)
   const [width] = useState<number>(useDisplayInfo().Width)
   const [height] = useState<number>(useDisplayInfo().Height)
@@ -90,11 +91,20 @@ export const EpisodeDetailModalPovider = ({ children }: { children: any }) => {
             scrollbars="vertical"
             style={{ height: `${height * 0.7}px` }}
           >
-            <div className="episode-detail-modal-wrapper">
-              <div
-                dangerouslySetInnerHTML={{ __html: detailData?.shownotes }}
-                onClick={handleClick}
-              />
+            <div className="episode-detail-modal-layout">
+              <h3>{detailData?.title}</h3>
+
+              <div className="info">
+                {detailData?.duration && Math.floor(detailData?.duration / 60)}
+                分钟 · {dayjs(detailData?.pubDate).format('YYYY/MM/DD')}
+              </div>
+
+              <div className="episode-detail-html-content">
+                <div
+                  dangerouslySetInnerHTML={{ __html: detailData?.shownotes }}
+                  onClick={handleClick}
+                />
+              </div>
             </div>
           </ScrollArea>
         </Spinner>

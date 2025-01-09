@@ -3,6 +3,7 @@ import './index.modules.scss'
 import { ColorfulShadow } from '@/components'
 import { ChatBubbleIcon, PlayIcon } from '@radix-ui/react-icons'
 import { Box, Flex, HoverCard, Text, Skeleton } from '@radix-ui/themes'
+import { showEpisodeDetailModal } from '@/utils'
 
 type IProps = {
   data: any
@@ -41,7 +42,13 @@ const EditorRecommended: React.FC<IProps> = ({ data, loading, onDetail }) => {
                         >
                           {item.episode.podcast.title}
                         </p>
-                        <p>{item.episode.title}</p>
+                        <p
+                          onClick={() => {
+                            showEpisodeDetailModal(item.episode.eid)
+                          }}
+                        >
+                          {item.episode.title}
+                        </p>
                         <p>
                           <span>
                             <PlayIcon />

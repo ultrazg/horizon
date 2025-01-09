@@ -1,20 +1,29 @@
-.episode-detail-modal-wrapper {
-  padding: 0 1rem;
+.episode-detail-modal-layout{
+  padding: 0 0.7rem;
 
-  a {
-    color: var(--purple-indicator);
+  h3{
+    margin-bottom: 1rem;
+    font-size: 2rem;
   }
 
-  figure {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 12px 0;
+  .info{
+    margin-bottom: 1rem;
+    color: rgba(255, 255, 255, 0.3);
+  }
+
+  .episode-detail-html-content {
+    color: rgba(255, 255, 255, 0.6) !important;
+
+    a {
+      color: var(--purple-indicator);
+    }
 
     img {
-      width: 90%;
-      height: 90%;
-      object-fit: cover;
+      width: 100%;
+      height: 100%;
+      padding: 12px 0;
     }
   }
 }
+
+

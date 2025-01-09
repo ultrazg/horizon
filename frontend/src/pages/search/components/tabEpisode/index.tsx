@@ -6,6 +6,7 @@ import dayjs from 'dayjs'
 import './index.modules.scss'
 import { isEmpty } from 'lodash'
 import { Button } from '@radix-ui/themes'
+import { showEpisodeDetailModal } from '@/utils'
 
 type IProps = {
   data: { records: EpisodeType[]; loadMoreKey: {} }
@@ -42,7 +43,12 @@ export const TabEpisode: React.FC<IProps> = ({ data, onLoadMore, loading }) => {
               src={item?.image ? item.image.picUrl : item.podcast.image.picUrl}
             />
           </div>
-          <div className="right">
+          <div
+            className="right"
+            onClick={() => {
+              showEpisodeDetailModal(item.eid)
+            }}
+          >
             <p>{item.title}</p>
             <p title={item.description}>{item.description}</p>
             <p>

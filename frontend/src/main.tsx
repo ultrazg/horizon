@@ -2,7 +2,7 @@ import React from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App'
 import { Theme } from '@radix-ui/themes'
-import { ToastProvider, EpisodeDetailModalPovider } from '@/layouts'
+import { ToastProvider, EpisodeDetailModalProvider } from '@/layouts'
 import '@radix-ui/themes/styles.css'
 import '@radix-ui/themes/tokens/base.css'
 import '@radix-ui/themes/tokens/colors/purple.css'
@@ -21,9 +21,9 @@ root.render(
         appearance="dark"
         accentColor="purple"
       >
-        <EpisodeDetailModalPovider>
+        <EpisodeDetailModalProvider>
           <App />
-        </EpisodeDetailModalPovider>
+        </EpisodeDetailModalProvider>
       </Theme>
     </ToastProvider>
   </React.StrictMode>,

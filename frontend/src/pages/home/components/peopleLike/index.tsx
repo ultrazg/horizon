@@ -13,6 +13,7 @@ import { ColorfulShadow, ProfileModal } from '@/components'
 import { PeopleLikeType } from '@/pages/home'
 import React, { useState } from 'react'
 import dayjs from 'dayjs'
+import { showEpisodeDetailModal } from '@/utils'
 
 type IProps = {
   data: PeopleLikeType
@@ -44,7 +45,6 @@ const PeopleLike: React.FC<IProps> = ({ data, loading, onDetail }) => {
               gap="3"
               width="700px"
             >
-              {/* <div className="card-items"> */}
               {data.map((item) => (
                 <Box key={item.pick.id}>
                   <Card className="card">
@@ -107,7 +107,12 @@ const PeopleLike: React.FC<IProps> = ({ data, loading, onDetail }) => {
                         />
                       </div>
                       <div className="m">
-                        <p title={item.pick.episode.title}>
+                        <p
+                          onClick={() => {
+                            showEpisodeDetailModal(item.pick.episode.eid)
+                          }}
+                          title={item.pick.episode.title}
+                        >
                           {item.pick.episode.title}
                         </p>
                         <p
@@ -127,7 +132,6 @@ const PeopleLike: React.FC<IProps> = ({ data, loading, onDetail }) => {
                   </Card>
                 </Box>
               ))}
-              {/* </div> */}
             </Flex>
           </ScrollArea>
         </div>
