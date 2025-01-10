@@ -114,7 +114,7 @@ export const PodcastDetail: React.FC = () => {
         ShowMessageDialog(
           DialogType.INFO,
           '关于节目',
-          `IP属地：${res.data.data.ipLoc}（代表该节目运营账号的所在地，信息来自网络运营商）\r\n账号主体：${res.data.data.subject}`,
+          `IP属地：${res.data.data.ipLoc}\r\n账号主体：${res.data.data.subject}`,
         ).then()
       })
       .catch((err) => {
