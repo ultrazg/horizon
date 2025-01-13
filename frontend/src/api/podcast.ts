@@ -5,6 +5,7 @@ const api = {
   podcastDetail: 'podcast_detail',
   podcastRelated: 'podcast_related',
   podcastGetInfo: 'podcast_get_info',
+  podcastBulletin: 'podcast_bulletin',
 }
 
 type podcastDetailType = {
@@ -16,6 +17,10 @@ type podcastRelatedType = {
 }
 
 type podcastGetInfoType = {
+  pid: string
+}
+
+type podcastBulletinType = {
   pid: string
 }
 
@@ -33,3 +38,8 @@ export const podcastRelated = (
 export const podcastGetInfo = (
   params: podcastGetInfoType,
 ): Promise<responseType> => httpRequest.post(api.podcastGetInfo, params)
+
+/** 获取节目公告 */
+export const podcastBulletin = (
+  params: podcastBulletinType,
+): Promise<responseType> => httpRequest.post(api.podcastBulletin, params)

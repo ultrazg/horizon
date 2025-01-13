@@ -1,0 +1,45 @@
+@import '@/assets/global/_variables.scss';
+
+.PBM-wrapper {
+  .PBM-podcast-info {
+    display: flex;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: default;
+
+    .left {
+      width: 3rem;
+      height: 3rem;
+      margin-right: 1rem;
+
+      img {
+        width: 100%;
+        height: 100%;
+        border-radius: 4px;
+      }
+    }
+
+    .middle {
+      flex: 1;
+    }
+
+    .right {
+      color: $secondary-font-color;
+    }
+  }
+
+  .bulletin-content {
+    margin-bottom: 1rem;
+  }
+
+  img {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  .create-time {
+    margin-top: 1rem;
+    color: $secondary-font-color;
+  }
+}
+

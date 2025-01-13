@@ -4,24 +4,51 @@
 
 /* shakeX */
 @keyframes shakeX {
-  from,
-  to {
-    transform: translate3d(0, 0, 0);
-  }
+    from,
+    to {
+        transform: translate3d(0, 0, 0);
+    }
 
-  10%,
-  50%,
-  90% {
-    transform: translate3d(-10px, 0, 0);
-  }
+    10%,
+    50%,
+    90% {
+        transform: translate3d(-10px, 0, 0);
+    }
 
-  30%,
-  70% {
-    transform: translate3d(10px, 0, 0);
-  }
+    30%,
+    70% {
+        transform: translate3d(10px, 0, 0);
+    }
 }
 
 .shakeX {
-  animation-name: shakeX;
-  animation-duration: 0.5s;
+    animation-name: shakeX;
+    animation-duration: 0.5s;
+}
+
+@keyframes swing {
+    20% {
+        transform: rotate3d(0, 0, 1, 15deg);
+    }
+
+    40% {
+        transform: rotate3d(0, 0, 1, -10deg);
+    }
+
+    60% {
+        transform: rotate3d(0, 0, 1, 5deg);
+    }
+
+    80% {
+        transform: rotate3d(0, 0, 1, -5deg);
+    }
+
+    to {
+        transform: rotate3d(0, 0, 1, 0deg);
+    }
+}
+
+.swing {
+    transform-origin: top center;
+    animation: swing 0.6s ease-in-out;
 }

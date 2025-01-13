@@ -32,4 +32,20 @@ type PodcastType = {
   type: string
 }
 
-export type { PodcastType }
+type PodcastBulletinType = {
+  content: string
+  createdAt: string
+  id: string
+  offline: boolean
+  pictures: imageType[]
+  podcast: PodcastType
+  reactions: {
+    count: number
+    name: string
+    reacted: boolean
+    url: string
+  }[]
+  uniqueVisitorCount: number
+}
+
+export type { PodcastType, PodcastBulletinType }

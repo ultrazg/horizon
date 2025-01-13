@@ -11,17 +11,24 @@ import {
   ScrollArea,
   Text,
 } from '@radix-ui/themes'
-import { InfoCircledIcon, PlusIcon } from '@radix-ui/react-icons'
+import { InfoCircledIcon, PlusIcon, BellIcon } from '@radix-ui/react-icons'
 import { SlBubble, SlEarphones } from 'react-icons/sl'
-import { podcastDetail, podcastGetInfo, podcastRelated } from '@/api/podcast'
+import {
+  podcastDetail,
+  podcastGetInfo,
+  podcastRelated,
+  podcastBulletin,
+} from '@/api/podcast'
 import { episodeList } from '@/api/episode'
-import { PodcastType } from '@/types/podcast'
+import { PodcastBulletinType, PodcastType } from '@/types/podcast'
 import './index.modules.scss'
+import '@/assets/global/animate.css'
 import { EpisodeType } from '@/types/episode'
 import { isEmpty } from 'lodash'
 import dayjs from 'dayjs'
 import { DialogType, ShowMessageDialog, toast } from '@/utils'
 import { updateSubscription } from '@/api/subscription'
+import { PodcastBulletinModal } from './components/podcastBulletinModal'
 
 export const PodcastDetail: React.FC = () => {
   const { pid } = useLocation().state
@@ -90,6 +97,21 @@ export const PodcastDetail: React.FC = () => {
       recommendation: string
     }[]
   >([])
+  const [bulletinData, setBulletinData] = useState<PodcastBulletinType>()
+  const [swing, setSwing] = useState<boolean>(false)
+  const [bulletinModalOpen, setBulletinModalOpen] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (bulletinData) {
+      const timer = setInterval(() => {
+        setSwing((prev) => !prev)
+      }, 1500)
+
+      return () => {
+        clearInterval(timer)
+      }
+    }
+  }, [bulletinData])
 
   const navigateTo = useNavigate()
   const goPodcastDetail = (pid: string) => {
@@ -98,6 +120,21 @@ export const PodcastDetail: React.FC = () => {
         pid,
       },
     })
+  }
+
+  /**
+   * 获取节目公告
+   */
+  const getPodcastBulletin = () => {
+    const params = {
+      pid,
+    }
+
+    podcastBulletin(params)
+      .then((res) => setBulletinData(res.data.data))
+      .catch((err) => {
+        console.error(err)
+      })
   }
 
   /**
@@ -253,6 +290,7 @@ export const PodcastDetail: React.FC = () => {
       getDetail()
       getEpisodeList()
       getPodcastRelated()
+      getPodcastBulletin()
     }
   }, [pid])
 
@@ -326,6 +364,20 @@ export const PodcastDetail: React.FC = () => {
                     ? '已订阅'
                     : '订阅'}
                 </Button>
+
+                {bulletinData && (
+                  <IconButton
+                    variant="soft"
+                    color="gray"
+                    style={{ marginLeft: 12 }}
+                    onClick={() => {
+                      setBulletinModalOpen(true)
+                    }}
+                  >
+                    <BellIcon className={swing ? 'swing' : ''} />
+                  </IconButton>
+                )}
+
                 <IconButton
                   variant="soft"
                   color="gray"
@@ -362,6 +414,7 @@ export const PodcastDetail: React.FC = () => {
                         uid: item.uid,
                       })
                     }}
+                    title={item.nickname}
                   >
                     <div className="top">
                       <AspectRatio ratio={1}>
@@ -482,6 +535,14 @@ export const PodcastDetail: React.FC = () => {
             open: false,
             uid: '',
           })
+        }}
+      />
+
+      <PodcastBulletinModal
+        data={bulletinData}
+        open={bulletinModalOpen}
+        onClose={() => {
+          setBulletinModalOpen(false)
         }}
       />
     </div>
