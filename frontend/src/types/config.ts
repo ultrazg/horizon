@@ -18,5 +18,11 @@ const USER_CONFIG_ENUM = {
   refreshToken: 'user.refresh_token',
 }
 
+enum PROXY_CONFIG_ENUM {
+  ENABLED = 'proxy.enabled',
+  IP = 'proxy.ip',
+  PORT = 'proxy.port',
+}
+
 export type { settingConfigType, userConfigType }
-export { SETTING_CONFIG_ENUM, USER_CONFIG_ENUM }
+export { SETTING_CONFIG_ENUM, USER_CONFIG_ENUM, PROXY_CONFIG_ENUM }

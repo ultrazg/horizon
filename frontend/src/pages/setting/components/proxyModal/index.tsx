@@ -1,14 +1,23 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Modal } from '@/components'
 import { modalType } from '@/types/modal'
 import { Box, Button, Flex, Switch, Text, TextField } from '@radix-ui/themes'
 import { GearIcon, RocketIcon } from '@radix-ui/react-icons'
-import { DialogType, ShowMessageDialog } from '@/utils'
+import {
+  DialogType,
+  isValidIp,
+  ReadConfig,
+  ShowMessageDialog,
+  toast,
+  UpdateConfig,
+} from '@/utils'
+import { PROXY_CONFIG_ENUM } from '@/types/config'
+import { TestConnect } from 'wailsjs/go/bridge/App'
 
 export const ProxyModal: React.FC<modalType> = ({ open, onClose }) => {
   const [ip, setIp] = useState<string>('')
   const [port, setPort] = useState<string>('')
-  const [enable, setEnable] = useState<boolean>(false)
+  const [enabled, setEnabled] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
 
   const onChange = (
@@ -23,8 +32,48 @@ export const ProxyModal: React.FC<modalType> = ({ open, onClose }) => {
   }
 
   const onSwitchChange = (checked: boolean) => {
-    setEnable(checked)
+    setEnabled(checked)
   }
+
+  const onCheck = (): boolean => {
+    if (ip === '' || port === '') {
+      toast('IP 和端口不能为空')
+
+      return false
+    }
+
+    if (!isValidIp(ip)) {
+      toast('IP 不合法')
+
+      return false
+    }
+
+    const p = Number(port)
+
+    if (isNaN(p) || p < 0 || p > 65535) {
+      toast('端口不合法')
+
+      return false
+    }
+
+    return true
+  }
+
+  useEffect(() => {
+    if (open) {
+      ReadConfig()
+        .then((res) => {
+          const { ip, port, enabled } = res.proxy
+
+          setIp(ip)
+          setPort(port)
+          setEnabled(enabled)
+        })
+        .catch((err) => {
+          console.error('err', err)
+        })
+    }
+  }, [open])
 
   return (
     <Modal
@@ -38,16 +87,20 @@ export const ProxyModal: React.FC<modalType> = ({ open, onClose }) => {
             variant="soft"
             loading={loading}
             onClick={() => {
-              setLoading(true)
+              if (onCheck()) {
+                setLoading(true)
 
-              setTimeout(() => {
-                ShowMessageDialog(
-                  DialogType.INFO,
-                  '测试结果',
-                  'Google：连接成功\r\nGithub：连接成功',
-                ).then()
-                setLoading(false)
-              }, 3000)
+                TestConnect('https://www.github.com')
+                  .then((res) => {
+                    console.log(res)
+                  })
+                  .catch((err) => {
+                    console.log(err)
+                  })
+                  .finally(() => {
+                    setLoading(false)
+                  })
+              }
             }}
           >
             <RocketIcon />
@@ -57,7 +110,19 @@ export const ProxyModal: React.FC<modalType> = ({ open, onClose }) => {
           <Button
             variant="soft"
             onClick={() => {
-              console.log(ip, port, enable)
+              if (onCheck()) {
+                Promise.all([
+                  UpdateConfig(PROXY_CONFIG_ENUM.IP, ip),
+                  UpdateConfig(PROXY_CONFIG_ENUM.PORT, port),
+                  UpdateConfig(PROXY_CONFIG_ENUM.ENABLED, enabled),
+                ])
+                  .then(() => {
+                    toast('保存成功')
+                  })
+                  .catch(() => {
+                    toast('保存失败')
+                  })
+              }
             }}
           >
             <GearIcon />
@@ -73,6 +138,7 @@ export const ProxyModal: React.FC<modalType> = ({ open, onClose }) => {
         <Box width="100px">
           <TextField.Root
             placeholder="127.0.0.1"
+            value={ip}
             onChange={(event) => onChange('ip', event)}
           />
         </Box>
@@ -89,6 +155,7 @@ export const ProxyModal: React.FC<modalType> = ({ open, onClose }) => {
         <Box width="100px">
           <TextField.Root
             placeholder="7890"
+            value={port}
             onChange={(event) => onChange('port', event)}
           />
         </Box>
@@ -99,12 +166,16 @@ export const ProxyModal: React.FC<modalType> = ({ open, onClose }) => {
           <Text color="gray">启用代理</Text>
         </Box>
         <Box width="220px">
-          <Switch onCheckedChange={onSwitchChange} />
+          <Switch
+            checked={enabled}
+            onCheckedChange={onSwitchChange}
+          />
           <Text
             as="p"
             color="gray"
             size="1"
             mt="1"
+            style={{ fontWeight: 300 }}
           >
             启用前建议先进行连通性测试
           </Text>

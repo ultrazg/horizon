@@ -38,7 +38,7 @@ export const Root: React.FC = () => {
         .finally(() => {
           setLoading(false)
         })
-    }, 3000)
+    }, 3500)
   }
 
   useEffect(() => {

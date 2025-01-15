@@ -1,5 +1,5 @@
 import httpRequest from './request'
-import { isValidPhoneNumber } from './regex'
+import { isValidPhoneNumber, isValidIp } from './regex'
 import { APP_NAME, APP_VERSION } from './appInfo'
 import { toast } from './toast'
 import Storage from '@/utils/storage'
@@ -20,4 +20,5 @@ export {
   ShowMessageDialog,
   DialogType,
   showEpisodeDetailModal,
+  isValidIp,
 }
