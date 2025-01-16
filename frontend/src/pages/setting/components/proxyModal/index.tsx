@@ -8,17 +8,24 @@ import {
   isValidIp,
   ReadConfig,
   ShowMessageDialog,
+  testConnect,
   toast,
   UpdateConfig,
 } from '@/utils'
 import { PROXY_CONFIG_ENUM } from '@/types/config'
-import { TestConnect } from 'wailsjs/go/bridge/App'
+import { CONSTANT } from '@/types/constant'
 
 export const ProxyModal: React.FC<modalType> = ({ open, onClose }) => {
   const [ip, setIp] = useState<string>('')
   const [port, setPort] = useState<string>('')
   const [enabled, setEnabled] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
+
+  const getSavedIpAndPort = async (): Promise<string[]> => {
+    const res = await ReadConfig()
+
+    return [res.proxy.ip, res.proxy.port]
+  }
 
   const onChange = (
     type: 'ip' | 'port',
@@ -31,8 +38,23 @@ export const ProxyModal: React.FC<modalType> = ({ open, onClose }) => {
     }
   }
 
-  const onSwitchChange = (checked: boolean) => {
+  const onSwitchChange = async (checked: boolean) => {
+    const [ip, port] = await getSavedIpAndPort()
+
+    if (ip === '' || port === '') {
+      toast('请先保存代理设置')
+
+      return
+    }
+
     setEnabled(checked)
+    UpdateConfig(PROXY_CONFIG_ENUM.ENABLED, checked).then(() => {
+      if (checked) {
+        toast('启用代理')
+      } else {
+        toast('禁用代理')
+      }
+    })
   }
 
   const onCheck = (): boolean => {
@@ -90,12 +112,21 @@ export const ProxyModal: React.FC<modalType> = ({ open, onClose }) => {
               if (onCheck()) {
                 setLoading(true)
 
-                TestConnect('https://www.github.com')
+                Promise.all([
+                  testConnect(CONSTANT.GOOGLE_URL, ip, port),
+                  testConnect(CONSTANT.GITHUB_URL, ip, port),
+                ])
                   .then((res) => {
-                    console.log(res)
+                    const [googleResponse, githubResponse] = res
+
+                    ShowMessageDialog(
+                      DialogType.INFO,
+                      '测试结果',
+                      `Google Status: ${googleResponse.code} ${googleResponse.code === 200 ? 'OK' : 'FAILED'}\r\nGithub Status: ${githubResponse.code} ${githubResponse.code === 200 ? 'OK' : 'FAILED'}`,
+                    ).then()
                   })
                   .catch((err) => {
-                    console.log(err)
+                    toast('错误')
                   })
                   .finally(() => {
                     setLoading(false)
@@ -104,7 +135,7 @@ export const ProxyModal: React.FC<modalType> = ({ open, onClose }) => {
             }}
           >
             <RocketIcon />
-            连通性测试
+            测试连接
           </Button>
 
           <Button
@@ -114,7 +145,6 @@ export const ProxyModal: React.FC<modalType> = ({ open, onClose }) => {
                 Promise.all([
                   UpdateConfig(PROXY_CONFIG_ENUM.IP, ip),
                   UpdateConfig(PROXY_CONFIG_ENUM.PORT, port),
-                  UpdateConfig(PROXY_CONFIG_ENUM.ENABLED, enabled),
                 ])
                   .then(() => {
                     toast('保存成功')
@@ -133,6 +163,31 @@ export const ProxyModal: React.FC<modalType> = ({ open, onClose }) => {
     >
       <Flex gap="3">
         <Box width="100px">
+          <Text color="gray">启用代理</Text>
+        </Box>
+        <Box width="220px">
+          <Switch
+            checked={enabled}
+            onCheckedChange={onSwitchChange}
+          />
+          <Text
+            as="span"
+            color="gray"
+            size="1"
+            mt="1"
+            style={{ fontWeight: 300, marginLeft: '12px' }}
+          >
+            启用前建议先测试连接
+          </Text>
+        </Box>
+      </Flex>
+
+      <Flex
+        gap="3"
+        mt="4"
+        mb="4"
+      >
+        <Box width="100px">
           <Text color="gray">代理地址</Text>
         </Box>
         <Box width="100px">
@@ -144,11 +199,7 @@ export const ProxyModal: React.FC<modalType> = ({ open, onClose }) => {
         </Box>
       </Flex>
 
-      <Flex
-        gap="3"
-        mt="4"
-        mb="4"
-      >
+      <Flex gap="3">
         <Box width="100px">
           <Text color="gray">代理端口</Text>
         </Box>
@@ -158,27 +209,6 @@ export const ProxyModal: React.FC<modalType> = ({ open, onClose }) => {
             value={port}
             onChange={(event) => onChange('port', event)}
           />
-        </Box>
-      </Flex>
-
-      <Flex gap="3">
-        <Box width="100px">
-          <Text color="gray">启用代理</Text>
-        </Box>
-        <Box width="220px">
-          <Switch
-            checked={enabled}
-            onCheckedChange={onSwitchChange}
-          />
-          <Text
-            as="p"
-            color="gray"
-            size="1"
-            mt="1"
-            style={{ fontWeight: 300 }}
-          >
-            启用前建议先进行连通性测试
-          </Text>
         </Box>
       </Flex>
     </Modal>

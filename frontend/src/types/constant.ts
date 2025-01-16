@@ -13,4 +13,6 @@ export enum CONSTANT {
   REJECT_HOT_PUSH = '接受热门内容推送',
   REJECT_RECOMMEND_ACTION = '个性化推荐',
   IP_LOC_HIDDEN = '不展示 IP 属地信息',
+  GOOGLE_URL = 'https://www.google.com/',
+  GITHUB_URL = 'https://www.github.com/',
 }

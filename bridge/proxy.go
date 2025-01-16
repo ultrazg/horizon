@@ -12,10 +12,8 @@ type TestConnectResult struct {
 	Err  error `json:"err"`
 }
 
-func (a *App) TestConnect(url string) *TestConnectResult {
-	var c *Config = a.ReadConfig()
-
-	proxyURL := fmt.Sprintf("http://%s:%s", c.Proxy.Ip, c.Proxy.Port)
+func (a *App) TestConnect(url, ip, port string) *TestConnectResult {
+	proxyURL := fmt.Sprintf("http://%s:%s", ip, port)
 
 	fmt.Println("proxyURL --->", proxyURL)
 
