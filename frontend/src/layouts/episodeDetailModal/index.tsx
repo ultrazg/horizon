@@ -112,9 +112,9 @@ export const EpisodeDetailModalProvider = ({ children }: { children: any }) => {
       >
         <Spinner loading={loading}>
           <ScrollArea
-            type="scroll"
+            type="hover"
             scrollbars="vertical"
-            style={{ height: `${height * 0.7}px` }}
+            style={{ maxHeight: `${height * 0.7}px` }}
           >
             <div className="episode-detail-modal-layout">
               <h3>{detailData?.title}</h3>

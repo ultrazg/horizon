@@ -2,7 +2,7 @@ import React from 'react'
 import './index.modules.scss'
 import { ColorfulShadow } from '@/components'
 import { ChatBubbleIcon, PlayIcon } from '@radix-ui/react-icons'
-import { Box, Flex, HoverCard, Text, Skeleton } from '@radix-ui/themes'
+import { Skeleton } from '@radix-ui/themes'
 import { showEpisodeDetailModal } from '@/utils'
 
 type IProps = {
@@ -23,6 +23,7 @@ const EditorRecommended: React.FC<IProps> = ({ data, loading, onDetail }) => {
               <div
                 className="editor-recommended-item"
                 key={item.episode.eid}
+                title={`@${item.comment.author.nickname}：\r\n${item.comment ? item.comment.text : item.recommendation}`}
               >
                 <div className="editor-recommended-info">
                   <div className="cover-box">
@@ -32,68 +33,32 @@ const EditorRecommended: React.FC<IProps> = ({ data, loading, onDetail }) => {
                       curPointer
                     />
                   </div>
-                  <HoverCard.Root>
-                    <HoverCard.Trigger>
-                      <div className="info-box">
-                        <p
-                          onClick={() => {
-                            onDetail(item.episode.podcast.pid)
-                          }}
-                        >
-                          {item.episode.podcast.title}
-                        </p>
-                        <p
-                          onClick={() => {
-                            showEpisodeDetailModal(item.episode.eid)
-                          }}
-                        >
-                          {item.episode.title}
-                        </p>
-                        <p>
-                          <span>
-                            <PlayIcon />
-                            {item.episode.playCount}
-                          </span>
-                          <span>
-                            <ChatBubbleIcon />
-                            {item.episode.commentCount}
-                          </span>
-                        </p>
-                      </div>
-                    </HoverCard.Trigger>
-                    <HoverCard.Content
-                      maxWidth="300px"
-                      style={{
-                        background: 'var(--black-a9)',
-                        backdropFilter: 'blur(20px)',
-                        WebkitBackdropFilter: 'blur(20px)',
+                  <div className="info-box">
+                    <p
+                      onClick={() => {
+                        onDetail(item.episode.podcast.pid)
                       }}
                     >
-                      <Flex gap="1">
-                        <Box>
-                          {item.comment && (
-                            <Text
-                              as="div"
-                              size="4"
-                              color="gray"
-                              mb="1"
-                            >
-                              @{item.comment.author.nickname}：
-                            </Text>
-                          )}
-
-                          <Text
-                            as="div"
-                            size="3"
-                          >
-                            {item.comment
-                              ? item.comment.text
-                              : item.recommendation}
-                          </Text>
-                        </Box>
-                      </Flex>
-                    </HoverCard.Content>
-                  </HoverCard.Root>
+                      {item.episode.podcast.title}
+                    </p>
+                    <p
+                      onClick={() => {
+                        showEpisodeDetailModal(item.episode.eid)
+                      }}
+                    >
+                      {item.episode.title}
+                    </p>
+                    <p>
+                      <span>
+                        <PlayIcon />
+                        {item.episode.playCount}
+                      </span>
+                      <span>
+                        <ChatBubbleIcon />
+                        {item.episode.commentCount}
+                      </span>
+                    </p>
+                  </div>
                 </div>
               </div>
             )

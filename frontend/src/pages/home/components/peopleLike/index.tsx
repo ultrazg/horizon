@@ -1,12 +1,4 @@
-import {
-  Box,
-  Card,
-  Flex,
-  ScrollArea,
-  Avatar,
-  HoverCard,
-  Skeleton,
-} from '@radix-ui/themes'
+import { Box, Card, Flex, ScrollArea, Avatar, Skeleton } from '@radix-ui/themes'
 import { PlayIcon } from '@radix-ui/react-icons'
 import './index.modules.scss'
 import { ColorfulShadow, ProfileModal } from '@/components'
@@ -86,14 +78,12 @@ const PeopleLike: React.FC<IProps> = ({ data, loading, onDetail }) => {
                       </div>
                     </div>
 
-                    <HoverCard.Root>
-                      <HoverCard.Trigger>
-                        <div className="comment">{item.pick.story.text}</div>
-                      </HoverCard.Trigger>
-                      <HoverCard.Content>
-                        {item.pick.story.text}
-                      </HoverCard.Content>
-                    </HoverCard.Root>
+                    <div
+                      className="comment"
+                      title={item.pick.story.text}
+                    >
+                      {item.pick.story.text}
+                    </div>
 
                     <div className="episode_info">
                       <div className="l">
