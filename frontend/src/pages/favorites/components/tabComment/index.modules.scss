@@ -2,10 +2,20 @@
 
 .favorites-comment-item {
   margin-bottom: 1.7rem;
+
+  &:hover {
+    .top {
+      .remove-like {
+        display: block;
+      }
+    }
+  }
+
   .top {
     display: flex;
+    margin-bottom: 12px;
 
-    .comment-avatar{
+    .comment-avatar {
       cursor: pointer;
     }
 
@@ -26,14 +36,14 @@
         }
       }
     }
-    .comment-like {
-      cursor: pointer;
-      color: $main-color;
 
-      svg {
-        font-size: 1.2rem;
-        padding-right: 0.5rem;
-      }
+    .remove-like {
+      display: none;
+      margin-right: 12px;
+    }
+
+    .comment-like {
+      color: $main-color;
     }
   }
 
@@ -47,6 +57,7 @@
       p {
         font-size: 0.7rem;
         font-weight: 300;
+
         &:last-child {
           color: $secondary-font-color;
         }
@@ -55,7 +66,8 @@
   }
 }
 
-.load-more-button{
+.load-more-button {
   width: 100%;
   text-align: center;
+  margin-bottom: 24px;
 }

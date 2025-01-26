@@ -6,6 +6,20 @@
     display: flex;
     margin-bottom: 1.7rem;
 
+    &:hover {
+      .right {
+        p {
+          &:last-child {
+            span {
+              &:last-child {
+                opacity: 1;
+              }
+            }
+          }
+        }
+      }
+    }
+
     .left {
       .episode-cover {
         width: 10rem;
@@ -19,6 +33,7 @@
 
       p {
         &:first-child {
+          cursor: pointer;
           font-size: 1.2rem;
           font-weight: bold;
           overflow: hidden;
@@ -30,6 +45,7 @@
         }
 
         &:nth-child(2) {
+          cursor: pointer;
           color: $secondary-font-color;
           overflow: hidden;
           display: -webkit-box;
@@ -51,7 +67,7 @@
               flex: 1;
             }
 
-            &:last-child {
+            &:nth-child(2) {
               flex: 1;
               display: flex;
               align-items: center;
@@ -60,6 +76,10 @@
                 margin-left: 0.8rem;
                 margin-right: 0.5rem;
               }
+            }
+
+            &:last-child {
+              opacity: 0;
             }
           }
         }

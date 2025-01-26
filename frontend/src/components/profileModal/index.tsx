@@ -61,7 +61,7 @@ type IProps = {
  */
 export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
   const userInfo: userType = Storage.get('user_info')
-  const [width] = useState<number>(useDisplayInfo().Width * 0.5)
+  const [width] = useState<number>(useDisplayInfo().Width * 0.7)
   const [height] = useState<number>(useDisplayInfo().Height * 0.7)
   const [stickerModalOpen, setStickerModalOpen] = useState<boolean>(false)
   const [dropDownMenuOpen, setDropDownMenuOpen] = useState<boolean>(false)

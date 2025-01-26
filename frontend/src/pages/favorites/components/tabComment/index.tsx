@@ -1,12 +1,25 @@
 import React, { useEffect, useState } from 'react'
-import { Avatar, Button, Card, Separator, Spinner } from '@radix-ui/themes'
+import {
+  Avatar,
+  Button,
+  Card,
+  IconButton,
+  Separator,
+  Spinner,
+} from '@radix-ui/themes'
+import { TrashIcon } from '@radix-ui/react-icons'
 import { BiLike, BiSolidLike } from 'react-icons/bi'
 import './index.modules.scss'
-import { commentCollectList } from '@/api/favorite'
+import { commentCollectList, commentCollectRemove } from '@/api/favorite'
 import { FavoriteCommentType } from '@/types/comment'
 import dayjs from 'dayjs'
 import { ProfileModal } from '@/components'
-import { toast } from '@/utils'
+import {
+  DialogType,
+  showEpisodeDetailModal,
+  ShowMessageDialog,
+  toast,
+} from '@/utils'
 import { CONSTANT } from '@/types/constant'
 
 const TabComment: React.FC = () => {
@@ -26,6 +39,10 @@ const TabComment: React.FC = () => {
     uid: '',
   })
 
+  /**
+   * 获取收藏的评论数据
+   * @param loadMoreKey
+   */
   const getLists = (loadMoreKey = '') => {
     setLoading(true)
 
@@ -45,6 +62,34 @@ const TabComment: React.FC = () => {
       .finally(() => {
         setLoading(false)
       })
+  }
+
+  /**
+   * 删除收藏的评论
+   * @param commentId 评论 id
+   */
+  const onRemove = (commentId: string) => {
+    ShowMessageDialog(
+      DialogType.QUESTION,
+      '提示',
+      '确定要取消收藏这条评论吗？',
+    ).then((res) => {
+      if (res === 'Yes' || res === '是') {
+        const params = {
+          commentId,
+        }
+
+        commentCollectRemove(params)
+          .then((res) => {
+            console.log(res.data)
+            toast(res.data.toast)
+            getLists()
+          })
+          .catch(() => {
+            toast('操作失败')
+          })
+      }
+    })
   }
 
   useEffect(() => {
@@ -96,12 +141,33 @@ const TabComment: React.FC = () => {
                 <p>
                   {dayjs(item.collectedAt).format('MM/DD')} {item.ipLoc}
                 </p>
-                <p>{item.text}</p>
+              </div>
+              <div className="remove-like">
+                <IconButton
+                  size="1"
+                  color="red"
+                  variant="soft"
+                  onClick={() => {
+                    onRemove(item.id)
+                  }}
+                >
+                  <TrashIcon />
+                </IconButton>
               </div>
               <div className="comment-like">
-                {item.liked ? <BiSolidLike /> : <BiLike />}
+                <IconButton
+                  size="1"
+                  variant="soft"
+                  mr="1"
+                >
+                  {item.liked ? <BiSolidLike /> : <BiLike />}
+                </IconButton>
                 {item.likeCount}
               </div>
+            </div>
+
+            <div>
+              <p>{item.text}</p>
             </div>
 
             <Separator
@@ -110,7 +176,12 @@ const TabComment: React.FC = () => {
             />
 
             <div className="bottom">
-              <div className="episode-cover">
+              <div
+                className="episode-cover"
+                onClick={() => {
+                  showEpisodeDetailModal(item.episode.eid)
+                }}
+              >
                 <Avatar
                   size="2"
                   src={
@@ -123,7 +194,13 @@ const TabComment: React.FC = () => {
                 />
               </div>
               <div className="episode-info">
-                <p>{item.episode.title}</p>
+                <p
+                  onClick={() => {
+                    showEpisodeDetailModal(item.episode.eid)
+                  }}
+                >
+                  {item.episode.title}
+                </p>
                 <p>{item.episode.podcast.title}</p>
               </div>
             </div>
@@ -132,6 +209,7 @@ const TabComment: React.FC = () => {
 
         <div className="load-more-button">
           <Button
+            size="1"
             color="gray"
             onClick={() => {
               getLists(data.loadMoreKey)
