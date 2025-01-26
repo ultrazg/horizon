@@ -12,6 +12,7 @@
         height: 10rem;
       }
     }
+
     .right {
       padding-left: 0.7rem;
       position: relative;
@@ -22,10 +23,10 @@
           font-weight: bold;
           overflow: hidden;
           display: -webkit-box;
-          line-clamp: 2;
+          line-clamp: 1;
           box-orient: vertical;
           -webkit-box-orient: vertical;
-          -webkit-line-clamp: 2;
+          -webkit-line-clamp: 1;
         }
 
         &:nth-child(2) {

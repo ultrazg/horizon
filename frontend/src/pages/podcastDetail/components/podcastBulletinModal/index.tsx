@@ -52,7 +52,7 @@ export const PodcastBulletinModal: React.FC<IProps> = ({
           <ScrollArea
             type="hover"
             scrollbars="vertical"
-            style={{ height }}
+            style={{ maxHeight: height }}
           >
             <div className="bulletin-content">{data.content}</div>
 
