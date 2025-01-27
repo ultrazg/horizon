@@ -37,6 +37,15 @@
       -webkit-line-clamp: 1;
     }
 
+    .podcast-brief {
+      overflow: hidden;
+      display: -webkit-box;
+      line-clamp: 1;
+      box-orient: vertical;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 1;
+    }
+
     .podcast-update-time {
       color: $secondary-font-color;
     }

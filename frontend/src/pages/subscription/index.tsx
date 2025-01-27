@@ -83,9 +83,20 @@ export const Subscription: React.FC = () => {
                   className="podcast-title"
                   as="p"
                   size="4"
+                  title={item.title}
                 >
                   {item.title}
                 </Text>
+
+                <Text
+                  className="podcast-brief"
+                  as="p"
+                  size="2"
+                  title={item.brief}
+                >
+                  {item.brief}
+                </Text>
+
                 <Text
                   className="podcast-update-time"
                   as="p"
