@@ -6,9 +6,13 @@ import React, {
   useEffect,
 } from 'react'
 import { setToastFunction } from '@/utils/toast'
+import TOAST_INFO_ICON from '@/assets/images/toast-info-icon.png'
+import TOAST_WARN_ICON from '@/assets/images/toast-warn-icon.png'
+import TOAST_SUCCESS_ICON from '@/assets/images/toast-success-icon.png'
 import './index.modules.scss'
 
 export type ToastOptions = {
+  type?: 'info' | 'warn' | 'success'
   duration?: number
 }
 
@@ -24,6 +28,23 @@ export const useToast = () => useContext(ToastContext)
 /** Toast component */
 export const ToastProvider = ({ children }: { children: any }) => {
   const [toasts, setToasts] = useState<any>([])
+
+  /**
+   * render toast icon
+   * @param type
+   */
+  const renderToastIcon = (type: string): string => {
+    switch (type) {
+      case 'info':
+        return TOAST_INFO_ICON
+      case 'warn':
+        return TOAST_WARN_ICON
+      case 'success':
+        return TOAST_SUCCESS_ICON
+      default:
+        return TOAST_INFO_ICON
+    }
+  }
 
   const addToast = useCallback(
     (message: string, options?: ToastOptions, cb?: () => void) => {
@@ -72,8 +93,18 @@ export const ToastProvider = ({ children }: { children: any }) => {
             id={`toast-${toast.id}`}
             className="toast show"
           >
+            <img
+              src={renderToastIcon(toast.type)}
+              alt="icon"
+            />
             {toast.message}
-            <button onClick={() => removeToast(toast.id)}>×</button>
+            <button
+              onClick={() => {
+                removeToast(toast.id)
+              }}
+            >
+              ×
+            </button>
           </div>
         ))}
       </div>
