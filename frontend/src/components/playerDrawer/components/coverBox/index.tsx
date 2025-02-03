@@ -2,16 +2,17 @@ import React, { useEffect, useState } from 'react'
 import './index.modules.scss'
 import { useDisplayInfo } from '@/hooks'
 
-const TEMP_BACKGROUND_IMAGE: string =
-  'https://image.xyzcdn.net/FnQ-E7VcqLbzqplvdVPGrQRGHmxC.jpg@large'
-const TEMP_BACKGROUND_IMAGE_2: string =
-  'https://image.xyzcdn.net/FqUrrUGD1YIaeVqrpn9MV0yPz_iY.jpg@large'
-
 type IProps = {
-  hasOpen: boolean
+  episodeCover: string | undefined
+  podcastCover: string | undefined
+  open: boolean
 }
 
-export const CoverBox: React.FC<IProps> = ({ hasOpen }) => {
+export const CoverBox: React.FC<IProps> = ({
+  open,
+  episodeCover,
+  podcastCover,
+}) => {
   const [height] = React.useState<number>(useDisplayInfo().Height - 35)
   const [toggle, setToggle] = useState<boolean>(false)
 
@@ -51,12 +52,12 @@ export const CoverBox: React.FC<IProps> = ({ hasOpen }) => {
   }
 
   useEffect(() => {
-    if (hasOpen && !toggle) {
+    if (open && !toggle) {
       setTimeout(() => {
         setToggle(true)
       }, 1500)
     }
-  }, [hasOpen])
+  }, [open])
 
   return (
     <div
@@ -72,12 +73,12 @@ export const CoverBox: React.FC<IProps> = ({ hasOpen }) => {
       >
         <img
           style={toggle ? cbEpisodeImage : cbEpisodeImageActive}
-          src={TEMP_BACKGROUND_IMAGE}
+          src={episodeCover}
           alt="cover-image"
         />
         <img
           style={toggle ? cbPodcastImage : cbPodcastImageActive}
-          src={TEMP_BACKGROUND_IMAGE_2}
+          src={podcastCover}
           alt="cover-image"
         />
       </div>

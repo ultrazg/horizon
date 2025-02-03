@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Avatar,
   Button,
@@ -21,16 +21,17 @@ import {
   BsSkipForwardFill,
 } from 'react-icons/bs'
 import { IoMdThumbsUp, IoMdInformationCircleOutline } from 'react-icons/io'
-
-const TEMP_BACKGROUND_IMAGE: string =
-  'https://image.xyzcdn.net/FnQ-E7VcqLbzqplvdVPGrQRGHmxC.jpg@large'
+import { episodeDetail } from '@/api/episode'
+import { EpisodeType } from '@/types/episode'
+import { showEpisodeDetailModal, toast } from '@/utils'
 
 type IProps = {
+  eid: string
   open: boolean
   onClose: () => void
 }
 
-export const Player: React.FC<IProps> = ({ open, onClose }) => {
+export const Player: React.FC<IProps> = ({ eid, open, onClose }) => {
   const [height] = React.useState<number>(useDisplayInfo().Height - 35)
   const [width] = React.useState<number>(useDisplayInfo().Width)
   const [replyModal, setReplyModal] = useState<{ id: string; open: boolean }>({
@@ -44,6 +45,7 @@ export const Player: React.FC<IProps> = ({ open, onClose }) => {
     open: false,
     uid: '',
   })
+  const [episodeDetailInfo, setEpisodeDetailInfo] = useState<EpisodeType>()
 
   const count = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
@@ -53,6 +55,26 @@ export const Player: React.FC<IProps> = ({ open, onClose }) => {
       open: true,
     })
   }
+
+  const getEpisodeDetail = () => {
+    const params = {
+      eid,
+    }
+
+    episodeDetail(params)
+      .then((res) => {
+        setEpisodeDetailInfo(res.data.data)
+      })
+      .catch(() => {
+        toast('获取单集详情失败', { type: 'warn' })
+      })
+  }
+
+  useEffect(() => {
+    if (open) {
+      getEpisodeDetail()
+    }
+  }, [open])
 
   return (
     <div
@@ -68,7 +90,7 @@ export const Player: React.FC<IProps> = ({ open, onClose }) => {
       <div
         className="player-background-image"
         style={{
-          background: `url(${TEMP_BACKGROUND_IMAGE}) no-repeat center center / cover`,
+          background: `url(${episodeDetailInfo?.image ? episodeDetailInfo.image.picUrl : episodeDetailInfo?.podcast.image.picUrl}) no-repeat center center / cover`,
         }}
       />
 
@@ -85,7 +107,10 @@ export const Player: React.FC<IProps> = ({ open, onClose }) => {
             height={30}
           />
         </IconButton>
-        <LiveCount />
+        <LiveCount
+          open={open}
+          eid={eid}
+        />
       </div>
 
       <div
@@ -94,7 +119,15 @@ export const Player: React.FC<IProps> = ({ open, onClose }) => {
       >
         <div className="player-left">
           <div className="player-left-content">
-            <CoverBox hasOpen={open} />
+            <CoverBox
+              open={open}
+              episodeCover={
+                episodeDetailInfo?.image
+                  ? episodeDetailInfo.image.picUrl
+                  : episodeDetailInfo?.podcast.image.picUrl
+              }
+              podcastCover={episodeDetailInfo?.podcast.image.picUrl}
+            />
             <Text
               as="p"
               size="7"
@@ -103,7 +136,7 @@ export const Player: React.FC<IProps> = ({ open, onClose }) => {
               align="center"
               className="episode-name"
             >
-              159.听听孩子的话，别让TA受伤：聊聊亲子关系
+              {episodeDetailInfo?.title}
             </Text>
             <Text
               as="p"
@@ -112,7 +145,7 @@ export const Player: React.FC<IProps> = ({ open, onClose }) => {
               mb="6"
               className="podcast-name"
             >
-              不开玩笑 Joker Aside
+              {episodeDetailInfo?.podcast.title}
             </Text>
 
             <div className="control-button-layout">
@@ -122,6 +155,9 @@ export const Player: React.FC<IProps> = ({ open, onClose }) => {
                     variant="ghost"
                     radius="large"
                     className="control-button"
+                    onClick={() => {
+                      showEpisodeDetailModal(eid)
+                    }}
                   >
                     <IoMdInformationCircleOutline />
                   </IconButton>
