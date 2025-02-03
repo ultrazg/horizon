@@ -7,6 +7,7 @@ import { UpdateConfig, ReadConfig, IsStartup } from 'wailsjs/go/bridge/App'
 import { ShowMessageDialog, DialogType } from './dialog'
 import { showEpisodeDetailModal } from './showEpisodeDetailModal'
 import { testConnect } from './proxy'
+import Player from './player'
 
 export {
   httpRequest,
@@ -23,4 +24,5 @@ export {
   showEpisodeDetailModal,
   isValidIp,
   testConnect,
+  Player,
 }

@@ -274,7 +274,7 @@ export const PodcastDetail: React.FC = () => {
       })
     } else {
       updateSubscription(params)
-        .then((res) => {
+        .then(() => {
           toast(toastText, { duration: 1000 }, () => {
             getDetail()
           })

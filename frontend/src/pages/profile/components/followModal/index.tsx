@@ -53,24 +53,24 @@ export const onRelationUpdate = (
       if (res === 'Yes' || res === '是') {
         relationUpdata(params)
           .then(() => {
-            toast('操作成功', { duration: 1000 }, () => {
+            toast('操作成功', { duration: 1000, type: 'success' }, () => {
               cb?.()
             })
           })
           .catch(() => {
-            toast('操作失败')
+            toast('操作失败', { type: 'warn' })
           })
       }
     })
   } else {
     relationUpdata(params)
       .then(() => {
-        toast('操作成功', { duration: 1000 }, () => {
+        toast('操作成功', { duration: 1000, type: 'success' }, () => {
           cb?.()
         })
       })
       .catch(() => {
-        toast('操作失败')
+        toast('操作失败', { type: 'warn' })
       })
   }
 }
@@ -106,7 +106,7 @@ export const FollowModal: React.FC<IProps> = ({ uid, type, onClose, open }) => {
     following(params)
       .then((res) => setLists(res.data.data))
       .catch(() => {
-        toast('获取关注列表失败')
+        toast('获取关注列表失败', { type: 'warn' })
       })
       .finally(() => {
         setLoading(false)
@@ -124,7 +124,7 @@ export const FollowModal: React.FC<IProps> = ({ uid, type, onClose, open }) => {
     follower(params)
       .then((res) => setLists(res.data.data))
       .catch(() => {
-        toast('获取粉丝列表失败')
+        toast('获取粉丝列表失败', { type: 'warn' })
       })
       .finally(() => {
         setLoading(false)

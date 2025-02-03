@@ -1,5 +1,5 @@
 import { PlayController } from './playerController'
-import { Player } from './player'
+import { PlayerDrawer } from './playerDrawer'
 import { NavLogo } from './navLogo'
 import { NavUser } from './navUser'
 import { ColorfulShadow } from './colorfulShadow'
@@ -13,7 +13,7 @@ import { PickModal } from './pickModal'
 
 export {
   PlayController,
-  Player,
+  PlayerDrawer,
   NavLogo,
   NavUser,
   ColorfulShadow,

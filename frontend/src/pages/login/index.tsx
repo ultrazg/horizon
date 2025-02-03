@@ -52,7 +52,7 @@ export const Login: React.FC = () => {
 
     login(params)
       .then((res) => {
-        toast(`欢迎，${res.data.data.data.user.nickname}`)
+        toast(`欢迎，${res.data.data.data.user.nickname}`, { type: 'success' })
         UpdateConfig(
           USER_CONFIG_ENUM.accessToken,
           res.data['x-jike-access-token'],
@@ -85,7 +85,7 @@ export const Login: React.FC = () => {
         goHome()
       })
       .catch((err) => {
-        toast(CONSTANT.LOGIN_FAILED, { duration: 3000 })
+        toast(CONSTANT.LOGIN_FAILED, { duration: 3000, type: 'warn' })
         console.error('error', err)
       })
       .finally(() => {
@@ -106,10 +106,10 @@ export const Login: React.FC = () => {
       sendCode({ mobilePhoneNumber })
         .then(() => {
           onStartCountdown()
-          toast(`验证码已发送至 ${mobilePhoneNumber}`)
+          toast(`验证码已发送至 ${mobilePhoneNumber}`, { type: 'success' })
         })
         .catch(() => {
-          toast('发送验证码失败')
+          toast('发送验证码失败', { type: 'warn' })
         })
         .finally(() => {
           setSmsLoading(false)

@@ -15,4 +15,11 @@ export enum CONSTANT {
   IP_LOC_HIDDEN = '不展示 IP 属地信息',
   GOOGLE_URL = 'https://www.google.com/',
   GITHUB_URL = 'https://www.github.com/',
+  NO_PLAY = '未在播放',
+  PLAYER_FAST_FORWARD = '向前 15 秒',
+  PLAYER_REWIND = '向后 15 秒',
+  PLAYER_PLAY = '播放',
+  PLAYER_PAUSE = '暂停',
+  PLAYER_LIKED = '收藏',
+  PLAYER_UNLIKED = '取消收藏',
 }

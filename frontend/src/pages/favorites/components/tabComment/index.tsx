@@ -82,11 +82,11 @@ const TabComment: React.FC = () => {
         commentCollectRemove(params)
           .then((res) => {
             console.log(res.data)
-            toast(res.data.toast)
+            toast(res.data.toast, { type: 'success' })
             getLists()
           })
           .catch(() => {
-            toast('操作失败')
+            toast('操作失败', { type: 'warn' })
           })
       }
     })

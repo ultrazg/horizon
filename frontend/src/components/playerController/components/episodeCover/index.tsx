@@ -1,41 +1,69 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { Spinner } from '@radix-ui/themes'
 import { CaretUpIcon } from '@radix-ui/react-icons'
 import './index.modules.scss'
+import { Player } from '@/utils'
+import COVER_PLACEHOLDER from '@/assets/images/cover-placeholder.png'
+import { PlayInfoType } from '@/utils/player'
+import { CONSTANT } from '@/types/constant'
 
 interface IProps {
+  player: Player
+  playInfo: PlayInfoType
+  playerLoading: boolean
   onOpen: () => void
 }
 
-export const EpisodeCover: React.FC<IProps> = (props) => {
-  const [isPlay, setIsPlay] = useState<boolean>(false)
+export const secondsToHms = (seconds: number): string => {
+  const h: number = Math.floor(seconds / 3600)
+  const m: number = Math.floor((seconds % 3600) / 60)
+  const s: number = seconds % 60
+  return `${h}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`
+}
 
+export const EpisodeCover: React.FC<IProps> = ({
+  player,
+  playInfo,
+  playerLoading,
+  onOpen,
+}) => {
   return (
     <>
       <div className="episode-cover-layout">
-        <div className="episode-cover">
-          <img
-            src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?&w=256&h=256&q=70&crop=focalpoint&fp-x=0.5&fp-y=0.3&fp-z=1&fit=crop"
-            alt="episode-cover"
-            draggable={false}
-          />
-          <div
-            className="mask"
-            onClick={() => {
-              props.onOpen()
-            }}
-          >
-            <CaretUpIcon style={{ width: 50, height: 50 }} />
+        <Spinner
+          size="3"
+          loading={playerLoading}
+        >
+          <div className="episode-cover">
+            <img
+              src={playInfo.cover ? playInfo.cover : COVER_PLACEHOLDER}
+              alt="episode-cover"
+              draggable={false}
+            />
+            <div
+              className="mask"
+              onClick={() => {
+                if (player.playInfo.eid != '') {
+                  onOpen()
+                }
+              }}
+            >
+              <CaretUpIcon style={{ width: 50, height: 50 }} />
+            </div>
           </div>
-        </div>
+        </Spinner>
+
         <div className="episode-info">
           <div className="episode-title">
-            <h4>Episode Title</h4>
+            <h4 title={playInfo.title || CONSTANT.NO_PLAY}>
+              {playInfo.title || CONSTANT.NO_PLAY}
+            </h4>
           </div>
           <div className="episode-info">
             <div>
-              <span>0:00</span>
+              <span>{secondsToHms(Math.round(playInfo.current))}</span>
               <span>/</span>
-              <span>12:00</span>
+              <span>{secondsToHms(Math.round(playInfo.duration))}</span>
             </div>
           </div>
         </div>

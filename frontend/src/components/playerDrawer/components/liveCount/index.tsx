@@ -26,9 +26,9 @@ export const LiveCount: React.FC<IProps> = ({ open, eid }) => {
   useEffect(() => {
     let timer: any
 
-    getLiveCount()
-
     if (open) {
+      getLiveCount()
+
       timer = setInterval(() => {
         getLiveCount()
       }, 1000 * 60)

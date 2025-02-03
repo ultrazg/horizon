@@ -52,7 +52,7 @@ export const TabPodcast: React.FC<IProps> = ({
         if (res === 'Yes' || res === '是') {
           updateSubscription(params)
             .then(() =>
-              toast(toastText, { duration: 1000 }, () => {
+              toast(toastText, { duration: 1000, type: 'success' }, () => {
                 onRefresh()
               }),
             )
@@ -64,7 +64,7 @@ export const TabPodcast: React.FC<IProps> = ({
     } else {
       updateSubscription(params)
         .then((res) => {
-          toast(toastText, { duration: 1000 }, () => {
+          toast(toastText, { duration: 1000, type: 'success' }, () => {
             onRefresh()
           })
         })

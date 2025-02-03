@@ -15,23 +15,30 @@ import { LiveCount } from './components/liveCount'
 import { CommentReplyModal } from './components/commentReplyModal'
 import { ProfileModal } from '@/components'
 import './index.modules.scss'
-import {
-  BsPlayFill,
-  BsSkipBackwardFill,
-  BsSkipForwardFill,
-} from 'react-icons/bs'
+import { BsPauseFill, BsPlayFill } from 'react-icons/bs'
 import { IoMdThumbsUp, IoMdInformationCircleOutline } from 'react-icons/io'
 import { episodeDetail } from '@/api/episode'
 import { EpisodeType } from '@/types/episode'
-import { showEpisodeDetailModal, toast } from '@/utils'
+import { Player, showEpisodeDetailModal, toast } from '@/utils'
+import { CONSTANT } from '@/types/constant'
+import FF_BUTTON_ICON from '@/assets/images/ff-button-colorful.png'
+import RW_BUTTON_ICON from '@/assets/images/rw-button-colorful.png'
+import { PlayInfoType } from '@/utils/player'
+import { secondsToHms } from '@/components/playerController/components/episodeCover'
 
 type IProps = {
-  eid: string
+  player: Player
+  playInfo: PlayInfoType
   open: boolean
   onClose: () => void
 }
 
-export const Player: React.FC<IProps> = ({ eid, open, onClose }) => {
+export const PlayerDrawer: React.FC<IProps> = ({
+  player,
+  playInfo,
+  open,
+  onClose,
+}) => {
   const [height] = React.useState<number>(useDisplayInfo().Height - 35)
   const [width] = React.useState<number>(useDisplayInfo().Width)
   const [replyModal, setReplyModal] = useState<{ id: string; open: boolean }>({
@@ -46,8 +53,43 @@ export const Player: React.FC<IProps> = ({ eid, open, onClose }) => {
     uid: '',
   })
   const [episodeDetailInfo, setEpisodeDetailInfo] = useState<EpisodeType>()
+  const [isPlaying, setIsPlaying] = useState<boolean>(player.isPlaying)
+  const [left, setLeft] = useState<boolean>(false)
+  const [right, setRight] = useState<boolean>(false)
+  const [progress, setProgress] = React.useState<number>(0)
 
   const count = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+  /**
+   * 快进
+   */
+  const onFastForward = () => {
+    player.skip(15)
+
+    setRight(true)
+
+    setTimeout(() => {
+      setRight(false)
+    }, 300)
+  }
+
+  /**
+   * 快退
+   */
+  const onRewind = () => {
+    player.skip(-15)
+
+    setLeft(true)
+
+    setTimeout(() => {
+      setLeft(false)
+    }, 300)
+  }
+
+  const onPlay = () => {
+    player.togglePlay()
+    setIsPlaying(player.isPlaying)
+  }
 
   const onViewReply = () => {
     setReplyModal({
@@ -58,7 +100,7 @@ export const Player: React.FC<IProps> = ({ eid, open, onClose }) => {
 
   const getEpisodeDetail = () => {
     const params = {
-      eid,
+      eid: playInfo.eid,
     }
 
     episodeDetail(params)
@@ -75,6 +117,10 @@ export const Player: React.FC<IProps> = ({ eid, open, onClose }) => {
       getEpisodeDetail()
     }
   }, [open])
+
+  useEffect(() => {
+    setProgress(Math.round(playInfo.current))
+  }, [playInfo])
 
   return (
     <div
@@ -109,7 +155,7 @@ export const Player: React.FC<IProps> = ({ eid, open, onClose }) => {
         </IconButton>
         <LiveCount
           open={open}
-          eid={eid}
+          eid={playInfo.eid}
         />
       </div>
 
@@ -156,40 +202,61 @@ export const Player: React.FC<IProps> = ({ eid, open, onClose }) => {
                     radius="large"
                     className="control-button"
                     onClick={() => {
-                      showEpisodeDetailModal(eid)
+                      showEpisodeDetailModal(playInfo.eid)
                     }}
                   >
                     <IoMdInformationCircleOutline />
                   </IconButton>
                 </Tooltip>
 
-                <Tooltip content="向后15秒">
+                <Tooltip content={CONSTANT.PLAYER_REWIND}>
                   <IconButton
                     variant="ghost"
                     radius="large"
                     className="control-button"
+                    onClick={() => {
+                      onRewind()
+                    }}
                   >
-                    <BsSkipBackwardFill />
+                    <img
+                      className={left ? 'rotateLeft' : ''}
+                      src={RW_BUTTON_ICON}
+                      alt="icon"
+                    />
                   </IconButton>
                 </Tooltip>
 
-                <Tooltip content="播放">
+                <Tooltip
+                  content={
+                    isPlaying ? CONSTANT.PLAYER_PAUSE : CONSTANT.PLAYER_PLAY
+                  }
+                >
                   <IconButton
                     variant="ghost"
                     radius="large"
                     className="control-button"
+                    onClick={() => {
+                      onPlay()
+                    }}
                   >
-                    <BsPlayFill />
+                    {!isPlaying ? <BsPlayFill /> : <BsPauseFill />}
                   </IconButton>
                 </Tooltip>
 
-                <Tooltip content="向前15秒">
+                <Tooltip content={CONSTANT.PLAYER_FAST_FORWARD}>
                   <IconButton
                     variant="ghost"
                     radius="large"
                     className="control-button"
+                    onClick={() => {
+                      onFastForward()
+                    }}
                   >
-                    <BsSkipForwardFill />
+                    <img
+                      className={right ? 'rotateRight' : ''}
+                      src={FF_BUTTON_ICON}
+                      alt="icon"
+                    />
                   </IconButton>
                 </Tooltip>
 
@@ -207,14 +274,22 @@ export const Player: React.FC<IProps> = ({ eid, open, onClose }) => {
 
             <div className="progress-bar-layout">
               <div className="time-flag">
-                <span>16:58</span>
-                <span>1:41:11</span>
+                <span>{secondsToHms(Math.round(playInfo.current))}</span>
+                <span>{secondsToHms(Math.round(playInfo.duration))}</span>
               </div>
               <div className="progress-bar">
                 <Slider
                   size="1"
-                  radius="none"
-                  defaultValue={[30]}
+                  step={1}
+                  radius="full"
+                  min={0}
+                  max={Math.round(playInfo.duration)}
+                  value={[progress]}
+                  onValueChange={(value) => {
+                    setProgress(value[0])
+                    player.seek(value[0])
+                  }}
+                  defaultValue={[0]}
                 />
               </div>
             </div>

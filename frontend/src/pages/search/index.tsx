@@ -46,7 +46,7 @@ export const Search: React.FC = () => {
         }
       })
       .catch(() => {
-        toast('搜索失败')
+        toast('搜索失败', { type: 'warn' })
       })
       .finally(() => {
         setLoading(false)

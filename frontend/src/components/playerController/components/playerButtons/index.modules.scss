@@ -7,6 +7,7 @@
 
   .buttons {
     display: flex;
+
     .button {
       width: 45px;
       height: 45px;
@@ -54,6 +55,11 @@
           width: 26px;
           height: 26px;
         }
+      }
+
+      img {
+        width: 26px;
+        height: 26px;
       }
     }
   }

@@ -42,7 +42,7 @@ export const ProxyModal: React.FC<modalType> = ({ open, onClose }) => {
     const [ip, port] = await getSavedIpAndPort()
 
     if (ip === '' || port === '') {
-      toast('请先保存代理设置')
+      toast('请先保存代理设置', { type: 'warn' })
 
       return
     }
@@ -50,22 +50,22 @@ export const ProxyModal: React.FC<modalType> = ({ open, onClose }) => {
     setEnabled(checked)
     UpdateConfig(PROXY_CONFIG_ENUM.ENABLED, checked).then(() => {
       if (checked) {
-        toast('启用代理')
+        toast('启用代理', { type: 'success' })
       } else {
-        toast('禁用代理')
+        toast('禁用代理', { type: 'success' })
       }
     })
   }
 
   const onCheck = (): boolean => {
     if (ip === '' || port === '') {
-      toast('IP 和端口不能为空')
+      toast('IP 和端口不能为空', { type: 'warn' })
 
       return false
     }
 
     if (!isValidIp(ip)) {
-      toast('IP 不合法')
+      toast('IP 不合法', { type: 'warn' })
 
       return false
     }
@@ -73,7 +73,7 @@ export const ProxyModal: React.FC<modalType> = ({ open, onClose }) => {
     const p = Number(port)
 
     if (isNaN(p) || p < 0 || p > 65535) {
-      toast('端口不合法')
+      toast('端口不合法', { type: 'warn' })
 
       return false
     }
@@ -126,7 +126,7 @@ export const ProxyModal: React.FC<modalType> = ({ open, onClose }) => {
                     ).then()
                   })
                   .catch((err) => {
-                    toast('错误')
+                    toast('错误', { type: 'warn' })
                   })
                   .finally(() => {
                     setLoading(false)
@@ -147,10 +147,10 @@ export const ProxyModal: React.FC<modalType> = ({ open, onClose }) => {
                   UpdateConfig(PROXY_CONFIG_ENUM.PORT, port),
                 ])
                   .then(() => {
-                    toast('保存成功')
+                    toast('保存成功', { type: 'success' })
                   })
                   .catch(() => {
-                    toast('保存失败')
+                    toast('保存失败', { type: 'warn' })
                   })
               }
             }}

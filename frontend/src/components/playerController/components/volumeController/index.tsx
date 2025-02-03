@@ -1,12 +1,17 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { SpeakerLoudIcon, SpeakerOffIcon } from '@radix-ui/react-icons'
 import { Button, Slider } from '@radix-ui/themes'
 import './index.modules.scss'
+import { Player } from '@/utils'
 
-export const VolumeController = () => {
-  const [volume, setVolume] = useState<number>(75)
+type IProps = {
+  player: Player
+}
+
+export const VolumeController: React.FC<IProps> = ({ player }) => {
+  const [volume, setVolume] = useState<number>(0.8)
   const [isMuted, setIsMuted] = useState<boolean>(false)
-  const [previousVolume, setPreviousVolume] = useState<number>(75)
+  const [previousVolume, setPreviousVolume] = useState<number>(0.8)
 
   const onVolumeChange = (v: number[]) => {
     setVolume(v[0])
@@ -29,6 +34,10 @@ export const VolumeController = () => {
     }
   }
 
+  useEffect(() => {
+    player.setVolume(volume)
+  }, [volume])
+
   return (
     <>
       <div className="volume-layout">
@@ -44,7 +53,8 @@ export const VolumeController = () => {
         </div>
         <div className="volume-slider">
           <Slider
-            step={5}
+            max={1}
+            step={0.05}
             value={[isMuted ? 0 : volume]}
             variant="soft"
             onValueChange={(v: number[]) => {

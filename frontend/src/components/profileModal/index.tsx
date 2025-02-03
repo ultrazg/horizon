@@ -162,7 +162,7 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
     getProfile(params)
       .then((res) => setProfileData(res.data.data))
       .catch(() => {
-        toast('获取用户信息失败')
+        toast('获取用户信息失败', { type: 'warn' })
       })
   }
 

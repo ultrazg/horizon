@@ -5,6 +5,8 @@ import { Button, Skeleton } from '@radix-ui/themes'
 import './index.modules.scss'
 import { PopularType, TargetType } from '@/pages/home'
 import { showEpisodeDetailModal } from '@/utils'
+import { usePlayer } from '@/hooks'
+import { PlayerEpisodeInfoType } from '@/utils/player'
 
 type IProps = {
   data: PopularType
@@ -23,6 +25,13 @@ const PopularPart: React.FC<IProps> = ({
   onRefresh,
   onDetail,
 }) => {
+  const player = usePlayer()
+
+  const onClickHandle = (url: string, episodeInfo: PlayerEpisodeInfoType) => {
+    player.load(url, episodeInfo)
+    player.play()
+  }
+
   return (
     <div className="popular-layout">
       <h3>大家都在听</h3>
@@ -44,6 +53,19 @@ const PopularPart: React.FC<IProps> = ({
                     }
                     mask
                     curPointer
+                    onClick={() => {
+                      const episodeInfo: PlayerEpisodeInfoType = {
+                        title: item.episode.title,
+                        eid: item.episode.eid,
+                        pid: item.episode.pid,
+                        cover: item.episode?.image
+                          ? item.episode.image.picUrl
+                          : item.episode.podcast.image.picUrl,
+                        liked: item.episode.isFavorited,
+                      }
+
+                      onClickHandle(item.episode.media.source.url, episodeInfo)
+                    }}
                   />
                 </div>
                 <div className="info-box">
@@ -62,7 +84,11 @@ const PopularPart: React.FC<IProps> = ({
                   >
                     {item.episode.title}
                   </p>
-                  <p>
+                  <p
+                    onClick={() => {
+                      console.log(player.duration)
+                    }}
+                  >
                     <QuoteIcon />
                     {item.recommendation}
                   </p>

@@ -35,7 +35,7 @@ export const onBlockedUserRemove = (uid: string, cb?: () => void) => {
   }
   blockedUserRemove(params)
     .then((res) => {
-      toast(res.data.toast, { duration: 1500 }, cb)
+      toast(res.data.toast, { duration: 1500, type: 'success' }, cb)
     })
     .catch(() => {
       toast('操作失败')
@@ -53,10 +53,10 @@ export const onBlockedUserCreate = (uid: string, cb?: () => void) => {
   }
   blockedUserCreate(params)
     .then((res) => {
-      toast(res.data.toast, { duration: 1500 }, cb)
+      toast(res.data.toast, { duration: 1500, type: 'success' }, cb)
     })
     .catch(() => {
-      toast('操作失败')
+      toast('操作失败', { type: 'warn' })
     })
 }
 
@@ -87,8 +87,8 @@ export const BlockedModal: React.FC<modalType> = ({ open, onClose }) => {
     setLoading(true)
     blockedUserLists()
       .then((res) => setLists(res.data.data))
-      .catch((err) => {
-        toast('获取黑名单列表失败')
+      .catch(() => {
+        toast('获取黑名单列表失败', { type: 'warn' })
       })
       .finally(() => {
         setLoading(false)

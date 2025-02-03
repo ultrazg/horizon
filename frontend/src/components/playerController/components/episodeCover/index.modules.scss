@@ -28,6 +28,7 @@
       &:hover {
         opacity: 1;
         background-color: rgba(99, 99, 99, 0.5);
+        backdrop-filter: blur(2px);
       }
     }
   }
@@ -36,6 +37,9 @@
     flex: 3;
 
     .episode-title {
+      cursor: default;
+      user-select: none;
+      -webkit-user-select: none;
       overflow: hidden;
       display: -webkit-box;
       line-clamp: 1;

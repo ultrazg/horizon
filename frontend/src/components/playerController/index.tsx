@@ -1,41 +1,67 @@
 import React, { useEffect, useState } from 'react'
-import { Player } from '@/components'
+import { PlayerDrawer } from '@/components'
 import { EpisodeCover } from './components/episodeCover'
 import { VolumeController } from './components/volumeController'
 import { PlayerButtons } from './components/playerButtons'
 import { Slider } from '@radix-ui/themes'
 import './index.modules.scss'
-import UserStore from '@/store/user'
+import { usePlayer } from '@/hooks'
+import { PlayInfoType } from '@/utils/player'
+import { episodePlayProgressUpdate } from '@/api/episode'
 
-export const PlayController = () => {
+export const PlayController: React.FC = () => {
+  const player = usePlayer()
   const [open, setOpen] = React.useState<boolean>(false)
   const [progress, setProgress] = React.useState<number>(0)
+  const [playerLoading, setPlayerLoading] = useState<boolean>(player.isLoading)
+  const [playInfo, setPlayInfo] = useState<PlayInfoType>({
+    title: '',
+    pid: '',
+    eid: '',
+    cover: '',
+    current: 0,
+    duration: 0,
+    liked: false,
+  })
+
+  /**
+   * 更新单集播放进度
+   */
+  const onUpdateProgress = () => {
+    const params = {
+      data: [
+        {
+          eid: player.playInfo.eid,
+          pid: player.playInfo.pid,
+          progress: Math.round(player.playInfo.current),
+          playedAt: new Date().toISOString(),
+        },
+      ],
+    }
+
+    episodePlayProgressUpdate(params).catch((err) => {
+      console.error(err)
+    })
+  }
 
   useEffect(() => {
-    UserStore.initSetMusic()
-  }, [])
+    const checkLoading = setInterval(() => {
+      setPlayerLoading(player.isLoading)
+      setPlayInfo(player.playInfo)
+      setProgress(Math.round(player.playInfo.current))
+    }, 100)
 
-  const handleMusic = (type: string, time: number = 0) => {
-    console.log('handleMusic', type)
-    switch (type) {
-      case 'play':
-        UserStore.musicInfo.play()
-        break
-      case 'pause':
-        UserStore.musicInfo.pause()
-        break
-      case 'next':
-        UserStore.musicInfo.playNext()
-        break
-      case 'prev':
-        UserStore.musicInfo.playPre()
-        break
-      case 'progres':
-        UserStore.musicInfo.seek(time)
-      default:
-        break
+    const timer = setInterval(() => {
+      if (player.isPlaying) {
+        onUpdateProgress()
+      }
+    }, 1000 * 20)
+
+    return () => {
+      clearInterval(checkLoading)
+      clearInterval(timer)
     }
-  }
+  }, [player])
 
   return (
     <>
@@ -46,23 +72,22 @@ export const PlayController = () => {
             size="1"
             step={1}
             min={0}
-            max={100}
-            radius="none"
+            max={Math.round(playInfo.duration)}
+            radius="full"
             value={[progress]}
             onValueChange={(value) => {
               setProgress(value[0])
-              // UserStore.musicInfo.curProgress = value[0]
-            }}
-            onValueCommit={(value) => {
-              console.log("结算=", value)
-              handleMusic('progres',value[0])
+              player.seek(value[0])
             }}
             defaultValue={[0]}
           />
         </div>
-        
+
         <div className="left">
           <EpisodeCover
+            player={player}
+            playInfo={playInfo}
+            playerLoading={playerLoading}
             onOpen={() => {
               setOpen(true)
             }}
@@ -70,15 +95,20 @@ export const PlayController = () => {
         </div>
 
         <div className="middle">
-          <PlayerButtons onHandleMusic={(e: string) => handleMusic(e)} />
+          <PlayerButtons
+            player={player}
+            playInfo={playInfo}
+          />
         </div>
 
         <div className="right">
-          <VolumeController />
+          <VolumeController player={player} />
         </div>
       </div>
 
-      <Player
+      <PlayerDrawer
+        player={player}
+        playInfo={playInfo}
         open={open}
         onClose={() => {
           setOpen(false)

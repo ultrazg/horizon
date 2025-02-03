@@ -52,7 +52,7 @@ const TabEpisode: React.FC = () => {
 
         favoriteEpisodeUpdate(params)
           .then(() => {
-            toast('取消收藏成功')
+            toast('取消收藏成功', { type: 'success' })
             getLists()
           })
           .catch(() => {
@@ -82,14 +82,23 @@ const TabEpisode: React.FC = () => {
                 src={item.image ? item.image.picUrl : item.podcast.image.picUrl}
               />
             </div>
-            <div
-              className="right"
-              onClick={() => {
-                showEpisodeDetailModal(item.eid)
-              }}
-            >
-              <p title={item.title}>{item.title}</p>
-              <p title={item.description}>{item.description}</p>
+            <div className="right">
+              <p
+                title={item.title}
+                onClick={() => {
+                  showEpisodeDetailModal(item.eid)
+                }}
+              >
+                {item.title}
+              </p>
+              <p
+                title={item.description}
+                onClick={() => {
+                  showEpisodeDetailModal(item.eid)
+                }}
+              >
+                {item.description}
+              </p>
               <p>
                 <span>
                   {Math.floor(item.duration / 60)}分钟 ·{' '}
