@@ -17,7 +17,7 @@ import { ProfileModal } from '@/components'
 import './index.modules.scss'
 import { BsPauseFill, BsPlayFill } from 'react-icons/bs'
 import { IoMdThumbsUp, IoMdInformationCircleOutline } from 'react-icons/io'
-import { episodeDetail } from '@/api/episode'
+import { episodeDetail, episodeClapCreate } from '@/api/episode'
 import { EpisodeType } from '@/types/episode'
 import { Player, showEpisodeDetailModal, toast } from '@/utils'
 import { CONSTANT } from '@/types/constant'
@@ -59,6 +59,29 @@ export const PlayerDrawer: React.FC<IProps> = ({
   const [progress, setProgress] = React.useState<number>(0)
 
   const count = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+  /**
+   * 标记精彩时刻
+   * @param eid
+   */
+  const onCreateClap = (eid: string) => {
+    const params = {
+      eid,
+      timestamp: Math.round(playInfo.current),
+      duration: Math.round(playInfo.duration),
+    }
+
+    episodeClapCreate(params)
+      .then(() => {
+        toast(
+          `成功在 ${secondsToHms(Math.round(playInfo.current))} 处标记为精彩时刻`,
+          { type: 'success' },
+        )
+      })
+      .catch(() => {
+        toast('标记精彩时刻失败', { type: 'warn' })
+      })
+  }
 
   /**
    * 快进
@@ -260,11 +283,14 @@ export const PlayerDrawer: React.FC<IProps> = ({
                   </IconButton>
                 </Tooltip>
 
-                <Tooltip content="标记精彩时刻">
+                <Tooltip content={CONSTANT.CREATE_EPISODE_CLAP}>
                   <IconButton
                     variant="ghost"
                     radius="large"
                     className="control-button"
+                    onClick={() => {
+                      onCreateClap(playInfo.eid)
+                    }}
                   >
                     <IoMdThumbsUp />
                   </IconButton>
@@ -279,6 +305,7 @@ export const PlayerDrawer: React.FC<IProps> = ({
               </div>
               <div className="progress-bar">
                 <Slider
+                  className="progress-slider"
                   size="1"
                   step={1}
                   radius="full"

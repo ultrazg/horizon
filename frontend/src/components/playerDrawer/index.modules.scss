@@ -100,6 +100,18 @@
 
           .progress-bar {
             margin-top: 0.7rem;
+
+            .progress-slider {
+              cursor: pointer;
+
+              .rt-SliderThumb {
+                cursor: ew-resize;
+
+                &::after {
+                  cursor: ew-resize;
+                }
+              }
+            }
           }
         }
       }

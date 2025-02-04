@@ -22,4 +22,5 @@ export enum CONSTANT {
   PLAYER_PAUSE = '暂停',
   PLAYER_LIKED = '收藏',
   PLAYER_UNLIKED = '取消收藏',
+  CREATE_EPISODE_CLAP = '标记精彩时刻',
 }

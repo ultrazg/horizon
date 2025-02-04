@@ -6,6 +6,7 @@ const api = {
   episodeDetail: 'episode_detail',
   episodeLiveCount: 'episode_live_count',
   episodePlayProgressUpdate: 'episode_play_progress_update',
+  episodeClapCreate: 'episode_clap_create',
 }
 
 type episodeListType = {
@@ -31,6 +32,12 @@ type episodePlayProgressUpdateType = {
   }[]
 }
 
+type episodeClapCreateType = {
+  eid: string
+  timestamp: number
+  duration: number
+}
+
 /** 查询单集列表 */
 export const episodeList = (params: episodeListType): Promise<responseType> =>
   httpRequest.post(api.episodeList, params)
@@ -50,3 +57,8 @@ export const episodePlayProgressUpdate = (
   params: episodePlayProgressUpdateType,
 ): Promise<responseType> =>
   httpRequest.post(api.episodePlayProgressUpdate, params)
+
+/** 标记精彩时间点 */
+export const episodeClapCreate = (
+  params: episodeClapCreateType,
+): Promise<responseType> => httpRequest.post(api.episodeClapCreate, params)
