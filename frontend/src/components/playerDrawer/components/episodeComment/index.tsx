@@ -15,10 +15,16 @@ import { IoMdThumbsUp } from 'react-icons/io'
 import { useDisplayInfo } from '@/hooks'
 import { CommentReplyModal } from '@/components/playerDrawer/components/commentReplyModal'
 import { ProfileModal } from '@/components'
-import { commentPrimary, commentPrimaryType } from '@/api/comment'
+import {
+  commentPrimary,
+  commentPrimaryType,
+  commentCollectCreate,
+} from '@/api/comment'
 import { CommentPrimaryType } from '@/types/comment'
-import { toast } from '@/utils'
+import { DialogType, ShowMessageDialog, toast } from '@/utils'
 import dayjs from 'dayjs'
+import { commentCollectRemove } from '@/api/favorite'
+import { isEmpty } from 'lodash'
 
 type IProps = {
   open: boolean
@@ -28,6 +34,7 @@ type IProps = {
 export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
   const [height] = React.useState<number>(useDisplayInfo().Height - 35)
   const [loading, setLoading] = useState<boolean>(false)
+  const [loadMoreLoading, setLoadMoreLoading] = useState<boolean>(false)
   const [commentData, setCommentData] = useState<{
     total: number
     records: CommentPrimaryType[]
@@ -42,32 +49,85 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
     open: false,
     uid: '',
   })
+  const [loadMoreKey, setLoadMoreKey] = useState<any>({})
   const [replyModal, setReplyModal] = useState<{ id: string; open: boolean }>({
     id: '0',
     open: false,
   })
 
-  const getComment = () => {
-    setLoading(true)
+  const getComment = (loadMoreKey?: {}) => {
+    if (loadMoreKey) {
+      setLoadMoreLoading(true)
+    } else {
+      setLoading(true)
+    }
 
     const params: commentPrimaryType = {
       id: eid,
       order: 'HOT',
+      loadMoreKey,
     }
 
     commentPrimary(params)
       .then((res) => {
         setCommentData({
           total: res.data.totalCount,
-          records: res.data.data,
+          records: [...commentData.records, ...res.data.data],
         })
+
+        if (res.data?.loadMoreKey) {
+          setLoadMoreKey(res.data.loadMoreKey)
+        }
       })
       .catch(() => {
         toast('获取单集评论失败', { type: 'warn' })
       })
       .finally(() => {
         setLoading(false)
+        setLoadMoreLoading(false)
       })
+  }
+
+  /**
+   * 收藏评论
+   * @param commentId 评论 id
+   */
+  const onCommentCollectCreate = (commentId: string) => {
+    const params = {
+      commentId,
+    }
+
+    commentCollectCreate(params).then((res) => {
+      toast(res.data.toast, { type: 'success' })
+      getComment()
+    })
+  }
+
+  /**
+   * 删除收藏的评论
+   * @param commentId 评论 id
+   */
+  const onCommentCollectRemove = (commentId: string) => {
+    ShowMessageDialog(
+      DialogType.QUESTION,
+      '提示',
+      '确定要取消收藏这条评论吗？',
+    ).then((res) => {
+      if (res === 'Yes' || res === '是') {
+        const params = {
+          commentId,
+        }
+
+        commentCollectRemove(params)
+          .then((res) => {
+            toast(res.data.toast, { type: 'success' })
+            getComment()
+          })
+          .catch(() => {
+            toast('操作失败', { type: 'warn' })
+          })
+      }
+    })
   }
 
   const onViewReply = () => {
@@ -79,6 +139,11 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
 
   useEffect(() => {
     if (open) {
+      setCommentData({
+        total: 0,
+        records: [],
+      })
+
       getComment()
     }
   }, [open])
@@ -136,14 +201,23 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
                         <span>{item.author.ipLoc}</span>
                       </p>
                     </div>
-                    <div className="player-comment-more-action">
-                      <Tooltip content="收藏评论">
+                    <div
+                      className="player-comment-more-action"
+                      style={item.collected ? { opacity: 1 } : {}}
+                    >
+                      <Tooltip
+                        content={item.collected ? '取消收藏' : '收藏评论'}
+                      >
                         <IconButton
                           variant="ghost"
                           size="1"
                           color="gray"
                           onClick={() => {
-                            // ...
+                            if (item.collected) {
+                              onCommentCollectRemove(item.id)
+                            } else {
+                              onCommentCollectCreate(item.id)
+                            }
                           }}
                         >
                           {item.collected ? (
@@ -205,14 +279,20 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
                 </div>
               ))}
 
-              <div className="load-more-button">
-                <Button
-                  variant="soft"
-                  color="gray"
-                >
-                  加载更多
-                </Button>
-              </div>
+              {!isEmpty(loadMoreKey) && (
+                <div className="load-more-button">
+                  <Button
+                    variant="soft"
+                    color="gray"
+                    onClick={() => {
+                      getComment(loadMoreKey)
+                    }}
+                    loading={loadMoreLoading}
+                  >
+                    加载更多
+                  </Button>
+                </div>
+              )}
             </div>
           </ScrollArea>
         </Spinner>

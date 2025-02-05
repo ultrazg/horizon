@@ -66,6 +66,7 @@ export const Modal: React.FC<modalType> = ({
           mt="4"
           justify="end"
         >
+          {options}
           <Dialog.Close>
             <Button
               variant="soft"
@@ -75,8 +76,6 @@ export const Modal: React.FC<modalType> = ({
               关闭
             </Button>
           </Dialog.Close>
-
-          {options}
         </Flex>
       </Dialog.Content>
     </Dialog.Root>

@@ -81,7 +81,6 @@ const TabComment: React.FC = () => {
 
         commentCollectRemove(params)
           .then((res) => {
-            console.log(res.data)
             toast(res.data.toast, { type: 'success' })
             getLists()
           })

@@ -33,6 +33,18 @@ export const CommentReplyModal: React.FC<IProps> = ({ id, open, onClose }) => {
       title="回复"
       open={open}
       onClose={onClose}
+      options={
+        <>
+          <TextField.Root
+            style={{ width: '100%' }}
+            placeholder="回复给..."
+          />
+          <Button variant="soft">
+            <PaperPlaneIcon />
+            评论
+          </Button>
+        </>
+      }
     >
       <ScrollArea
         type="hover"
@@ -99,28 +111,6 @@ export const CommentReplyModal: React.FC<IProps> = ({ id, open, onClose }) => {
           </div>
         </div>
       </ScrollArea>
-
-      <div className="comment-reply-bottom">
-        <div>
-          <TextField.Root placeholder="回复给..." />
-        </div>
-        <div>
-          <Button variant="soft">
-            <PaperPlaneIcon />
-            评论
-          </Button>
-        </div>
-        <div>
-          <Dialog.Close>
-            <Button
-              variant="soft"
-              color="gray"
-            >
-              关闭
-            </Button>
-          </Dialog.Close>
-        </div>
-      </div>
     </Modal>
   )
 }
