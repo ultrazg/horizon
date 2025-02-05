@@ -1,19 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import {
-  Avatar,
-  Button,
-  IconButton,
-  ScrollArea,
-  Slider,
-  Text,
-  Tooltip,
-} from '@radix-ui/themes'
-import { CaretDownIcon, StarIcon } from '@radix-ui/react-icons'
+import { IconButton, Slider, Text, Tooltip } from '@radix-ui/themes'
+import { CaretDownIcon } from '@radix-ui/react-icons'
 import { useDisplayInfo } from '@/hooks'
 import { CoverBox } from './components/coverBox'
 import { LiveCount } from './components/liveCount'
-import { CommentReplyModal } from './components/commentReplyModal'
-import { ProfileModal } from '@/components'
+import { EpisodeComment } from './components/episodeComment'
 import './index.modules.scss'
 import { BsPauseFill, BsPlayFill } from 'react-icons/bs'
 import { IoMdThumbsUp, IoMdInformationCircleOutline } from 'react-icons/io'
@@ -41,24 +32,12 @@ export const PlayerDrawer: React.FC<IProps> = ({
 }) => {
   const [height] = React.useState<number>(useDisplayInfo().Height - 35)
   const [width] = React.useState<number>(useDisplayInfo().Width)
-  const [replyModal, setReplyModal] = useState<{ id: string; open: boolean }>({
-    id: '0',
-    open: false,
-  })
-  const [profileModal, setProfileModal] = useState<{
-    open: boolean
-    uid: string
-  }>({
-    open: false,
-    uid: '',
-  })
+
   const [episodeDetailInfo, setEpisodeDetailInfo] = useState<EpisodeType>()
   const [isPlaying, setIsPlaying] = useState<boolean>(player.isPlaying)
   const [left, setLeft] = useState<boolean>(false)
   const [right, setRight] = useState<boolean>(false)
   const [progress, setProgress] = React.useState<number>(0)
-
-  const count = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
   /**
    * 标记精彩时刻
@@ -112,13 +91,6 @@ export const PlayerDrawer: React.FC<IProps> = ({
   const onPlay = () => {
     player.togglePlay()
     setIsPlaying(player.isPlaying)
-  }
-
-  const onViewReply = () => {
-    setReplyModal({
-      id: '123',
-      open: true,
-    })
   }
 
   const getEpisodeDetail = () => {
@@ -322,149 +294,14 @@ export const PlayerDrawer: React.FC<IProps> = ({
             </div>
           </div>
         </div>
+
         <div className="player-right">
-          <div className="player-comment-layout">
-            <Text
-              size="5"
-              style={{ fontWeight: 'bold' }}
-            >
-              1055 条评论
-            </Text>
-
-            <ScrollArea
-              type="always"
-              scrollbars="vertical"
-              style={{ height: `${height - 100}px` }}
-            >
-              <div className="player-comment-content">
-                {count.map((item: any) => (
-                  <div
-                    key={item}
-                    className="player-comment-item"
-                  >
-                    <div className="player-comment-author">
-                      <div
-                        onClick={() => {
-                          setProfileModal({
-                            open: true,
-                            uid: '123',
-                          })
-                        }}
-                      >
-                        <Avatar
-                          radius="full"
-                          src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?&w=256&h=256&q=70&crop=focalpoint&fp-x=0.5&fp-y=0.3&fp-z=1&fit=crop"
-                          fallback="A"
-                        />
-                      </div>
-                      <div>
-                        <span
-                          onClick={() => {
-                            setProfileModal({
-                              open: true,
-                              uid: '123',
-                            })
-                          }}
-                        >
-                          不开玩笑小助手
-                        </span>
-                        <p>
-                          10/23 <span>上海</span>
-                        </p>
-                      </div>
-                      <div className="player-comment-more-action">
-                        <Tooltip content="收藏评论">
-                          <IconButton
-                            variant="ghost"
-                            size="1"
-                            color="gray"
-                            onClick={() => {
-                              // ...
-                            }}
-                          >
-                            <StarIcon />
-                          </IconButton>
-                        </Tooltip>
-                      </div>
-                      <div>
-                        <IoMdThumbsUp />
-                        23
-                      </div>
-                    </div>
-                    <div className="player-comment-body">
-                      窦娥在刑场即将行刑时 看着漫天的大雪 哭诉道：“冤深，启冻！”
-                      后人都称：万冤深导致的 后人悲呼：万冤身亡的
-                      商鞅：原来你也万冤身 有人觉得窦娥不怨
-                      对此我想说：冤身怎么你了？
-                    </div>
-                    <div className="player-comment-replies">
-                      <div className="player-comment-reply">
-                        <span
-                          className="player-comment-reply-nickname"
-                          onClick={() => {
-                            setProfileModal({
-                              open: true,
-                              uid: '123',
-                            })
-                          }}
-                        >
-                          推阿婆下楼
-                        </span>
-                        ：原神怎么你了？😡
-                      </div>
-                      <div className="player-comment-reply">
-                        <span className="player-comment-reply-nickname">
-                          想吃羊肉串儿
-                        </span>
-                        ：说到我心坎儿里说到我心坎儿里说到我心坎儿里说到我心坎儿里
-                      </div>
-                      <div
-                        className="player-comment-more-reply"
-                        onClick={() => {
-                          onViewReply()
-                        }}
-                      >
-                        共 3 条回复 &gt;
-                      </div>
-                    </div>
-                  </div>
-                ))}
-
-                <div className="load-more-button">
-                  <Button
-                    variant="ghost"
-                    color="gray"
-                  >
-                    加载更多
-                  </Button>
-                </div>
-              </div>
-            </ScrollArea>
-          </div>
+          <EpisodeComment
+            eid={playInfo.eid}
+            open={open}
+          />
         </div>
       </div>
-
-      <CommentReplyModal
-        id={replyModal.id}
-        open={replyModal.open}
-        onClose={() => {
-          setReplyModal({
-            id: '0',
-            open: false,
-          })
-        }}
-      />
-
-      <ProfileModal
-        uid={profileModal.uid}
-        open={profileModal.open}
-        onClose={() => {
-          setProfileModal({
-            open: false,
-            uid: '',
-          })
-        }}
-      />
     </div>
   )
 }
