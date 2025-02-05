@@ -50,8 +50,11 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
     uid: '',
   })
   const [loadMoreKey, setLoadMoreKey] = useState<any>({})
-  const [replyModal, setReplyModal] = useState<{ id: string; open: boolean }>({
-    id: '0',
+  const [replyModal, setReplyModal] = useState<{
+    primaryComment: CommentPrimaryType | any
+    open: boolean
+  }>({
+    primaryComment: {},
     open: false,
   })
 
@@ -127,13 +130,6 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
             toast('操作失败', { type: 'warn' })
           })
       }
-    })
-  }
-
-  const onViewReply = () => {
-    setReplyModal({
-      id: '123',
-      open: true,
     })
   }
 
@@ -248,7 +244,10 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
                   {item.replies && item.replies.length > 0 && (
                     <div className="player-comment-replies">
                       {item.replies.map((itm) => (
-                        <div className="player-comment-reply">
+                        <div
+                          key={itm.author.uid}
+                          className="player-comment-reply"
+                        >
                           <span
                             className="player-comment-reply-nickname"
                             onClick={() => {
@@ -268,7 +267,10 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
                         <div
                           className="player-comment-more-reply"
                           onClick={() => {
-                            onViewReply()
+                            setReplyModal({
+                              primaryComment: item,
+                              open: true,
+                            })
                           }}
                         >
                           共 {item.threadReplyCount} 条回复 &gt;
@@ -299,11 +301,11 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
       </div>
 
       <CommentReplyModal
-        id={replyModal.id}
+        primaryComment={replyModal.primaryComment}
         open={replyModal.open}
         onClose={() => {
           setReplyModal({
-            id: '0',
+            primaryComment: {},
             open: false,
           })
         }}

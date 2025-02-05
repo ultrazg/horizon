@@ -3,6 +3,7 @@ import { responseType } from '@/types/response'
 
 const api = {
   commentPrimary: 'comment_primary',
+  commentThread: 'comment_thread',
   commentCollectCreate: 'comment_collect_create',
 }
 
@@ -10,6 +11,11 @@ export type commentPrimaryType = {
   id: string
   order: 'HOT' | 'TIME' | 'TIMESTAMP' // 全部评论（HOT）、最新评论（TIME）、时点评论（TIMESTAMP）
   loadMoreKey?: {}
+}
+
+export type commentThreadType = {
+  primaryCommentId: string
+  order: 'SMART' | 'TIME' // 全部评论（SMART）、最新评论（TIME）
 }
 
 type commentCollectCreateType = {
@@ -20,6 +26,11 @@ type commentCollectCreateType = {
 export const commentPrimary = (
   params: commentPrimaryType,
 ): Promise<responseType> => httpRequest.post(api.commentPrimary, params)
+
+/** 查询回复评论 */
+export const commentThread = (
+  params: commentThreadType,
+): Promise<responseType> => httpRequest.post(api.commentThread, params)
 
 /** 收藏评论 */
 export const commentCollectCreate = (
