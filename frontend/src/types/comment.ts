@@ -25,6 +25,28 @@ type CommentPrimaryType = {
   type: string
   authorAssociation: string
   threadReplyCount: number
+  replyToComment: {
+    author: baseUserType
+    badges: any[]
+    collected: boolean
+    collectedAt: string
+    createdAt: string
+    id: string
+    ipLoc: string
+    isAuthorMuted: boolean
+    level: number
+    likeCount: number
+    liked: boolean
+    owner: {
+      id: string
+      type: string
+    }
+    pid: string
+    pinned: boolean
+    text: string
+    status: string
+    type: string
+  }
   replies?: {
     replyToComment?: CommentPrimaryType
   } & CommentPrimaryType[]

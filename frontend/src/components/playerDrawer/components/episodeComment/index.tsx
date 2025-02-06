@@ -135,12 +135,14 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
 
   useEffect(() => {
     if (open) {
+      getComment()
+    }
+
+    return () => {
       setCommentData({
         total: 0,
         records: [],
       })
-
-      getComment()
     }
   }, [open])
 
@@ -224,8 +226,12 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
                         </IconButton>
                       </Tooltip>
                     </div>
-                    <div>
-                      <IoMdThumbsUp color={item.liked ? 'white' : 'gray'} />
+                    <div
+                      style={
+                        item.liked ? { color: 'white' } : { color: 'gray' }
+                      }
+                    >
+                      <IoMdThumbsUp />
                       {item.likeCount}
                     </div>
                   </div>

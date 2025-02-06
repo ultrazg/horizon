@@ -19,10 +19,17 @@ var icon []byte
 
 func AppOptions(app *bridge.App) *options.App {
 	dw, dh := bridge.GetDisplaySize()
+	var width int
+
+	if dw > 1280 {
+		width = 1280
+	} else {
+		width = int(float32(dw) * 0.7)
+	}
 
 	return &options.App{
 		Title:         bridge.APP_NAME,
-		Width:         int(float32(dw) * 0.7),
+		Width:         width,
 		Height:        int(float32(dh) * 0.7),
 		DisableResize: true,
 		AssetServer: &assetserver.Options{
@@ -50,7 +57,7 @@ func AppOptions(app *bridge.App) *options.App {
 			WindowIsTranslucent:  true,
 			About: &mac.AboutInfo{
 				Title:   bridge.APP_NAME,
-				Message: "© 2024 2bit",
+				Message: "© 2025 2bit",
 				Icon:    icon,
 			},
 		},
