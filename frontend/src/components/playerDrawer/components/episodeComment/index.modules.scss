@@ -72,6 +72,7 @@
         padding: 0.2rem 0.3rem;
 
         .player-comment-reply {
+          cursor: pointer;
           overflow: hidden;
           display: -webkit-box;
           line-clamp: 1;
@@ -81,7 +82,6 @@
 
           .player-comment-reply-nickname {
             color: $secondary-font-color;
-            cursor: pointer;
           }
         }
 

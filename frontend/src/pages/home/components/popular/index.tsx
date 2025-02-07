@@ -27,7 +27,7 @@ const PopularPart: React.FC<IProps> = ({
 }) => {
   const player = usePlayer()
 
-  const onClickHandle = (url: string, episodeInfo: PlayerEpisodeInfoType) => {
+  const onPlayHandle = (url: string, episodeInfo: PlayerEpisodeInfoType) => {
     player.load(url, episodeInfo)
     player.play()
   }
@@ -64,7 +64,7 @@ const PopularPart: React.FC<IProps> = ({
                         liked: item.episode.isFavorited,
                       }
 
-                      onClickHandle(item.episode.media.source.url, episodeInfo)
+                      onPlayHandle(item.episode.media.source.url, episodeInfo)
                     }}
                   />
                 </div>

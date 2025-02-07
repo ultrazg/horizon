@@ -4,6 +4,8 @@ import { ColorfulShadow } from '@/components'
 import { ChatBubbleIcon, PlayIcon } from '@radix-ui/react-icons'
 import { Skeleton } from '@radix-ui/themes'
 import { showEpisodeDetailModal } from '@/utils'
+import { usePlayer } from '@/hooks'
+import { PlayerEpisodeInfoType } from '@/utils/player'
 
 type IProps = {
   data: any
@@ -12,6 +14,13 @@ type IProps = {
 }
 
 const EditorRecommended: React.FC<IProps> = ({ data, loading, onDetail }) => {
+  const player = usePlayer()
+
+  const onPlayHandle = (url: string, episodeInfo: PlayerEpisodeInfoType) => {
+    player.load(url, episodeInfo)
+    player.play()
+  }
+
   return (
     <div className="editor-recommended-layout">
       <h3>编辑精选</h3>
@@ -31,6 +40,19 @@ const EditorRecommended: React.FC<IProps> = ({ data, loading, onDetail }) => {
                       src={item.episode.podcast.image.picUrl}
                       mask
                       curPointer
+                      onClick={() => {
+                        const episodeInfo: PlayerEpisodeInfoType = {
+                          title: item.episode.title,
+                          eid: item.episode.eid,
+                          pid: item.episode.pid,
+                          cover: item.episode?.image
+                            ? item.episode.image.picUrl
+                            : item.episode.podcast.image.picUrl,
+                          liked: item.episode.isFavorited,
+                        }
+
+                        onPlayHandle(item.episode.media.source.url, episodeInfo)
+                      }}
                     />
                   </div>
                   <div className="info-box">

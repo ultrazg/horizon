@@ -24,6 +24,7 @@ type CommentPrimaryType = {
   status: string
   type: string
   authorAssociation: string
+  replyCount: number
   threadReplyCount: number
   replyToComment: {
     author: baseUserType

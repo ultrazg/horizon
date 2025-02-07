@@ -5,6 +5,7 @@ const api = {
   commentPrimary: 'comment_primary',
   commentThread: 'comment_thread',
   commentCollectCreate: 'comment_collect_create',
+  commentLikeUpdate: 'comment_like_update',
 }
 
 export type commentPrimaryType = {
@@ -22,6 +23,11 @@ type commentCollectCreateType = {
   commentId: string
 }
 
+type commentLikeUpdateType = {
+  id: string
+  liked: boolean
+}
+
 /** 查询单集的评论 */
 export const commentPrimary = (
   params: commentPrimaryType,
@@ -36,3 +42,8 @@ export const commentThread = (
 export const commentCollectCreate = (
   params: commentCollectCreateType,
 ): Promise<responseType> => httpRequest.post(api.commentCollectCreate, params)
+
+/** 点赞、取消点赞评论 */
+export const commentLikeUpdate = (
+  params: commentLikeUpdateType,
+): Promise<responseType> => httpRequest.post(api.commentLikeUpdate, params)
