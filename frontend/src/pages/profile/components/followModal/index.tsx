@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { Modal, ProfileModal } from '@/components'
+import { Empty, Modal, ProfileModal } from '@/components'
 import { modalType } from '@/types/modal'
 import {
   Avatar,
   Box,
   Button,
-  Dialog,
   Flex,
   Grid,
   Text,
@@ -255,18 +254,7 @@ export const FollowModal: React.FC<IProps> = ({ uid, type, onClose, open }) => {
             </ScrollArea>
           </div>
         ) : (
-          <div
-            style={{
-              width: '100%',
-              height: '80%',
-              color: 'gray',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            暂无数据
-          </div>
+          <Empty />
         )}
       </Spinner>
 

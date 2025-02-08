@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Modal } from '@/components'
+import { Modal, Empty } from '@/components'
 import './index.modules.scss'
 import { modalType } from '@/types/modal'
 import {
   Avatar,
   Box,
   Button,
-  Dialog,
   Flex,
   Grid,
   ScrollArea,
@@ -38,7 +37,7 @@ export const onBlockedUserRemove = (uid: string, cb?: () => void) => {
       toast(res.data.toast, { duration: 1500, type: 'success' }, cb)
     })
     .catch(() => {
-      toast('操作失败')
+      toast('操作失败', { type: 'warn' })
     })
 }
 
@@ -192,18 +191,7 @@ export const BlockedModal: React.FC<modalType> = ({ open, onClose }) => {
             </ScrollArea>
           </div>
         ) : (
-          <div
-            style={{
-              width: '100%',
-              height: '80%',
-              color: 'gray',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            暂无数据
-          </div>
+          <Empty />
         )}
       </Spinner>
     </Modal>

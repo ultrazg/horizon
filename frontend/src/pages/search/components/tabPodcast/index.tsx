@@ -1,6 +1,6 @@
 import React from 'react'
 import './index.modules.scss'
-import { ColorfulShadow } from '@/components'
+import { ColorfulShadow, Empty } from '@/components'
 import { Button } from '@radix-ui/themes'
 import { PlusIcon } from '@radix-ui/react-icons'
 import { PodcastType } from '@/types/podcast'
@@ -84,19 +84,7 @@ export const TabPodcast: React.FC<IProps> = ({
 
   return (
     <div className="search-result-podcast-layout">
-      {data.records.length === 0 && (
-        <div
-          style={{
-            width: '100%',
-            color: 'gray',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          暂无数据
-        </div>
-      )}
+      {data.records.length === 0 && <Empty />}
       {data.records.map((item) => (
         <div
           className="search-result-podcast-item"

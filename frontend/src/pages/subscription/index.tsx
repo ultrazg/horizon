@@ -4,6 +4,7 @@ import { subscription } from '@/api/subscription'
 import dayjs from 'dayjs'
 import './index.modules.scss'
 import { useNavigate } from 'react-router-dom'
+import { Empty } from '@/components'
 
 // TODO: 分页
 export const Subscription: React.FC = () => {
@@ -42,18 +43,7 @@ export const Subscription: React.FC = () => {
       {loading ? (
         <Spinner size="3" />
       ) : lists.length === 0 ? (
-        <div
-          style={{
-            width: '100%',
-            height: '80%',
-            color: 'gray',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          暂无数据
-        </div>
+        <Empty />
       ) : (
         <Grid
           columns="4"

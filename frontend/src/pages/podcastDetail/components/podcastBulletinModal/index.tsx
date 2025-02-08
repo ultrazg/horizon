@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { ScrollArea, Separator } from '@radix-ui/themes'
 import { EyeOpenIcon } from '@radix-ui/react-icons'
-import { Modal } from '@/components'
+import { Empty, Modal } from '@/components'
 import { modalType } from '@/types/modal'
 import { PodcastBulletinType } from '@/types/podcast'
 import './index.modules.scss'
@@ -71,17 +71,7 @@ export const PodcastBulletinModal: React.FC<IProps> = ({
           </ScrollArea>
         </div>
       ) : (
-        <div
-          style={{
-            width: '100%',
-            color: 'gray',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          暂无数据
-        </div>
+        <Empty />
       )}
     </Modal>
   )

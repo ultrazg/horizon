@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Modal, ProfileModal } from '@/components'
+import { Empty, Modal, ProfileModal } from '@/components'
 import { modalType } from '@/types/modal'
 import './index.modules.scss'
 import {
@@ -152,19 +152,7 @@ export const CommentReplyModal: React.FC<IProps> = ({
 
             <Text color="gray">评论回复({threadCommentData?.total})</Text>
 
-            {threadCommentData?.records.length === 0 && (
-              <div
-                style={{
-                  width: '100%',
-                  color: 'gray',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
-                暂无数据
-              </div>
-            )}
+            {threadCommentData?.records.length === 0 && <Empty />}
 
             {threadCommentData?.records.map((item) => (
               <div

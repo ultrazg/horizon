@@ -23,6 +23,7 @@ import {
   MyDropdownMenu,
   StickerModal,
   PickModal,
+  Empty,
 } from '@/components'
 import {
   SlBubble,
@@ -512,17 +513,7 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
                 <h3>{renderGender(profileData?.gender)}的贴纸库</h3>
 
                 {stickerData.total === 0 ? (
-                  <div
-                    style={{
-                      width: '100%',
-                      color: 'gray',
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}
-                  >
-                    暂无数据
-                  </div>
+                  <Empty />
                 ) : (
                   <Card
                     className="sticker-card"

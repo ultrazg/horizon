@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Avatar, Button } from '@radix-ui/themes'
-import { ProfileModal } from '@/components'
+import { ProfileModal, Empty } from '@/components'
 import { baseUserType } from '@/types/user'
 import { SlSymbleFemale, SlSymbolMale } from 'react-icons/sl'
 import { isEmpty } from 'lodash'
@@ -24,19 +24,7 @@ export const TabUser: React.FC<IProps> = ({ data, onLoadMore, loading }) => {
   return (
     <>
       <div className="search-result-user-layout">
-        {data.records.length === 0 && (
-          <div
-            style={{
-              width: '100%',
-              color: 'gray',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            暂无数据
-          </div>
-        )}
+        {data.records.length === 0 && <Empty />}
         {data.records.map((item) => (
           <div
             key={item.uid}

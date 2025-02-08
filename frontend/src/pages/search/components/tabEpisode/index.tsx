@@ -1,5 +1,5 @@
 import React from 'react'
-import { ColorfulShadow } from '@/components'
+import { ColorfulShadow, Empty } from '@/components'
 import { SlBubble, SlEarphones } from 'react-icons/sl'
 import { EpisodeType } from '@/types/episode'
 import dayjs from 'dayjs'
@@ -17,19 +17,7 @@ type IProps = {
 export const TabEpisode: React.FC<IProps> = ({ data, onLoadMore, loading }) => {
   return (
     <div className="search-result-episode-layout">
-      {data.records.length === 0 && (
-        <div
-          style={{
-            width: '100%',
-            color: 'gray',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          暂无数据
-        </div>
-      )}
+      {data.records.length === 0 && <Empty />}
       {data.records.map((item) => (
         <div
           key={item.eid}
