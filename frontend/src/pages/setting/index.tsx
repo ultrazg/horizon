@@ -31,7 +31,7 @@ import {
   DialogType,
 } from '@/utils'
 import { getUserPreference, updateUserPreference } from '@/api/user'
-import { useNavigateTo } from '@/hooks'
+import { useNavigateTo, usePlayer } from '@/hooks'
 import APP_ICON from '@/assets/images/logo.png'
 import {
   userType,
@@ -60,6 +60,7 @@ export const Setting: React.FC = () => {
   const userInfo: userType = Storage.get('user_info')
   const [blockedModal, setBlockedModal] = useState<boolean>(false)
   const [proxyModal, setProxyModal] = useState<boolean>(false)
+  const player = usePlayer()
 
   const goAbout = useNavigateTo('/about')
   const goLogin = useNavigateTo('/login')
@@ -82,8 +83,8 @@ export const Setting: React.FC = () => {
             ])
 
             Storage.clear()
+            player.stop()
             goLogin()
-            // TODO: 停止播放
           } catch (err) {
             console.error(err)
           }
@@ -284,35 +285,6 @@ export const Setting: React.FC = () => {
                   USER_PREFERENCE_ENUM.rejectRecommendation,
                   checked,
                 )
-              }}
-            />
-          </Box>
-        </Flex>
-        <Separator
-          my="3"
-          size="4"
-        />
-        <Flex>
-          <Box width="100%">
-            {CONSTANT.IP_LOC_HIDDEN}
-            <Tooltip content="关闭后将不显示自己与他人的 IP 属地信息">
-              <QuestionMarkCircledIcon
-                style={{
-                  marginLeft: '6px',
-                  cursor: 'help',
-                }}
-              />
-            </Tooltip>
-          </Box>
-          <Box>
-            <Switch
-              checked={config?.isIpLocHidden}
-              onCheckedChange={(checked: boolean) => {
-                setConfig({
-                  ...config,
-                  isIpLocHidden: checked,
-                })
-                onUpdateConfig(SETTING_CONFIG_ENUM.isIpLocHidden, checked)
               }}
             />
           </Box>

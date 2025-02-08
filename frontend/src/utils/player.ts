@@ -82,7 +82,6 @@ class Player {
   stop(): void {
     this.audio.pause()
     this.audio.currentTime = 0
-    this.audio.src = ''
     this.isLoading = false
     this.episodeInfo = {
       title: '',
@@ -91,6 +90,7 @@ class Player {
       cover: '',
       liked: false,
     }
+    this.audio.load()
   }
 
   /**
