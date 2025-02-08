@@ -37,7 +37,8 @@ func AppOptions(app *bridge.App) *options.App {
 			Handler: bridge.NewHttpRequest(),
 		},
 		//BackgroundColour: &options.RGBA{R: 67, G: 67, B: 67, A: 1},
-		OnStartup: app.Start,
+		OnStartup:     app.Start,
+		OnBeforeClose: app.BeforeClose,
 		Bind: []interface{}{
 			app,
 		},

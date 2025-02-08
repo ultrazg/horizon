@@ -6,6 +6,7 @@ import (
 	"runtime"
 
 	"github.com/ultrazg/xyz/service"
+	r "github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
 var isStartup = true
@@ -39,4 +40,20 @@ func IsWindows() bool {
 
 func IsMacOS() bool {
 	return runtime.GOOS == "darwin"
+}
+
+func (a *App) BeforeClose(ctx context.Context) (prevent bool) {
+	dialog, err := r.MessageDialog(ctx, r.MessageDialogOptions{
+		Type:    r.QuestionDialog,
+		Title:   APP_NAME,
+		Message: "是否退出应用?",
+	})
+
+	if err != nil {
+		return false
+	}
+
+	// TODO: 保存正在播放的音频信息
+
+	return dialog != "Yes"
 }
