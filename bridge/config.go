@@ -20,7 +20,6 @@ func initConfig() {
 	viper.SetDefault("user.access_token", "")
 	viper.SetDefault("user.refresh_token", "")
 	viper.SetDefault("setting.check_update_on_startup", true)
-	viper.SetDefault("setting.is_ip_loc_hidden", false)
 	viper.SetDefault("proxy.enabled", false)
 	viper.SetDefault("proxy.ip", "")
 	viper.SetDefault("proxy.port", "")
