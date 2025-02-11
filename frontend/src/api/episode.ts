@@ -7,6 +7,7 @@ const api = {
   episodeLiveCount: 'episode_live_count',
   episodePlayProgressUpdate: 'episode_play_progress_update',
   episodeClapCreate: 'episode_clap_create',
+  episodePlayProgress: 'episode_play_progress',
 }
 
 type episodeListType = {

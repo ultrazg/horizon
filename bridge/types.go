@@ -10,6 +10,7 @@ type Config struct {
 	User    User    `yaml:"user" json:"user"`
 	Setting Setting `yaml:"setting" json:"setting"`
 	Proxy   Proxy   `yaml:"proxy" json:"proxy"`
+	Play    Play    `yaml:"play" json:"play"`
 }
 
 type User struct {
@@ -26,4 +27,8 @@ type Proxy struct {
 	Enabled bool   `mapstructure:"enabled" json:"enabled"`
 	Ip      string `mapstructure:"ip" json:"ip"`
 	Port    string `mapstructure:"port" json:"port"`
+}
+
+type Play struct {
+	LastPlayEid string `mapstructure:"last_play_eid" json:"last_play_eid"`
 }

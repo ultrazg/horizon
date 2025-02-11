@@ -24,5 +24,9 @@ enum PROXY_CONFIG_ENUM {
   PORT = 'proxy.port',
 }
 
+enum PLAY_ENUM {
+  LAST_PLAY_EID = 'play.last_play_eid',
+}
+
 export type { settingConfigType, userConfigType }
-export { SETTING_CONFIG_ENUM, USER_CONFIG_ENUM, PROXY_CONFIG_ENUM }
+export { SETTING_CONFIG_ENUM, USER_CONFIG_ENUM, PROXY_CONFIG_ENUM, PLAY_ENUM }

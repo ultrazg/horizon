@@ -23,6 +23,7 @@ func initConfig() {
 	viper.SetDefault("proxy.enabled", false)
 	viper.SetDefault("proxy.ip", "")
 	viper.SetDefault("proxy.port", "")
+	viper.SetDefault("play.last_play_eid", "")
 
 	if err := viper.SafeWriteConfigAs(configFile); err != nil {
 		log.Printf("创建配置文件失败: %v", err)

@@ -43,9 +43,7 @@ func IsMacOS() bool {
 }
 
 func (a *App) BeforeClose(ctx context.Context) bool {
-	fmt.Println("==================before close")
+	r.EventsEmit(a.ctx, "SaveLastPlay")
 
-	r.EventsEmit(a.ctx, "SavePlayerInfo")
-
-	return true
+	return false
 }

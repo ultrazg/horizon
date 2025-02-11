@@ -8,6 +8,7 @@ import './index.modules.scss'
 import { usePlayer } from '@/hooks'
 import { PlayInfoType } from '@/utils/player'
 import { episodePlayProgressUpdate } from '@/api/episode'
+import { ReadConfig } from 'wailsjs/go/bridge/App'
 
 export const PlayController: React.FC = () => {
   const player = usePlayer()
@@ -43,6 +44,19 @@ export const PlayController: React.FC = () => {
       console.error(err)
     })
   }
+
+  // TODO: 继续上次播放的进度
+  // useEffect(() => {
+  //   ReadConfig()
+  //     .then((res) => {
+  //       if (res.play.last_play_eid && res.play.last_play_eid !== '') {
+  //         const eid = res.play.last_play_eid
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.error(err)
+  //     })
+  // }, [])
 
   useEffect(() => {
     const checkLoading = setInterval(() => {
