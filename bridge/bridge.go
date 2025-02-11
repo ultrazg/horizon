@@ -42,18 +42,10 @@ func IsMacOS() bool {
 	return runtime.GOOS == "darwin"
 }
 
-func (a *App) BeforeClose(ctx context.Context) (prevent bool) {
-	dialog, err := r.MessageDialog(ctx, r.MessageDialogOptions{
-		Type:    r.QuestionDialog,
-		Title:   APP_NAME,
-		Message: "是否退出应用?",
-	})
+func (a *App) BeforeClose(ctx context.Context) bool {
+	fmt.Println("==================before close")
 
-	if err != nil {
-		return false
-	}
+	r.EventsEmit(a.ctx, "SavePlayerInfo")
 
-	// TODO: 保存正在播放的音频信息
-
-	return dialog != "Yes"
+	return true
 }

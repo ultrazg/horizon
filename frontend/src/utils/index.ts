@@ -8,6 +8,7 @@ import { ShowMessageDialog, DialogType } from './dialog'
 import { showEpisodeDetailModal } from './showEpisodeDetailModal'
 import { testConnect } from './proxy'
 import Player from './player'
+import { SavePlayerInfo } from './event'
 
 export {
   httpRequest,
@@ -25,4 +26,5 @@ export {
   isValidIp,
   testConnect,
   Player,
+  SavePlayerInfo,
 }
