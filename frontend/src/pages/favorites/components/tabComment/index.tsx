@@ -14,6 +14,7 @@ import {
   toast,
 } from '@/utils'
 import { CONSTANT } from '@/types/constant'
+import { onCommentLikeUpdate } from '@/components/playerDrawer/components/episodeComment'
 
 const TabComment: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false)
@@ -43,12 +44,19 @@ const TabComment: React.FC = () => {
       loadMoreKey,
     }
     commentCollectList(params)
-      .then((res) =>
-        setData({
-          records: res.data.data,
-          loadMoreKey: res.data.loadMoreKey,
-        }),
-      )
+      .then((res) => {
+        if (loadMoreKey) {
+          setData({
+            records: [...data.records, ...res.data.data],
+            loadMoreKey: res.data.loadMoreKey,
+          })
+        } else {
+          setData({
+            records: res.data.data,
+            loadMoreKey: res.data.loadMoreKey,
+          })
+        }
+      })
       .catch((err) => {
         console.error(err)
       })
@@ -150,6 +158,9 @@ const TabComment: React.FC = () => {
                 size="1"
                 variant="soft"
                 mr="1"
+                onClick={() => {
+                  onCommentLikeUpdate(item.id, !item.liked, getLists)
+                }}
               >
                 {item.liked ? <BiSolidLike /> : <BiLike />}
               </IconButton>
