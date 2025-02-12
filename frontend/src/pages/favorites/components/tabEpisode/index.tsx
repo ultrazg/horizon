@@ -13,10 +13,13 @@ import {
   ShowMessageDialog,
   toast,
 } from '@/utils'
+import { usePlayer } from '@/hooks'
+import { PlayerEpisodeInfoType } from '@/utils/player'
 
 const TabEpisode: React.FC = () => {
   const [lists, setLists] = useState<EpisodeType[]>([])
   const [loading, setLoading] = useState<boolean>(false)
+  const player = usePlayer()
 
   /**
    * 获取收藏单集列表数据
@@ -80,6 +83,20 @@ const TabEpisode: React.FC = () => {
                 curPointer
                 mask
                 src={item.image ? item.image.picUrl : item.podcast.image.picUrl}
+                onClick={() => {
+                  const episodeInfo: PlayerEpisodeInfoType = {
+                    title: item.title,
+                    pid: item.podcast.pid,
+                    eid: item.eid,
+                    cover: item?.image
+                      ? item.image.picUrl
+                      : item.podcast.image.picUrl,
+                    liked: item.isFavorited,
+                  }
+
+                  player.load(item.media.source.url, episodeInfo)
+                  player.play()
+                }}
               />
             </div>
             <div className="right">

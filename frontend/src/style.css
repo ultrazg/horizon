@@ -15,33 +15,3 @@ ul {
 html {
   background: rgba(38, 38, 38, 0.5);
 }
-
-.radix-themes {
-  --default-font-family: 'PuHui';
-  --heading-font-family: 'PuHui';
-  --strong-font-family: 'PuHui';
-}
-
-@font-face {
-  font-family: 'PuHui';
-  font-weight: normal;
-  src:
-    local(''),
-    url('assets/fonts/AlibabaPuHuiTi-Regular.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'PuHui';
-  font-weight: 300;
-  src:
-    local(''),
-    url('assets/fonts/AlibabaPuHuiTi-Thin.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'PuHui';
-  font-weight: bold;
-  src:
-    local(''),
-    url('assets/fonts/AlibabaPuHuiTi-Bold.woff2') format('woff2');
-}

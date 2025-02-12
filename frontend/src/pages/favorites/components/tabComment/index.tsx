@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import {
-  Avatar,
-  Button,
-  Card,
-  IconButton,
-  Separator,
-  Spinner,
-} from '@radix-ui/themes'
+import { Avatar, Button, Card, IconButton, Separator } from '@radix-ui/themes'
 import { TrashIcon } from '@radix-ui/react-icons'
 import { BiLike, BiSolidLike } from 'react-icons/bi'
 import './index.modules.scss'
@@ -97,138 +90,137 @@ const TabComment: React.FC = () => {
 
   return (
     <>
-      <Spinner loading={loading}>
-        {data.records.map((item) => (
-          <Card
-            className="favorites-comment-item"
-            key={item.id}
-          >
-            <div className="top">
-              <div className="comment-avatar">
-                <Avatar
-                  size="4"
-                  src={item.author.avatar.picture.picUrl}
-                  radius="full"
-                  fallback={item.author.nickname}
-                  onClick={() => {
-                    if (item.author.isBlockedByViewer) {
-                      return toast(CONSTANT.BLOCKED_BY_VIEWER)
-                    }
+      {data.records.map((item) => (
+        <Card
+          className="favorites-comment-item"
+          key={item.id}
+        >
+          <div className="top">
+            <div className="comment-avatar">
+              <Avatar
+                size="4"
+                src={item.author.avatar.picture.picUrl}
+                radius="full"
+                fallback={item.author.nickname}
+                onClick={() => {
+                  if (item.author.isBlockedByViewer) {
+                    return toast(CONSTANT.BLOCKED_BY_VIEWER)
+                  }
 
-                    setProfileModal({
-                      open: true,
-                      uid: item.author.uid,
-                    })
-                  }}
-                />
-              </div>
-              <div className="comment-info">
-                <p
-                  onClick={() => {
-                    if (item.author.isBlockedByViewer) {
-                      return toast(CONSTANT.BLOCKED_BY_VIEWER)
-                    }
-
-                    setProfileModal({
-                      open: true,
-                      uid: item.author.uid,
-                    })
-                  }}
-                >
-                  {item.author.nickname}
-                </p>
-                <p>
-                  {dayjs(item.collectedAt).format('MM/DD')} {item.ipLoc}
-                </p>
-              </div>
-              <div className="remove-like">
-                <IconButton
-                  size="1"
-                  color="red"
-                  variant="soft"
-                  onClick={() => {
-                    onRemove(item.id)
-                  }}
-                >
-                  <TrashIcon />
-                </IconButton>
-              </div>
-              <div className="comment-like">
-                <IconButton
-                  size="1"
-                  variant="soft"
-                  mr="1"
-                >
-                  {item.liked ? <BiSolidLike /> : <BiLike />}
-                </IconButton>
-                {item.likeCount}
-              </div>
+                  setProfileModal({
+                    open: true,
+                    uid: item.author.uid,
+                  })
+                }}
+              />
             </div>
+            <div className="comment-info">
+              <p
+                onClick={() => {
+                  if (item.author.isBlockedByViewer) {
+                    return toast(CONSTANT.BLOCKED_BY_VIEWER)
+                  }
 
-            <div>
-              <p>{item.text}</p>
+                  setProfileModal({
+                    open: true,
+                    uid: item.author.uid,
+                  })
+                }}
+              >
+                {item.author.nickname}
+              </p>
+              <p>
+                {dayjs(item.collectedAt).format('MM/DD')} {item.ipLoc}
+              </p>
             </div>
+            <div className="remove-like">
+              <IconButton
+                size="1"
+                color="red"
+                variant="soft"
+                onClick={() => {
+                  onRemove(item.id)
+                }}
+              >
+                <TrashIcon />
+              </IconButton>
+            </div>
+            <div className="comment-like">
+              <IconButton
+                size="1"
+                variant="soft"
+                mr="1"
+              >
+                {item.liked ? <BiSolidLike /> : <BiLike />}
+              </IconButton>
+              {item.likeCount}
+            </div>
+          </div>
 
-            <Separator
-              my="3"
-              size="4"
-            />
+          <div>
+            <p>{item.text}</p>
+          </div>
 
-            <div className="bottom">
-              <div
-                className="episode-cover"
+          <Separator
+            my="3"
+            size="4"
+          />
+
+          <div className="bottom">
+            <div
+              className="episode-cover"
+              onClick={() => {
+                showEpisodeDetailModal(item.episode.eid)
+              }}
+            >
+              <Avatar
+                size="2"
+                src={
+                  item.episode.image
+                    ? item.episode.image.picUrl
+                    : item.episode.podcast.image.picUrl
+                }
+                radius="small"
+                fallback={item.episode.title}
+              />
+            </div>
+            <div className="episode-info">
+              <p
                 onClick={() => {
                   showEpisodeDetailModal(item.episode.eid)
                 }}
               >
-                <Avatar
-                  size="2"
-                  src={
-                    item.episode.image
-                      ? item.episode.image.picUrl
-                      : item.episode.podcast.image.picUrl
-                  }
-                  radius="small"
-                  fallback={item.episode.title}
-                />
-              </div>
-              <div className="episode-info">
-                <p
-                  onClick={() => {
-                    showEpisodeDetailModal(item.episode.eid)
-                  }}
-                >
-                  {item.episode.title}
-                </p>
-                <p>{item.episode.podcast.title}</p>
-              </div>
+                {item.episode.title}
+              </p>
+              <p>{item.episode.podcast.title}</p>
             </div>
-          </Card>
-        ))}
+          </div>
+        </Card>
+      ))}
 
-        <div className="load-more-button">
-          <Button
-            size="1"
-            color="gray"
-            onClick={() => {
-              getLists(data.loadMoreKey)
-            }}
-          >
-            加载更多
-          </Button>
-        </div>
-
-        <ProfileModal
-          uid={profileModal.uid}
-          open={profileModal.open}
-          onClose={() => {
-            setProfileModal({
-              open: false,
-              uid: '',
-            })
+      <div className="load-more-button">
+        <Button
+          size="1"
+          color="gray"
+          onClick={() => {
+            getLists(data.loadMoreKey)
           }}
-        />
-      </Spinner>
+          loading={loading}
+        >
+          加载更多
+        </Button>
+      </div>
+
+      <ProfileModal
+        uid={profileModal.uid}
+        open={profileModal.open}
+        onClose={() => {
+          setProfileModal({
+            open: false,
+            uid: '',
+          })
+        }}
+      />
     </>
   )
 }

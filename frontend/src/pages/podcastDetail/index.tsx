@@ -29,6 +29,8 @@ import dayjs from 'dayjs'
 import { DialogType, ShowMessageDialog, toast } from '@/utils'
 import { updateSubscription } from '@/api/subscription'
 import { PodcastBulletinModal } from './components/podcastBulletinModal'
+import { usePlayer } from '@/hooks'
+import { PlayerEpisodeInfoType } from '@/utils/player'
 
 export const PodcastDetail: React.FC = () => {
   const { pid } = useLocation().state
@@ -100,6 +102,7 @@ export const PodcastDetail: React.FC = () => {
   const [bulletinData, setBulletinData] = useState<PodcastBulletinType>()
   const [swing, setSwing] = useState<boolean>(false)
   const [bulletinModalOpen, setBulletinModalOpen] = useState<boolean>(false)
+  const player = usePlayer()
 
   useEffect(() => {
     if (bulletinData) {
@@ -434,7 +437,10 @@ export const PodcastDetail: React.FC = () => {
               <div className="label">节目列表({episodeData.total})</div>
 
               {episodeData.records.map((item) => (
-                <div className="episode-item">
+                <div
+                  className="episode-item"
+                  key={item.eid}
+                >
                   <div className="left">
                     <ColorfulShadow
                       className="episode-cover"
@@ -445,6 +451,20 @@ export const PodcastDetail: React.FC = () => {
                           ? item.image.picUrl
                           : item.podcast.image.picUrl
                       }
+                      onClick={() => {
+                        const episodeInfo: PlayerEpisodeInfoType = {
+                          title: item.title,
+                          eid: item.eid,
+                          pid: item.podcast.pid,
+                          cover: item?.image
+                            ? item.image.picUrl
+                            : item.podcast.image.picUrl,
+                          liked: item.isFavorited,
+                        }
+
+                        player.load(item.media.source.url, episodeInfo)
+                        player.play()
+                      }}
                     />
                   </div>
                   <div className="right">

@@ -7,6 +7,8 @@ import './index.modules.scss'
 import { isEmpty } from 'lodash'
 import { Button } from '@radix-ui/themes'
 import { showEpisodeDetailModal } from '@/utils'
+import { usePlayer } from '@/hooks'
+import { PlayerEpisodeInfoType } from '@/utils/player'
 
 type IProps = {
   data: { records: EpisodeType[]; loadMoreKey: {} }
@@ -15,6 +17,8 @@ type IProps = {
 }
 
 export const TabEpisode: React.FC<IProps> = ({ data, onLoadMore, loading }) => {
+  const player = usePlayer()
+
   return (
     <div className="search-result-episode-layout">
       {data.records.length === 0 && <Empty />}
@@ -29,6 +33,20 @@ export const TabEpisode: React.FC<IProps> = ({ data, onLoadMore, loading }) => {
               curPointer
               mask
               src={item?.image ? item.image.picUrl : item.podcast.image.picUrl}
+              onClick={() => {
+                const episodeInfo: PlayerEpisodeInfoType = {
+                  title: item.title,
+                  eid: item.eid,
+                  pid: item.podcast.pid,
+                  cover: item?.image
+                    ? item.image.picUrl
+                    : item.podcast.image.picUrl,
+                  liked: item.isFavorited,
+                }
+
+                player.load(item.media.source.url, episodeInfo)
+                player.play()
+              }}
             />
           </div>
           <div

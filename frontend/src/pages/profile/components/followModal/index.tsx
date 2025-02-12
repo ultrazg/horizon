@@ -157,7 +157,7 @@ export const FollowModal: React.FC<IProps> = ({ uid, type, onClose, open }) => {
             <ScrollArea
               type="hover"
               scrollbars="vertical"
-              style={{ height }}
+              style={{ maxHeight: height }}
             >
               <Grid
                 columns="2"

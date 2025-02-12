@@ -16,7 +16,7 @@ import {
   DotsHorizontalIcon,
 } from '@radix-ui/react-icons'
 import { modalType } from '@/types/modal'
-import { useDisplayInfo } from '@/hooks'
+import { useDisplayInfo, usePlayer } from '@/hooks'
 import './index.modules.scss'
 import {
   ColorfulShadow,
@@ -48,6 +48,7 @@ import { onBlockedUserCreate } from '@/pages/setting/components/blockedModal'
 import { CONSTANT } from '@/types/constant'
 import { pickListRecent } from '@/api/pick'
 import { PickRecentType } from '@/types/pick'
+import { PlayerEpisodeInfoType } from '@/utils/player'
 
 type IProps = {
   uid: string
@@ -93,6 +94,7 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
     open: false,
     uid: '',
   })
+  const player = usePlayer()
 
   const avoidDefaultDomBehavior = (e: Event) => {
     e.preventDefault()
@@ -545,20 +547,7 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
             <div className="pm-history-content">
               <h3>最近听过</h3>
 
-              {playedLists.length === 0 && (
-                <div
-                  style={{
-                    width: '100%',
-                    height: '5rem',
-                    color: 'gray',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
-                >
-                  暂无数据
-                </div>
-              )}
+              {playedLists.length === 0 && <Empty />}
 
               {playedLists.map((item) => (
                 <div
@@ -575,6 +564,20 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
                           ? item.image.picUrl
                           : item.podcast.image.picUrl
                       }
+                      onClick={() => {
+                        const episodeInfo: PlayerEpisodeInfoType = {
+                          title: item.title,
+                          eid: item.eid,
+                          pid: item.podcast.pid,
+                          cover: item?.image
+                            ? item.image.picUrl
+                            : item.podcast.image.picUrl,
+                          liked: item.isFavorited,
+                        }
+
+                        player.load(item.media.source.url, episodeInfo)
+                        player.play()
+                      }}
                     />
                   </div>
                   <div className="right">

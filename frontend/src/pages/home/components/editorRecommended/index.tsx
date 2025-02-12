@@ -16,11 +16,6 @@ type IProps = {
 const EditorRecommended: React.FC<IProps> = ({ data, loading, onDetail }) => {
   const player = usePlayer()
 
-  const onPlayHandle = (url: string, episodeInfo: PlayerEpisodeInfoType) => {
-    player.load(url, episodeInfo)
-    player.play()
-  }
-
   return (
     <div className="editor-recommended-layout">
       <h3>编辑精选</h3>
@@ -51,7 +46,8 @@ const EditorRecommended: React.FC<IProps> = ({ data, loading, onDetail }) => {
                           liked: item.episode.isFavorited,
                         }
 
-                        onPlayHandle(item.episode.media.source.url, episodeInfo)
+                        player.load(item.episode.media.source.url, episodeInfo)
+                        player.play()
                       }}
                     />
                   </div>

@@ -6,11 +6,14 @@ import { userType } from '@/types/user'
 import { Storage } from '@/utils'
 import { playedList } from '@/api/played'
 import './index.modules.scss'
+import { usePlayer } from '@/hooks'
+import { PlayerEpisodeInfoType } from '@/utils/player'
+import { EpisodeType } from '@/types/episode'
 
 export const PlayedList: React.FC = () => {
-  const [playedLists, setPlayedLists] = useState<any>([])
-
+  const [playedLists, setPlayedLists] = useState<EpisodeType[]>([])
   const userInfo: userType = Storage.get('user_info')
+  const player = usePlayer()
 
   /**
    * 获取最近听过列表
@@ -35,7 +38,7 @@ export const PlayedList: React.FC = () => {
     <div className="history-content">
       <h3>最近听过</h3>
 
-      {playedLists.map((item: any) => (
+      {playedLists.map((item) => (
         <div
           className="history-episode-item"
           key={item.eid}
@@ -45,7 +48,21 @@ export const PlayedList: React.FC = () => {
               className="episode-cover"
               curPointer
               mask
-              src={item.image.picUrl}
+              src={item?.image ? item.image.picUrl : item.podcast.image.picUrl}
+              onClick={() => {
+                const episodeInfo: PlayerEpisodeInfoType = {
+                  eid: item.eid,
+                  pid: item.podcast.pid,
+                  cover: item?.image
+                    ? item.image.picUrl
+                    : item.podcast.image.picUrl,
+                  title: item.title,
+                  liked: item.isFavorited,
+                }
+
+                player.load(item.media.source.url, episodeInfo)
+                player.play()
+              }}
             />
           </div>
           <div className="right">

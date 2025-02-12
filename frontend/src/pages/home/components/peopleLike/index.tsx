@@ -6,6 +6,8 @@ import { PeopleLikeType } from '@/pages/home'
 import React, { useState } from 'react'
 import dayjs from 'dayjs'
 import { showEpisodeDetailModal } from '@/utils'
+import { usePlayer } from '@/hooks'
+import { PlayerEpisodeInfoType } from '@/utils/player'
 
 type IProps = {
   data: PeopleLikeType
@@ -14,6 +16,7 @@ type IProps = {
 }
 
 const PeopleLike: React.FC<IProps> = ({ data, loading, onDetail }) => {
+  const player = usePlayer()
   const [profileModal, setProfileModal] = useState<{
     open: boolean
     uid: string
@@ -113,7 +116,26 @@ const PeopleLike: React.FC<IProps> = ({ data, loading, onDetail }) => {
                           {item.pick.episode.podcast.title}
                         </p>
                       </div>
-                      <div className="r">
+                      <div
+                        className="r"
+                        onClick={() => {
+                          const episodeInfo: PlayerEpisodeInfoType = {
+                            title: item.pick.episode.title,
+                            eid: item.pick.episode.eid,
+                            pid: item.pick.episode.podcast.pid,
+                            cover: item.pick.episode?.image
+                              ? item.pick.episode.image.picUrl
+                              : item.pick.episode.podcast.image.picUrl,
+                            liked: item.pick.episode.isFavorited,
+                          }
+
+                          player.load(
+                            item.pick.episode.media.source.url,
+                            episodeInfo,
+                          )
+                          player.play()
+                        }}
+                      >
                         <div className="play_button">
                           <PlayIcon />
                         </div>
