@@ -29,6 +29,7 @@ import {
   Storage,
   ShowMessageDialog,
   DialogType,
+  toast,
 } from '@/utils'
 import { getUserPreference, updateUserPreference } from '@/api/user'
 import { useNavigateTo, usePlayer } from '@/hooks'
@@ -42,6 +43,8 @@ import { BlockedModal } from './components/blockedModal'
 import { ProxyModal } from './components/proxyModal'
 import './index.modules.scss'
 import { CONSTANT } from '@/types/constant'
+import { CheckUpgrade } from 'wailsjs/go/bridge/App'
+import dayjs from 'dayjs'
 
 export const Setting: React.FC = () => {
   const [envInfo, setEnvInfo] = useState<envType>()
@@ -60,13 +63,41 @@ export const Setting: React.FC = () => {
   const userInfo: userType = Storage.get('user_info')
   const [blockedModal, setBlockedModal] = useState<boolean>(false)
   const [proxyModal, setProxyModal] = useState<boolean>(false)
+  const [checkLoading, setCheckLoading] = useState<boolean>(false)
   const player = usePlayer()
 
   const goAbout = useNavigateTo('/about')
   const goLogin = useNavigateTo('/login')
 
   const checkUpdate = () => {
+    setCheckLoading(true)
+
     // TODO:  check update
+    CheckUpgrade()
+      .then((res) => {
+        if (res.err !== '') {
+          toast(res.err, { type: 'warn' })
+
+          return
+        }
+
+        if (!res.isLatest) {
+          ShowMessageDialog(
+            DialogType.QUESTION,
+            '发现新版本！',
+            `发布时间：${dayjs(res.latest?.created_at).format('YYYY-MM-DD HH:mm:ss')}\r\n当前版本：v${APP_VERSION}\r\n最新版本：${res.latest?.tag_name}更新内容：\r\n${res.latest?.body}\r\n\r\n是否升级？`,
+          ).then((res) => {
+            if (res === 'Yes' || res === '是') {
+              console.log('升级')
+            }
+          })
+        } else {
+          ShowMessageDialog(DialogType.INFO, '提示', '当前已是最新版本').then()
+        }
+      })
+      .finally(() => {
+        setCheckLoading(false)
+      })
   }
 
   /**
@@ -326,6 +357,7 @@ export const Setting: React.FC = () => {
               variant={'soft'}
               style={{ width: '100px' }}
               onClick={checkUpdate}
+              loading={checkLoading}
             >
               <SymbolIcon />
               检查更新...
