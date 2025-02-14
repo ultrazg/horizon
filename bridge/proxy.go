@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"time"
 )
 
 type TestConnectResult struct {
@@ -32,18 +33,31 @@ func (a *App) TestConnect(url, ip, port string) *TestConnectResult {
 }
 
 func HTTPClientWithProxy(proxyURL string) (*http.Client, error) {
-	proxy, err := url.Parse(proxyURL)
-	if err != nil {
-		return nil, err
+	if proxyURL == "" {
+		return &http.Client{}, nil
 	}
 
-	transport := &http.Transport{
-		Proxy: http.ProxyURL(proxy),
+	proxy, err := url.Parse(proxyURL)
+	if err != nil {
+		return nil, fmt.Errorf("无法解析代理 URL: %v", err)
 	}
 
 	client := &http.Client{
-		Transport: transport,
+		Timeout: time.Second * 15,
+		Transport: &http.Transport{
+			Proxy: http.ProxyURL(proxy),
+		},
 	}
 
 	return client, nil
+}
+
+func GetProxyInfo(a *App) string {
+	config := a.ReadConfig()
+
+	if config.Proxy.Ip != "" && config.Proxy.Enabled {
+		return fmt.Sprintf("%s:%s", config.Proxy.Ip, config.Proxy.Port)
+	}
+
+	return ""
 }

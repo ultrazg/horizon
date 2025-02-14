@@ -43,7 +43,7 @@ import { BlockedModal } from './components/blockedModal'
 import { ProxyModal } from './components/proxyModal'
 import './index.modules.scss'
 import { CONSTANT } from '@/types/constant'
-import { CheckUpgrade } from 'wailsjs/go/bridge/App'
+import { CheckForUpgrade } from 'wailsjs/go/bridge/App'
 import dayjs from 'dayjs'
 
 export const Setting: React.FC = () => {
@@ -73,10 +73,10 @@ export const Setting: React.FC = () => {
     setCheckLoading(true)
 
     // TODO:  check update
-    CheckUpgrade()
+    CheckForUpgrade()
       .then((res) => {
         if (res.err !== '') {
-          toast(res.err, { type: 'warn' })
+          ShowMessageDialog(DialogType.ERROR, '提示', res.err).then()
 
           return
         }
@@ -85,7 +85,7 @@ export const Setting: React.FC = () => {
           ShowMessageDialog(
             DialogType.QUESTION,
             '发现新版本！',
-            `发布时间：${dayjs(res.latest?.created_at).format('YYYY-MM-DD HH:mm:ss')}\r\n当前版本：v${APP_VERSION}\r\n最新版本：${res.latest?.tag_name}更新内容：\r\n${res.latest?.body}\r\n\r\n是否升级？`,
+            `发布时间：${dayjs(res.latest?.created_at).format('YYYY-MM-DD')}\r\n当前版本：v${APP_VERSION}\r\n最新版本：${res.latest?.tag_name}\r\n更新内容：\r\n${res.latest?.body}\r\n\r\n是否升级？`,
           ).then((res) => {
             if (res === 'Yes' || res === '是') {
               console.log('升级')
