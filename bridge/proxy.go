@@ -56,7 +56,7 @@ func GetProxyInfo(a *App) string {
 	config := a.ReadConfig()
 
 	if config.Proxy.Ip != "" && config.Proxy.Enabled {
-		return fmt.Sprintf("%s:%s", config.Proxy.Ip, config.Proxy.Port)
+		return fmt.Sprintf("http://%s:%s", config.Proxy.Ip, config.Proxy.Port)
 	}
 
 	return ""

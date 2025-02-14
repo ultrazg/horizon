@@ -2,7 +2,6 @@ package bridge
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -24,8 +23,7 @@ func (a *App) CheckForUpgrade() *CheckUpgradeInfo {
 }
 
 func GetGithubReleaseInfo(a *App) (*Latest, error) {
-	proxy := GetProxyInfo(a)
-	proxyUrl := fmt.Sprintf("http://%s", proxy)
+	proxyUrl := GetProxyInfo(a)
 
 	client, err := HTTPClientWithProxy(proxyUrl)
 	if err != nil {
