@@ -3,6 +3,7 @@ package bridge
 import (
 	"log"
 	"os"
+	"os/user"
 	"path/filepath"
 )
 
@@ -26,4 +27,13 @@ func GetPath() string {
 	log.Println("程序所在目录:", execDir)
 
 	return execDir
+}
+
+func GetUserDownloadPath() string {
+	current, err := user.Current()
+	if err != nil {
+		return ""
+	}
+
+	return filepath.Join(current.HomeDir, "Downloads")
 }

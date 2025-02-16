@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import { Environment } from 'wailsjs/runtime'
+import { Environment, EventsOn } from 'wailsjs/runtime'
 import { envType } from '@/types/env'
 import {
-  settingConfigType,
   SETTING_CONFIG_ENUM,
+  settingConfigType,
   USER_CONFIG_ENUM,
 } from '@/types/config'
 import {
   Box,
+  Button,
   Card,
   Flex,
   Separator,
   Switch,
-  Button,
   Tooltip,
 } from '@radix-ui/themes'
 import {
@@ -24,26 +24,25 @@ import {
 import {
   APP_NAME,
   APP_VERSION,
-  ReadConfig,
-  UpdateConfig,
-  Storage,
-  ShowMessageDialog,
   DialogType,
-  toast,
+  ReadConfig,
+  ShowMessageDialog,
+  Storage,
+  UpdateConfig,
 } from '@/utils'
 import { getUserPreference, updateUserPreference } from '@/api/user'
 import { useNavigateTo, usePlayer } from '@/hooks'
 import APP_ICON from '@/assets/images/logo.png'
 import {
-  userType,
-  userPreferenceType,
   USER_PREFERENCE_ENUM,
+  userPreferenceType,
+  userType,
 } from '@/types/user'
 import { BlockedModal } from './components/blockedModal'
 import { ProxyModal } from './components/proxyModal'
 import './index.modules.scss'
 import { CONSTANT } from '@/types/constant'
-import { CheckForUpgrade } from 'wailsjs/go/bridge/App'
+import { CheckForUpgrade, Upgrade } from 'wailsjs/go/bridge/App'
 import dayjs from 'dayjs'
 
 export const Setting: React.FC = () => {
@@ -69,6 +68,23 @@ export const Setting: React.FC = () => {
   const goAbout = useNavigateTo('/about')
   const goLogin = useNavigateTo('/login')
 
+  useEffect(() => {
+    EventsOn(
+      'download-progress',
+      (progress: number, total: number, downloaded: number) => {
+        console.log('progress', progress, total, downloaded)
+      },
+    )
+
+    EventsOn('download-error', (error: string) => {
+      console.error('error', error)
+    })
+
+    EventsOn('download-complete', () => {
+      console.log('download-complete')
+    })
+  }, [])
+
   const checkUpdate = () => {
     setCheckLoading(true)
 
@@ -88,7 +104,13 @@ export const Setting: React.FC = () => {
             `发布时间：${dayjs(res.latest?.created_at).format('YYYY-MM-DD')}\r\n当前版本：v${APP_VERSION}\r\n最新版本：${res.latest?.tag_name}\r\n更新内容：\r\n${res.latest?.body}\r\n\r\n是否升级？`,
           ).then((res) => {
             if (res === 'Yes' || res === '是') {
-              console.log('升级')
+              Upgrade().catch((err) => {
+                ShowMessageDialog(
+                  DialogType.ERROR,
+                  'Download error',
+                  err,
+                ).then()
+              })
             }
           })
         } else {

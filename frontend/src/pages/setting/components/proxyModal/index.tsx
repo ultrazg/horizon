@@ -192,7 +192,6 @@ export const ProxyModal: React.FC<modalType> = ({ open, onClose }) => {
         </Box>
         <Box width="100px">
           <TextField.Root
-            placeholder="127.0.0.1"
             value={ip}
             onChange={(event) => onChange('ip', event)}
           />
@@ -205,7 +204,6 @@ export const ProxyModal: React.FC<modalType> = ({ open, onClose }) => {
         </Box>
         <Box width="100px">
           <TextField.Root
-            placeholder="7890"
             value={port}
             onChange={(event) => onChange('port', event)}
           />
