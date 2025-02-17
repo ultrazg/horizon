@@ -8,6 +8,7 @@ type modalType = {
   onOk?: (data?: any) => void
   children?: React.ReactNode
   options?: React.ReactNode
+  hiddenCloseBtn?: boolean
 }
 
 export type { modalType }

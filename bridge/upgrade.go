@@ -3,7 +3,6 @@ package bridge
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/wailsapp/wails/v2/pkg/runtime"
 	"io"
 	"log"
 	"net/http"
@@ -11,11 +10,14 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
 var downloadUrl string
 
 func (a *App) CheckForUpgrade() *CheckUpgradeInfo {
+	GetPath()
 	latest, err := GetGithubReleaseInfo(a)
 	if err != nil {
 		return &CheckUpgradeInfo{Err: err.Error(), IsLatest: false, Latest: nil}
@@ -148,7 +150,7 @@ func DownloadLatestRelease(a *App, url string, path string, fc func(progress flo
 	return nil
 }
 
-func (a *App) Upgrade() error {
+func (a *App) Download() error {
 	path := GetUserDownloadPath()
 	savePath := filepath.Join(path, "horizon-upgrade.zip")
 
@@ -179,3 +181,17 @@ func (a *App) Upgrade() error {
 
 	return nil
 }
+
+func (a *App) Upgrade() {
+	if IsWindows() {
+		upgradeForWindows()
+	}
+
+	if IsMacOS() {
+		upgradeForMac()
+	}
+}
+
+func upgradeForWindows() {}
+
+func upgradeForMac() {}

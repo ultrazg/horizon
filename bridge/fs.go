@@ -1,6 +1,7 @@
 package bridge
 
 import (
+	"archive/zip"
 	"log"
 	"os"
 	"os/user"
@@ -36,4 +37,30 @@ func GetUserDownloadPath() string {
 	}
 
 	return filepath.Join(current.HomeDir, "Downloads")
+}
+
+func UnzipZIPFile(path string) error {
+	archive, err := zip.OpenReader(path)
+	if err != nil {
+		return err
+	}
+
+	defer archive.Close()
+
+	output := GetPath()
+
+	for _, f := range archive.File {
+		filePath := filepath.Join(output, f.Name)
+
+		if f.FileInfo().IsDir() {
+			err := os.MkdirAll(filePath, f.Mode())
+			if err != nil {
+				return err
+			}
+
+			continue
+		}
+	}
+
+	return nil
 }

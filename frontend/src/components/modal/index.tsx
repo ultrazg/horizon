@@ -12,6 +12,7 @@ import { modalType } from '@/types/modal'
  * @param children 子元素
  * @param width 宽度
  * @param options 附加操作
+ * @param hiddenCloseBtn 是否显示关闭按钮
  * @constructor
  */
 export const Modal: React.FC<modalType> = ({
@@ -21,6 +22,7 @@ export const Modal: React.FC<modalType> = ({
   children,
   width,
   options,
+  hiddenCloseBtn = false,
 }) => {
   // https://github.com/radix-ui/primitives/discussions/1997
   const avoidDefaultDomBehavior = (e: Event) => {
@@ -67,15 +69,30 @@ export const Modal: React.FC<modalType> = ({
           justify="end"
         >
           {options}
-          <Dialog.Close>
-            <Button
-              variant="soft"
-              color="gray"
-            >
-              <MinusCircledIcon />
-              关闭
-            </Button>
-          </Dialog.Close>
+
+          {hiddenCloseBtn ? (
+            <VisuallyHidden.Root>
+              <Dialog.Close>
+                <Button
+                  variant="soft"
+                  color="gray"
+                >
+                  <MinusCircledIcon />
+                  关闭
+                </Button>
+              </Dialog.Close>
+            </VisuallyHidden.Root>
+          ) : (
+            <Dialog.Close>
+              <Button
+                variant="soft"
+                color="gray"
+              >
+                <MinusCircledIcon />
+                关闭
+              </Button>
+            </Dialog.Close>
+          )}
         </Flex>
       </Dialog.Content>
     </Dialog.Root>
