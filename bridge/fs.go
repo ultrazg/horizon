@@ -2,6 +2,7 @@ package bridge
 
 import (
 	"archive/zip"
+	"io"
 	"log"
 	"os"
 	"os/user"
@@ -59,6 +60,30 @@ func UnzipZIPFile(path string) error {
 			}
 
 			continue
+		}
+
+		srcFile, err := f.Open()
+		if err != nil {
+			return err
+		}
+
+		defer srcFile.Close()
+
+		destFile, err := os.Create(filePath)
+		if err != nil {
+			return err
+		}
+
+		defer destFile.Close()
+
+		_, err = io.Copy(destFile, srcFile)
+		if err != nil {
+			return err
+		}
+
+		err = os.Chmod(filePath, f.Mode())
+		if err != nil {
+			return err
 		}
 	}
 

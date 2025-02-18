@@ -15,8 +15,13 @@ func TestGetPath(t *testing.T) {
 	GetPath()
 }
 
-func TestUnZIPFile(t *testing.T) {
+func TestUnzipZIPFile(t *testing.T) {
 	path := `C:\Users\XXX\Downloads\upgrade-windows.zip`
 
-	UnzipZIPFile(path)
+	err := UnzipZIPFile(path)
+	if err != nil {
+		fmt.Println(err.Error())
+	} else {
+		fmt.Println("unzip success")
+	}
 }
