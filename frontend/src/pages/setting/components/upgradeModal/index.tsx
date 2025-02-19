@@ -4,7 +4,7 @@ import { UpdateIcon } from '@radix-ui/react-icons'
 import { Modal } from '@/components'
 import { modalType } from '@/types/modal'
 import { EventsOn } from 'wailsjs/runtime'
-import { Download } from 'wailsjs/go/bridge/App'
+import { Download, Upgrade } from 'wailsjs/go/bridge/App'
 import { DialogType, ShowMessageDialog } from '@/utils'
 
 export const UpgradeModal: React.FC<modalType> = ({ open, onClose }) => {
@@ -18,6 +18,10 @@ export const UpgradeModal: React.FC<modalType> = ({ open, onClose }) => {
     total: 0,
     downloaded: 0,
   })
+
+  const onUpgrade = () => {
+    Upgrade().then()
+  }
 
   useEffect(() => {
     if (open) {
@@ -64,7 +68,7 @@ export const UpgradeModal: React.FC<modalType> = ({ open, onClose }) => {
         <Button
           variant="soft"
           disabled={!downloadComplete}
-          onClick={() => onClose()}
+          onClick={() => onUpgrade()}
         >
           <UpdateIcon />
           重启应用

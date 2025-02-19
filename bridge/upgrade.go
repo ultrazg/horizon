@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 	"time"
@@ -182,16 +183,51 @@ func (a *App) Download() error {
 	return nil
 }
 
-func (a *App) Upgrade() {
+func (a *App) Upgrade() error {
 	if IsWindows() {
-		upgradeForWindows()
+		err := upgradeForWindows()
+		if err != nil {
+			log.Println("upgradeForWindows", err.Error())
+
+			return err
+		}
 	}
 
 	if IsMacOS() {
 		upgradeForMac()
 	}
+
+	return nil
 }
 
-func upgradeForWindows() {}
+func upgradeForWindows() error {
+	userDownloadPath := GetUserDownloadPath()
+	zipFilePath := filepath.Join(userDownloadPath, "horizon-upgrade.zip")
+	execFilePath := userDownloadPath + "/" + APP_NAME + ".exe"
+
+	err := UnzipZIPFile(zipFilePath)
+	if err != nil {
+		return err
+	}
+
+	execDir := GetPath()
+	execName := execDir + "\\" + APP_NAME + ".exe"
+	oldFileName := execName + ".old.bak"
+
+	if _, err := os.Stat(oldFileName); err == nil {
+		os.Remove(oldFileName)
+	}
+
+	os.Rename(execName, oldFileName)
+	os.Rename(execFilePath, execName)
+
+	cmd := exec.Command(execName)
+	cmd.Args = append(cmd.Args, os.Args[1:]...)
+	cmd.Start()
+
+	os.Exit(0)
+
+	return nil
+}
 
 func upgradeForMac() {}

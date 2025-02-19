@@ -48,7 +48,7 @@ func UnzipZIPFile(path string) error {
 
 	defer archive.Close()
 
-	output := GetPath()
+	output := GetUserDownloadPath()
 
 	for _, f := range archive.File {
 		filePath := filepath.Join(output, f.Name)

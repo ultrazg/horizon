@@ -16,7 +16,7 @@ func TestGetPath(t *testing.T) {
 }
 
 func TestUnzipZIPFile(t *testing.T) {
-	path := `C:\Users\XXX\Downloads\upgrade-windows.zip`
+	path := `C:\Users\XXX\Downloads\horizon-upgrade.zip`
 
 	err := UnzipZIPFile(path)
 	if err != nil {
