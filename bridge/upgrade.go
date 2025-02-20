@@ -152,8 +152,8 @@ func DownloadLatestRelease(a *App, url string, path string, fc func(progress flo
 }
 
 func (a *App) Download() error {
-	path := GetUserDownloadPath()
-	savePath := filepath.Join(path, "horizon-upgrade.zip")
+	userDownloadPath := GetUserDownloadPath()
+	savePath := filepath.Join(userDownloadPath, DOWNLOAD_ZIPFILE_NAME)
 
 	if downloadUrl == "" {
 		fmt.Println("找不到更新包下载地址")
@@ -202,8 +202,8 @@ func (a *App) Upgrade() error {
 
 func upgradeForWindows() error {
 	userDownloadPath := GetUserDownloadPath()
-	zipFilePath := filepath.Join(userDownloadPath, "horizon-upgrade.zip")
-	execFilePath := userDownloadPath + "/" + APP_NAME + ".exe"
+	zipFilePath := filepath.Join(userDownloadPath, DOWNLOAD_ZIPFILE_NAME)
+	UnzipExecFilePath := filepath.Join(userDownloadPath, APP_NAME+".exe")
 
 	err := UnzipZIPFile(zipFilePath)
 	if err != nil {
@@ -211,15 +211,21 @@ func upgradeForWindows() error {
 	}
 
 	execDir := GetPath()
-	execName := execDir + "\\" + APP_NAME + ".exe"
+	execName := filepath.Join(execDir, APP_NAME+".exe")
 	oldFileName := execName + ".old.bak"
 
 	if _, err := os.Stat(oldFileName); err == nil {
 		os.Remove(oldFileName)
 	}
 
-	os.Rename(execName, oldFileName)
-	os.Rename(execFilePath, execName)
+	err = os.Rename(execName, oldFileName)
+	if err != nil {
+		return err
+	}
+	err = os.Rename(UnzipExecFilePath, execName)
+	if err != nil {
+		return err
+	}
 
 	cmd := exec.Command(execName)
 	cmd.Args = append(cmd.Args, os.Args[1:]...)
