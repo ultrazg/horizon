@@ -2,6 +2,8 @@ package bridge
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
 	"testing"
 )
 
@@ -24,4 +26,23 @@ func TestUnzipZIPFile(t *testing.T) {
 	} else {
 		fmt.Println("unzip success")
 	}
+}
+
+func TestLibraryRoot(t *testing.T) {
+	exePath, err := os.Executable()
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	basePath := filepath.Dir(exePath)
+	fmt.Println("basePath", basePath)
+}
+
+func TestGetMacOSUserConfigDir(t *testing.T) {
+	configDir, err := os.UserConfigDir()
+	if err != nil {
+		println(err.Error())
+	}
+
+	println("configDir", configDir)
 }

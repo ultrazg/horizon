@@ -194,7 +194,12 @@ func (a *App) Upgrade() error {
 	}
 
 	if IsMacOS() {
-		upgradeForMac()
+		err := upgradeForMac()
+		if err != nil {
+			log.Println("upgradeForMac", err.Error())
+
+			return err
+		}
 	}
 
 	return nil
@@ -236,4 +241,56 @@ func upgradeForWindows() error {
 	return nil
 }
 
-func upgradeForMac() {}
+func upgradeForMac() error {
+	userDownloadPath := GetUserDownloadPath()
+	zipFilePath := filepath.Join(userDownloadPath, DOWNLOAD_ZIPFILE_NAME)
+	UnzipExecFilePath := filepath.Join(userDownloadPath, APP_NAME+".app")
+
+	err := UnzipZIPFile(zipFilePath)
+	if err != nil {
+		return err
+	}
+
+	// execDir := GetPathForMac()
+
+	// if execDir != "" {
+	// 	appParentPath := execDir[:strings.LastIndex(execDir, "/")]
+	// 	fmt.Println("压缩文件", zipFilePath)
+	// 	fmt.Println("压缩包路径", UnzipExecFilePath)
+	// 	fmt.Println("app父目录", appParentPath)
+	// 	fmt.Println("MacOS应用路径", execDir)
+	// }
+
+	oldAppPath, err := os.Executable()
+	if err != nil {
+		return err
+	}
+
+	oldAppPath, _ = filepath.Abs(oldAppPath)
+	oldAppDir := filepath.Dir(oldAppPath)
+
+	updateScript := fmt.Sprintf(`#!/bin/bash
+	sleep 2
+	rm -rf "%s"
+	mv "%s" "%s"
+	open "%s"
+	`, oldAppDir, UnzipExecFilePath, oldAppDir, filepath.Join(oldAppDir, "horizon.app"))
+
+	// 写入临时文件
+	tmpScript := filepath.Join(os.TempDir(), "update.sh")
+	err = os.WriteFile(tmpScript, []byte(updateScript), 0755)
+	if err != nil {
+		return err
+	}
+
+	// 执行脚本
+	cmd := exec.Command("bash", tmpScript)
+	err = cmd.Start()
+	if err != nil {
+		return err
+	}
+
+	// 退出当前应用
+	os.Exit(0)
+	return nil
+}

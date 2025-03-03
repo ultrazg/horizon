@@ -2,17 +2,32 @@ package bridge
 
 import (
 	"log"
+	"os"
+	"path/filepath"
 
 	"github.com/spf13/viper"
 )
 
-const (
-	configFileName = "config"
-	configFilePath = "."
-	configFile     = configFilePath + "/" + configFileName + ".yaml"
-)
+const configFileName = "config"
+
+var configFilePath string
+var configFile string
 
 func initConfig() {
+	if IsMacOS() {
+		configDir, _ := os.UserConfigDir()
+		configFilePath = filepath.Join(configDir, APP_NAME)
+
+		if err := os.MkdirAll(configFilePath, os.ModePerm); err != nil {
+			log.Printf("创建配置目录失败: %v", err)
+		}
+
+		configFile = filepath.Join(configFilePath, configFileName+".yaml")
+	} else {
+		configFilePath = "."
+		configFile = configFileName + ".yaml"
+	}
+
 	viper.SetConfigName(configFileName)
 	viper.AddConfigPath(configFilePath)
 	viper.SetConfigType("yaml")
@@ -40,13 +55,13 @@ func (a *App) ReadConfig() *Config {
 	viper.SetConfigType("yaml")
 
 	if err := viper.ReadInConfig(); err != nil {
-		log.Fatalf("读取配置文件失败: %v", err)
+		log.Printf("读取配置文件失败: %v", err)
 	}
 
 	var c *Config
 
 	if err := viper.Unmarshal(&c); err != nil {
-		log.Fatalf("解析配置文件失败: %v", err)
+		log.Printf("解析配置文件失败: %v", err)
 	}
 
 	return c

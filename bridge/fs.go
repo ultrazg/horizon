@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/user"
 	"path/filepath"
+	"strings"
 )
 
 func IsExist(path string) bool {
@@ -29,6 +30,25 @@ func GetPath() string {
 	log.Println("程序所在目录:", execDir)
 
 	return execDir
+}
+
+func GetPathForMac() string {
+	execPath, err := os.Executable()
+	if err != nil {
+		log.Println("获取程序路径失败:", err)
+		return ""
+	}
+
+	execPath = execPath[:strings.LastIndex(execPath, "/")]
+	appPath := execPath[:strings.LastIndex(execPath, "/")]
+	appPath = appPath[:strings.LastIndex(appPath, "/")]
+	parentPath := execPath[strings.LastIndex(execPath, "/")+1:]
+
+	if parentPath == "MacOS" {
+		return appPath
+	} else {
+		return ""
+	}
 }
 
 func GetUserDownloadPath() string {
