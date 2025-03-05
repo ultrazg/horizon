@@ -43,7 +43,7 @@ import { ProxyModal } from './components/proxyModal'
 import { UpgradeModal } from './components/upgradeModal'
 import './index.modules.scss'
 import { CONSTANT } from '@/types/constant'
-import { CheckForUpgrade, Upgrade } from 'wailsjs/go/bridge/App'
+import { CheckForUpgrade } from 'wailsjs/go/bridge/App'
 import dayjs from 'dayjs'
 
 export const Setting: React.FC = () => {
@@ -73,7 +73,6 @@ export const Setting: React.FC = () => {
   const checkUpdate = () => {
     setCheckLoading(true)
 
-    // TODO:  check update
     CheckForUpgrade()
       .then((res) => {
         if (res.err !== '') {

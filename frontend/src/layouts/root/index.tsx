@@ -10,13 +10,24 @@ import { ScrollArea } from '@radix-ui/themes'
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import { PlayController, NavUser } from '@/components'
 import { useNavigateTo } from '@/hooks'
-import { ReadConfig, IsStartup } from '@/utils'
+import {
+  ReadConfig,
+  IsStartup,
+  ShowMessageDialog,
+  DialogType,
+  APP_VERSION,
+} from '@/utils'
 import { Launch } from '@/pages'
 import './index.modules.scss'
+import { CheckForUpgrade } from 'wailsjs/go/bridge/App'
+import dayjs from 'dayjs'
+import { UpgradeModal } from '@/pages/setting/components/upgradeModal'
 
 export const Root: React.FC = () => {
   const scrollRef = useRef<HTMLDivElement | null>(null)
   const [loading, setLoading] = useState<boolean>(true)
+  const [checkUpgrade, setcheckUpgrade] = useState<boolean>(false)
+  const [upgradeModal, setUpgradeModal] = useState<boolean>(false)
   const location = useLocation()
 
   const goLogin = useNavigateTo('/login')
@@ -26,6 +37,10 @@ export const Root: React.FC = () => {
     setTimeout(() => {
       ReadConfig()
         .then((res) => {
+          if (res.setting.checkUpdateOnStartup) {
+            setcheckUpgrade(true)
+          }
+
           if (res.user.accessToken) {
             return goHome()
           } else {
@@ -38,7 +53,35 @@ export const Root: React.FC = () => {
         .finally(() => {
           setLoading(false)
         })
-    }, 3500)
+    }, 2000)
+  }
+
+  const onCheckForUpgrade = () => {
+    CheckForUpgrade()
+      .then((res) => {
+        if (res.err !== '') {
+          ShowMessageDialog(DialogType.ERROR, '提示', res.err).then()
+
+          return
+        }
+
+        if (!res.isLatest) {
+          ShowMessageDialog(
+            DialogType.QUESTION,
+            '发现新版本！',
+            `发布时间：${dayjs(res.latest?.created_at).format('YYYY-MM-DD')}\r\n当前版本：v${APP_VERSION}\r\n最新版本：${res.latest?.tag_name}\r\n更新内容：\r\n${res.latest?.body}\r\n\r\n是否升级？`,
+          ).then((res) => {
+            if (res === 'Yes' || res === '是') {
+              setUpgradeModal(true)
+            }
+          })
+        } else {
+          ShowMessageDialog(DialogType.INFO, '提示', '当前已是最新版本').then()
+        }
+      })
+      .catch((err: any) => {
+        console.error('error', err)
+      })
   }
 
   useEffect(() => {
@@ -51,6 +94,12 @@ export const Root: React.FC = () => {
       }
     })
   }, [])
+
+  useEffect(() => {
+    if (checkUpgrade) {
+      onCheckForUpgrade()
+    }
+  }, [checkUpgrade])
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -150,6 +199,11 @@ export const Root: React.FC = () => {
           <PlayController />
         </>
       )}
+
+      <UpgradeModal
+        open={upgradeModal}
+        onClose={() => setUpgradeModal(false)}
+      />
     </>
   )
 }

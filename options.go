@@ -2,6 +2,7 @@ package main
 
 import (
 	"embed"
+	"fmt"
 	"runtime"
 
 	"github.com/ultrazg/horizon/bridge"
@@ -57,8 +58,8 @@ func AppOptions(app *bridge.App) *options.App {
 			WebviewIsTransparent: true,
 			WindowIsTranslucent:  true,
 			About: &mac.AboutInfo{
-				Title:   bridge.APP_NAME,
-				Message: "© 2025 2bit",
+				Title:   fmt.Sprintf("%s %s", bridge.APP_NAME, bridge.APP_VERSION),
+				Message: "第三方小宇宙桌面客户端，支持 Windows 与 macOS\r\n\r\n© 2025 2bit",
 				Icon:    icon,
 			},
 		},

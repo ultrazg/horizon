@@ -7,7 +7,6 @@ import axios, {
 import { toast, Storage, UpdateConfig } from '@/utils'
 import { refreshToken } from '@/api/login'
 import { USER_CONFIG_ENUM } from '@/types/config'
-import { CONSTANT } from '@/types/constant'
 
 const httpRequest: AxiosInstance = axios.create({
   baseURL: '/',
@@ -24,6 +23,8 @@ httpRequest.interceptors.response.use(
   (error: AxiosError) => {
     const { response } = error
     const statusCode = response?.status
+
+    console.log('response', response)
 
     if (statusCode === 401) {
       const XJikeAccessToken: string = Storage.get('x-jike-access-token')
@@ -89,8 +90,14 @@ httpRequest.interceptors.response.use(
       }
     }
 
-    if (statusCode && statusCode >= 500) {
-      toast(CONSTANT.RESPONSE_CODE_500, { type: 'warn' })
+    if (statusCode && statusCode !== 401) {
+      toast(
+        `请求失败（${statusCode}）访问${response.config.url}时遇到问题：${response.statusText}`,
+        {
+          type: 'warn',
+          duration: 5000,
+        },
+      )
     }
 
     if (response) {
