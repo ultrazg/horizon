@@ -8,30 +8,48 @@ import (
 	"github.com/spf13/viper"
 )
 
-const configFileName = "config"
+const configFileName = "config.yaml"
 
 var configFilePath string
-var configFile string
+
+func init() {
+	initConfig()
+}
 
 func initConfig() {
 	if IsMacOS() {
-		configDir, _ := os.UserConfigDir()
-		configFilePath = filepath.Join(configDir, APP_NAME)
+		configDir, err := os.UserConfigDir()
+		if err != nil {
+			log.Printf("获取用户配置目录失败: %v", err)
+		}
 
+		configFilePath = filepath.Join(configDir, APP_NAME)
 		if err := os.MkdirAll(configFilePath, os.ModePerm); err != nil {
 			log.Printf("创建配置目录失败: %v", err)
 		}
-
-		configFile = filepath.Join(configFilePath, configFileName+".yaml")
 	} else {
 		configFilePath = "."
-		configFile = configFileName + ".yaml"
 	}
 
-	viper.SetConfigName(configFileName)
-	viper.AddConfigPath(configFilePath)
+	configFile := filepath.Join(configFilePath, configFileName)
+
+	viper.SetConfigFile(configFile)
 	viper.SetConfigType("yaml")
 
+	setDefaults()
+
+	if !IsExist(configFile) {
+		if err := viper.SafeWriteConfigAs(configFile); err != nil {
+			log.Printf("创建配置文件失败: %v", err)
+		}
+	} else {
+		if err := viper.ReadInConfig(); err != nil {
+			log.Printf("读取配置文件失败: %v", err)
+		}
+	}
+}
+
+func setDefaults() {
 	viper.SetDefault("user.access_token", "")
 	viper.SetDefault("user.refresh_token", "")
 	viper.SetDefault("setting.check_update_on_startup", true)
@@ -39,31 +57,13 @@ func initConfig() {
 	viper.SetDefault("proxy.ip", "")
 	viper.SetDefault("proxy.port", "")
 	viper.SetDefault("play.last_play_eid", "")
-
-	if err := viper.SafeWriteConfigAs(configFile); err != nil {
-		log.Printf("创建配置文件失败: %v", err)
-	}
 }
 
-func (a *App) ReadConfig() *Config {
-	if !IsExist(configFile) {
-		initConfig()
-	}
-
-	viper.SetConfigName(configFileName)
-	viper.AddConfigPath(configFilePath)
-	viper.SetConfigType("yaml")
-
-	if err := viper.ReadInConfig(); err != nil {
-		log.Printf("读取配置文件失败: %v", err)
-	}
-
-	var c *Config
-
+func (a *App) ReadConfig() Config {
+	var c Config
 	if err := viper.Unmarshal(&c); err != nil {
 		log.Printf("解析配置文件失败: %v", err)
 	}
-
 	return c
 }
 
@@ -71,8 +71,7 @@ func (a *App) UpdateConfig(key string, value any) (bool, string) {
 	viper.Set(key, value)
 
 	if err := viper.WriteConfig(); err != nil {
-		log.Println("无法写入配置文件")
-
+		log.Printf("无法写入配置文件: %v", err)
 		return false, "无法写入配置文件"
 	}
 
