@@ -33,6 +33,8 @@ func initConfig() {
 
 	configFile := filepath.Join(configFilePath, configFileName)
 
+	println("配置文件：", configFile)
+
 	viper.SetConfigFile(configFile)
 	viper.SetConfigType("yaml")
 

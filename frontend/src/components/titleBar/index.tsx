@@ -3,7 +3,7 @@ import { Quit, WindowMinimise } from 'wailsjs/runtime/runtime'
 import { Cross1Icon, MinusIcon } from '@radix-ui/react-icons'
 import { Environment } from 'wailsjs/runtime'
 import { envType } from '@/types/env'
-import { APP_NAME } from '@/utils'
+import { APP_NAME, APP_VERSION } from '@/utils'
 import './index.modules.scss'
 
 export const TitleBar = () => {
@@ -30,7 +30,9 @@ export const TitleBar = () => {
     >
       {envInfo?.platform !== 'darwin' && (
         <>
-          <div className="title-bar-text">{APP_NAME}</div>
+          <div className="title-bar-text">
+            {APP_NAME} v{APP_VERSION}
+          </div>
           <div
             className="title-bar-button"
             style={
