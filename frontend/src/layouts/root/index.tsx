@@ -16,12 +16,15 @@ import {
   ShowMessageDialog,
   DialogType,
   APP_VERSION,
+  Storage,
 } from '@/utils'
 import { Launch } from '@/pages'
 import './index.modules.scss'
 import { CheckForUpgrade } from 'wailsjs/go/bridge/App'
 import dayjs from 'dayjs'
 import { UpgradeModal } from '@/pages/setting/components/upgradeModal'
+import { Profile } from '@/api/profile'
+import { userType } from '@/types/user'
 
 export const Root: React.FC = () => {
   const scrollRef = useRef<HTMLDivElement | null>(null)
@@ -33,6 +36,29 @@ export const Root: React.FC = () => {
   const goLogin = useNavigateTo('/login')
   const goHome = useNavigateTo('/')
 
+  const updateProfile = () => {
+    Profile()
+      .then((res) => {
+        const data: userType = {
+          uid: res.data.uid,
+          bio: res.data.bio,
+          avatar: res.data.avatar.picture.picUrl,
+          nickname: res.data.nickname,
+          gender: res.data.gender,
+          industry: res.data.industry,
+          mobilePhoneNumber: res.data.phoneNumber.mobilePhoneNumber,
+          ipLoc: res.data.ipLoc,
+          wechatUserInfo: res.data?.wechatUserInfo,
+          jikeUserInfo: res.data?.jikeUserInfo,
+        }
+
+        Storage.set('user_info', data)
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+
   const onReadConfigFunc = () => {
     setTimeout(() => {
       ReadConfig()
@@ -42,6 +68,8 @@ export const Root: React.FC = () => {
           }
 
           if (res.user.accessToken) {
+            updateProfile()
+
             return goHome()
           } else {
             return goLogin()
