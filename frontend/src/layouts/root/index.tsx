@@ -36,8 +36,8 @@ export const Root: React.FC = () => {
   const goLogin = useNavigateTo('/login')
   const goHome = useNavigateTo('/')
 
-  const updateProfile = () => {
-    Profile()
+  const updateProfile = async () => {
+    await Profile()
       .then((res) => {
         const data: userType = {
           uid: res.data.uid,
@@ -60,28 +60,26 @@ export const Root: React.FC = () => {
   }
 
   const onReadConfigFunc = () => {
-    setTimeout(() => {
-      ReadConfig()
-        .then((res) => {
-          if (res.setting.checkUpdateOnStartup) {
-            setcheckUpgrade(true)
-          }
+    ReadConfig()
+      .then(async (res) => {
+        if (res.setting.checkUpdateOnStartup) {
+          setcheckUpgrade(true)
+        }
 
-          if (res.user.accessToken) {
-            updateProfile()
+        if (res.user.accessToken) {
+          await updateProfile()
 
-            return goHome()
-          } else {
-            return goLogin()
-          }
-        })
-        .catch((err: any) => {
-          console.error('error', err)
-        })
-        .finally(() => {
-          setLoading(false)
-        })
-    }, 2000)
+          return goHome()
+        } else {
+          return goLogin()
+        }
+      })
+      .catch((err: any) => {
+        console.error('error', err)
+      })
+      .finally(() => {
+        setLoading(false)
+      })
   }
 
   const onCheckForUpgrade = () => {
