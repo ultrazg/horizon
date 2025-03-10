@@ -22,6 +22,17 @@
           flex: 1;
 
           p {
+            &:first-child {
+              display: flex;
+              align-items: center;
+
+              img {
+                cursor: default;
+                margin-left: 0.4rem;
+                filter: brightness(0) saturate(100%) invert(87%) sepia(29%) saturate(743%) hue-rotate(233deg) brightness(100%) contrast(101%);
+              }
+            }
+
             &:last-child {
               font-size: 0.7rem;
               color: $secondary-font-color;
@@ -40,8 +51,8 @@
       }
     }
 
-    .comment-reply-body {
-      margin: 0.3rem 0;
+    .player-comment-body{
+      margin-top: 0.3rem;
     }
   }
 }

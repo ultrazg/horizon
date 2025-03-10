@@ -132,10 +132,26 @@ export const CommentReplyModal: React.FC<IProps> = ({
                   />
                 </div>
                 <div>
-                  <p>{primaryComment?.author?.nickname}</p>
+                  <p>
+                    {primaryComment?.author?.nickname}
+
+                    {primaryComment?.badges?.length > 0
+                      ? primaryComment?.badges.map((item) => (
+                          <img
+                            style={{
+                              width: item.icon.width * 0.4,
+                              height: item.icon.height * 0.4,
+                            }}
+                            title={item.tip}
+                            src={item.icon.picUrl}
+                            alt="badge"
+                          />
+                        ))
+                      : null}
+                  </p>
                   <p>
                     {dayjs(primaryComment?.collectedAt).format('YYYY/MM/DD')}{' '}
-                    <span>{primaryComment?.ipLoc}</span>
+                    <span>IP属地：{primaryComment?.ipLoc}</span>
                   </p>
                 </div>
                 <div
@@ -174,10 +190,26 @@ export const CommentReplyModal: React.FC<IProps> = ({
                     />
                   </div>
                   <div>
-                    <p>{item?.author?.nickname}</p>
+                    <p>
+                      {item?.author?.nickname}
+
+                      {item.badges.length > 0
+                        ? item.badges.map((itm) => (
+                            <img
+                              style={{
+                                width: itm.icon.width * 0.4,
+                                height: itm.icon.height * 0.4,
+                              }}
+                              title={itm.tip}
+                              src={itm.icon.picUrl}
+                              alt="badge"
+                            />
+                          ))
+                        : null}
+                    </p>
                     <p>
                       {dayjs(item?.createdAt).format('YYYY/MM/DD')}{' '}
-                      <span>{item?.author.ipLoc}</span>
+                      <span>IP属地：{item?.author.ipLoc}</span>
                     </p>
                   </div>
                   <div

@@ -220,10 +220,24 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
                       }}
                     >
                       {item.author.nickname}
+
+                      {item.badges.length > 0
+                        ? item.badges.map((itm) => (
+                            <img
+                              style={{
+                                width: itm.icon.width * 0.4,
+                                height: itm.icon.height * 0.4,
+                              }}
+                              title={itm.tip}
+                              src={itm.icon.picUrl}
+                              alt="badge"
+                            />
+                          ))
+                        : null}
                     </span>
                     <p>
                       {dayjs(item.collectedAt).format('YYYY/MM/DD')}{' '}
-                      <span>{item.author.ipLoc}</span>
+                      <span>IP属地：{item.author.ipLoc}</span>
                     </p>
                   </div>
                   <div
