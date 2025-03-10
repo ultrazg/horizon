@@ -1,6 +1,5 @@
 import { PlayController } from './playerController'
 import { PlayerDrawer } from './playerDrawer'
-import { NavLogo } from './navLogo'
 import { NavUser } from './navUser'
 import { ColorfulShadow } from './colorfulShadow'
 import { TitleBar } from './titleBar'
@@ -15,7 +14,6 @@ import { Empty } from './empty'
 export {
   PlayController,
   PlayerDrawer,
-  NavLogo,
   NavUser,
   ColorfulShadow,
   TitleBar,
