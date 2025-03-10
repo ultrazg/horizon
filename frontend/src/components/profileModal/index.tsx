@@ -496,6 +496,23 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
                                   ? item.episode.image.picUrl
                                   : item.episode.podcast.image.picUrl
                               }
+                              onClick={() => {
+                                const episodeInfo: PlayerEpisodeInfoType = {
+                                  title: item.episode.title,
+                                  eid: item.episode.eid,
+                                  pid: item.episode.pid,
+                                  cover: item.episode.image
+                                    ? item.episode.image.picUrl
+                                    : item.episode.podcast.image.picUrl,
+                                  liked: item.episode.isFavorited,
+                                }
+
+                                player.load(
+                                  item.episode.media.source.url,
+                                  episodeInfo,
+                                )
+                                player.play()
+                              }}
                             />
                           </div>
                           <div className="right">
