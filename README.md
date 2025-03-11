@@ -34,12 +34,20 @@
 
 ```bash
 git clone https://github.com/ultrazg/horizon.git
+
 cd horizon/frontend
+
 pnpm install
+
 pnpm build
+
 cd ..
+
 # 在开发模式下运行
 wails dev
+
+# 或者
+
 # 构建对应平台的可执行文件
 wails build
 ```
