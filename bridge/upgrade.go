@@ -152,6 +152,12 @@ func DownloadLatestRelease(a *App, url string, path string, fc func(progress flo
 }
 
 func (a *App) Download() error {
+	DOWNLOAD_ZIPFILE_NAME := DOWNLOAD_ZIPFILE_NAME_WINDOWS
+
+	if IsMacOS() {
+		DOWNLOAD_ZIPFILE_NAME = DOWNLOAD_ZIPFILE_NAME_MACOS
+	}
+
 	userDownloadPath := GetUserDownloadPath()
 	savePath := filepath.Join(userDownloadPath, DOWNLOAD_ZIPFILE_NAME)
 
@@ -207,7 +213,7 @@ func (a *App) Upgrade() error {
 
 func upgradeForWindows() error {
 	userDownloadPath := GetUserDownloadPath()
-	zipFilePath := filepath.Join(userDownloadPath, DOWNLOAD_ZIPFILE_NAME)
+	zipFilePath := filepath.Join(userDownloadPath, DOWNLOAD_ZIPFILE_NAME_WINDOWS)
 	UnzipExecFilePath := filepath.Join(userDownloadPath, APP_NAME+".exe")
 
 	err := UnzipZIPFile(zipFilePath)
@@ -243,7 +249,7 @@ func upgradeForWindows() error {
 
 func upgradeForMac() error {
 	userDownloadPath := GetUserDownloadPath()
-	zipFilePath := filepath.Join(userDownloadPath, DOWNLOAD_ZIPFILE_NAME)
+	zipFilePath := filepath.Join(userDownloadPath, DOWNLOAD_ZIPFILE_NAME_MACOS)
 	UnzipExecFilePath := filepath.Join(userDownloadPath, APP_NAME+".app")
 	oldAppPath := "/Applications/" + APP_NAME + ".app"
 
