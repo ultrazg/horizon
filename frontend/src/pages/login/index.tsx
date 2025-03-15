@@ -136,7 +136,10 @@ export const Login: React.FC = () => {
 
   return (
     <>
-      <Container size="1">
+      <Container
+        size="1"
+        className="login-wrapper"
+      >
         <Section size="3">
           <div className="logo-layout">
             <div className="logo">
@@ -157,13 +160,14 @@ export const Login: React.FC = () => {
               </Text>
 
               <TextField.Root
+                autoComplete="off"
+                name={`input-${Math.random()}`}
                 className={animate ? 'shakeX' : ''}
                 id="phone"
                 placeholder="请输入"
                 size="3"
                 style={{ marginTop: 12, marginBottom: 12 }}
                 maxLength={11}
-                type="tel"
                 value={mobilePhoneNumber}
                 onChange={(e) => {
                   setMobilePhoneNumber(e.target.value)
