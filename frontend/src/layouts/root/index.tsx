@@ -101,8 +101,6 @@ export const Root: React.FC = () => {
               setUpgradeModal(true)
             }
           })
-        } else {
-          ShowMessageDialog(DialogType.INFO, '提示', '当前已是最新版本').then()
         }
       })
       .catch((err: any) => {
