@@ -66,7 +66,7 @@ export const Root: React.FC = () => {
           setcheckUpgrade(true)
         }
 
-        if (res.user.accessToken) {
+        if (res?.user?.accessToken || res.user.accessToken === null) {
           await updateProfile()
 
           return goHome()
@@ -109,14 +109,7 @@ export const Root: React.FC = () => {
   }
 
   useEffect(() => {
-    IsStartup().then((res) => {
-      if (res) {
-        onReadConfigFunc()
-      } else {
-        setLoading(false)
-        goHome()
-      }
-    })
+    onReadConfigFunc()
   }, [])
 
   useEffect(() => {
