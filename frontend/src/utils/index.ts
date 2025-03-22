@@ -3,7 +3,7 @@ import { isValidPhoneNumber, isValidIp } from './regex'
 import { APP_NAME, APP_VERSION } from './appInfo'
 import { toast } from './toast'
 import Storage from '@/utils/storage'
-import { UpdateConfig, ReadConfig, IsStartup } from 'wailsjs/go/bridge/App'
+import { UpdateConfig, ReadConfig } from 'wailsjs/go/bridge/App'
 import { ShowMessageDialog, DialogType } from './dialog'
 import { showEpisodeDetailModal } from './showEpisodeDetailModal'
 import { testConnect } from './proxy'
@@ -19,7 +19,6 @@ export {
   Storage,
   UpdateConfig,
   ReadConfig,
-  IsStartup,
   ShowMessageDialog,
   DialogType,
   showEpisodeDetailModal,

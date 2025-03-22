@@ -1,13 +1,24 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Button, Tabs, TextField } from '@radix-ui/themes'
-import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
+import {
+  Box,
+  Button,
+  Tabs,
+  TextField,
+  Badge,
+  IconButton,
+} from '@radix-ui/themes'
+import {
+  MagnifyingGlassIcon,
+  Cross2Icon,
+  TrashIcon,
+} from '@radix-ui/react-icons'
 import { search } from '@/api/search'
 import { TabPodcast } from './components/tabPodcast'
 import { TabEpisode } from './components/tabEpisode'
 import { TabUser } from './components/tabUser'
 import './index.modules.scss'
 import { isEmpty } from 'lodash'
-import { toast } from '@/utils'
+import { toast, Storage } from '@/utils'
 
 export const Search: React.FC = () => {
   const [searchParams, setSearchParams] = useState({
@@ -19,15 +30,58 @@ export const Search: React.FC = () => {
     loadMoreKey: {},
   })
   const [loading, setLoading] = useState<boolean>(false)
+  const [searchHistory, setSearchHistory] = useState<string[]>([])
+
+  const saveSearchHistory = (keyword: string) => {
+    let history: string[] = Storage.get('search_history') || []
+    history = Array.isArray(history) ? [...history] : []
+
+    history = history.filter((item) => item !== keyword)
+
+    if (history.length >= 20) {
+      history.shift()
+    }
+
+    history.push(keyword)
+
+    Storage.set('search_history', history.reverse())
+
+    getSearchHistory()
+  }
+
+  const getSearchHistory = () => {
+    let history = Storage.get('search_history')
+    history = Array.isArray(history) ? [...history] : []
+
+    setSearchHistory(() => history)
+  }
+
+  const clearSearchHistory = () => {
+    Storage.remove('search_history')
+
+    getSearchHistory()
+  }
+
+  const removeSearchHistoryKeyword = (keyword: string) => {
+    let history: string[] = Storage.get('search_history')
+    history = Array.isArray(history) ? [...history] : []
+
+    history = history.filter((item) => item !== keyword)
+
+    Storage.set('search_history', history)
+
+    getSearchHistory()
+  }
 
   /**
    * 搜索
    */
-  const onSearch = (loadMoreKey?: {}) => {
+  const onSearch = (keyword?: string, loadMoreKey?: {}) => {
     setLoading(true)
 
     const params = {
       ...searchParams,
+      keyword: keyword || searchParams.keyword,
       loadMoreKey,
     }
 
@@ -50,7 +104,16 @@ export const Search: React.FC = () => {
       })
       .finally(() => {
         setLoading(false)
+        saveSearchHistory(params.keyword)
       })
+  }
+
+  const onSearchHistoryClick = (keyword: string) => {
+    setSearchParams({
+      ...searchParams,
+      keyword,
+    })
+    onSearch(keyword)
   }
 
   const onChangeHandle = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -73,6 +136,10 @@ export const Search: React.FC = () => {
     }
   }, [searchParams.type])
 
+  useEffect(() => {
+    getSearchHistory()
+  }, [])
+
   return (
     <div className="search-layout">
       <h3>搜索</h3>
@@ -84,6 +151,7 @@ export const Search: React.FC = () => {
               size="3"
               placeholder="输入关键字"
               onChange={onChangeHandle}
+              value={searchParams.keyword}
             >
               <TextField.Slot>
                 <MagnifyingGlassIcon
@@ -108,6 +176,49 @@ export const Search: React.FC = () => {
           </div>
         </div>
 
+        {!isEmpty(searchHistory) && (
+          <div className="search_history">
+            <div className="search_history_title">
+              <span>搜索历史</span>
+
+              <IconButton
+                size="1"
+                color="gray"
+                variant="ghost"
+                style={{ marginLeft: 4 }}
+                onClick={() => clearSearchHistory()}
+              >
+                <TrashIcon
+                  width="14"
+                  height="14"
+                />
+              </IconButton>
+            </div>
+            {searchHistory.map((item) => {
+              return (
+                <Badge
+                  key={item}
+                  color="gray"
+                  style={{ marginRight: 4, cursor: 'pointer' }}
+                >
+                  <span onClick={() => onSearchHistoryClick(item)}>{item}</span>
+
+                  <IconButton
+                    size="1"
+                    variant="ghost"
+                    onClick={() => removeSearchHistoryKeyword(item)}
+                  >
+                    <Cross2Icon
+                      width="14"
+                      height="14"
+                    />
+                  </IconButton>
+                </Badge>
+              )
+            })}
+          </div>
+        )}
+
         <div className="search-result">
           <Tabs.Root
             value={searchParams.type}
@@ -124,7 +235,7 @@ export const Search: React.FC = () => {
                 <TabPodcast
                   data={data}
                   onLoadMore={(loadMoreKey) => {
-                    onSearch(loadMoreKey)
+                    onSearch('', loadMoreKey)
                   }}
                   onRefresh={() => {
                     onSearch()
@@ -137,7 +248,7 @@ export const Search: React.FC = () => {
                 <TabEpisode
                   data={data}
                   onLoadMore={(loadMoreKey) => {
-                    onSearch(loadMoreKey)
+                    onSearch('', loadMoreKey)
                   }}
                   loading={loading}
                 />
@@ -147,7 +258,7 @@ export const Search: React.FC = () => {
                 <TabUser
                   data={data}
                   onLoadMore={(loadMoreKey) => {
-                    onSearch(loadMoreKey)
+                    onSearch('', loadMoreKey)
                   }}
                   loading={loading}
                 />

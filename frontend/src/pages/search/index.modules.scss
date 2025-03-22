@@ -33,6 +33,13 @@
       }
     }
 
+    .search_history {
+      .search_history_title{
+        display: flex;
+        align-items: center;
+      }
+    }
+
     .search-result {
       display: block;
     }
