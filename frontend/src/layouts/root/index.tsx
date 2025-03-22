@@ -12,7 +12,6 @@ import { PlayController, NavUser } from '@/components'
 import { useNavigateTo } from '@/hooks'
 import {
   ReadConfig,
-  IsStartup,
   ShowMessageDialog,
   DialogType,
   APP_VERSION,
