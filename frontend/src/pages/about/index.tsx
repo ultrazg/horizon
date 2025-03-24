@@ -58,10 +58,10 @@ export const About = () => {
           <Button
             variant="ghost"
             onClick={() => {
-              BrowserOpenURL('https://opensource.org/license/mit')
+              BrowserOpenURL('https://opensource.org/license/gpl-3-0')
             }}
           >
-            MIT License
+            GPL-3.0 License
           </Button>
           <Separator orientation="vertical" />
           <Button
