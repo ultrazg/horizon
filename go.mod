@@ -5,7 +5,7 @@ go 1.22.0
 require (
 	github.com/kbinani/screenshot v0.0.0-20240820160931-a8a2c5d0e191
 	github.com/spf13/viper v1.19.0
-	github.com/ultrazg/xyz v1.8.1
+	github.com/ultrazg/xyz v1.8.2
 	github.com/wailsapp/wails/v2 v2.9.1
 )
 
