@@ -10,6 +10,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
+	"syscall"
 	"time"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
@@ -18,7 +19,6 @@ import (
 var downloadUrl string
 
 func (a *App) CheckForUpgrade() *CheckUpgradeInfo {
-	GetPath()
 	latest, err := GetGithubReleaseInfo(a)
 	if err != nil {
 		return &CheckUpgradeInfo{Err: err.Error(), IsLatest: false, Latest: nil}
@@ -218,29 +218,36 @@ func upgradeForWindows() error {
 
 	err := UnzipZIPFile(zipFilePath)
 	if err != nil {
+		log.Println("UnzipZIPFile", err.Error())
 		return err
 	}
 
-	execDir := GetPath()
-	execName := filepath.Join(execDir, APP_NAME+".exe")
-	oldFileName := execName + ".old.bak"
+	RemoveFile(zipFilePath)
 
-	if _, err := os.Stat(oldFileName); err == nil {
-		os.Remove(oldFileName)
-	}
-
-	err = os.Rename(execName, oldFileName)
-	if err != nil {
-		return err
-	}
-	err = os.Rename(UnzipExecFilePath, execName)
+	oldExePath, err := os.Executable()
 	if err != nil {
 		return err
 	}
 
-	cmd := exec.Command(execName)
-	cmd.Args = append(cmd.Args, os.Args[1:]...)
-	cmd.Start()
+	batchScript := fmt.Sprintf(`@echo off
+timeout /t 1 /nobreak >nul
+move /y "%s" "%s"
+start "" "%s"
+del "%%~f0"
+`, UnzipExecFilePath, oldExePath, oldExePath)
+
+	batchFilePath := filepath.Join(os.TempDir(), "horizon_update.bat")
+	err = os.WriteFile(batchFilePath, []byte(batchScript), 0644)
+	if err != nil {
+		return err
+	}
+
+	cmd := exec.Command("cmd", "/c", batchFilePath)
+	cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true}
+	err = cmd.Start()
+	if err != nil {
+		return err
+	}
 
 	os.Exit(0)
 
