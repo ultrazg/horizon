@@ -6,7 +6,8 @@ import (
 )
 
 type App struct {
-	ctx context.Context
+	ctx    context.Context
+	cancel context.CancelFunc
 }
 
 type Config struct {

@@ -1,6 +1,7 @@
 package bridge
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -88,9 +89,8 @@ func GetGithubReleaseInfo(a *App) (*Latest, error) {
 	}, nil
 }
 
-func DownloadLatestRelease(a *App, url string, path string, fc func(progress float64, total, downloaded int64)) error {
+func DownloadLatestRelease(ctx context.Context, a *App, url string, path string, fc func(progress float64, total, downloaded int64)) error {
 	proxyUrl := GetProxyInfo(a)
-
 	client, err := HTTPClientWithProxy(proxyUrl)
 	if err != nil {
 		return err
@@ -114,42 +114,48 @@ func DownloadLatestRelease(a *App, url string, path string, fc func(progress flo
 	progressTicker := time.Tick(time.Millisecond * 50)
 
 	for {
-		n, err := resp.Body.Read(buffer)
-		if n > 0 {
-			_, err := create.Write(buffer[:n])
-			if err != nil {
-				return err
-			}
+		select {
+		case <-ctx.Done():
+			create.Close()
+			RemoveFile(path)
+			runtime.EventsEmit(a.ctx, "download-cancelled")
 
-			downloadedSize += int64(n)
-			progress := float64(downloadedSize) / float64(fileSize) * 100
-
-			select {
-			case <-progressTicker:
-				if fc != nil {
-					fc(progress, fileSize, downloadedSize)
+			return fmt.Errorf("下载已取消")
+		default:
+			n, err := resp.Body.Read(buffer)
+			if n > 0 {
+				_, writeErr := create.Write(buffer[:n])
+				if writeErr != nil {
+					return writeErr
 				}
-			default:
-			}
-		}
 
-		if err != nil {
-			if err != io.EOF {
-				return err
+				downloadedSize += int64(n)
+				progress := float64(downloadedSize) / float64(fileSize) * 100
+
+				select {
+				case <-progressTicker:
+					if fc != nil {
+						fc(progress, fileSize, downloadedSize)
+					}
+				default:
+				}
 			}
 
-			break
+			if err != nil {
+				if err != io.EOF {
+					return err
+				}
+
+				fc(100, fileSize, downloadedSize)
+
+				return nil
+			}
 		}
 	}
-
-	fc(100, fileSize, downloadedSize)
-
-	return nil
 }
 
 func (a *App) Download() error {
 	DOWNLOAD_ZIPFILE_NAME := DOWNLOAD_ZIPFILE_NAME_WINDOWS
-
 	if IsMacOS() {
 		DOWNLOAD_ZIPFILE_NAME = DOWNLOAD_ZIPFILE_NAME_MACOS
 	}
@@ -158,31 +164,33 @@ func (a *App) Download() error {
 	savePath := filepath.Join(userDownloadPath, DOWNLOAD_ZIPFILE_NAME)
 
 	if downloadUrl == "" {
-		fmt.Println("找不到更新包下载地址")
+		err := fmt.Errorf("找不到更新包下载地址")
+		runtime.EventsEmit(a.ctx, "download-error", err)
 
-		runtime.EventsEmit(a.ctx, "download-error", fmt.Errorf("找不到更新包下载地址"))
-		return fmt.Errorf("找不到更新包下载地址")
+		return err
 	}
 
-	fmt.Println("download url --->", downloadUrl)
+	ctx, cancel := context.WithCancel(context.Background())
+	a.cancel = cancel
 
-	err := DownloadLatestRelease(a, downloadUrl, savePath, func(progress float64, total, downloaded int64) {
-		fmt.Println("正在下载...", progress)
-
+	err := DownloadLatestRelease(ctx, a, downloadUrl, savePath, func(progress float64, total, downloaded int64) {
 		runtime.EventsEmit(a.ctx, "download-progress", progress, total, downloaded)
 	})
 	if err != nil {
-		fmt.Println("下载出错", err)
-
 		runtime.EventsEmit(a.ctx, "download-error", err.Error())
-		return fmt.Errorf("下载出错 %v", err)
-	} else {
-		fmt.Println("下载成功")
 
-		runtime.EventsEmit(a.ctx, "download-complete")
+		return err
 	}
 
+	runtime.EventsEmit(a.ctx, "download-complete")
+
 	return nil
+}
+
+func (a *App) CancelUpgrade() {
+	if a.cancel != nil {
+		a.cancel()
+	}
 }
 
 func (a *App) Upgrade() error {

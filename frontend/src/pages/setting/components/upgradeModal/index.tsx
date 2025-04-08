@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Progress } from '@radix-ui/themes'
-import { UpdateIcon } from '@radix-ui/react-icons'
+import { UpdateIcon, Cross2Icon } from '@radix-ui/react-icons'
 import { Modal } from '@/components'
 import { modalType } from '@/types/modal'
 import { EventsOn } from 'wailsjs/runtime'
-import { Download, Upgrade } from 'wailsjs/go/bridge/App'
+import { Download, Upgrade, CancelUpgrade } from 'wailsjs/go/bridge/App'
 import { DialogType, ShowMessageDialog } from '@/utils'
 
 export const UpgradeModal: React.FC<modalType> = ({ open, onClose }) => {
@@ -21,6 +21,11 @@ export const UpgradeModal: React.FC<modalType> = ({ open, onClose }) => {
 
   const onUpgrade = () => {
     Upgrade().then()
+  }
+
+  const onCancelUpgrade = async () => {
+    await CancelUpgrade()
+    onClose()
   }
 
   useEffect(() => {
@@ -65,14 +70,24 @@ export const UpgradeModal: React.FC<modalType> = ({ open, onClose }) => {
       open={open}
       onClose={onClose}
       options={
-        <Button
-          variant="soft"
-          disabled={!downloadComplete}
-          onClick={() => onUpgrade()}
-        >
-          <UpdateIcon />
-          重启应用
-        </Button>
+        <>
+          <Button
+            variant="soft"
+            color="gray"
+            onClick={() => onCancelUpgrade()}
+          >
+            <Cross2Icon />
+            取消更新
+          </Button>
+          <Button
+            variant="soft"
+            disabled={!downloadComplete}
+            onClick={() => onUpgrade()}
+          >
+            <UpdateIcon />
+            重启应用
+          </Button>
+        </>
       }
       hiddenCloseBtn
     >
