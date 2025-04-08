@@ -11,7 +11,6 @@ import (
 	"path/filepath"
 	r "runtime"
 	"strings"
-	"syscall"
 	"time"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
@@ -211,7 +210,7 @@ func (a *App) Upgrade() error {
 func upgradeForWindows() error {
 	userDownloadPath := GetUserDownloadPath()
 	zipFilePath := filepath.Join(userDownloadPath, DOWNLOAD_ZIPFILE_NAME_WINDOWS)
-	UnzipExecFilePath := filepath.Join(userDownloadPath, APP_NAME+".exe")
+	unzipExecFilePath := filepath.Join(userDownloadPath, APP_NAME+".exe")
 
 	err := UnzipZIPFile(zipFilePath)
 	if err != nil {
@@ -231,7 +230,7 @@ timeout /t 1 /nobreak >nul
 move /y "%s" "%s"
 start "" "%s"
 del "%%~f0"
-`, UnzipExecFilePath, oldExePath, oldExePath)
+`, unzipExecFilePath, oldExePath, oldExePath)
 
 	batchFilePath := filepath.Join(os.TempDir(), "horizon_update.bat")
 	err = os.WriteFile(batchFilePath, []byte(batchScript), 0644)
@@ -240,7 +239,7 @@ del "%%~f0"
 	}
 
 	cmd := exec.Command("cmd", "/c", batchFilePath)
-	cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true}
+	cmd.SysProcAttr = sysProcAttr
 	err = cmd.Start()
 	if err != nil {
 		return err
@@ -254,28 +253,43 @@ del "%%~f0"
 func upgradeForMac() error {
 	userDownloadPath := GetUserDownloadPath()
 	zipFilePath := filepath.Join(userDownloadPath, DOWNLOAD_ZIPFILE_NAME_MACOS)
-	UnzipExecFilePath := filepath.Join(userDownloadPath, APP_NAME+".app")
-	oldAppPath := "/Applications/" + APP_NAME + ".app"
+	unzipExecFilePath := filepath.Join(userDownloadPath, APP_NAME+".app")
 
 	err := UnzipZIPFile(zipFilePath)
 	if err != nil {
 		return err
 	}
 
-	exec.Command("pkill", "-f", oldAppPath).Run()
+	RemoveFile(zipFilePath)
 
-	err = os.RemoveAll(oldAppPath)
+	oldAppExe, err := os.Executable()
 	if err != nil {
 		return err
 	}
 
-	err = os.Rename(UnzipExecFilePath, oldAppPath)
+	oldAppPath := filepath.Join(oldAppExe, "../../..")
+
+	script := fmt.Sprintf(`#!/bin/bash
+sleep 1
+rm -rf "%s"
+mv "%s" "%s"
+open "%s"
+rm -- "$0"
+`, oldAppPath, unzipExecFilePath, oldAppPath, oldAppPath)
+
+	scriptPath := filepath.Join(os.TempDir(), "horizon_update.sh")
+	err = os.WriteFile(scriptPath, []byte(script), 0755)
 	if err != nil {
 		return err
 	}
 
-	exec.Command("open", oldAppPath).Start()
+	cmd := exec.Command("bash", scriptPath)
+	err = cmd.Start()
+	if err != nil {
+		return err
+	}
 
 	os.Exit(0)
+
 	return nil
 }

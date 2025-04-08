@@ -13,10 +13,6 @@ func TestGetUserDownloadPath(t *testing.T) {
 	fmt.Printf("user download path %s", path)
 }
 
-func TestGetPath(t *testing.T) {
-	GetPath()
-}
-
 func TestUnzipZIPFile(t *testing.T) {
 	path := `C:\Users\XXX\Downloads\horizon-upgrade.zip`
 
