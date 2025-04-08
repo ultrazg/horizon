@@ -9,6 +9,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	r "runtime"
 	"strings"
 	"syscall"
 	"time"
@@ -76,11 +77,7 @@ func GetGithubReleaseInfo(a *App) (*Latest, error) {
 	}
 
 	for _, assets := range githubReleaseInfo.Assets {
-		if strings.Contains(strings.ToLower(assets.Name), "darwin") && runtime.Environment(a.ctx).Platform == "darwin" {
-			downloadUrl = assets.BrowserDownloadURL
-		}
-
-		if strings.Contains(strings.ToLower(assets.Name), "windows") && runtime.Environment(a.ctx).Platform == "windows" {
+		if strings.Contains(strings.ToLower(assets.Name), r.GOOS) && strings.Contains(strings.ToLower(assets.Name), r.GOARCH) {
 			downloadUrl = assets.BrowserDownloadURL
 		}
 	}
