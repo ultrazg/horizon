@@ -4,8 +4,6 @@ import { modalType } from '@/types/modal'
 import {
   AspectRatio,
   Box,
-  Button,
-  Dialog,
   Flex,
   Grid,
   ScrollArea,
@@ -77,7 +75,7 @@ export const StickerModal: React.FC<IProps> = ({
       <ScrollArea
         type="auto"
         scrollbars="vertical"
-        style={{ height }}
+        style={{ height, paddingRight: 10 }}
       >
         <Grid
           columns="4"

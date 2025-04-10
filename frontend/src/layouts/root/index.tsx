@@ -65,7 +65,7 @@ export const Root: React.FC = () => {
           setcheckUpgrade(true)
         }
 
-        if (res?.user?.accessToken || res.user.accessToken === null) {
+        if (res?.user?.accessToken) {
           await updateProfile()
 
           return goHome()
