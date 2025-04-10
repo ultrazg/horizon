@@ -34,7 +34,7 @@ export const PlayerDrawer: React.FC<IProps> = ({
   const [width] = React.useState<number>(useDisplayInfo().Width)
 
   const [episodeDetailInfo, setEpisodeDetailInfo] = useState<EpisodeType>()
-  const [isPlaying, setIsPlaying] = useState<boolean>(player.isPlaying)
+  const [isPlaying, setIsPlaying] = useState<boolean>(false)
   const [left, setLeft] = useState<boolean>(false)
   const [right, setRight] = useState<boolean>(false)
   const [progress, setProgress] = React.useState<number>(0)
@@ -115,6 +115,7 @@ export const PlayerDrawer: React.FC<IProps> = ({
 
   useEffect(() => {
     setProgress(Math.round(playInfo.current))
+    setIsPlaying(player.isPlaying)
   }, [playInfo])
 
   return (
