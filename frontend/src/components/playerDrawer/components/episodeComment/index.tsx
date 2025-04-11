@@ -15,7 +15,7 @@ import {
   ChatBubbleIcon,
 } from '@radix-ui/react-icons'
 import { IoMdThumbsUp } from 'react-icons/io'
-import { useDisplayInfo } from '@/hooks'
+import { useDisplayInfo, usePlayer } from '@/hooks'
 import { CommentReplyModal } from '@/components/playerDrawer/components/commentReplyModal'
 import { ProfileModal } from '@/components'
 import {
@@ -29,6 +29,7 @@ import { DialogType, ShowMessageDialog, toast } from '@/utils'
 import dayjs from 'dayjs'
 import { commentCollectRemove } from '@/api/favorite'
 import { isEmpty } from 'lodash'
+import HighlightTimeStrings from '@/components/playerDrawer/components/highlightTimeStrings'
 
 type IProps = {
   open: boolean
@@ -59,6 +60,7 @@ export const onCommentLikeUpdate = (
 }
 
 export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
+  const player = usePlayer()
   const [height] = React.useState<number>(useDisplayInfo().Height - 35)
   const [loading, setLoading] = useState<boolean>(false)
   const [commentData, setCommentData] = useState<{
@@ -304,7 +306,10 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
                     </Badge>
                   )}
 
-                  {item.text}
+                  <HighlightTimeStrings
+                    text={item.text}
+                    player={player}
+                  />
                 </div>
                 {item.replies && item.replies.length > 0 && (
                   <div className="player-comment-replies">
