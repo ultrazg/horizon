@@ -1,3 +1,15 @@
+### v0.1.2
+
+Features
+
+- 新增适配不同 CPU 架构
+
+Fixes
+
+- 修复无法自动更新的问题
+- 修复启动时检查 token 异常的问题
+- 修复 playerDrawer 内播放状态更新不及时的问题
+
 ### v0.1.1
 
 Features
