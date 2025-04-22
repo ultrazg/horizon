@@ -1,14 +1,31 @@
 import React, { useEffect } from 'react'
-import { episodeLiveCount } from '@/api/episode'
+import {
+  episodeLiveCount,
+  liveStatsReport,
+  liveStatsReportType,
+} from '@/api/episode'
 import './index.modules.scss'
 
 type IProps = {
   open: boolean
   eid: string
+  pid: string
 }
 
-export const LiveCount: React.FC<IProps> = ({ open, eid }) => {
+export const LiveCount: React.FC<IProps> = ({ open, eid, pid }) => {
   const [liveCount, setLiveCount] = React.useState<string | number>(0)
+
+  /**
+   * 上报播放统计数据
+   */
+  const reportLiveStats = () => {
+    const params: liveStatsReportType = {
+      eid,
+      pid,
+    }
+
+    liveStatsReport(params).then()
+  }
 
   /**
    * 获取正在收听人数
@@ -27,9 +44,11 @@ export const LiveCount: React.FC<IProps> = ({ open, eid }) => {
     let timer: any
 
     if (open) {
+      reportLiveStats()
       getLiveCount()
 
       timer = setInterval(() => {
+        reportLiveStats()
         getLiveCount()
       }, 1000 * 60)
     }

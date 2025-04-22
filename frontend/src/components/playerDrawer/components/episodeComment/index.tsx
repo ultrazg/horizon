@@ -226,6 +226,7 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
                       {item.badges.length > 0
                         ? item.badges.map((itm) => (
                             <img
+                              key={itm.icon.picUrl}
                               style={{
                                 width: itm.icon.width * 0.4,
                                 height: itm.icon.height * 0.4,

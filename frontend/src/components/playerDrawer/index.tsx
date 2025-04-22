@@ -152,6 +152,7 @@ export const PlayerDrawer: React.FC<IProps> = ({
         <LiveCount
           open={open}
           eid={playInfo.eid}
+          pid={player.episodeInfo.pid}
         />
       </div>
 

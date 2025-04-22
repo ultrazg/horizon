@@ -8,6 +8,7 @@ import './index.modules.scss'
 import { usePlayer } from '@/hooks'
 import { PlayInfoType } from '@/utils/player'
 import { episodePlayProgressUpdate } from '@/api/episode'
+import { updatePlayedList, updatePlayedListType } from '@/api/played'
 import { ReadConfig } from 'wailsjs/go/bridge/App'
 
 export const PlayController: React.FC = () => {
@@ -24,6 +25,19 @@ export const PlayController: React.FC = () => {
     duration: 0,
     liked: false,
   })
+
+  /**
+   * 更新播放历史
+   */
+  const onUpdatePlayedList = () => {
+    const params: updatePlayedListType = {
+      eid: playInfo.eid,
+    }
+
+    updatePlayedList(params).catch((err) => {
+      console.error(err)
+    })
+  }
 
   /**
    * 更新单集播放进度
@@ -69,13 +83,19 @@ export const PlayController: React.FC = () => {
       if (player.isPlaying) {
         onUpdateProgress()
       }
-    }, 1000 * 20)
+    }, 1000 * 60)
 
     return () => {
       clearInterval(checkLoading)
       clearInterval(timer)
     }
   }, [player])
+
+  useEffect(() => {
+    if (player.isPlaying) {
+      onUpdatePlayedList()
+    }
+  }, [player.episodeInfo.eid])
 
   return (
     <>
