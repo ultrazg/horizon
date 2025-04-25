@@ -73,15 +73,16 @@ export const StickerModal: React.FC<IProps> = ({
       onClose={onClose}
     >
       <ScrollArea
-        type="auto"
+        type="hover"
         scrollbars="vertical"
-        style={{ height, paddingRight: 10 }}
+        style={{ height }}
       >
         <Grid
           columns="4"
           mt="3"
           gap="3"
           width="auto"
+          mr="2"
         >
           {stickerLists.map((sticker: stickerType, index: number) => (
             <Box
