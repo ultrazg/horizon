@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
 import { BsPlayFill, BsPauseFill } from 'react-icons/bs'
 import { Spinner, Tooltip } from '@radix-ui/themes'
 import { HeartIcon, HeartFilledIcon } from '@radix-ui/react-icons'
@@ -20,6 +20,7 @@ export const PlayerButtons: React.FC<IProps> = ({ player, playInfo }) => {
   const [left, setLeft] = useState<boolean>(false)
   const [right, setRight] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
+  const [playbackRate, setPlaybackRate] = useState<string>('1')
 
   /**
    * 收藏
@@ -83,9 +84,24 @@ export const PlayerButtons: React.FC<IProps> = ({ player, playInfo }) => {
     }, 300)
   }
 
+  /**
+   * 播放速度
+   * @param e
+   */
+  const onSpeedChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    if (player.isPlaying) {
+      player.setPlaybackRate(Number(e.target.value))
+      setPlaybackRate(e.target.value)
+    }
+  }
+
   useEffect(() => {
     setIsPlaying(player.isPlaying)
   }, [player.isPlaying])
+
+  useEffect(() => {
+    setPlaybackRate(String(player.playbackRate))
+  }, [player.playInfo.eid])
 
   return (
     <div className="player-buttons-layout">
@@ -153,6 +169,26 @@ export const PlayerButtons: React.FC<IProps> = ({ player, playInfo }) => {
             />
           </div>
         </Tooltip>
+
+        <div className="player-speed">
+          <Tooltip content={CONSTANT.PLAYER_SPEED}>
+            <select
+              value={playbackRate}
+              onChange={(value) => onSpeedChange(value)}
+            >
+              <option value="0.5">0.5x</option>
+              <option value="0.8">0.8x</option>
+              <option value="1">1x</option>
+              <option value="1.1">1.1x</option>
+              <option value="1.2">1.2x</option>
+              <option value="1.3">1.3x</option>
+              <option value="1.3">1.5x</option>
+              <option value="1.7">1.7x</option>
+              <option value="2">2x</option>
+              <option value="3">3x</option>
+            </select>
+          </Tooltip>
+        </div>
       </div>
     </div>
   )

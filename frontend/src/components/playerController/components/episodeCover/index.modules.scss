@@ -2,6 +2,8 @@
   width: 85%;
   height: 85%;
   display: flex;
+  user-select: none;
+  -webkit-user-select: none;
 
   .episode-cover {
     display: flex;

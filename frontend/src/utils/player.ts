@@ -185,6 +185,13 @@ class Player {
       current: this.currentTime,
     }
   }
+
+  /**
+   * 获取播放倍速
+   */
+  get playbackRate(): number {
+    return this.audio.playbackRate
+  }
 }
 
 export default Player

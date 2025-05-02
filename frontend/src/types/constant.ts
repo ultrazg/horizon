@@ -17,6 +17,7 @@ export enum CONSTANT {
   NO_PLAY = '未在播放',
   PLAYER_FAST_FORWARD = '向前 15 秒',
   PLAYER_REWIND = '向后 15 秒',
+  PLAYER_SPEED = '播放倍速',
   PLAYER_PLAY = '播放',
   PLAYER_PAUSE = '暂停',
   PLAYER_LIKED = '收藏',
