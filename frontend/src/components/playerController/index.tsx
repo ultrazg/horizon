@@ -9,7 +9,9 @@ import { usePlayer } from '@/hooks'
 import { PlayInfoType } from '@/utils/player'
 import { episodePlayProgressUpdate } from '@/api/episode'
 import { updatePlayedList, updatePlayedListType } from '@/api/played'
+import { mileageUpdate, type mileageUpdateType } from '@/api/mileage'
 import { ReadConfig } from 'wailsjs/go/bridge/App'
+import dayjs from 'dayjs'
 
 export const PlayController: React.FC = () => {
   const player = usePlayer()
@@ -25,6 +27,32 @@ export const PlayController: React.FC = () => {
     duration: 0,
     liked: false,
   })
+
+  /**
+   * 更新收听概览
+   */
+  const onMileageUpdate = (startTime: number, endTime: number) => {
+    const params: mileageUpdateType = {
+      tracking: [
+        {
+          eid: playInfo.eid,
+          pid: playInfo.pid,
+          startPlayingTimestamp: startTime,
+          endPlayingTimestamp: endTime,
+          isSpeaker: false,
+          isOffline: false,
+          isTrial: false,
+          withSpeed: player.playbackRate,
+        },
+      ],
+    }
+
+    mileageUpdate(params)
+      .then()
+      .catch((err) => {
+        console.error(err)
+      })
+  }
 
   /**
    * 更新播放历史
@@ -77,7 +105,7 @@ export const PlayController: React.FC = () => {
       setPlayerLoading(player.isLoading)
       setPlayInfo(player.playInfo)
       setProgress(Math.round(player.playInfo.current))
-    }, 100)
+    }, 500)
 
     const timer = setInterval(() => {
       if (player.isPlaying) {
@@ -96,6 +124,21 @@ export const PlayController: React.FC = () => {
       onUpdatePlayedList()
     }
   }, [player.episodeInfo.eid])
+
+  useEffect(() => {
+    if (player.isPlaying) {
+      const timer = setInterval(() => {
+        const endTime = dayjs().valueOf()
+        const startTime = dayjs().subtract(60, 'seconds').valueOf()
+
+        onMileageUpdate(startTime, endTime)
+      }, 60 * 1000)
+
+      return () => {
+        clearInterval(timer)
+      }
+    }
+  }, [player.isPlaying])
 
   return (
     <>
