@@ -1,0 +1,34 @@
+@import '@/assets/global/_variables.scss';
+@import '@/assets/global/_common.scss';
+
+.crashWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+
+  .crashTitle {
+    @include no-select;
+    text-align: center;
+    font-size: 1.7rem;
+    color: $secondary-font-color;
+    margin-bottom: 1.5rem;
+  }
+
+  .crashMessage {
+    width: 96%;
+    font-size: 1rem;
+    background: rgba(240, 128, 128, 0.1);
+    margin-bottom: 1.5rem;
+    height: 17rem;
+    overflow-y: scroll;
+    border-radius: 6px;
+    padding: 6px;
+
+    pre {
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+  }
+}

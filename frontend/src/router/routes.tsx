@@ -11,6 +11,7 @@ import {
   About,
   PodcastDetail,
   Launch,
+  Crash,
 } from '@/pages'
 import { Root } from '@/layouts'
 
@@ -18,6 +19,7 @@ export const router = createHashRouter([
   {
     path: '/',
     Component: Root,
+    errorElement: <Crash />,
     children: [
       {
         index: true,

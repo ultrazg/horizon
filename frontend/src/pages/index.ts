@@ -8,6 +8,7 @@ import { Profile } from './profile'
 import { About } from './about'
 import { PodcastDetail } from './podcastDetail'
 import { Launch } from './launch'
+import { Crash } from './crash'
 
 export {
   Home,
@@ -20,4 +21,5 @@ export {
   About,
   PodcastDetail,
   Launch,
+  Crash,
 }
