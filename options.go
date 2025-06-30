@@ -19,20 +19,13 @@ var assets embed.FS
 var icon []byte
 
 func AppOptions(app *bridge.App) *options.App {
-	dw, dh := bridge.GetDisplaySize()
-	var width int
-
-	if dw > 1280 {
-		width = 1280
-	} else {
-		width = int(float32(dw) * 0.7)
-	}
-
 	return &options.App{
-		Title:         bridge.APP_NAME,
-		Width:         width,
-		Height:        int(float32(dh) * 0.7),
-		DisableResize: true,
+		Title:     bridge.APP_NAME,
+		Width:     1024,
+		Height:    720,
+		MinWidth:  1024,
+		MinHeight: 720,
+		// DisableResize: true,
 		AssetServer: &assetserver.Options{
 			Assets:  assets,
 			Handler: bridge.NewHttpRequest(),
