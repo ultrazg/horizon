@@ -18,7 +18,7 @@ import {
   Storage,
 } from '@/utils'
 import { Launch } from '@/pages'
-import './index.modules.scss'
+import styles from './index.module.scss'
 import { CheckForUpgrade } from 'wailsjs/go/bridge/App'
 import dayjs from 'dayjs'
 import { UpgradeModal } from '@/pages/setting/components/upgradeModal'
@@ -110,18 +110,18 @@ export const Root: React.FC = () => {
   useEffect(() => {
     onReadConfigFunc()
   }, [])
-
-  useEffect(() => {
-    if (checkUpgrade) {
-      onCheckForUpgrade()
-    }
-  }, [checkUpgrade])
-
-  useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTo({ top: 0 })
-    }
-  }, [location])
+  //
+  // useEffect(() => {
+  //   if (checkUpgrade) {
+  //     onCheckForUpgrade()
+  //   }
+  // }, [checkUpgrade])
+  //
+  // useEffect(() => {
+  //   if (scrollRef.current) {
+  //     scrollRef.current.scrollTo({ top: 0 })
+  //   }
+  // }, [location])
 
   return (
     <>
@@ -129,87 +129,87 @@ export const Root: React.FC = () => {
         <Launch />
       ) : (
         <>
-          <div className="root-layout">
-            <nav className="nav-layout">
-              <NavUser />
+          <div className={styles.rootLayout}>
+            {/*  <nav className="nav-layout">*/}
+            {/*    <NavUser />*/}
 
-              <ul>
-                <li>
-                  <NavLink
-                    to="/"
-                    className={({ isActive, isPending }) =>
-                      isPending ? 'pending' : isActive ? 'active' : ''
-                    }
-                  >
-                    <span className="icon-box">
-                      <GlobeIcon className="icon" />
-                    </span>
-                    发现
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    to="search"
-                    className={({ isActive, isPending }) =>
-                      isPending ? 'pending' : isActive ? 'active' : ''
-                    }
-                  >
-                    <span className="icon-box">
-                      <MagnifyingGlassIcon className="icon" />
-                    </span>
-                    搜索
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    to="subscription"
-                    className={({ isActive, isPending }) =>
-                      isPending ? 'pending' : isActive ? 'active' : ''
-                    }
-                  >
-                    <span className="icon-box">
-                      <CardStackIcon className="icon" />
-                    </span>
-                    订阅
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    to="favorites"
-                    className={({ isActive, isPending }) =>
-                      isPending ? 'pending' : isActive ? 'active' : ''
-                    }
-                  >
-                    <span className="icon-box">
-                      <StarIcon className="icon" />
-                    </span>
-                    收藏
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    to="setting"
-                    className={({ isActive, isPending }) =>
-                      isPending ? 'pending' : isActive ? 'active' : ''
-                    }
-                  >
-                    <span className="icon-box">
-                      <GearIcon className="icon" />
-                    </span>
-                    设置
-                  </NavLink>
-                </li>
-              </ul>
-            </nav>
+            {/*    <ul>*/}
+            {/*      <li>*/}
+            {/*        <NavLink*/}
+            {/*          to="/"*/}
+            {/*          className={({ isActive, isPending }) =>*/}
+            {/*            isPending ? 'pending' : isActive ? 'active' : ''*/}
+            {/*          }*/}
+            {/*        >*/}
+            {/*          <span className="icon-box">*/}
+            {/*            <GlobeIcon className="icon" />*/}
+            {/*          </span>*/}
+            {/*          发现*/}
+            {/*        </NavLink>*/}
+            {/*      </li>*/}
+            {/*      <li>*/}
+            {/*        <NavLink*/}
+            {/*          to="search"*/}
+            {/*          className={({ isActive, isPending }) =>*/}
+            {/*            isPending ? 'pending' : isActive ? 'active' : ''*/}
+            {/*          }*/}
+            {/*        >*/}
+            {/*          <span className="icon-box">*/}
+            {/*            <MagnifyingGlassIcon className="icon" />*/}
+            {/*          </span>*/}
+            {/*          搜索*/}
+            {/*        </NavLink>*/}
+            {/*      </li>*/}
+            {/*      <li>*/}
+            {/*        <NavLink*/}
+            {/*          to="subscription"*/}
+            {/*          className={({ isActive, isPending }) =>*/}
+            {/*            isPending ? 'pending' : isActive ? 'active' : ''*/}
+            {/*          }*/}
+            {/*        >*/}
+            {/*          <span className="icon-box">*/}
+            {/*            <CardStackIcon className="icon" />*/}
+            {/*          </span>*/}
+            {/*          订阅*/}
+            {/*        </NavLink>*/}
+            {/*      </li>*/}
+            {/*      <li>*/}
+            {/*        <NavLink*/}
+            {/*          to="favorites"*/}
+            {/*          className={({ isActive, isPending }) =>*/}
+            {/*            isPending ? 'pending' : isActive ? 'active' : ''*/}
+            {/*          }*/}
+            {/*        >*/}
+            {/*          <span className="icon-box">*/}
+            {/*            <StarIcon className="icon" />*/}
+            {/*          </span>*/}
+            {/*          收藏*/}
+            {/*        </NavLink>*/}
+            {/*      </li>*/}
+            {/*      <li>*/}
+            {/*        <NavLink*/}
+            {/*          to="setting"*/}
+            {/*          className={({ isActive, isPending }) =>*/}
+            {/*            isPending ? 'pending' : isActive ? 'active' : ''*/}
+            {/*          }*/}
+            {/*        >*/}
+            {/*          <span className="icon-box">*/}
+            {/*            <GearIcon className="icon" />*/}
+            {/*          </span>*/}
+            {/*          设置*/}
+            {/*        </NavLink>*/}
+            {/*      </li>*/}
+            {/*    </ul>*/}
+            {/*  </nav>*/}
 
-            <div className="outlet-layout">
-              <ScrollArea
-                type="hover"
-                ref={scrollRef}
-              >
-                <Outlet />
-              </ScrollArea>
-            </div>
+            {/*  <div className="outlet-layout">*/}
+            {/*    <ScrollArea*/}
+            {/*      type="hover"*/}
+            {/*      ref={scrollRef}*/}
+            {/*    >*/}
+            {/*      <Outlet />*/}
+            {/*    </ScrollArea>*/}
+            {/*  </div>*/}
           </div>
 
           <PlayController />

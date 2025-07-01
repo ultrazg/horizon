@@ -1,9 +1,9 @@
-.root-layout {
+.rootLayout {
   display: flex;
   padding-top: 35px;
   height: calc(100vh - 70px);
 
-  .nav-layout {
+  .navLayout {
     width: 200px;
 
     ul {
@@ -62,7 +62,7 @@
     }
   }
 
-  .outlet-layout {
+  .outletLayout {
     flex: 4;
     padding-bottom: 35px;
   }
