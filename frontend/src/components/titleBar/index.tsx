@@ -1,6 +1,15 @@
 import { useEffect, useState } from 'react'
-import { Quit, WindowMinimise } from 'wailsjs/runtime/runtime'
-import { Cross1Icon, MinusIcon } from '@radix-ui/react-icons'
+import {
+  Quit,
+  WindowMinimise,
+  WindowToggleMaximise,
+} from 'wailsjs/runtime/runtime'
+import {
+  Cross1Icon,
+  MinusIcon,
+  EnterFullScreenIcon,
+  ExitFullScreenIcon,
+} from '@radix-ui/react-icons'
 import { Environment } from 'wailsjs/runtime'
 import { envType } from '@/types/env'
 import { APP_NAME, APP_VERSION } from '@/utils'
@@ -8,6 +17,12 @@ import './index.modules.scss'
 
 export const TitleBar = () => {
   const [envInfo, setEnvInfo] = useState<envType>()
+  const [isMaximised, setIsMaximised] = useState<boolean>(false)
+
+  const toggleWindowMaximised = (): void => {
+    WindowToggleMaximise()
+    setIsMaximised(!isMaximised)
+  }
 
   useEffect(() => {
     Environment().then((res: envType) => {
@@ -48,6 +63,14 @@ export const TitleBar = () => {
               title="最小化"
             >
               <MinusIcon />
+            </div>
+            <div
+              onClick={() => {
+                toggleWindowMaximised()
+              }}
+              title={isMaximised ? '还原' : '最大化'}
+            >
+              {isMaximised ? <ExitFullScreenIcon /> : <EnterFullScreenIcon />}
             </div>
             <div
               onClick={() => {
