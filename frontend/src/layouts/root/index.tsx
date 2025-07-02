@@ -1,14 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
-import {
-  MagnifyingGlassIcon,
-  GlobeIcon,
-  CardStackIcon,
-  StarIcon,
-  GearIcon,
-} from '@radix-ui/react-icons'
-import { ScrollArea } from '@radix-ui/themes'
-import { NavLink, Outlet, useLocation } from 'react-router-dom'
-import { PlayController, NavUser, TitleBar } from '@/components'
+import { Outlet, useLocation } from 'react-router-dom'
+import { PlayController, TitleBar } from '@/components'
 import { useNavigateTo } from '@/hooks'
 import {
   ReadConfig,
@@ -28,7 +20,7 @@ import { userType } from '@/types/user'
 export const Root: React.FC = () => {
   const scrollRef = useRef<HTMLDivElement | null>(null)
   const [loading, setLoading] = useState<boolean>(true)
-  const [checkUpgrade, setcheckUpgrade] = useState<boolean>(false)
+  const [checkUpgrade, setCheckUpgrade] = useState<boolean>(false)
   const [upgradeModal, setUpgradeModal] = useState<boolean>(false)
   const location = useLocation()
 
@@ -62,7 +54,7 @@ export const Root: React.FC = () => {
     ReadConfig()
       .then(async (res) => {
         if (res.setting.checkUpdateOnStartup) {
-          setcheckUpgrade(true)
+          setCheckUpgrade(true)
         }
 
         if (res?.user?.accessToken) {
@@ -110,13 +102,13 @@ export const Root: React.FC = () => {
   useEffect(() => {
     onReadConfigFunc()
   }, [])
-  //
-  // useEffect(() => {
-  //   if (checkUpgrade) {
-  //     onCheckForUpgrade()
-  //   }
-  // }, [checkUpgrade])
-  //
+
+  useEffect(() => {
+    if (checkUpgrade) {
+      onCheckForUpgrade()
+    }
+  }, [checkUpgrade])
+
   // useEffect(() => {
   //   if (scrollRef.current) {
   //     scrollRef.current.scrollTo({ top: 0 })
@@ -131,15 +123,8 @@ export const Root: React.FC = () => {
         <>
           <TitleBar />
 
-          <div className={styles.rootLayout}>
-            <div className="outlet-layout">
-              <ScrollArea
-                type="hover"
-                ref={scrollRef}
-              >
-                <Outlet />
-              </ScrollArea>
-            </div>
+          <div className={styles['outlet-layout']}>
+            <Outlet />
           </div>
 
           <PlayController />

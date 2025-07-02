@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box, Flex, ScrollArea, Skeleton } from '@radix-ui/themes'
-import './index.moduless.scss'
+import styles from './index.module.scss'
 import { ColorfulShadow } from '@/components'
 import { RecommendedType } from '@/pages/home'
 
@@ -12,11 +12,11 @@ type IProps = {
 
 const Recommended: React.FC<IProps> = ({ data, loading, onDetail }) => {
   return (
-    <div className="recommended-layout">
+    <div className={styles['recommended-layout']}>
       <h3>精选节目</h3>
 
       <Skeleton loading={loading}>
-        <div className="recommended-content">
+        <div className={styles['recommended-content']}>
           <ScrollArea
             size="2"
             type="hover"
@@ -28,10 +28,10 @@ const Recommended: React.FC<IProps> = ({ data, loading, onDetail }) => {
             >
               {data?.target?.map((item) => (
                 <Box key={item.podcast.pid}>
-                  <div className="recommended-item">
-                    <div className="cover-box">
+                  <div className={styles['recommended-item']}>
+                    <div className={styles['cover-box']}>
                       <ColorfulShadow
-                        className="cover"
+                        className={styles['cover']}
                         src={item.podcast.image.picUrl}
                         curPointer
                         onClick={() => {
@@ -40,8 +40,10 @@ const Recommended: React.FC<IProps> = ({ data, loading, onDetail }) => {
                       />
                     </div>
 
-                    <div className="podcast-info">
-                      <div className="podcast-title">{item.podcast.title}</div>
+                    <div className={styles['podcast-info']}>
+                      <div className={styles['podcast-title']}>
+                        {item.podcast.title}
+                      </div>
                     </div>
                   </div>
                 </Box>

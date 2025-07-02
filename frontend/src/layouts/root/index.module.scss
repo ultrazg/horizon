@@ -1,16 +1,3 @@
-.rootLayout {
-  display: flex;
-  padding-top: 95px;
-  //padding-top: 35px;
-  //height: calc(100vh - 75px);
-  height: 100vh;
-
-  .navLayout {
-    width: 200px;
-  }
-
-  .outletLayout {
-    flex: 4;
-    padding-bottom: 35px;
-  }
+.outlet-layout {
+  padding: 95px 12rem;
 }

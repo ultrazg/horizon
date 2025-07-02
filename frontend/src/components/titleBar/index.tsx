@@ -15,14 +15,18 @@ import {
 } from '@radix-ui/react-icons'
 import { Environment } from 'wailsjs/runtime'
 import { envType } from '@/types/env'
-import { APP_NAME, APP_VERSION } from '@/utils'
+import { APP_NAME, APP_VERSION, Storage } from '@/utils'
 import styles from './index.module.scss'
 import { NavLink } from 'react-router-dom'
 import { Avatar, TextField } from '@radix-ui/themes'
+import { userType } from '@/types/user'
 
 export const TitleBar = () => {
   const [envInfo, setEnvInfo] = useState<envType>()
   const [isMaximised, setIsMaximised] = useState<boolean>(false)
+  const [info, setInfo] = useState<userType>({
+    uid: '',
+  })
 
   const toggleWindowMaximised = (): void => {
     WindowToggleMaximise()
@@ -33,6 +37,10 @@ export const TitleBar = () => {
     Environment().then((res: envType) => {
       setEnvInfo(res)
     })
+
+    const data: userType = Storage.get('user_info')
+
+    setInfo(data)
   }, [])
 
   return (
@@ -139,15 +147,22 @@ export const TitleBar = () => {
                 收藏
               </NavLink>
             </li>
+            <li>
+              <NavLink
+                to="setting"
+                className={({ isActive, isPending }) =>
+                  isPending ? 'pending' : isActive ? styles['active'] : ''
+                }
+              >
+                设置
+              </NavLink>
+            </li>
           </ul>
         </div>
 
         <div className={styles['right-part']}>
           <div className={styles['search-input']}>
-            <TextField.Root
-              // size="3"
-              placeholder="输入关键字"
-            >
+            <TextField.Root placeholder="搜索">
               <TextField.Slot>
                 <MagnifyingGlassIcon
                   height="16"
@@ -157,11 +172,19 @@ export const TitleBar = () => {
             </TextField.Root>
           </div>
           <div className={styles['avatar']}>
-            <Avatar
-              radius="full"
-              src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?&w=256&h=256&q=70&crop=focalpoint&fp-x=0.5&fp-y=0.3&fp-z=1&fit=crop"
-              fallback="A"
-            />
+            <NavLink
+              to="profile"
+              className={({ isActive, isPending }) =>
+                isPending ? 'pending' : isActive ? styles['active'] : ''
+              }
+            >
+              <Avatar
+                radius="full"
+                src={info.avatar}
+                title={info.nickname}
+                fallback={info.nickname || 'avatar'}
+              />
+            </NavLink>
           </div>
         </div>
       </div>
