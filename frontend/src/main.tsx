@@ -21,7 +21,7 @@ root.render(
     <ToastProvider>
       <Theme
         hasBackground={false}
-        radius="medium"
+        radius="large"
         appearance="dark"
         accentColor="purple"
       >

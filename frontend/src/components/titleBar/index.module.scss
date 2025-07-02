@@ -1,33 +1,36 @@
 @import '@/assets/global/_variables.scss';
 
 .title-bar-windows-layout {
+  background: rgba(255, 0, 0, 0.22);
   width: 100%;
   position: fixed;
   top: 0;
   z-index: 1000;
-  height: 35px;
+  height: 75px;
   cursor: default;
   user-select: none;
   -webkit-user-select: none;
   display: flex;
   align-items: center;
-  font-weight: bold;
 
   .title-bar-text {
     color: $secondary-font-color;
     padding-left: 10px;
     width: 100%;
+    position: absolute;
+    top: 4px;
+    font-size: 16px;
   }
 
   .title-bar-button {
     position: absolute;
+    top: 0;
     right: 0;
-    height: 100%;
+    height: 30px;
     display: flex;
 
     div {
       width: 50px;
-      height: 100%;
       transition: 0.2s;
       display: flex;
       align-items: center;
@@ -74,34 +77,140 @@
   //padding: 0 88px;
   //padding-left: 8rem;
   //padding-right: 8rem;
+}
 
-  .navbar-layout {
-    //width: 100%;
-    height: 100%;
-    background: rgba(255, 192, 203, 0.55);
+.navbar-layout {
+  width: 100%;
+  height: 32px;
+  //background: rgba(255, 192, 203, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12rem;
+  margin-top: 10px;
+
+  .nav-button {
+    text-align: center;
+    width: 32px;
+    height: 32px;
+    //height: 100%;
+    text-decoration: none;
+    font-weight: 600;
+    //font-size: 18px;
+    color: white;
+    cursor: default;
+    border-radius: 6px;
+    transition: 0.2s;
+    overflow: hidden;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 0 8rem;
+    justify-content: center;
 
-    div {
-      &:first-child {
-        //flex: 1;
-        width: 250px;
-        background: rgba(0, 0, 255, 0.2);
-      }
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
 
-      &:nth-child(2) {
-        //flex: 1;
-        width: 250px;
-        background: rgba(255, 255, 0, 0.2);
-      }
+    &:active {
+      background: rgba(255, 255, 255, 0.2);
+    }
+  }
 
-      &:last-child {
-        //flex: 1;
-        width: 250px;
-        background: rgba(240, 128, 128, 0.2);
+  //div {
+  //display: flex;
+  //height: 32px;
+
+  .left-part {
+    display: flex;
+    //flex: 1;
+    width: 250px;
+    //background: rgba(0, 0, 255, 0.2);
+    //align-items: start;
+    justify-content: start;
+  }
+
+  .middle-part {
+    //flex: 1;
+    width: 250px;
+    //align-items: center;
+    justify-content: center;
+    //background: rgba(255, 255, 0, 0.2);
+
+    ul {
+      display: flex;
+
+      li {
+        //padding: 0 14px;
+        height: 32px;
+        line-height: 32px;
+        display: flex;
+        //margin-bottom: 8px;
+
+        &:nth-child(2) {
+          margin-left: 6px;
+          margin-right: 6px;
+        }
+
+        a {
+          text-align: center;
+          width: 64px;
+          //height: 100%;
+          text-decoration: none;
+          font-weight: 600;
+          //font-size: 18px;
+          color: white;
+          cursor: default;
+          border-radius: 6px;
+          transition: 0.2s;
+          overflow: hidden;
+          //display: flex;
+
+          &:hover {
+            background: rgba(255, 255, 255, 0.1);
+          }
+
+          &:active {
+            background: rgba(255, 255, 255, 0.2);
+          }
+        }
+
+        .active {
+          background: rgba(255, 255, 255, 0.1);
+        }
       }
     }
   }
+
+  .right-part {
+    height: 32px;
+    display: flex;
+    //flex: 1;
+    width: 250px;
+    align-items: center;
+    justify-content: end;
+    //background: rgba(240, 128, 128, 0.2);
+
+    .search-input {
+      width: 168px;
+      height: 100%;
+      margin-right: 6px;
+
+      input {
+        border-radius: 6px !important;
+      }
+    }
+
+    .avatar {
+      width: 32px;
+      height: 100%;
+      cursor: pointer;
+
+      span {
+        display: block;
+        width: 32px;
+        height: 32px;
+      }
+    }
+  }
+
+  //}
 }

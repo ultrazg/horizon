@@ -14,7 +14,7 @@ function App() {
 
   return (
     <>
-      <TitleBar />
+      {/*<TitleBar />*/}
       <RouterProvider router={router} />
     </>
   )

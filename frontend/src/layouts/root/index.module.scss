@@ -1,65 +1,12 @@
 .rootLayout {
   display: flex;
-  padding-top: 35px;
-  height: calc(100vh - 70px);
+  padding-top: 95px;
+  //padding-top: 35px;
+  //height: calc(100vh - 75px);
+  height: 100vh;
 
   .navLayout {
     width: 200px;
-
-    ul {
-      li {
-        padding: 0 14px;
-        height: 48px;
-        line-height: 48px;
-        display: flex;
-        margin-bottom: 8px;
-
-        a {
-          width: 100%;
-          text-decoration: none;
-          font-weight: 600;
-          font-size: 18px;
-          color: white;
-          cursor: default;
-          border-radius: 6px;
-          transition: 0.2s;
-          overflow: hidden;
-          display: flex;
-
-          &:hover {
-            background: rgba(255, 255, 255, 0.1);
-          }
-
-          &:active {
-            background: rgba(255, 255, 255, 0.2);
-          }
-
-          .icon-box {
-            display: flex;
-            height: 100%;
-            justify-content: center;
-            align-items: center;
-
-            .icon {
-              display: inline-block;
-              width: 20px;
-              height: 20px;
-              margin-left: 10px;
-              margin-right: 10px;
-              transition: 0.2s;
-            }
-          }
-        }
-
-        .active {
-          background: rgba(255, 255, 255, 0.1);
-        }
-
-        &:last-child {
-          margin-bottom: 0;
-        }
-      }
-    }
   }
 
   .outletLayout {
