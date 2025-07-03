@@ -14,7 +14,7 @@ import {
 import { following, follower } from '@/api/follow'
 import { relationUpdata } from '@/api/relation'
 import { useDisplayInfo } from '@/hooks'
-import './index.modules.scss'
+import styles from './index.module.scss'
 import { imageType } from '@/types/image'
 import { toast, ShowMessageDialog, DialogType } from '@/utils'
 import { SlSymbleFemale, SlSymbolMale } from 'react-icons/sl'
@@ -153,7 +153,7 @@ export const FollowModal: React.FC<IProps> = ({ uid, type, onClose, open }) => {
     >
       <Spinner loading={loading}>
         {lists.length > 0 ? (
-          <div className="follow-modal">
+          <div className={styles['follow-modal']}>
             <ScrollArea
               type="hover"
               scrollbars="vertical"
@@ -178,13 +178,13 @@ export const FollowModal: React.FC<IProps> = ({ uid, type, onClose, open }) => {
                     index: number,
                   ) => (
                     <Box
-                      className="chunk"
+                      className={styles['chunk']}
                       mb="4"
                       key={index}
                     >
                       <Flex gap="2">
                         <Avatar
-                          className="avatar"
+                          className={styles['avatar']}
                           src={item.avatar.picture.picUrl}
                           fallback={item.nickname}
                           onClick={() => {
@@ -196,7 +196,7 @@ export const FollowModal: React.FC<IProps> = ({ uid, type, onClose, open }) => {
                         />
                         <Box>
                           <Text
-                            className="nickname"
+                            className={styles['nickname']}
                             mb="1"
                             size="3"
                             title={item.nickname}

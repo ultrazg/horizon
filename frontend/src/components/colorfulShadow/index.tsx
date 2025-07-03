@@ -1,5 +1,5 @@
 import React from 'react'
-import './index.modules.scss'
+import styles from './index.module.scss'
 import { PlayIcon } from '@radix-ui/react-icons'
 
 type ColorfulShadowType = {
@@ -31,25 +31,27 @@ export const ColorfulShadow: React.FC<ColorfulShadowType> = ({
 }): JSX.Element => {
   return (
     <div
-      className={`colorful-shadow-layout ${className}`}
+      className={`${styles['colorful-shadow-layout']} ${className}`}
       style={style}
       onClick={onClick}
     >
       <div
-        className="pic-box"
+        className={styles['pic-box']}
         style={{ cursor: `${curPointer ? 'pointer' : 'default'}` }}
       >
         <img
           src={src}
-          className="origin_pic"
+          className={styles['origin_pic']}
+          alt="origin_pic"
         />
         <img
           src={src}
-          className="shadow"
+          className={styles['shadow']}
+          alt="shadow"
         />
         {mask && (
-          <div className="mask">
-            <div className="circle">
+          <div className={styles['mask']}>
+            <div className={styles['circle']}>
               <PlayIcon />
             </div>
           </div>

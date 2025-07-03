@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import './index.modules.scss'
+import styles from './index.module.scss'
 import { useDisplayInfo } from '@/hooks'
 
 type IProps = {
@@ -61,11 +61,11 @@ export const CoverBox: React.FC<IProps> = ({
 
   return (
     <div
-      className="cover-box-layout"
+      className={styles['cover-box-layout']}
       style={{ height: `${height * 0.4}px` }}
     >
       <div
-        className="cover-box"
+        className={styles['cover-box']}
         style={{ width: `${height * 0.4}px`, height: `${height * 0.4}px` }}
         onClick={() => {
           handleToggle()

@@ -16,7 +16,7 @@ import { useDisplayInfo } from '@/hooks'
 import { mileageList } from '@/api/mileage'
 import { formatTime } from '../mileageDuration'
 import { mileageType } from '@/types/mileage'
-import './index.modules.scss'
+import styles from './index.module.scss'
 
 type IProps = {
   data: mileageType & { time: number[] }
@@ -62,11 +62,11 @@ export const MileageModal: React.FC<IProps> = ({ data, open, onClose }) => {
       open={open}
       onClose={onClose}
     >
-      <div className="tagline-layout">
+      <div className={styles['tagline-layout']}>
         <div>
-          <span className="num">{playedData.time[0]}</span>
+          <span className={styles['num']}>{playedData.time[0]}</span>
           小时
-          <span className="num">{playedData.time[1]}</span>
+          <span className={styles['num']}>{playedData.time[1]}</span>
           分钟
         </div>
         <div>{playedData.tagline}</div>
@@ -103,7 +103,7 @@ export const MileageModal: React.FC<IProps> = ({ data, open, onClose }) => {
                   >
                     {item.podcast.title}
                   </Heading>
-                  <Text className="played-time">
+                  <Text className={styles['played-time']}>
                     {formatTime(item.playedSeconds)[0] === 0
                       ? ''
                       : formatTime(item.playedSeconds)[0] + '时'}

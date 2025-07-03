@@ -15,3 +15,9 @@ export const useBack = () => {
     navigate(-1)
   }
 }
+
+export const useForward = () => {
+  return () => {
+    window.history.forward()
+  }
+}

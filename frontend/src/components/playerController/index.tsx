@@ -4,7 +4,7 @@ import { EpisodeCover } from './components/episodeCover'
 import { VolumeController } from './components/volumeController'
 import { PlayerButtons } from './components/playerButtons'
 import { Slider } from '@radix-ui/themes'
-import './index.modules.scss'
+import styles from './index.module.scss'
 import { usePlayer } from '@/hooks'
 import { PlayInfoType } from '@/utils/player'
 import { episodePlayProgressUpdate } from '@/api/episode'
@@ -142,10 +142,10 @@ export const PlayController: React.FC = () => {
 
   return (
     <>
-      <div className="play-controller-layout">
-        <div className="progress-layout">
+      <div className={styles['play-controller-layout']}>
+        <div className={styles['progress-layout']}>
           <Slider
-            className="progress-slider"
+            className={styles['progress-slider']}
             size="1"
             step={1}
             min={0}
@@ -160,7 +160,7 @@ export const PlayController: React.FC = () => {
           />
         </div>
 
-        <div className="left">
+        <div className={styles['left']}>
           <EpisodeCover
             player={player}
             playInfo={playInfo}
@@ -171,14 +171,14 @@ export const PlayController: React.FC = () => {
           />
         </div>
 
-        <div className="middle">
+        <div className={styles['middle']}>
           <PlayerButtons
             player={player}
             playInfo={playInfo}
           />
         </div>
 
-        <div className="right">
+        <div className={styles['right']}>
           <VolumeController player={player} />
         </div>
       </div>

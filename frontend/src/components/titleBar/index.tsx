@@ -20,8 +20,11 @@ import styles from './index.module.scss'
 import { NavLink } from 'react-router-dom'
 import { Avatar, TextField } from '@radix-ui/themes'
 import { userType } from '@/types/user'
+import { useBack, useForward } from '@/hooks'
 
 export const TitleBar = () => {
+  const back = useBack()
+  const forward = useForward()
   const [envInfo, setEnvInfo] = useState<envType>()
   const [isMaximised, setIsMaximised] = useState<boolean>(false)
   const [info, setInfo] = useState<userType>({
@@ -106,11 +109,19 @@ export const TitleBar = () => {
         }
       >
         <div className={styles['left-part']}>
-          <a className={styles['nav-button']}>
+          <a
+            title="后退"
+            className={styles['nav-button']}
+            onClick={back}
+          >
             <ArrowLeftIcon />
           </a>
 
-          <a className={styles['nav-button']}>
+          <a
+            title="前进"
+            className={styles['nav-button']}
+            onClick={forward}
+          >
             <ArrowRightIcon />
           </a>
         </div>

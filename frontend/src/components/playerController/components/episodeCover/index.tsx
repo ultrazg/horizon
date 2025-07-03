@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Spinner } from '@radix-ui/themes'
 import { CaretUpIcon } from '@radix-ui/react-icons'
-import './index.modules.scss'
+import styles from './index.module.scss'
 import { Player } from '@/utils'
 import COVER_PLACEHOLDER from '@/assets/images/cover-placeholder.png'
 import { PlayInfoType } from '@/utils/player'
@@ -29,19 +29,19 @@ export const EpisodeCover: React.FC<IProps> = ({
 }) => {
   return (
     <>
-      <div className="episode-cover-layout">
+      <div className={styles['episode-cover-layout']}>
         <Spinner
           size="3"
           loading={playerLoading}
         >
-          <div className="episode-cover">
+          <div className={styles['episode-cover']}>
             <img
               src={playInfo.cover ? playInfo.cover : COVER_PLACEHOLDER}
               alt="episode-cover"
               draggable={false}
             />
             <div
-              className="mask"
+              className={styles['mask']}
               onClick={() => {
                 if (player.playInfo.eid != '') {
                   onOpen()
@@ -53,13 +53,13 @@ export const EpisodeCover: React.FC<IProps> = ({
           </div>
         </Spinner>
 
-        <div className="episode-info">
-          <div className="episode-title">
+        <div className={styles['episode-info']}>
+          <div className={styles['episode-title']}>
             <h4 title={playInfo.title || CONSTANT.NO_PLAY}>
               {playInfo.title || CONSTANT.NO_PLAY}
             </h4>
           </div>
-          <div className="episode-info">
+          <div className={styles['episode-info']}>
             <div>
               <span>{secondsToHms(Math.round(playInfo.current))}</span>
               <span>/</span>

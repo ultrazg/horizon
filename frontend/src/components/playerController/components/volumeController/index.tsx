@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { SpeakerLoudIcon, SpeakerOffIcon } from '@radix-ui/react-icons'
 import { Button, Slider } from '@radix-ui/themes'
-import './index.modules.scss'
+import styles from './index.module.scss'
 import { Player } from '@/utils'
 
 type IProps = {
@@ -40,8 +40,8 @@ export const VolumeController: React.FC<IProps> = ({ player }) => {
 
   return (
     <>
-      <div className="volume-layout">
-        <div className="volume-value">
+      <div className={styles['volume-layout']}>
+        <div className={styles['volume-value']}>
           <Button
             variant="ghost"
             onClick={() => {
@@ -51,7 +51,7 @@ export const VolumeController: React.FC<IProps> = ({ player }) => {
             {isMuted ? <SpeakerOffIcon /> : <SpeakerLoudIcon />}
           </Button>
         </div>
-        <div className="volume-slider">
+        <div className={styles['volume-slider']}>
           <Slider
             max={1}
             step={0.05}

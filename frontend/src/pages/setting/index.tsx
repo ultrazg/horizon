@@ -41,7 +41,7 @@ import {
 import { BlockedModal } from './components/blockedModal'
 import { ProxyModal } from './components/proxyModal'
 import { UpgradeModal } from './components/upgradeModal'
-import './index.modules.scss'
+import styles from './index.module.scss'
 import { CONSTANT } from '@/types/constant'
 import { CheckForUpgrade } from 'wailsjs/go/bridge/App'
 import dayjs from 'dayjs'
@@ -174,14 +174,14 @@ export const Setting: React.FC = () => {
   }, [])
 
   return (
-    <div className="setting-layout">
-      <h3>设置</h3>
-
+    <div className={styles['setting-layout']}>
       <h4>账号绑定</h4>
       <Card>
         <Flex>
           <Box width="100%">手机号</Box>
-          <Box className="content_text">{userInfo.mobilePhoneNumber}</Box>
+          <Box className={styles['content_text']}>
+            {userInfo.mobilePhoneNumber}
+          </Box>
         </Flex>
         {userInfo.wechatUserInfo?.nickName && (
           <>
@@ -191,7 +191,7 @@ export const Setting: React.FC = () => {
             />
             <Flex>
               <Box width="100%">微信</Box>
-              <Box className="content_text">
+              <Box className={styles['content_text']}>
                 {userInfo.wechatUserInfo?.nickName}
               </Box>
             </Flex>
@@ -206,7 +206,7 @@ export const Setting: React.FC = () => {
             />
             <Flex>
               <Box width="100%">即刻</Box>
-              <Box className="content_text">
+              <Box className={styles['content_text']}>
                 {userInfo.jikeUserInfo?.nickname}
               </Box>
             </Flex>
@@ -446,8 +446,8 @@ export const Setting: React.FC = () => {
         </Flex>
       </Card>
 
-      <div className="app-logo">
-        <div className="logo">
+      <div className={styles['app-logo']}>
+        <div className={styles['logo']}>
           <img
             src={APP_ICON}
             alt="app_icon"
@@ -455,7 +455,7 @@ export const Setting: React.FC = () => {
         </div>
       </div>
 
-      <div className="app-info">
+      <div className={styles['app-info']}>
         <div>{APP_NAME}</div>
         <p>
           v{APP_VERSION}_{envInfo?.platform}_{envInfo?.arch}

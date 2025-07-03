@@ -9,7 +9,7 @@ import { Storage } from '@/utils'
 import { userType, userStats } from '@/types/user'
 import { getUserStats } from '@/api/user'
 import { PlayedList } from './components/playedList'
-import './index.modules.scss'
+import styles from './index.module.scss'
 
 export const Profile: React.FC = () => {
   const userInfo: userType = Storage.get('user_info')
@@ -57,9 +57,9 @@ export const Profile: React.FC = () => {
   }, [])
 
   return (
-    <div className="profile-layout">
-      <div className="profile-content">
-        <div className="profile-avatar">
+    <div className={styles['profile-layout']}>
+      <div className={styles['profile-content']}>
+        <div className={styles['profile-avatar']}>
           <Avatar
             size="9"
             src={userInfo.avatar}
@@ -67,10 +67,10 @@ export const Profile: React.FC = () => {
             radius="full"
           />
         </div>
-        <div className="profile-info">
-          <div className="profile-nickname">
+        <div className={styles['profile-info']}>
+          <div className={styles['profile-nickname']}>
             {userInfo.nickname}
-            <span className="gender">
+            <span className={styles['gender']}>
               {userInfo?.gender === 'MALE' ? (
                 <SlSymbolMale
                   fontSize="18"
@@ -89,13 +89,13 @@ export const Profile: React.FC = () => {
             my="1"
             size="4"
           />
-          <div className="profile-follow">
+          <div className={styles['profile-follow']}>
             <Flex
               gap="3"
               align="center"
             >
               <div
-                className="chunk"
+                className={styles['chunk']}
                 onClick={() => {
                   onFollowHandle('FOLLOWING')
                 }}
@@ -104,12 +104,12 @@ export const Profile: React.FC = () => {
                 <p>关注</p>
               </div>
               <Separator
-                className="separator"
+                className={styles['separator']}
                 size="2"
                 orientation="vertical"
               />
               <div
-                className="chunk"
+                className={styles['chunk']}
                 onClick={() => {
                   onFollowHandle('FOLLOWER')
                 }}
@@ -118,12 +118,12 @@ export const Profile: React.FC = () => {
                 <p>粉丝</p>
               </div>
               <Separator
-                className="separator"
+                className={styles['separator']}
                 size="2"
                 orientation="vertical"
               />
               <div
-                className="chunk"
+                className={styles['chunk']}
                 onClick={() => {
                   goMySubscribe()
                 }}
@@ -133,8 +133,12 @@ export const Profile: React.FC = () => {
               </div>
             </Flex>
           </div>
-          <div className="profile-bio">{userInfo.bio || '还没有设置签名'}</div>
-          <div className="profile-ip">IP属地：{userInfo.ipLoc || '未知'}</div>
+          <div className={styles['profile-bio']}>
+            {userInfo.bio || '还没有设置签名'}
+          </div>
+          <div className={styles['profile-ip']}>
+            IP属地：{userInfo.ipLoc || '未知'}
+          </div>
         </div>
       </div>
 

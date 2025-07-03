@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import './index.modules.scss'
+import styles from './index.module.scss'
 import {
   Avatar,
   Badge,
@@ -178,7 +178,7 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
 
   return (
     <>
-      <div className="player-comment-layout">
+      <div className={styles['player-comment-layout']}>
         <Text
           size="5"
           style={{ fontWeight: 'bold' }}
@@ -191,13 +191,13 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
           scrollbars="vertical"
           style={{ height: `${height - 100}px` }}
         >
-          <div className="player-comment-content">
+          <div className={styles['player-comment-content']}>
             {commentData.records.map((item) => (
               <div
                 key={item.id}
-                className="player-comment-item"
+                className={styles['player-comment-item']}
               >
-                <div className="player-comment-author">
+                <div className={styles['player-comment-author']}>
                   <div
                     onClick={() => {
                       setProfileModal({
@@ -244,7 +244,7 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
                     </p>
                   </div>
                   <div
-                    className="player-comment-more-action"
+                    className={styles['player-comment-more-action']}
                     style={item.collected ? { opacity: 1 } : {}}
                   >
                     <span>
@@ -297,7 +297,7 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
                     {item.likeCount}
                   </div>
                 </div>
-                <div className="player-comment-body">
+                <div className={styles['player-comment-body']}>
                   {item.pinned && (
                     <Badge
                       color="violet"
@@ -313,14 +313,16 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
                   />
                 </div>
                 {item.replies && item.replies.length > 0 && (
-                  <div className="player-comment-replies">
+                  <div className={styles['player-comment-replies']}>
                     {item.replies.map((itm) => (
                       <div
                         key={itm.id}
-                        className="player-comment-reply"
+                        className={styles['player-comment-reply']}
                         title={`${itm.author.nickname}：${itm.text}`}
                       >
-                        <span className="player-comment-reply-nickname">
+                        <span
+                          className={styles['player-comment-reply-nickname']}
+                        >
                           {itm.author.nickname}
                         </span>
                         ：{itm.text}
@@ -329,7 +331,7 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
 
                     {item.threadReplyCount > 2 && (
                       <div
-                        className="player-comment-more-reply"
+                        className={styles['player-comment-more-reply']}
                         onClick={() => {
                           setReplyModal({
                             primaryComment: item,
@@ -346,7 +348,7 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
             ))}
 
             {!isEmpty(loadMoreKey) && (
-              <div className="load-more-button">
+              <div className={styles['load-more-button']}>
                 <Button
                   variant="soft"
                   color="gray"

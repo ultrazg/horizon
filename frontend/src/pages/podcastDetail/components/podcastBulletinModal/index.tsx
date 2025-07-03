@@ -4,7 +4,7 @@ import { EyeOpenIcon } from '@radix-ui/react-icons'
 import { Empty, Modal } from '@/components'
 import { modalType } from '@/types/modal'
 import { PodcastBulletinType } from '@/types/podcast'
-import './index.modules.scss'
+import styles from './index.module.scss'
 import { useDisplayInfo } from '@/hooks'
 import dayjs from 'dayjs'
 
@@ -33,13 +33,16 @@ export const PodcastBulletinModal: React.FC<IProps> = ({
       onClose={onClose}
     >
       {data ? (
-        <div className="PBM-wrapper">
-          <div className="PBM-podcast-info">
-            <div className="left">
-              <img src={data.podcast.image.picUrl} />
+        <div className={styles['PBM-wrapper']}>
+          <div className={styles['PBM-podcast-info']}>
+            <div className={styles['left']}>
+              <img
+                src={data.podcast.image.picUrl}
+                alt="podcast_picture"
+              />
             </div>
-            <div className="middle">{data.podcast.title}</div>
-            <div className="right">
+            <div className={styles['middle']}>{data.podcast.title}</div>
+            <div className={styles['right']}>
               <EyeOpenIcon /> {data.uniqueVisitorCount}
             </div>
           </div>
@@ -54,7 +57,7 @@ export const PodcastBulletinModal: React.FC<IProps> = ({
             scrollbars="vertical"
             style={{ maxHeight: height }}
           >
-            <div className="bulletin-content">{data.content}</div>
+            <div className={styles['bulletin-content']}>{data.content}</div>
 
             {data.pictures.length > 0 &&
               data.pictures.map((item) => (
@@ -65,7 +68,7 @@ export const PodcastBulletinModal: React.FC<IProps> = ({
                 />
               ))}
 
-            <div className="create-time">
+            <div className={styles['create-time']}>
               {dayjs(data.createdAt).format('YYYY-MM-DD HH:mm:ss')} 发布
             </div>
           </ScrollArea>

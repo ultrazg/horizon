@@ -1,6 +1,6 @@
 import { Box, Card, Flex, ScrollArea, Avatar, Skeleton } from '@radix-ui/themes'
 import { PlayIcon } from '@radix-ui/react-icons'
-import './index.modules.scss'
+import styles from './index.module.scss'
 import { ColorfulShadow, ProfileModal } from '@/components'
 import { PeopleLikeType } from '@/pages/home'
 import React, { useState } from 'react'
@@ -26,11 +26,11 @@ const PeopleLike: React.FC<IProps> = ({ data, loading, onDetail }) => {
   })
 
   return (
-    <div className="people-like-layout">
+    <div className={styles['people-like-layout']}>
       <h3>TA们的喜欢</h3>
 
       <Skeleton loading={loading}>
-        <div className="people-like-content">
+        <div className={styles['people-like-content']}>
           <ScrollArea
             size="2"
             type="hover"
@@ -43,10 +43,10 @@ const PeopleLike: React.FC<IProps> = ({ data, loading, onDetail }) => {
             >
               {data.map((item) => (
                 <Box key={item.pick.id}>
-                  <Card className="card">
-                    <div className="user-info">
+                  <Card className={styles['card']}>
+                    <div className={styles['user-info']}>
                       <div
-                        className="l"
+                        className={styles['l']}
                         onClick={() => {
                           setProfileModal({
                             open: true,
@@ -62,7 +62,7 @@ const PeopleLike: React.FC<IProps> = ({ data, loading, onDetail }) => {
                         />
                       </div>
                       <div
-                        className="m"
+                        className={styles['m']}
                         onClick={() => {
                           setProfileModal({
                             open: true,
@@ -73,7 +73,7 @@ const PeopleLike: React.FC<IProps> = ({ data, loading, onDetail }) => {
                         <p>{item.pick.user.nickname}</p>
                         <p>{dayjs(item.pick.pickedAt).format('MM/DD')}</p>
                       </div>
-                      <div className="r">
+                      <div className={styles['r']}>
                         {item.pick.likeCount}
                         <img
                           src={item.pick.story.iconUrl}
@@ -83,16 +83,16 @@ const PeopleLike: React.FC<IProps> = ({ data, loading, onDetail }) => {
                     </div>
 
                     <div
-                      className="comment"
+                      className={styles['comment']}
                       title={item.pick.story.text}
                     >
                       {item.pick.story.text}
                     </div>
 
-                    <div className="episode_info">
-                      <div className="l">
+                    <div className={styles['episode_info']}>
+                      <div className={styles['l']}>
                         <ColorfulShadow
-                          className="episode_cover"
+                          className={styles['episode_cover']}
                           src={
                             item.pick.episode.image?.picUrl
                               ? item.pick.episode.image.picUrl
@@ -100,7 +100,7 @@ const PeopleLike: React.FC<IProps> = ({ data, loading, onDetail }) => {
                           }
                         />
                       </div>
-                      <div className="m">
+                      <div className={styles['m']}>
                         <p
                           onClick={() => {
                             showEpisodeDetailModal(item.pick.episode.eid)
@@ -118,7 +118,7 @@ const PeopleLike: React.FC<IProps> = ({ data, loading, onDetail }) => {
                         </p>
                       </div>
                       <div
-                        className="r"
+                        className={styles['r']}
                         onClick={() => {
                           const episodeInfo: PlayerEpisodeInfoType = {
                             title: item.pick.episode.title,
@@ -137,7 +137,7 @@ const PeopleLike: React.FC<IProps> = ({ data, loading, onDetail }) => {
                           player.play()
                         }}
                       >
-                        <div className="play_button">
+                        <div className={styles['play_button']}>
                           <PlayIcon />
                         </div>
                       </div>

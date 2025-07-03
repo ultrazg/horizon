@@ -1,9 +1,8 @@
 @import '@/assets/global/_variables.scss';
 
 .player-drawer-layout {
-  margin-top: 35px;
   position: fixed;
-  z-index: 99;
+  z-index: 1001;
   left: 0;
   transition: 0.7s ease-in-out;
 

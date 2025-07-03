@@ -5,7 +5,7 @@ import { SlBubble, SlEarphones } from 'react-icons/sl'
 import { userType } from '@/types/user'
 import { Storage } from '@/utils'
 import { playedList } from '@/api/played'
-import './index.modules.scss'
+import styles from './index.module.scss'
 import { usePlayer } from '@/hooks'
 import { PlayerEpisodeInfoType } from '@/utils/player'
 import { EpisodeType } from '@/types/episode'
@@ -35,17 +35,17 @@ export const PlayedList: React.FC = () => {
   }, [])
 
   return (
-    <div className="history-content">
+    <div className={styles['history-content']}>
       <h3>最近听过</h3>
 
       {playedLists.map((item) => (
         <div
-          className="history-episode-item"
+          className={styles['history-episode-item']}
           key={item.eid}
         >
-          <div className="left">
+          <div className={styles['left']}>
             <ColorfulShadow
-              className="episode-cover"
+              className={styles['episode-cover']}
               curPointer
               mask
               src={item?.image ? item.image.picUrl : item.podcast.image.picUrl}
@@ -65,7 +65,7 @@ export const PlayedList: React.FC = () => {
               }}
             />
           </div>
-          <div className="right">
+          <div className={styles['right']}>
             <p>{item.title}</p>
             <p>{item.description}</p>
             <p>

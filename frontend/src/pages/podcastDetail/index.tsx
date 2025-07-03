@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { ColorfulShadow, NavBackButton, ProfileModal } from '@/components'
+import { ColorfulShadow, ProfileModal } from '@/components'
 import { useLocation, useNavigate } from 'react-router-dom'
 import {
   AspectRatio,
@@ -21,7 +21,7 @@ import {
 } from '@/api/podcast'
 import { episodeList } from '@/api/episode'
 import { PodcastBulletinType, PodcastType } from '@/types/podcast'
-import './index.modules.scss'
+import styles from './index.module.scss'
 import '@/assets/global/animate.css'
 import { EpisodeType } from '@/types/episode'
 import { isEmpty } from 'lodash'
@@ -298,12 +298,10 @@ export const PodcastDetail: React.FC = () => {
   }, [pid])
 
   return (
-    <div className="podcast-detail-layout">
-      <NavBackButton />
-
-      <div className="podcast-detail-info">
-        <div className="pdi-top">
-          <Box className="pdi-top-cover">
+    <div className={styles['podcast-detail-layout']}>
+      <div className={styles['podcast-detail-info']}>
+        <div className={styles['pdi-top']}>
+          <Box className={styles['pdi-top-cover']}>
             <img
               src={podcastDetailData?.image?.picUrl}
               alt={podcastDetailData?.title}
@@ -316,7 +314,7 @@ export const PodcastDetail: React.FC = () => {
             />
           </Box>
 
-          <div className="pdi-top-description">
+          <div className={styles['pdi-top-description']}>
             <div>
               <Heading
                 size="9"
@@ -335,7 +333,7 @@ export const PodcastDetail: React.FC = () => {
               >
                 {podcastDetailData?.description}
               </Text>
-              <div className="sub">
+              <div className={styles['sub']}>
                 <Text
                   size="5"
                   mr="5"
@@ -397,20 +395,20 @@ export const PodcastDetail: React.FC = () => {
           </div>
         </div>
 
-        <div className="podcast-detail">
+        <div className={styles['podcast-detail']}>
           <Box
             mt="6"
             width="100%"
             height="100%"
           >
-            <div className="podcasters">
-              <div className="label">节目主播</div>
+            <div className={styles['podcasters']}>
+              <div className={styles['label']}>节目主播</div>
 
-              <div className="layout">
+              <div className={styles['layout']}>
                 {podcastDetailData?.podcasters?.map((item) => (
                   <div
                     key={item.uid}
-                    className="podcaster"
+                    className={styles['podcaster']}
                     onClick={() => {
                       setProfileModal({
                         open: true,
@@ -419,7 +417,7 @@ export const PodcastDetail: React.FC = () => {
                     }}
                     title={item.nickname}
                   >
-                    <div className="top">
+                    <div className={styles['top']}>
                       <AspectRatio ratio={1}>
                         <img
                           src={item.avatar.picture.picUrl}
@@ -427,23 +425,25 @@ export const PodcastDetail: React.FC = () => {
                         />
                       </AspectRatio>
                     </div>
-                    <div className="bottom">{item.nickname}</div>
+                    <div className={styles['bottom']}>{item.nickname}</div>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="episode-lists">
-              <div className="label">节目列表({episodeData.total})</div>
+            <div className={styles['episode-lists']}>
+              <div className={styles['label']}>
+                节目列表({episodeData.total})
+              </div>
 
               {episodeData.records.map((item) => (
                 <div
-                  className="episode-item"
+                  className={styles['episode-item']}
                   key={item.eid}
                 >
-                  <div className="left">
+                  <div className={styles['left']}>
                     <ColorfulShadow
-                      className="episode-cover"
+                      className={styles['episode-cover']}
                       curPointer
                       mask
                       src={
@@ -467,7 +467,7 @@ export const PodcastDetail: React.FC = () => {
                       }}
                     />
                   </div>
-                  <div className="right">
+                  <div className={styles['right']}>
                     <p>{item.title}</p>
                     <p>{item.description}</p>
                     <p>
@@ -492,7 +492,7 @@ export const PodcastDetail: React.FC = () => {
                     ? { display: 'none' }
                     : { paddingBottom: '3rem' }
                 }
-                className="load-more-button"
+                className={styles['load-more-button']}
               >
                 <Button
                   color="gray"
@@ -508,10 +508,10 @@ export const PodcastDetail: React.FC = () => {
           </Box>
         </div>
 
-        <div className="recommended-layout">
-          <div className="label">相关节目推荐</div>
+        <div className={styles['recommended-layout']}>
+          <div className={styles['label']}>相关节目推荐</div>
 
-          <div className="recommended-content">
+          <div className={styles['recommended-content']}>
             <ScrollArea
               size="2"
               type="hover"
@@ -523,10 +523,10 @@ export const PodcastDetail: React.FC = () => {
               >
                 {podcastRelatedList?.map((item) => (
                   <Box key={item.podcast.pid}>
-                    <div className="recommended-item">
-                      <div className="cover-box">
+                    <div className={styles['recommended-item']}>
+                      <div className={styles['cover-box']}>
                         <ColorfulShadow
-                          className="cover"
+                          className={styles['cover']}
                           src={item.podcast.image.picUrl}
                           curPointer
                           onClick={() => {
@@ -535,8 +535,10 @@ export const PodcastDetail: React.FC = () => {
                         />
                       </div>
 
-                      <div className="podcast-info">
-                        <p className="podcast-title">{item.podcast.title}</p>
+                      <div className={styles['podcast-info']}>
+                        <p className={styles['podcast-title']}>
+                          {item.podcast.title}
+                        </p>
                       </div>
                     </div>
                   </Box>

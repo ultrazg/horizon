@@ -15,7 +15,7 @@ import { pickListHistory } from '@/api/pick'
 import { PickRecentType } from '@/types/pick'
 import dayjs from 'dayjs'
 import { CONSTANT } from '@/types/constant'
-import './index.modules.scss'
+import styles from './index.module.scss'
 
 type IProps = {
   perspective: '他' | '她' | 'TA'
@@ -79,13 +79,13 @@ export const PickModal: React.FC<IProps> = ({
           scrollbars="vertical"
           style={{ height }}
         >
-          <div className="pm-like-content">
+          <div className={styles['pm-like-content']}>
             {records.map((item) => (
               <Card
-                className="pm-like-item"
+                className={styles['pm-like-item']}
                 key={item.id}
               >
-                <div className="top">
+                <div className={styles['top']}>
                   <span>{dayjs(item.pickedAt).format('MM/DD')}</span>
                   <span>
                     <span>{item.likeCount}</span>
@@ -96,7 +96,7 @@ export const PickModal: React.FC<IProps> = ({
                   </span>
                 </div>
                 <div
-                  className="middle"
+                  className={styles['middle']}
                   title={item.story.text}
                 >
                   {item.story.text}
@@ -105,16 +105,16 @@ export const PickModal: React.FC<IProps> = ({
                   my="3"
                   size="4"
                 />
-                <div className="bottom">
+                <div className={styles['bottom']}>
                   {item.episode.status === 'REMOVED' ? (
-                    <div className="episode-removed">
+                    <div className={styles['episode-removed']}>
                       {CONSTANT.EPISODE_STATUS_REMOVED}
                     </div>
                   ) : (
                     <>
-                      <div className="left">
+                      <div className={styles['left']}>
                         <ColorfulShadow
-                          className="episode-cover"
+                          className={styles['episode-cover']}
                           curPointer
                           src={
                             item.episode?.image
@@ -123,7 +123,7 @@ export const PickModal: React.FC<IProps> = ({
                           }
                         />
                       </div>
-                      <div className="right">
+                      <div className={styles['right']}>
                         <p>{item.episode.title}</p>
                         <p>{item.episode.podcast.title}</p>
                       </div>

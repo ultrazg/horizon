@@ -154,12 +154,13 @@
           }
 
           &:active {
-            background: rgba(255, 255, 255, 0.2);
+            background: $main-color-opacity-1;
           }
         }
 
         .active {
-          background: rgba(255, 255, 255, 0.1);
+          background: $main-color-opacity-1;
+          color: $main-color;
         }
       }
     }

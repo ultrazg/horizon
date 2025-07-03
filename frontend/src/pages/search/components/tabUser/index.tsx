@@ -4,7 +4,7 @@ import { ProfileModal, Empty } from '@/components'
 import { baseUserType } from '@/types/user'
 import { SlSymbleFemale, SlSymbolMale } from 'react-icons/sl'
 import { isEmpty } from 'lodash'
-import './index.modules.scss'
+import styles from './index.module.scss'
 
 type IProps = {
   data: { records: baseUserType[]; loadMoreKey: {} }
@@ -23,12 +23,12 @@ export const TabUser: React.FC<IProps> = ({ data, onLoadMore, loading }) => {
 
   return (
     <>
-      <div className="search-result-user-layout">
+      <div className={styles['search-result-user-layout']}>
         {data.records.length === 0 && <Empty />}
         {data.records.map((item) => (
           <div
             key={item.uid}
-            className="search-result-user-item"
+            className={styles['search-result-user-item']}
             onClick={() => {
               setProfileModal({
                 open: true,
@@ -36,14 +36,14 @@ export const TabUser: React.FC<IProps> = ({ data, onLoadMore, loading }) => {
               })
             }}
           >
-            <div className="user-avatar">
+            <div className={styles['user-avatar']}>
               <Avatar
-                className="avatar-box"
+                className={styles['avatar-box']}
                 src={item?.avatar?.picture?.picUrl}
                 fallback={item.nickname}
               />
             </div>
-            <div className="user-info">
+            <div className={styles['user-info']}>
               <p>
                 {item.nickname}
                 {item?.gender === 'MALE' ? (
@@ -61,12 +61,12 @@ export const TabUser: React.FC<IProps> = ({ data, onLoadMore, loading }) => {
                   />
                 ) : null}
               </p>
-              <p className="user-bio">{item.bio}</p>
+              <p className={styles['user-bio']}>{item.bio}</p>
             </div>
           </div>
         ))}
 
-        <div className="user-load-more-button">
+        <div className={styles['user-load-more-button']}>
           {!isEmpty(data.loadMoreKey) && (
             <Button
               color="gray"

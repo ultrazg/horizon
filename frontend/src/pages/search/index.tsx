@@ -16,7 +16,7 @@ import { search } from '@/api/search'
 import { TabPodcast } from './components/tabPodcast'
 import { TabEpisode } from './components/tabEpisode'
 import { TabUser } from './components/tabUser'
-import './index.modules.scss'
+import styles from './index.module.scss'
 import { isEmpty } from 'lodash'
 import { toast, Storage } from '@/utils'
 
@@ -141,12 +141,12 @@ export const Search: React.FC = () => {
   }, [])
 
   return (
-    <div className="search-layout">
+    <div className={styles['search-layout']}>
       <h3>搜索</h3>
 
-      <div className="search-content">
-        <div className="search-input">
-          <div className="left">
+      <div className={styles['search-content']}>
+        <div className={styles['search-input']}>
+          <div className={styles['left']}>
             <TextField.Root
               size="3"
               placeholder="输入关键字"
@@ -162,7 +162,7 @@ export const Search: React.FC = () => {
             </TextField.Root>
           </div>
 
-          <div className="right">
+          <div className={styles['right']}>
             <Button
               size="3"
               onClick={() => {
@@ -177,8 +177,8 @@ export const Search: React.FC = () => {
         </div>
 
         {!isEmpty(searchHistory) && (
-          <div className="search_history">
-            <div className="search_history_title">
+          <div className={styles['search_history']}>
+            <div className={styles['search_history_title']}>
               <span>搜索历史</span>
 
               <IconButton
@@ -219,7 +219,7 @@ export const Search: React.FC = () => {
           </div>
         )}
 
-        <div className="search-result">
+        <div className={styles['search-result']}>
           <Tabs.Root
             value={searchParams.type}
             onValueChange={onTabChangeHandle}

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Avatar, Button, Card, IconButton, Separator } from '@radix-ui/themes'
 import { TrashIcon } from '@radix-ui/react-icons'
 import { BiLike, BiSolidLike } from 'react-icons/bi'
-import './index.modules.scss'
+import styles from './index.module.scss'
 import { commentCollectList, commentCollectRemove } from '@/api/favorite'
 import { FavoriteCommentType } from '@/types/comment'
 import dayjs from 'dayjs'
@@ -100,11 +100,11 @@ const TabComment: React.FC = () => {
     <>
       {data.records.map((item) => (
         <Card
-          className="favorites-comment-item"
+          className={styles['favorites-comment-item']}
           key={item.id}
         >
-          <div className="top">
-            <div className="comment-avatar">
+          <div className={styles['top']}>
+            <div className={styles['comment-avatar']}>
               <Avatar
                 size="4"
                 src={item.author.avatar.picture.picUrl}
@@ -122,7 +122,7 @@ const TabComment: React.FC = () => {
                 }}
               />
             </div>
-            <div className="comment-info">
+            <div className={styles['comment-info']}>
               <p
                 onClick={() => {
                   if (item.author.isBlockedByViewer) {
@@ -141,7 +141,7 @@ const TabComment: React.FC = () => {
                 {dayjs(item.collectedAt).format('MM/DD')} {item.ipLoc}
               </p>
             </div>
-            <div className="remove-like">
+            <div className={styles['remove-like']}>
               <IconButton
                 size="1"
                 color="red"
@@ -153,7 +153,7 @@ const TabComment: React.FC = () => {
                 <TrashIcon />
               </IconButton>
             </div>
-            <div className="comment-like">
+            <div className={styles['comment-like']}>
               <IconButton
                 size="1"
                 variant="soft"
@@ -177,9 +177,9 @@ const TabComment: React.FC = () => {
             size="4"
           />
 
-          <div className="bottom">
+          <div className={styles['bottom']}>
             <div
-              className="episode-cover"
+              className={styles['episode-cover']}
               onClick={() => {
                 showEpisodeDetailModal(item.episode.eid)
               }}
@@ -195,7 +195,7 @@ const TabComment: React.FC = () => {
                 fallback={item.episode.title}
               />
             </div>
-            <div className="episode-info">
+            <div className={styles['episode-info']}>
               <p
                 onClick={() => {
                   showEpisodeDetailModal(item.episode.eid)
@@ -209,7 +209,7 @@ const TabComment: React.FC = () => {
         </Card>
       ))}
 
-      <div className="load-more-button">
+      <div className={styles['load-more-button']}>
         <Button
           size="1"
           color="gray"

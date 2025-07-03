@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import './index.modules.scss'
+import styles from './index.module.scss'
 import { ColorfulShadow } from '@/components'
 import { SlBubble, SlEarphones } from 'react-icons/sl'
 import { favoriteEpisodeList, favoriteEpisodeUpdate } from '@/api/favorite'
@@ -70,16 +70,16 @@ const TabEpisode: React.FC = () => {
   }, [])
 
   return (
-    <div className="favorites-episode-layout">
+    <div className={styles['favorites-episode-layout']}>
       <Spinner loading={loading}>
         {lists.map((item) => (
           <div
-            className="favorites-episode-item"
+            className={styles['favorites-episode-item']}
             key={item.eid}
           >
-            <div className="left">
+            <div className={styles['left']}>
               <ColorfulShadow
-                className="episode-cover"
+                className={styles['episode-cover']}
                 curPointer
                 mask
                 src={item.image ? item.image.picUrl : item.podcast.image.picUrl}
@@ -99,7 +99,7 @@ const TabEpisode: React.FC = () => {
                 }}
               />
             </div>
-            <div className="right">
+            <div className={styles['right']}>
               <p
                 title={item.title}
                 onClick={() => {
