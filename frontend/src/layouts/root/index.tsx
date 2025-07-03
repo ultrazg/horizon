@@ -109,11 +109,11 @@ export const Root: React.FC = () => {
     }
   }, [checkUpgrade])
 
-  // useEffect(() => {
-  //   if (scrollRef.current) {
-  //     scrollRef.current.scrollTo({ top: 0 })
-  //   }
-  // }, [location])
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }, [location])
 
   return (
     <>
@@ -123,7 +123,10 @@ export const Root: React.FC = () => {
         <>
           <TitleBar />
 
-          <div className={styles['outlet-layout']}>
+          <div
+            className={styles['outlet-layout']}
+            ref={scrollRef}
+          >
             <Outlet />
           </div>
 

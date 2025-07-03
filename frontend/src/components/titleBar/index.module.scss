@@ -1,7 +1,6 @@
 @import '@/assets/global/_variables.scss';
 
 .title-bar-windows-layout {
-  background: rgba(255, 0, 0, 0.22);
   width: 100%;
   position: fixed;
   top: 0;
@@ -12,6 +11,9 @@
   -webkit-user-select: none;
   display: flex;
   align-items: center;
+  background: rgba(38, 38, 38, 0.5);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
 
   .title-bar-text {
     color: $secondary-font-color;

@@ -35,6 +35,7 @@ const PeopleLike: React.FC<IProps> = ({ data, loading, onDetail }) => {
             size="2"
             type="hover"
             scrollbars="horizontal"
+            style={{ paddingBottom: 20 }}
           >
             <Flex
               gap="3"
