@@ -222,6 +222,26 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
       onGetPlayedList()
       getPickRecentList()
     }
+
+    return () => {
+      setProfileData(undefined)
+      setStats({
+        followerCount: 0,
+        followingCount: 0,
+        subscriptionCount: 0,
+        totalPlayedSeconds: 0,
+      })
+      setStickerData({
+        records: [],
+        total: 0,
+      })
+      setTime([0, 0, 0])
+      setPlayedLists([])
+      setPickRecentList({
+        records: [],
+        total: 0,
+      })
+    }
   }, [open])
 
   return (

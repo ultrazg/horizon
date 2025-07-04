@@ -4,44 +4,106 @@
 .search-layout {
   @include no-select;
 
-  padding: 0 14px;
-  height: 100%;
+  //padding: 0 14px;
+  //height: 100%;
 
-  h3 {
-    font-size: 1.8rem;
+  //h3 {
+  //  font-size: 1.8rem;
+  //}
+
+  //.search-content {
+  //  padding: 0 5rem;
+  //
+  //.search-input {
+  //  display: flex;
+  //  justify-items: center;
+  //  padding: 1rem 0;
+  //
+  //  .left {
+  //    flex: 5;
+  //  }
+  //
+  //  .right {
+  //    margin-left: 1rem;
+  //    flex: 1;
+  //
+  //    button {
+  //      width: 100%;
+  //    }
+  //  }
+  //}
+
+  //.search_history {
+  //  .search_history_title{
+  //    display: flex;
+  //    align-items: center;
+  //  }
+  //}
+
+  //.search-result {
+  //  display: block;
+  .search-category-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
   }
 
-  .search-content {
-    padding: 0 5rem;
+  .search-result {
+    width: 100%;
+    height: 11rem;
+    background: rgba(255, 192, 203, 0.1);
+    margin-bottom: 1rem;
 
-    .search-input {
-      display: flex;
-      justify-items: center;
-      padding: 1rem 0;
-
-      .left {
-        flex: 5;
-      }
-
-      .right {
-        margin-left: 1rem;
-        flex: 1;
-
-        button {
-          width: 100%;
-        }
-      }
+    &:last-child {
+      margin-bottom: 0;
     }
+  }
 
-    .search_history {
-      .search_history_title{
+  .search-result-user {
+    background: rgba(0, 128, 0, 0.25);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.2rem;
+    box-sizing: border-box;
+
+    .avatar-container {
+      //width: 100%;
+      //height: 100%;
+      width: 33.333%;
+      //height: 100%;
+      aspect-ratio: 1 / 1;
+      background: rgba(240, 128, 128, 0.29);
+
+      .avatar {
+        display: block;
+        width: 100%;
+        height: 100%;
+        //aspect-ratio: 1 / 1;
+        background: rgba(255, 0, 0, 0.27);
+      }
+
+      .username {
         display: flex;
+        //width: 33.333%;
+        //height: 24px;
         align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        //overflow: hidden;
+        //display: -webkit-box;
+        //line-clamp: 1;
+        //box-orient: vertical;
+        //-webkit-box-orient: vertical;
+        //-webkit-line-clamp: 1;
       }
     }
-
-    .search-result {
-      display: block;
-    }
   }
+
+  //}
+  //}
 }

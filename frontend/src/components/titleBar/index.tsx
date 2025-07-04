@@ -17,7 +17,7 @@ import { Environment } from 'wailsjs/runtime'
 import { envType } from '@/types/env'
 import { APP_NAME, APP_VERSION, Storage } from '@/utils'
 import styles from './index.module.scss'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import { Avatar, TextField } from '@radix-ui/themes'
 import { userType } from '@/types/user'
 import { useBack, useForward } from '@/hooks'
@@ -25,6 +25,7 @@ import { useBack, useForward } from '@/hooks'
 export const TitleBar = () => {
   const back = useBack()
   const forward = useForward()
+  const navigateTo = useNavigate()
   const [envInfo, setEnvInfo] = useState<envType>()
   const [isMaximised, setIsMaximised] = useState<boolean>(false)
   const [info, setInfo] = useState<userType>({
@@ -34,6 +35,16 @@ export const TitleBar = () => {
   const toggleWindowMaximised = (): void => {
     WindowToggleMaximise()
     setIsMaximised(!isMaximised)
+  }
+
+  const onSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      navigateTo('/search', {
+        state: {
+          keyword: e.currentTarget.value,
+        },
+      })
+    }
   }
 
   useEffect(() => {
@@ -100,14 +111,7 @@ export const TitleBar = () => {
         </>
       )}
 
-      <div
-        className={styles['navbar-layout']}
-        style={
-          {
-            '--wails-draggable': 'drag',
-          } as any
-        }
-      >
+      <div className={styles['navbar-layout']}>
         <div className={styles['left-part']}>
           <a
             title="后退"
@@ -172,8 +176,18 @@ export const TitleBar = () => {
         </div>
 
         <div className={styles['right-part']}>
-          <div className={styles['search-input']}>
-            <TextField.Root placeholder="搜索">
+          <div
+            className={styles['search-input']}
+            style={
+              {
+                '--wails-draggable': 'none',
+              } as any
+            }
+          >
+            <TextField.Root
+              placeholder="搜索"
+              onKeyDown={onSearch}
+            >
               <TextField.Slot>
                 <MagnifyingGlassIcon
                   height="16"

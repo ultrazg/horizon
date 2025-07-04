@@ -39,7 +39,17 @@ export const Subscription: React.FC = () => {
   return (
     <div className={styles['subscription-layout']}>
       {loading ? (
-        <Spinner size="3" />
+        <div
+          style={{
+            width: '100%',
+            height: '100px',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <Spinner size="3" />
+        </div>
       ) : lists.length === 0 ? (
         <Empty />
       ) : (

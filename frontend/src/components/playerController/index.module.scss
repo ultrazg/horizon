@@ -8,13 +8,13 @@
   backdrop-filter: saturate(180%) blur(20px);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
   display: flex;
-  padding: 0 12rem;
 
   .left {
     display: flex;
     flex: 1;
     justify-content: center;
     align-items: center;
+    padding-left: 11rem;
   }
 
   .middle {
@@ -26,6 +26,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    padding-right: 11rem;
   }
 
   .progress-layout {

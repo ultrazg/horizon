@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import {
   Box,
   Button,
@@ -19,8 +20,13 @@ import { TabUser } from './components/tabUser'
 import styles from './index.module.scss'
 import { isEmpty } from 'lodash'
 import { toast, Storage } from '@/utils'
+import { ColorfulShadow } from '@/components'
 
 export const Search: React.FC = () => {
+  const location = useLocation()
+
+  console.log('location', location)
+
   const [searchParams, setSearchParams] = useState({
     keyword: '',
     type: 'PODCAST',
@@ -142,131 +148,169 @@ export const Search: React.FC = () => {
 
   return (
     <div className={styles['search-layout']}>
-      <h3>搜索</h3>
+      {/*<h3>搜索</h3>*/}
 
-      <div className={styles['search-content']}>
-        <div className={styles['search-input']}>
-          <div className={styles['left']}>
-            <TextField.Root
-              size="3"
-              placeholder="输入关键字"
-              onChange={onChangeHandle}
-              value={searchParams.keyword}
+      {/*<div className={styles['search-content']}>*/}
+      {/*<div className={styles['search-input']}>*/}
+      {/*  <div className={styles['left']}>*/}
+      {/*    <TextField.Root*/}
+      {/*      size="3"*/}
+      {/*      placeholder="输入关键字"*/}
+      {/*      onChange={onChangeHandle}*/}
+      {/*      value={searchParams.keyword}*/}
+      {/*    >*/}
+      {/*      <TextField.Slot>*/}
+      {/*        <MagnifyingGlassIcon*/}
+      {/*          height="16"*/}
+      {/*          width="16"*/}
+      {/*        />*/}
+      {/*      </TextField.Slot>*/}
+      {/*    </TextField.Root>*/}
+      {/*  </div>*/}
+
+      {/*  <div className={styles['right']}>*/}
+      {/*    <Button*/}
+      {/*      size="3"*/}
+      {/*      onClick={() => {*/}
+      {/*        onSearch()*/}
+      {/*      }}*/}
+      {/*      disabled={!searchParams.keyword}*/}
+      {/*      loading={loading}*/}
+      {/*    >*/}
+      {/*      搜索*/}
+      {/*    </Button>*/}
+      {/*  </div>*/}
+      {/*</div>*/}
+
+      {/*{!isEmpty(searchHistory) && (*/}
+      {/*  <div className={styles['search_history']}>*/}
+      {/*    <div className={styles['search_history_title']}>*/}
+      {/*      <span>搜索历史</span>*/}
+
+      {/*      <IconButton*/}
+      {/*        size="1"*/}
+      {/*        color="gray"*/}
+      {/*        variant="ghost"*/}
+      {/*        style={{ marginLeft: 4 }}*/}
+      {/*        onClick={() => clearSearchHistory()}*/}
+      {/*      >*/}
+      {/*        <TrashIcon*/}
+      {/*          width="14"*/}
+      {/*          height="14"*/}
+      {/*        />*/}
+      {/*      </IconButton>*/}
+      {/*    </div>*/}
+      {/*    {searchHistory.map((item) => {*/}
+      {/*      return (*/}
+      {/*        <Badge*/}
+      {/*          key={item}*/}
+      {/*          color="gray"*/}
+      {/*          style={{ marginRight: 4, cursor: 'pointer' }}*/}
+      {/*        >*/}
+      {/*          <span onClick={() => onSearchHistoryClick(item)}>{item}</span>*/}
+
+      {/*          <IconButton*/}
+      {/*            size="1"*/}
+      {/*            variant="ghost"*/}
+      {/*            onClick={() => removeSearchHistoryKeyword(item)}*/}
+      {/*          >*/}
+      {/*            <Cross2Icon*/}
+      {/*              width="14"*/}
+      {/*              height="14"*/}
+      {/*            />*/}
+      {/*          </IconButton>*/}
+      {/*        </Badge>*/}
+      {/*      )*/}
+      {/*    })}*/}
+      {/*  </div>*/}
+      {/*)}*/}
+
+      {/*<div className={styles['search-result']}>*/}
+      {/*<Tabs.Root*/}
+      {/*  value={searchParams.type}*/}
+      {/*  onValueChange={onTabChangeHandle}*/}
+      {/*>*/}
+      {/*  <Tabs.List size="2">*/}
+      {/*    <Tabs.Trigger value="PODCAST">节目</Tabs.Trigger>*/}
+      {/*    <Tabs.Trigger value="EPISODE">单集</Tabs.Trigger>*/}
+      {/*    <Tabs.Trigger value="USER">用户</Tabs.Trigger>*/}
+      {/*  </Tabs.List>*/}
+
+      {/*  <Box pt="3">*/}
+      {/*    <Tabs.Content value="PODCAST">*/}
+      {/*      <TabPodcast*/}
+      {/*        data={data}*/}
+      {/*        onLoadMore={(loadMoreKey) => {*/}
+      {/*          onSearch('', loadMoreKey)*/}
+      {/*        }}*/}
+      {/*        onRefresh={() => {*/}
+      {/*          onSearch()*/}
+      {/*        }}*/}
+      {/*        loading={loading}*/}
+      {/*      />*/}
+      {/*    </Tabs.Content>*/}
+
+      {/*    <Tabs.Content value="EPISODE">*/}
+      {/*      <TabEpisode*/}
+      {/*        data={data}*/}
+      {/*        onLoadMore={(loadMoreKey) => {*/}
+      {/*          onSearch('', loadMoreKey)*/}
+      {/*        }}*/}
+      {/*        loading={loading}*/}
+      {/*      />*/}
+      {/*    </Tabs.Content>*/}
+
+      {/*    <Tabs.Content value="USER">*/}
+      {/*      <TabUser*/}
+      {/*        data={data}*/}
+      {/*        onLoadMore={(loadMoreKey) => {*/}
+      {/*          onSearch('', loadMoreKey)*/}
+      {/*        }}*/}
+      {/*        loading={loading}*/}
+      {/*      />*/}
+      {/*    </Tabs.Content>*/}
+      {/*  </Box>*/}
+      {/*</Tabs.Root>*/}
+      <div className={styles['search-category-title']}>
+        <h3>用户</h3>
+        <Button variant="ghost">查看更多</Button>
+      </div>
+
+      <div className={styles['search-result']}>
+        <div className={styles['search-result-user']}>
+          {Array.from({ length: 6 }).map((item: any) => (
+            <div
+              key={item}
+              className={styles['avatar-container']}
             >
-              <TextField.Slot>
-                <MagnifyingGlassIcon
-                  height="16"
-                  width="16"
+              <div className={styles['avatar']}>
+                <ColorfulShadow
+                  src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?&w=256&h=256&q=70&crop=focalpoint&fp-x=0.5&fp-y=0.3&fp-z=1&fit=crop"
+                  curPointer
+                  circle
                 />
-              </TextField.Slot>
-            </TextField.Root>
-          </div>
-
-          <div className={styles['right']}>
-            <Button
-              size="3"
-              onClick={() => {
-                onSearch()
-              }}
-              disabled={!searchParams.keyword}
-              loading={loading}
-            >
-              搜索
-            </Button>
-          </div>
-        </div>
-
-        {!isEmpty(searchHistory) && (
-          <div className={styles['search_history']}>
-            <div className={styles['search_history_title']}>
-              <span>搜索历史</span>
-
-              <IconButton
-                size="1"
-                color="gray"
-                variant="ghost"
-                style={{ marginLeft: 4 }}
-                onClick={() => clearSearchHistory()}
-              >
-                <TrashIcon
-                  width="14"
-                  height="14"
-                />
-              </IconButton>
+              </div>
+              <div className={styles['username']}>username</div>
             </div>
-            {searchHistory.map((item) => {
-              return (
-                <Badge
-                  key={item}
-                  color="gray"
-                  style={{ marginRight: 4, cursor: 'pointer' }}
-                >
-                  <span onClick={() => onSearchHistoryClick(item)}>{item}</span>
-
-                  <IconButton
-                    size="1"
-                    variant="ghost"
-                    onClick={() => removeSearchHistoryKeyword(item)}
-                  >
-                    <Cross2Icon
-                      width="14"
-                      height="14"
-                    />
-                  </IconButton>
-                </Badge>
-              )
-            })}
-          </div>
-        )}
-
-        <div className={styles['search-result']}>
-          <Tabs.Root
-            value={searchParams.type}
-            onValueChange={onTabChangeHandle}
-          >
-            <Tabs.List size="2">
-              <Tabs.Trigger value="PODCAST">节目</Tabs.Trigger>
-              <Tabs.Trigger value="EPISODE">单集</Tabs.Trigger>
-              <Tabs.Trigger value="USER">用户</Tabs.Trigger>
-            </Tabs.List>
-
-            <Box pt="3">
-              <Tabs.Content value="PODCAST">
-                <TabPodcast
-                  data={data}
-                  onLoadMore={(loadMoreKey) => {
-                    onSearch('', loadMoreKey)
-                  }}
-                  onRefresh={() => {
-                    onSearch()
-                  }}
-                  loading={loading}
-                />
-              </Tabs.Content>
-
-              <Tabs.Content value="EPISODE">
-                <TabEpisode
-                  data={data}
-                  onLoadMore={(loadMoreKey) => {
-                    onSearch('', loadMoreKey)
-                  }}
-                  loading={loading}
-                />
-              </Tabs.Content>
-
-              <Tabs.Content value="USER">
-                <TabUser
-                  data={data}
-                  onLoadMore={(loadMoreKey) => {
-                    onSearch('', loadMoreKey)
-                  }}
-                  loading={loading}
-                />
-              </Tabs.Content>
-            </Box>
-          </Tabs.Root>
+          ))}
         </div>
       </div>
+
+      <div className={styles['search-category-title']}>
+        <h3>节目</h3>
+        <Button variant="ghost">查看更多</Button>
+      </div>
+
+      <div className={styles['search-result']}></div>
+
+      <div className={styles['search-category-title']}>
+        <h3>单集</h3>
+        <Button variant="ghost">查看更多</Button>
+      </div>
+
+      <div className={styles['search-result']}></div>
+      {/*</div>*/}
+      {/*</div>*/}
     </div>
   )
 }
