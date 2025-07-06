@@ -7,144 +7,253 @@ import {
   TextField,
   Badge,
   IconButton,
+  Spinner,
 } from '@radix-ui/themes'
 import {
   MagnifyingGlassIcon,
   Cross2Icon,
   TrashIcon,
 } from '@radix-ui/react-icons'
-import { search } from '@/api/search'
+import { search, type searchType } from '@/api/search'
 import { TabPodcast } from './components/tabPodcast'
 import { TabEpisode } from './components/tabEpisode'
 import { TabUser } from './components/tabUser'
 import styles from './index.module.scss'
 import { isEmpty } from 'lodash'
 import { toast, Storage } from '@/utils'
-import { ColorfulShadow } from '@/components'
+import { ColorfulShadow, ProfileModal } from '@/components'
+import { baseUserType } from '@/types/user'
+import { EpisodeType } from '@/types/episode'
+import { PodcastType } from '@/types/podcast'
 
 export const Search: React.FC = () => {
   const location = useLocation()
-
-  console.log('location', location)
-
-  const [searchParams, setSearchParams] = useState({
-    keyword: '',
-    type: 'PODCAST',
-  })
+  const keyword = location.state.keyword
   const [data, setData] = useState<{ records: any[]; loadMoreKey: {} }>({
     records: [],
     loadMoreKey: {},
   })
-  const [loading, setLoading] = useState<boolean>(false)
-  const [searchHistory, setSearchHistory] = useState<string[]>([])
+  const [podcastResults, setPodcastResults] = useState<{
+    records: PodcastType[]
+    loading: boolean
+  }>({
+    records: [],
+    loading: false,
+  })
+  const [episodeResults, setEpisodeResults] = useState<{
+    records: EpisodeType[]
+    loading: boolean
+  }>({
+    records: [],
+    loading: false,
+  })
+  const [userResults, setUserResults] = useState<{
+    records: baseUserType[]
+    loading: boolean
+  }>({
+    records: [],
+    loading: false,
+  })
+  const [profileModal, setProfileModal] = useState<{
+    open: boolean
+    uid: string
+  }>({
+    open: false,
+    uid: '',
+  })
+  // const [searchHistory, setSearchHistory] = useState<string[]>([])
 
-  const saveSearchHistory = (keyword: string) => {
-    let history: string[] = Storage.get('search_history') || []
-    history = Array.isArray(history) ? [...history] : []
+  // const saveSearchHistory = (keyword: string) => {
+  //   let history: string[] = Storage.get('search_history') || []
+  //   history = Array.isArray(history) ? [...history] : []
+  //
+  //   history = history.filter((item) => item !== keyword)
+  //
+  //   if (history.length >= 20) {
+  //     history.shift()
+  //   }
+  //
+  //   history.push(keyword)
+  //
+  //   Storage.set('search_history', history.reverse())
+  //
+  //   getSearchHistory()
+  // }
 
-    history = history.filter((item) => item !== keyword)
+  // const getSearchHistory = () => {
+  //   let history = Storage.get('search_history')
+  //   history = Array.isArray(history) ? [...history] : []
+  //
+  //   setSearchHistory(() => history)
+  // }
 
-    if (history.length >= 20) {
-      history.shift()
-    }
+  // const clearSearchHistory = () => {
+  //   Storage.remove('search_history')
+  //
+  //   getSearchHistory()
+  // }
 
-    history.push(keyword)
-
-    Storage.set('search_history', history.reverse())
-
-    getSearchHistory()
-  }
-
-  const getSearchHistory = () => {
-    let history = Storage.get('search_history')
-    history = Array.isArray(history) ? [...history] : []
-
-    setSearchHistory(() => history)
-  }
-
-  const clearSearchHistory = () => {
-    Storage.remove('search_history')
-
-    getSearchHistory()
-  }
-
-  const removeSearchHistoryKeyword = (keyword: string) => {
-    let history: string[] = Storage.get('search_history')
-    history = Array.isArray(history) ? [...history] : []
-
-    history = history.filter((item) => item !== keyword)
-
-    Storage.set('search_history', history)
-
-    getSearchHistory()
-  }
+  // const removeSearchHistoryKeyword = (keyword: string) => {
+  //   let history: string[] = Storage.get('search_history')
+  //   history = Array.isArray(history) ? [...history] : []
+  //
+  //   history = history.filter((item) => item !== keyword)
+  //
+  //   Storage.set('search_history', history)
+  //
+  //   getSearchHistory()
+  // }
 
   /**
    * 搜索
    */
-  const onSearch = (keyword?: string, loadMoreKey?: {}) => {
-    setLoading(true)
-
-    const params = {
-      ...searchParams,
-      keyword: keyword || searchParams.keyword,
+  const onSearch = async (
+    keyword: string,
+    type: 'PODCAST' | 'EPISODE' | 'USER',
+    loadMoreKey?: {},
+  ) => {
+    const params: searchType = {
+      type,
+      keyword,
       loadMoreKey,
     }
 
-    search(params)
-      .then((res) => {
-        if (isEmpty(loadMoreKey)) {
-          setData({
-            records: res.data.data,
-            loadMoreKey: res.data?.loadMoreKey,
-          })
-        } else {
-          setData({
-            records: [...data.records, ...res.data.data],
-            loadMoreKey: res.data?.loadMoreKey,
-          })
-        }
-      })
-      .catch(() => {
-        toast('搜索失败', { type: 'warn' })
-      })
-      .finally(() => {
-        setLoading(false)
-        saveSearchHistory(params.keyword)
-      })
+    return await search(params)
+
+    // search(params)
+    //   .then((res) => {
+    //     if (isEmpty(loadMoreKey)) {
+    //       setData({
+    //         records: res.data.data,
+    //         loadMoreKey: res.data?.loadMoreKey,
+    //       })
+    //     } else {
+    //       setData({
+    //         records: [...data.records, ...res.data.data],
+    //         loadMoreKey: res.data?.loadMoreKey,
+    //       })
+    //     }
+    //   })
+    //   .catch(() => {
+    //     toast('搜索失败', { type: 'warn' })
+    //   })
+    //   .finally(() => {
+    //     // saveSearchHistory(params.keyword)
+    //   })
   }
 
-  const onSearchHistoryClick = (keyword: string) => {
-    setSearchParams({
-      ...searchParams,
-      keyword,
-    })
-    onSearch(keyword)
-  }
+  // const onSearchHistoryClick = (keyword: string) => {
+  //   setSearchParams({
+  //     ...searchParams,
+  //     keyword,
+  //   })
+  //   onSearch(keyword)
+  // }
 
-  const onChangeHandle = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchParams({
-      ...searchParams,
-      keyword: e.target.value,
-    })
-  }
+  // const onChangeHandle = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setSearchParams({
+  //     ...searchParams,
+  //     keyword: e.target.value,
+  //   })
+  // }
 
-  const onTabChangeHandle = (value: string) => {
-    setSearchParams({
-      ...searchParams,
-      type: value,
-    })
-  }
+  // const onTabChangeHandle = (value: string) => {
+  //   setSearchParams({
+  //     ...searchParams,
+  //     type: value,
+  //   })
+  // }
+
+  // useEffect(() => {
+  //   if (searchParams.keyword) {
+  //     onSearch()
+  //   }
+  // }, [searchParams.type])
 
   useEffect(() => {
-    if (searchParams.keyword) {
-      onSearch()
+    const onSearchEpisode = async () => {
+      setEpisodeResults({
+        records: [],
+        loading: true,
+      })
+
+      await onSearch(keyword, 'EPISODE')
+        .then((res) => {
+          if (res.data.data.length > 6) {
+            setEpisodeResults({
+              records: res.data.data.slice(0, 6),
+              loading: false,
+            })
+          } else {
+            setEpisodeResults({
+              records: res.data.data,
+              loading: false,
+            })
+          }
+        })
+        .catch(() => {
+          toast('搜索单集失败', { type: 'warn' })
+        })
     }
-  }, [searchParams.type])
 
-  useEffect(() => {
-    getSearchHistory()
-  }, [])
+    const onSearchPodcast = async () => {
+      setPodcastResults({
+        records: [],
+        loading: true,
+      })
+
+      await onSearch(keyword, 'PODCAST')
+        .then((res) => {
+          if (res.data.data.length > 6) {
+            setPodcastResults({
+              records: res.data.data.slice(0, 6),
+              loading: false,
+            })
+          } else {
+            setPodcastResults({
+              records: res.data.data,
+              loading: false,
+            })
+          }
+        })
+        .catch(() => {
+          toast('搜索节目失败', { type: 'warn' })
+        })
+    }
+
+    const onSearchUser = async () => {
+      setUserResults({
+        records: [],
+        loading: true,
+      })
+
+      await onSearch(keyword, 'USER')
+        .then((res) => {
+          if (res.data.data.length > 6) {
+            setUserResults({
+              records: res.data.data.slice(0, 6),
+              loading: false,
+            })
+          } else {
+            setUserResults({
+              records: res.data.data,
+              loading: false,
+            })
+          }
+        })
+        .catch(() => {
+          toast('搜索用户失败', { type: 'warn' })
+        })
+    }
+
+    onSearchUser()
+    onSearchPodcast()
+    onSearchEpisode()
+  }, [keyword])
+
+  // useEffect(() => {
+  //   getSearchHistory()
+  // }, [])
 
   return (
     <div className={styles['search-layout']}>
@@ -277,23 +386,32 @@ export const Search: React.FC = () => {
       </div>
 
       <div className={styles['search-result']}>
-        <div className={styles['search-result-user']}>
-          {Array.from({ length: 6 }).map((item: any) => (
-            <div
-              key={item}
-              className={styles['avatar-container']}
-            >
-              <div className={styles['avatar']}>
-                <ColorfulShadow
-                  src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?&w=256&h=256&q=70&crop=focalpoint&fp-x=0.5&fp-y=0.3&fp-z=1&fit=crop"
-                  curPointer
-                  circle
-                />
+        <Spinner loading={userResults.loading}>
+          <div className={styles['search-result-wrapper']}>
+            {userResults.records.map((item) => (
+              <div
+                key={item.uid}
+                className={styles['image-container']}
+                title={item.nickname}
+                onClick={() => {
+                  setProfileModal({
+                    open: true,
+                    uid: item.uid,
+                  })
+                }}
+              >
+                <div className={styles['image']}>
+                  <ColorfulShadow
+                    src={item.avatar.picture.picUrl}
+                    curPointer
+                    circle
+                  />
+                </div>
+                <div className={styles['name']}>{item.nickname}</div>
               </div>
-              <div className={styles['username']}>username</div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        </Spinner>
       </div>
 
       <div className={styles['search-category-title']}>
@@ -301,16 +419,72 @@ export const Search: React.FC = () => {
         <Button variant="ghost">查看更多</Button>
       </div>
 
-      <div className={styles['search-result']}></div>
+      <div className={styles['search-result']}>
+        <Spinner loading={podcastResults.loading}>
+          <div className={styles['search-result-wrapper']}>
+            {podcastResults.records.map((item) => (
+              <div
+                key={item.pid}
+                className={styles['image-container']}
+                title={item.title}
+              >
+                <div className={styles['image']}>
+                  <ColorfulShadow
+                    src={item.image.picUrl}
+                    curPointer
+                  />
+                </div>
+                <div className={styles['name']}>{item.title}</div>
+              </div>
+            ))}
+          </div>
+        </Spinner>
+      </div>
 
       <div className={styles['search-category-title']}>
         <h3>单集</h3>
         <Button variant="ghost">查看更多</Button>
       </div>
 
-      <div className={styles['search-result']}></div>
+      <div className={styles['search-result']}>
+        <Spinner loading={episodeResults.loading}>
+          <div className={styles['search-result-wrapper']}>
+            {episodeResults.records.map((item) => (
+              <div
+                key={item.eid}
+                className={styles['image-container']}
+                title={item.title}
+              >
+                <div className={styles['image']}>
+                  <ColorfulShadow
+                    src={
+                      item?.image
+                        ? item.image.picUrl
+                        : item.podcast.image.picUrl
+                    }
+                    curPointer
+                    mask
+                  />
+                </div>
+                <div className={styles['name']}>{item.title}</div>
+              </div>
+            ))}
+          </div>
+        </Spinner>
+      </div>
       {/*</div>*/}
       {/*</div>*/}
+
+      <ProfileModal
+        uid={profileModal.uid}
+        open={profileModal.open}
+        onClose={() => {
+          setProfileModal({
+            open: false,
+            uid: '',
+          })
+        }}
+      />
     </div>
   )
 }

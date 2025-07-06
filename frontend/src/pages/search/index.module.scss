@@ -4,106 +4,56 @@
 .search-layout {
   @include no-select;
 
-  //padding: 0 14px;
-  //height: 100%;
-
-  //h3 {
-  //  font-size: 1.8rem;
-  //}
-
-  //.search-content {
-  //  padding: 0 5rem;
-  //
-  //.search-input {
-  //  display: flex;
-  //  justify-items: center;
-  //  padding: 1rem 0;
-  //
-  //  .left {
-  //    flex: 5;
-  //  }
-  //
-  //  .right {
-  //    margin-left: 1rem;
-  //    flex: 1;
-  //
-  //    button {
-  //      width: 100%;
-  //    }
-  //  }
-  //}
-
-  //.search_history {
-  //  .search_history_title{
-  //    display: flex;
-  //    align-items: center;
-  //  }
-  //}
-
-  //.search-result {
-  //  display: block;
   .search-category-title {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1rem;
+    color: $secondary-font-color;
   }
 
   .search-result {
     width: 100%;
     height: 11rem;
-    background: rgba(255, 192, 203, 0.1);
-    margin-bottom: 1rem;
+    margin-bottom: 1.3rem;
 
     &:last-child {
       margin-bottom: 0;
     }
   }
 
-  .search-result-user {
-    background: rgba(0, 128, 0, 0.25);
+  .search-result-wrapper {
     height: 100%;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: start;
     gap: 1.2rem;
     box-sizing: border-box;
 
-    .avatar-container {
-      //width: 100%;
-      //height: 100%;
-      width: 33.333%;
-      //height: 100%;
-      aspect-ratio: 1 / 1;
-      background: rgba(240, 128, 128, 0.29);
+    .image-container {
+      width: 157px;
+      height: 181px;
 
-      .avatar {
+      .image {
         display: block;
-        width: 100%;
-        height: 100%;
-        //aspect-ratio: 1 / 1;
-        background: rgba(255, 0, 0, 0.27);
+        width: 157px;
+        height: 157px;
       }
 
-      .username {
-        display: flex;
-        //width: 33.333%;
-        //height: 24px;
+      .name {
+        width: 157px;
+        height: 24px;
+        margin-top: 12px;
+        line-height: 24px;
+        text-align: center;
         align-items: center;
-        justify-content: center;
         overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        //overflow: hidden;
-        //display: -webkit-box;
-        //line-clamp: 1;
-        //box-orient: vertical;
-        //-webkit-box-orient: vertical;
-        //-webkit-line-clamp: 1;
+        display: -webkit-box;
+        line-clamp: 1;
+        box-orient: vertical;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
       }
     }
   }
-
-  //}
-  //}
 }
