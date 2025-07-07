@@ -394,6 +394,19 @@ export const Setting: React.FC = () => {
           style={{ cursor: 'pointer' }}
           onClick={goAbout}
         >
+          <Box width="100%">License Notices</Box>
+          <Box>
+            <ChevronRightIcon />
+          </Box>
+        </Flex>
+        <Separator
+          my="3"
+          size="4"
+        />
+        <Flex
+          style={{ cursor: 'pointer' }}
+          onClick={goAbout}
+        >
           <Box width="100%">关于</Box>
           <Box>
             <ChevronRightIcon />

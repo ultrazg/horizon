@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { IconButton, Slider, Text, Tooltip } from '@radix-ui/themes'
-import { CaretDownIcon } from '@radix-ui/react-icons'
+import {
+  CaretDownIcon,
+  Cross1Icon,
+  EnterFullScreenIcon,
+  ExitFullScreenIcon,
+  MinusIcon,
+} from '@radix-ui/react-icons'
 import { useDisplayInfo } from '@/hooks'
 import { CoverBox } from './components/coverBox'
 import { LiveCount } from './components/liveCount'
@@ -10,12 +16,25 @@ import { BsPauseFill, BsPlayFill } from 'react-icons/bs'
 import { IoMdThumbsUp, IoMdInformationCircleOutline } from 'react-icons/io'
 import { episodeDetail, episodeClapCreate } from '@/api/episode'
 import { EpisodeType } from '@/types/episode'
-import { Player, showEpisodeDetailModal, toast } from '@/utils'
+import {
+  APP_NAME,
+  APP_VERSION,
+  Player,
+  showEpisodeDetailModal,
+  toast,
+} from '@/utils'
 import { CONSTANT } from '@/types/constant'
 import FF_BUTTON_ICON from '@/assets/images/ff-button-colorful.png'
 import RW_BUTTON_ICON from '@/assets/images/rw-button-colorful.png'
 import { PlayInfoType } from '@/utils/player'
 import { secondsToHms } from '@/components/playerController/components/episodeCover'
+import {
+  Environment,
+  Quit,
+  WindowMinimise,
+  WindowToggleMaximise,
+} from '../../../wailsjs/runtime'
+import { envType } from '@/types/env'
 
 type IProps = {
   player: Player
@@ -30,14 +49,21 @@ export const PlayerDrawer: React.FC<IProps> = ({
   open,
   onClose,
 }) => {
-  const [height] = React.useState<number>(useDisplayInfo().Height - 35)
+  const [height] = React.useState<number>(useDisplayInfo().Height)
   const [width] = React.useState<number>(useDisplayInfo().Width)
 
+  const [envInfo, setEnvInfo] = useState<envType>()
   const [episodeDetailInfo, setEpisodeDetailInfo] = useState<EpisodeType>()
   const [isPlaying, setIsPlaying] = useState<boolean>(false)
   const [left, setLeft] = useState<boolean>(false)
   const [right, setRight] = useState<boolean>(false)
   const [progress, setProgress] = React.useState<number>(0)
+  const [isMaximised, setIsMaximised] = useState<boolean>(false)
+
+  const toggleWindowMaximised = (): void => {
+    WindowToggleMaximise()
+    setIsMaximised(!isMaximised)
+  }
 
   /**
    * 标记精彩时刻
@@ -110,6 +136,10 @@ export const PlayerDrawer: React.FC<IProps> = ({
   useEffect(() => {
     if (open) {
       getEpisodeDetail()
+
+      Environment().then((res: envType) => {
+        setEnvInfo(res)
+      })
     }
   }, [open])
 
@@ -129,6 +159,47 @@ export const PlayerDrawer: React.FC<IProps> = ({
       }}
       className={styles['player-drawer-layout']}
     >
+      {envInfo?.platform !== 'darwin' && (
+        <>
+          <div className={styles['title-bar-text']}>
+            {APP_NAME} v{APP_VERSION}
+          </div>
+          <div
+            className={styles['title-bar-button']}
+            style={
+              {
+                '--wails-draggable': 'none',
+              } as any
+            }
+          >
+            <div
+              onClick={() => {
+                WindowMinimise()
+              }}
+              title="最小化"
+            >
+              <MinusIcon />
+            </div>
+            <div
+              onClick={() => {
+                toggleWindowMaximised()
+              }}
+              title={isMaximised ? '还原' : '最大化'}
+            >
+              {isMaximised ? <ExitFullScreenIcon /> : <EnterFullScreenIcon />}
+            </div>
+            <div
+              onClick={() => {
+                Quit()
+              }}
+              title="退出"
+            >
+              <Cross1Icon />
+            </div>
+          </div>
+        </>
+      )}
+
       <div
         className={styles['player-background-image']}
         style={{

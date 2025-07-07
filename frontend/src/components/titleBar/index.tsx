@@ -196,7 +196,14 @@ export const TitleBar = () => {
               </TextField.Slot>
             </TextField.Root>
           </div>
-          <div className={styles['avatar']}>
+          <div
+            className={styles['avatar']}
+            style={
+              {
+                '--wails-draggable': 'none',
+              } as any
+            }
+          >
             <NavLink
               to="profile"
               className={({ isActive, isPending }) =>

@@ -6,6 +6,51 @@
   left: 0;
   transition: 0.7s ease-in-out;
 
+  .title-bar-text {
+    color: $secondary-font-color;
+    padding-left: 10px;
+    width: 100%;
+    position: absolute;
+    top: 4px;
+  }
+
+  .title-bar-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 30px;
+    display: flex;
+
+    div {
+      width: 50px;
+      transition: 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:first-child,
+      &:nth-child(2) {
+        &:hover {
+          background: rgba(255, 255, 255, 0.1);
+        }
+
+        &:active {
+          background: rgba(255, 255, 255, 0.3);
+        }
+      }
+
+      &:last-child {
+        &:hover {
+          background: rgba(255, 0, 0, 0.6);
+        }
+
+        &:active {
+          background: rgba(123, 2, 2, 0.6);
+        }
+      }
+    }
+  }
+
   .player-background-image {
     position: absolute;
     z-index: -1;
