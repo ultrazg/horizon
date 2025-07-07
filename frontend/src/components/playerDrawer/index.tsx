@@ -33,7 +33,7 @@ import {
   Quit,
   WindowMinimise,
   WindowToggleMaximise,
-} from '../../../wailsjs/runtime'
+} from 'wailsjs/runtime'
 import { envType } from '@/types/env'
 
 type IProps = {
@@ -151,8 +151,9 @@ export const PlayerDrawer: React.FC<IProps> = ({
   return (
     <div
       style={{
-        width,
-        height,
+        // width,
+        // height: envInfo?.platform === 'darwin' ? height - 50 : height,
+        paddingTop: envInfo?.platform === 'darwin' ? 50 : 0,
         transform: open
           ? `translateY(-${height}px)`
           : `translateY(${height}px)`,

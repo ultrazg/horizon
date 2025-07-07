@@ -25,14 +25,13 @@ import { ColorfulShadow, ProfileModal } from '@/components'
 import { baseUserType } from '@/types/user'
 import { EpisodeType } from '@/types/episode'
 import { PodcastType } from '@/types/podcast'
+import { PlayerEpisodeInfoType } from '@/utils/player'
+import { usePlayer } from '@/hooks'
 
 export const Search: React.FC = () => {
   const location = useLocation()
   const keyword = location.state.keyword
-  const [data, setData] = useState<{ records: any[]; loadMoreKey: {} }>({
-    records: [],
-    loadMoreKey: {},
-  })
+  const player = usePlayer()
   const [podcastResults, setPodcastResults] = useState<{
     records: PodcastType[]
     loading: boolean
@@ -464,6 +463,20 @@ export const Search: React.FC = () => {
                     }
                     curPointer
                     mask
+                    onClick={() => {
+                      const episodeInfo: PlayerEpisodeInfoType = {
+                        title: item.title,
+                        eid: item.eid,
+                        pid: item.podcast.pid,
+                        cover: item?.image
+                          ? item.image.picUrl
+                          : item.podcast.image.picUrl,
+                        liked: item.isFavorited,
+                      }
+
+                      player.load(item.media.source.url, episodeInfo)
+                      player.play()
+                    }}
                   />
                 </div>
                 <div className={styles['name']}>{item.title}</div>
