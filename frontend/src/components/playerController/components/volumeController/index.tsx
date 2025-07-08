@@ -53,6 +53,7 @@ export const VolumeController: React.FC<IProps> = ({ player }) => {
         </div>
         <div className={styles['volume-slider']}>
           <Slider
+            className={styles['progress-slider']}
             max={1}
             step={0.05}
             value={[isMuted ? 0 : volume]}

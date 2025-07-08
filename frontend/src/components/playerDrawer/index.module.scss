@@ -1,4 +1,5 @@
 @import '@/assets/global/_variables.scss';
+@import '@/assets/global/_common.scss';
 
 .player-drawer-layout {
   width: 100vw;
@@ -9,6 +10,8 @@
   transition: 0.7s ease-in-out;
 
   .title-bar-text {
+    @include no-select;
+
     color: $secondary-font-color;
     padding-left: 10px;
     width: 100%;

@@ -1,6 +1,6 @@
-type useDisplayInfoType = {
-  Height: number
-  Width: number
+type useWindowSizeType = {
+  height: number
+  width: number
 }
 
-export type { useDisplayInfoType }
+export type { useWindowSizeType }

@@ -1,0 +1,32 @@
+@import '@/assets/global/_common.scss';
+@import '@/assets/global/_variables.scss';
+
+.title{
+  @include no-select;
+  color: $secondary-font-color;
+}
+
+.search-result-wrapper {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+  width: 100%;
+  box-sizing: border-box;
+
+  .search-result-item{
+    background-color: rgba(144, 238, 144, 0.22);
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+
+    &::before{
+      content: '';
+      display: block;
+      padding-bottom: calc(100% + 24px);
+    }
+  }
+}

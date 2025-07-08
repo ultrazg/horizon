@@ -12,7 +12,7 @@ import {
   Heading,
   ScrollArea,
 } from '@radix-ui/themes'
-import { useDisplayInfo } from '@/hooks'
+import { useWindowSize } from '@/hooks'
 import { mileageList } from '@/api/mileage'
 import { formatTime } from '../mileageDuration'
 import { mileageType } from '@/types/mileage'
@@ -26,7 +26,7 @@ type IProps = {
  * 收听数据弹窗
  */
 export const MileageModal: React.FC<IProps> = ({ data, open, onClose }) => {
-  const [height] = useState(useDisplayInfo().Height * 0.4)
+  const [height] = useState(useWindowSize().height * 0.4)
   const [playedData, setPlayedData] = useState<
     mileageType & { time: number[] }
   >({

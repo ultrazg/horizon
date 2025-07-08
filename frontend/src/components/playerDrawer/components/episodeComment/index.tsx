@@ -15,7 +15,7 @@ import {
   ChatBubbleIcon,
 } from '@radix-ui/react-icons'
 import { IoMdThumbsUp } from 'react-icons/io'
-import { useDisplayInfo, usePlayer } from '@/hooks'
+import { useWindowSize, usePlayer } from '@/hooks'
 import { CommentReplyModal } from '@/components/playerDrawer/components/commentReplyModal'
 import { ProfileModal } from '@/components'
 import {
@@ -61,7 +61,7 @@ export const onCommentLikeUpdate = (
 
 export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
   const player = usePlayer()
-  const [height] = React.useState<number>(useDisplayInfo().Height - 35)
+  const [height] = React.useState<number>(useWindowSize().height - 35)
   const [loading, setLoading] = useState<boolean>(false)
   const [commentData, setCommentData] = useState<{
     total: number
@@ -187,7 +187,7 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
         </Text>
 
         <ScrollArea
-          type="always"
+          type="hover"
           scrollbars="vertical"
           style={{ height: `${height - 100}px` }}
         >

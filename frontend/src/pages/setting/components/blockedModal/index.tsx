@@ -21,7 +21,7 @@ import { imageType } from '@/types/image'
 import { genderType } from '@/types/user'
 import { toast } from '@/utils'
 import { SlSymbleFemale, SlSymbolMale } from 'react-icons/sl'
-import { useDisplayInfo } from '@/hooks'
+import { useWindowSize } from '@/hooks'
 
 /**
  * 取消黑名单用户
@@ -60,7 +60,7 @@ export const onBlockedUserCreate = (uid: string, cb?: () => void) => {
 }
 
 export const BlockedModal: React.FC<modalType> = ({ open, onClose }) => {
-  const [height] = useState<number>(useDisplayInfo().Height * 0.4)
+  const [height] = useState<number>(useWindowSize().height * 0.4)
   const [loading, setLoading] = useState<boolean>(false)
   const [profileModal, setProfileModal] = useState<{
     open: boolean

@@ -64,6 +64,7 @@ export const Setting: React.FC = () => {
   const [blockedModal, setBlockedModal] = useState<boolean>(false)
   const [upgradeModal, setUpgradeModal] = useState<boolean>(false)
   const [proxyModal, setProxyModal] = useState<boolean>(false)
+  const [licenseNoticesModal, setLicenseNoticesModal] = useState<boolean>(false)
   const [checkLoading, setCheckLoading] = useState<boolean>(false)
   const player = usePlayer()
 
@@ -384,19 +385,6 @@ export const Setting: React.FC = () => {
                 )
               }}
             />
-          </Box>
-        </Flex>
-        <Separator
-          my="3"
-          size="4"
-        />
-        <Flex
-          style={{ cursor: 'pointer' }}
-          onClick={goAbout}
-        >
-          <Box width="100%">License Notices</Box>
-          <Box>
-            <ChevronRightIcon />
           </Box>
         </Flex>
         <Separator

@@ -50,10 +50,14 @@
           width: 6px;
           height: 6px;
           display: none;
-          cursor: ew-resize;
+          cursor: grab;
+
+          &:active {
+            cursor: grabbing;
+          }
 
           &::after {
-            cursor: ew-resize;
+            cursor: grab;
           }
         }
       }

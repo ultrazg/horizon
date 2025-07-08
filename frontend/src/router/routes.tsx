@@ -13,6 +13,7 @@ import {
   Launch,
   Crash,
 } from '@/pages'
+import { ResultUser } from '@/pages/search/resultUser'
 import { Root } from '@/layouts'
 
 export const router = createHashRouter([
@@ -32,6 +33,10 @@ export const router = createHashRouter([
       {
         path: 'search',
         element: <Search />,
+      },
+      {
+        path: 'search/user',
+        element: <ResultUser />,
       },
       {
         path: 'subscription',

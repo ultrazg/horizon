@@ -2,17 +2,10 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import { PlayController, TitleBar } from '@/components'
 import { useNavigateTo } from '@/hooks'
-import {
-  ReadConfig,
-  ShowMessageDialog,
-  DialogType,
-  APP_VERSION,
-  Storage,
-} from '@/utils'
+import { ReadConfig, Storage, toast } from '@/utils'
 import { Launch } from '@/pages'
 import styles from './index.module.scss'
 import { CheckForUpgrade } from 'wailsjs/go/bridge/App'
-import dayjs from 'dayjs'
 import { UpgradeModal } from '@/pages/setting/components/upgradeModal'
 import { Profile } from '@/api/profile'
 import { userType } from '@/types/user'
@@ -76,21 +69,10 @@ export const Root: React.FC = () => {
   const onCheckForUpgrade = () => {
     CheckForUpgrade()
       .then((res) => {
-        if (res.err !== '') {
-          ShowMessageDialog(DialogType.ERROR, '提示', res.err).then()
-
-          return
-        }
-
         if (!res.isLatest) {
-          ShowMessageDialog(
-            DialogType.QUESTION,
-            '发现新版本！',
-            `发布时间：${dayjs(res.latest?.created_at).format('YYYY-MM-DD')}\r\n当前版本：v${APP_VERSION}\r\n最新版本：${res.latest?.tag_name}\r\n更新内容：\r\n${res.latest?.body}\r\n\r\n是否升级？`,
-          ).then((res) => {
-            if (res === 'Yes' || res === '是') {
-              setUpgradeModal(true)
-            }
+          toast('发现新版本！', {
+            type: 'info',
+            duration: 15 * 1000,
           })
         }
       })

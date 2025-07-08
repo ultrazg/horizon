@@ -10,7 +10,7 @@ import { ScrollArea, Spinner } from '@radix-ui/themes'
 import { setModalFunction } from '@/utils/showEpisodeDetailModal'
 import { EpisodeType } from '@/types/episode'
 import { episodeDetail } from '@/api/episode'
-import { useDisplayInfo } from '@/hooks'
+import { useWindowSize } from '@/hooks'
 import { DialogType, ShowMessageDialog } from '@/utils'
 import { BrowserOpenURL } from 'wailsjs/runtime'
 import dayjs from 'dayjs'
@@ -26,8 +26,7 @@ const EpisodeDetailModalContext = createContext<
 
 export const EpisodeDetailModalProvider = ({ children }: { children: any }) => {
   const [open, setOpen] = useState<boolean>(false)
-  const [width] = useState<number>(useDisplayInfo().Width)
-  const [height] = useState<number>(useDisplayInfo().Height)
+  const { width, height } = useWindowSize()
   const [loading, setLoading] = useState<boolean>(false)
   const [detailData, setDetailData] = useState<EpisodeType>()
 

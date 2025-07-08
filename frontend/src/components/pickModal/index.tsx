@@ -10,7 +10,7 @@ import {
   Separator,
   Spinner,
 } from '@radix-ui/themes'
-import { useDisplayInfo } from '@/hooks'
+import { useWindowSize } from '@/hooks'
 import { pickListHistory } from '@/api/pick'
 import { PickRecentType } from '@/types/pick'
 import dayjs from 'dayjs'
@@ -39,7 +39,7 @@ export const PickModal: React.FC<IProps> = ({
   total,
   onClose,
 }) => {
-  const [height] = useState(useDisplayInfo().Height * 0.6)
+  const [height] = useState(useWindowSize().height * 0.6)
   const [loading, setLoading] = useState(false)
   const [records, setRecords] = useState<PickRecentType[]>([])
 

@@ -16,7 +16,7 @@ import {
   DotsHorizontalIcon,
 } from '@radix-ui/react-icons'
 import { modalType } from '@/types/modal'
-import { useDisplayInfo, usePlayer } from '@/hooks'
+import { useWindowSize, usePlayer } from '@/hooks'
 import './index.modules.scss'
 import {
   ColorfulShadow,
@@ -63,8 +63,7 @@ type IProps = {
  */
 export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
   const userInfo: userType = Storage.get('user_info')
-  const [width] = useState<number>(useDisplayInfo().Width * 0.7)
-  const [height] = useState<number>(useDisplayInfo().Height * 0.7)
+  const { width, height } = useWindowSize()
   const [stickerModalOpen, setStickerModalOpen] = useState<boolean>(false)
   const [dropDownMenuOpen, setDropDownMenuOpen] = useState<boolean>(false)
   const [profileData, setProfileData] = useState<UserProfileType>()
@@ -250,7 +249,7 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
       onOpenChange={onClose}
     >
       <Dialog.Content
-        style={{ maxWidth: width, height, padding: 0 }}
+        style={{ maxWidth: width * 0.7, height: height * 0.7, padding: 0 }}
         onPointerDownOutside={avoidDefaultDomBehavior}
         onInteractOutside={avoidDefaultDomBehavior}
       >

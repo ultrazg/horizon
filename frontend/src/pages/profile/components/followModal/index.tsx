@@ -13,7 +13,7 @@ import {
 } from '@radix-ui/themes'
 import { following, follower } from '@/api/follow'
 import { relationUpdata } from '@/api/relation'
-import { useDisplayInfo } from '@/hooks'
+import { useWindowSize } from '@/hooks'
 import styles from './index.module.scss'
 import { imageType } from '@/types/image'
 import { toast, ShowMessageDialog, DialogType } from '@/utils'
@@ -75,7 +75,7 @@ export const onRelationUpdate = (
 }
 
 export const FollowModal: React.FC<IProps> = ({ uid, type, onClose, open }) => {
-  const [height] = useState<number>(useDisplayInfo().Height * 0.4)
+  const [height] = useState<number>(useWindowSize().height * 0.4)
   const [loading, setLoading] = useState<boolean>(false)
   const [profileModal, setProfileModal] = useState<{
     open: boolean

@@ -7,7 +7,7 @@ import {
   ExitFullScreenIcon,
   MinusIcon,
 } from '@radix-ui/react-icons'
-import { useDisplayInfo } from '@/hooks'
+import { useWindowSize } from '@/hooks'
 import { CoverBox } from './components/coverBox'
 import { LiveCount } from './components/liveCount'
 import { EpisodeComment } from './components/episodeComment'
@@ -49,8 +49,7 @@ export const PlayerDrawer: React.FC<IProps> = ({
   open,
   onClose,
 }) => {
-  const [height] = React.useState<number>(useDisplayInfo().Height)
-  const [width] = React.useState<number>(useDisplayInfo().Width)
+  const { height } = useWindowSize()
 
   const [envInfo, setEnvInfo] = useState<envType>()
   const [episodeDetailInfo, setEpisodeDetailInfo] = useState<EpisodeType>()
@@ -153,7 +152,8 @@ export const PlayerDrawer: React.FC<IProps> = ({
       style={{
         // width,
         // height: envInfo?.platform === 'darwin' ? height - 50 : height,
-        paddingTop: envInfo?.platform === 'darwin' ? 50 : 0,
+        // paddingTop: envInfo?.platform === 'darwin' ? 50 : 0,
+        paddingTop: 50,
         transform: open
           ? `translateY(-${height}px)`
           : `translateY(${height}px)`,
@@ -162,7 +162,14 @@ export const PlayerDrawer: React.FC<IProps> = ({
     >
       {envInfo?.platform !== 'darwin' && (
         <>
-          <div className={styles['title-bar-text']}>
+          <div
+            className={styles['title-bar-text']}
+            style={
+              {
+                '--wails-draggable': 'drag',
+              } as any
+            }
+          >
             {APP_NAME} v{APP_VERSION}
           </div>
           <div

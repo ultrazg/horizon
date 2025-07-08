@@ -11,7 +11,7 @@ import {
   Spinner,
 } from '@radix-ui/themes'
 import { PaperPlaneIcon } from '@radix-ui/react-icons'
-import { useDisplayInfo } from '@/hooks'
+import { useWindowSize } from '@/hooks'
 import { IoMdThumbsUp } from 'react-icons/io'
 import { commentThread, commentThreadType } from '@/api/comment'
 import { CommentPrimaryType } from '@/types/comment'
@@ -35,7 +35,7 @@ export const CommentReplyModal: React.FC<IProps> = ({
   open,
   onClose,
 }) => {
-  const [height] = React.useState<number>(useDisplayInfo().Height)
+  const [height] = React.useState<number>(useWindowSize().height)
   const [loading, setLoading] = useState<boolean>(false)
   const [threadCommentData, setThreadCommentData] = useState<{
     total: number

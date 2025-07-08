@@ -5,7 +5,7 @@ import { Empty, Modal } from '@/components'
 import { modalType } from '@/types/modal'
 import { PodcastBulletinType } from '@/types/podcast'
 import styles from './index.module.scss'
-import { useDisplayInfo } from '@/hooks'
+import { useWindowSize } from '@/hooks'
 import dayjs from 'dayjs'
 
 type IProps = {
@@ -24,7 +24,7 @@ export const PodcastBulletinModal: React.FC<IProps> = ({
   onClose,
   data,
 }) => {
-  const [height] = useState(useDisplayInfo().Height * 0.4)
+  const [height] = useState(useWindowSize().height * 0.4)
 
   return (
     <Modal
