@@ -200,7 +200,18 @@ export const Search: React.FC = () => {
 
       <div className={styles['search-category-title']}>
         <h3>节目</h3>
-        <Button variant="ghost">查看更多</Button>
+        <Button
+          variant="ghost"
+          onClick={() => {
+            navigateTo('/search/podcast', {
+              state: {
+                keyword,
+              },
+            })
+          }}
+        >
+          查看更多
+        </Button>
       </div>
 
       <div className={styles['search-result']}>
@@ -230,7 +241,18 @@ export const Search: React.FC = () => {
 
       <div className={styles['search-category-title']}>
         <h3>单集</h3>
-        <Button variant="ghost">查看更多</Button>
+        <Button
+          variant="ghost"
+          onClick={() => {
+            navigateTo('/search/episode', {
+              state: {
+                keyword,
+              },
+            })
+          }}
+        >
+          查看更多
+        </Button>
       </div>
 
       <div className={styles['search-result']}>

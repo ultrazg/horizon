@@ -1,32 +1,28 @@
 import React, { useEffect, useState } from 'react'
-import styles from './result.module.scss'
 import { useLocation } from 'react-router-dom'
-import { ColorfulShadow, Empty, ProfileModal } from '@/components'
-import { search, type searchType } from '@/api/search'
-import { baseUserType } from '@/types/user'
-import { Button, Spinner } from '@radix-ui/themes'
+import { EpisodeType } from '@/types/episode'
+import styles from './result.module.scss'
+import { ColorfulShadow, Empty } from '@/components'
+import { Spinner, Button } from '@radix-ui/themes'
+import { search, searchType } from '@/api/search'
 import { isEmpty } from 'lodash'
+import { PlayerEpisodeInfoType } from '@/utils/player'
+import { usePlayer } from '@/layouts/player'
 
 /**
- * 用户搜索结果页
+ * 单集搜索结果页
  * @constructor
  */
-export const ResultUser: React.FC = () => {
+export const ResultEpisode: React.FC = () => {
   const { keyword } = useLocation().state
+  const player = usePlayer()
   const [loading, setLoading] = useState<boolean>(false)
   const [data, setData] = useState<{
-    records: baseUserType[]
+    records: EpisodeType[]
     loadMoreKey: any
   }>({
     records: [],
     loadMoreKey: {},
-  })
-  const [profileModal, setProfileModal] = useState<{
-    open: boolean
-    uid: string
-  }>({
-    open: false,
-    uid: '',
   })
 
   const onSearch = (loadMore: boolean) => {
@@ -34,7 +30,7 @@ export const ResultUser: React.FC = () => {
 
     const params: searchType = {
       keyword,
-      type: 'USER',
+      type: 'EPISODE',
     }
 
     if (!isEmpty(data.loadMoreKey)) {
@@ -77,7 +73,7 @@ export const ResultUser: React.FC = () => {
 
   return (
     <>
-      <h3 className={styles['title']}>搜索用户“{keyword}”</h3>
+      <h3 className={styles['title']}>搜索单集“{keyword}”</h3>
 
       <Spinner loading={loading}>
         {data.records.length === 0 && <Empty />}
@@ -85,26 +81,39 @@ export const ResultUser: React.FC = () => {
         <div className={styles['search-result-wrapper']}>
           {data.records.map((item) => (
             <div
-              key={item.uid}
+              key={item.eid}
               className={styles['search-result-item']}
-              title={item.nickname}
+              title={item.description}
             >
               <div className={styles['image']}>
                 <ColorfulShadow
-                  src={item.avatar.picture.picUrl}
+                  src={
+                    item?.image ? item.image.picUrl : item.podcast.image.picUrl
+                  }
                   curPointer
-                  circle
+                  mask
                   onClick={() => {
-                    setProfileModal({
-                      open: true,
-                      uid: item.uid,
-                    })
+                    const episodeInfo: PlayerEpisodeInfoType = {
+                      title: item.title,
+                      eid: item.eid,
+                      pid: item.podcast.pid,
+                      cover: item?.image
+                        ? item.image.picUrl
+                        : item.podcast.image.picUrl,
+                      liked: item.isFavorited,
+                    }
+
+                    player.load(item.media.source.url, episodeInfo)
+                    player.play()
                   }}
                 />
               </div>
 
-              <div className={styles['name']}>
-                <span>{item.nickname}</span>
+              <div
+                className={styles['name']}
+                title={item.title}
+              >
+                <span>{item.title}</span>
               </div>
             </div>
           ))}
@@ -124,17 +133,6 @@ export const ResultUser: React.FC = () => {
           </div>
         )}
       </Spinner>
-
-      <ProfileModal
-        uid={profileModal.uid}
-        open={profileModal.open}
-        onClose={() => {
-          setProfileModal({
-            open: false,
-            uid: '',
-          })
-        }}
-      />
     </>
   )
 }
