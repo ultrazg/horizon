@@ -17,7 +17,7 @@ import {
 } from '@radix-ui/react-icons'
 import { modalType } from '@/types/modal'
 import { useWindowSize, usePlayer } from '@/hooks'
-import './index.modules.scss'
+import styles from './index.module.scss'
 import {
   ColorfulShadow,
   MyDropdownMenu,
@@ -249,7 +249,11 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
       onOpenChange={onClose}
     >
       <Dialog.Content
-        style={{ maxWidth: width * 0.7, height: height * 0.7, padding: 0 }}
+        style={{
+          maxWidth: width * 0.7,
+          height: height * 0.7,
+          padding: 0,
+        }}
         onPointerDownOutside={avoidDefaultDomBehavior}
         onInteractOutside={avoidDefaultDomBehavior}
       >
@@ -261,10 +265,10 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
         <ScrollArea
           type="scroll"
           scrollbars="vertical"
-          style={{ height }}
+          style={{ height: height * 0.7 }}
         >
-          <div className="profile-modal-layout">
-            <div className="pm-action-button">
+          <div className={styles['profile-modal-layout']}>
+            <div className={styles['pm-action-button']}>
               <IconButton
                 onClick={() => {
                   onClose()
@@ -283,7 +287,7 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
                 }}
                 trigger={
                   <IconButton
-                    className="more-button"
+                    className={styles['more-button']}
                     onClick={() => {
                       setDropDownMenuOpen(true)
                     }}
@@ -327,12 +331,12 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
               </MyDropdownMenu>
             </div>
 
-            <div className="profile-avatar-layout">
-              <div className="pm-ip-loc">
+            <div className={styles['profile-avatar-layout']}>
+              <div className={styles['pm-ip-loc']}>
                 IP属地：{profileData?.ipLoc || '未知'}
               </div>
               <div
-                className="background-image"
+                className={styles['background-image']}
                 style={{
                   background: `url(${profileData?.avatar.picture.picUrl}) no-repeat center center / cover`,
                   filter: 'blur(30px)',
@@ -340,14 +344,14 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
               />
               <Avatar
                 radius="full"
-                className="profile-avatar"
+                className={styles['profile-avatar']}
                 src={profileData?.avatar.picture.picUrl}
                 fallback="avatar"
               />
             </div>
 
-            <div className="profile-detail-layout">
-              <div className="pm-nickname">
+            <div className={styles['profile-detail-layout']}>
+              <div className={styles['pm-nickname']}>
                 <Text
                   as="div"
                   align="center"
@@ -379,39 +383,39 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
                 </Text>
               </div>
 
-              <div className="pm-follow">
+              <div className={styles['pm-follow']}>
                 <Flex
                   gap="3"
                   align="center"
                 >
-                  <div className="chunk">
+                  <div className={styles['chunk']}>
                     <p>{stats.followingCount}</p>
                     <p>关注</p>
                   </div>
                   <Separator
-                    className="separator"
+                    className={styles['separator']}
                     size="2"
                     orientation="vertical"
                   />
-                  <div className="chunk">
+                  <div className={styles['chunk']}>
                     <p>{stats.followerCount}</p>
                     <p>粉丝</p>
                   </div>
                   <Separator
-                    className="separator"
+                    className={styles['separator']}
                     size="2"
                     orientation="vertical"
                   />
-                  <div className="chunk">
+                  <div className={styles['chunk']}>
                     <p>{stats.subscriptionCount}</p>
                     <p>订阅</p>
                   </div>
                   <Separator
-                    className="separator"
+                    className={styles['separator']}
                     size="2"
                     orientation="vertical"
                   />
-                  <div className="chunk">
+                  <div className={styles['chunk']}>
                     <p>
                       {time[0]}
                       <span>时</span>
@@ -425,23 +429,23 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
             </div>
 
             {profileData?.authorship.length !== 0 && (
-              <div className="pm-podcast-layout">
-                <div className="pm-podcast-content">
+              <div className={styles['pm-podcast-layout']}>
+                <div className={styles['pm-podcast-content']}>
                   <h3>{renderGender(profileData?.gender)}的播客</h3>
 
                   {profileData?.authorship.map((item) => (
                     <div
-                      className="pm-podcast-item"
+                      className={styles['pm-podcast-item']}
                       key={item.pid}
                     >
-                      <div className="left">
+                      <div className={styles['left']}>
                         <ColorfulShadow
-                          className="episode-cover"
+                          className={styles['episode-cover']}
                           curPointer
                           src={item.image.picUrl}
                         />
                       </div>
-                      <div className="right">
+                      <div className={styles['right']}>
                         <p>{item.title}</p>
                         <p>{item.brief}</p>
                         {item.episodeCount !== 0 && (
@@ -455,7 +459,7 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
             )}
 
             {pickRecentList.total !== 0 && (
-              <div className="pm-like-content">
+              <div className={styles['pm-like-content']}>
                 <h3
                   style={pickRecentList.total > 4 ? { cursor: 'pointer' } : {}}
                   onClick={() => {
@@ -476,10 +480,10 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
 
                 {pickRecentList.records.map((item) => (
                   <Card
-                    className="pm-like-item"
+                    className={styles['pm-like-item']}
                     key={item.id}
                   >
-                    <div className="top">
+                    <div className={styles['top']}>
                       <span>{dayjs(item.pickedAt).format('MM/DD')}</span>
                       <span>
                         <span>{item.likeCount}</span>
@@ -490,7 +494,7 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
                       </span>
                     </div>
                     <div
-                      className="middle"
+                      className={styles['middle']}
                       title={item.story.text}
                     >
                       {item.story.text}
@@ -499,16 +503,16 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
                       my="3"
                       size="4"
                     />
-                    <div className="bottom">
+                    <div className={styles['bottom']}>
                       {item.episode.status === 'REMOVED' ? (
-                        <div className="episode-removed">
+                        <div className={styles['episode-removed']}>
                           {CONSTANT.EPISODE_STATUS_REMOVED}
                         </div>
                       ) : (
                         <>
-                          <div className="left">
+                          <div className={styles['left']}>
                             <ColorfulShadow
-                              className="episode-cover"
+                              className={styles['episode-cover']}
                               curPointer
                               src={
                                 item.episode?.image
@@ -534,7 +538,7 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
                               }}
                             />
                           </div>
-                          <div className="right">
+                          <div className={styles['right']}>
                             <p>{item.episode.title}</p>
                             <p>{item.episode.podcast.title}</p>
                           </div>
@@ -546,21 +550,21 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
               </div>
             )}
 
-            <div className="pm-sticker-layout">
-              <div className="pm-sticker-content">
+            <div className={styles['pm-sticker-layout']}>
+              <div className={styles['pm-sticker-content']}>
                 <h3>{renderGender(profileData?.gender)}的贴纸库</h3>
 
                 {stickerData.total === 0 ? (
                   <Empty />
                 ) : (
                   <Card
-                    className="sticker-card"
+                    className={styles['sticker-card']}
                     onClick={() => {
                       setStickerModalOpen(true)
                     }}
                   >
                     <div
-                      className="sticker-bgi"
+                      className={styles['sticker-bgi']}
                       style={{
                         backgroundImage: `url(${stickerData.total === 0 ? '' : stickerData.records[0].image.picUrl})`,
                       }}
@@ -580,19 +584,19 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
               </div>
             </div>
 
-            <div className="pm-history-content">
+            <div className={styles['pm-history-content']}>
               <h3>最近听过</h3>
 
               {playedLists.length === 0 && <Empty />}
 
               {playedLists.map((item) => (
                 <div
-                  className="pm-history-episode-item"
+                  className={styles['pm-history-episode-item']}
                   key={item.eid}
                 >
-                  <div className="left">
+                  <div className={styles['left']}>
                     <ColorfulShadow
-                      className="episode-cover"
+                      className={styles['episode-cover']}
                       curPointer
                       mask
                       src={
@@ -616,7 +620,7 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
                       }}
                     />
                   </div>
-                  <div className="right">
+                  <div className={styles['right']}>
                     <p>{item.title}</p>
                     <p title={item.description}>{item.description}</p>
                     <p>
