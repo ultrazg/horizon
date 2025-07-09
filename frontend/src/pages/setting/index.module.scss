@@ -17,6 +17,8 @@
   .content_text {
     color: $secondary-font-color;
     @include allow-select;
+    text-align: right;
+    width: 100%;
   }
 
   .app-logo {

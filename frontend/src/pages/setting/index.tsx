@@ -178,7 +178,7 @@ export const Setting: React.FC = () => {
       <h4>账号绑定</h4>
       <Card>
         <Flex>
-          <Box width="100%">手机号</Box>
+          <Box width="70%">手机号</Box>
           <Box className={styles['content_text']}>
             {userInfo.mobilePhoneNumber}
           </Box>
@@ -190,7 +190,7 @@ export const Setting: React.FC = () => {
               size="4"
             />
             <Flex>
-              <Box width="100%">微信</Box>
+              <Box width="70%">微信</Box>
               <Box className={styles['content_text']}>
                 {userInfo.wechatUserInfo?.nickName}
               </Box>
@@ -205,7 +205,7 @@ export const Setting: React.FC = () => {
               size="4"
             />
             <Flex>
-              <Box width="100%">即刻</Box>
+              <Box width="70%">即刻</Box>
               <Box className={styles['content_text']}>
                 {userInfo.jikeUserInfo?.nickname}
               </Box>
