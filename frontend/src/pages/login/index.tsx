@@ -139,6 +139,11 @@ export const Login: React.FC = () => {
       <Container
         size="1"
         className={styles['login-wrapper']}
+        style={
+          {
+            '--wails-draggable': 'drag',
+          } as any
+        }
       >
         <Section size="3">
           <div className={styles['logo-layout']}>

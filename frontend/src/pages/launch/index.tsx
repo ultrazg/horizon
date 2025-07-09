@@ -10,14 +10,7 @@ import styles from './index.module.scss'
  */
 export const Launch: React.FC = () => {
   return (
-    <div
-      className={styles['launch-layout']}
-      style={
-        {
-          '--wails-draggable': 'drag',
-        } as any
-      }
-    >
+    <div className={styles['launch-layout']}>
       <div className={styles['launch-wrapper']}>
         <img
           src={APP_ICON}

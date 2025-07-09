@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Environment, EventsOn } from 'wailsjs/runtime'
+import { Environment } from 'wailsjs/runtime'
 import { envType } from '@/types/env'
 import {
   SETTING_CONFIG_ENUM,
@@ -64,7 +64,6 @@ export const Setting: React.FC = () => {
   const [blockedModal, setBlockedModal] = useState<boolean>(false)
   const [upgradeModal, setUpgradeModal] = useState<boolean>(false)
   const [proxyModal, setProxyModal] = useState<boolean>(false)
-  const [licenseNoticesModal, setLicenseNoticesModal] = useState<boolean>(false)
   const [checkLoading, setCheckLoading] = useState<boolean>(false)
   const player = usePlayer()
 

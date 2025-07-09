@@ -59,7 +59,7 @@ export const LiveCount: React.FC<IProps> = ({ open, eid, pid }) => {
   return (
     <div className={styles['live-count-layout']}>
       <div className={styles['live-dot']} />
-      {liveCount || 'null'} 人正在听
+      {liveCount || 1} 人正在听
     </div>
   )
 }

@@ -153,11 +153,17 @@
             .progress-slider {
               cursor: pointer;
 
-              .rt-SliderThumb {
-                cursor: ew-resize;
+              :global {
+                .rt-SliderThumb {
+                  cursor: grab;
 
-                &::after {
-                  cursor: ew-resize;
+                  &:active {
+                    cursor: grabbing;
+                  }
+
+                  &::after {
+                    cursor: grab;
+                  }
                 }
               }
             }

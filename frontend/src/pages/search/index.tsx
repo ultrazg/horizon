@@ -70,6 +70,10 @@ export const Search: React.FC = () => {
     return await search(params)
   }
 
+  const delay = (ms: number) => {
+    return new Promise((resolve) => setTimeout(resolve, ms))
+  }
+
   useEffect(() => {
     const onSearchEpisode = async () => {
       setEpisodeResults({
@@ -146,9 +150,15 @@ export const Search: React.FC = () => {
         })
     }
 
-    onSearchUser()
-    onSearchPodcast()
-    onSearchEpisode()
+    const fetchData = async () => {
+      await onSearchUser()
+      await delay(500)
+      await onSearchPodcast()
+      await delay(500)
+      await onSearchEpisode()
+    }
+
+    fetchData()
   }, [keyword])
 
   return (
