@@ -41,6 +41,7 @@ import {
 import { BlockedModal } from './components/blockedModal'
 import { ProxyModal } from './components/proxyModal'
 import { UpgradeModal } from './components/upgradeModal'
+import { NewVersionModal } from './components/newVersionModal'
 import styles from './index.module.scss'
 import { CONSTANT } from '@/types/constant'
 import { CheckForUpgrade } from 'wailsjs/go/bridge/App'
@@ -65,6 +66,17 @@ export const Setting: React.FC = () => {
   const [upgradeModal, setUpgradeModal] = useState<boolean>(false)
   const [proxyModal, setProxyModal] = useState<boolean>(false)
   const [checkLoading, setCheckLoading] = useState<boolean>(false)
+  const [newVersionModalInfo, setNewVersionModalInfo] = useState<{
+    open: boolean
+    createdAt: string
+    tagName: string
+    body: string
+  }>({
+    open: false,
+    createdAt: '',
+    tagName: '',
+    body: '',
+  })
   const player = usePlayer()
 
   const goAbout = useNavigateTo('/about')
@@ -82,14 +94,11 @@ export const Setting: React.FC = () => {
         }
 
         if (!res.isLatest) {
-          ShowMessageDialog(
-            DialogType.QUESTION,
-            '发现新版本！',
-            `发布时间：${dayjs(res.latest?.created_at).format('YYYY-MM-DD')}\r\n当前版本：v${APP_VERSION}\r\n最新版本：${res.latest?.tag_name}\r\n更新内容：\r\n${res.latest?.body}\r\n\r\n是否升级？`,
-          ).then((res) => {
-            if (res === 'Yes' || res === '是') {
-              setUpgradeModal(true)
-            }
+          setNewVersionModalInfo({
+            open: true,
+            createdAt: dayjs(res.latest?.created_at).format('YYYY-MM-DD'),
+            tagName: res.latest?.tag_name || '',
+            body: res.latest?.body || '',
           })
         } else {
           ShowMessageDialog(DialogType.INFO, '提示', '当前已是最新版本').then()
@@ -473,6 +482,32 @@ export const Setting: React.FC = () => {
         open={proxyModal}
         onClose={() => {
           setProxyModal(false)
+        }}
+      />
+
+      <NewVersionModal
+        open={newVersionModalInfo.open}
+        newVersionInfo={{
+          createdAt: newVersionModalInfo.createdAt,
+          tagName: newVersionModalInfo.tagName,
+          body: newVersionModalInfo.body,
+        }}
+        onOk={() => {
+          setNewVersionModalInfo({
+            open: false,
+            createdAt: '',
+            tagName: '',
+            body: '',
+          })
+          setUpgradeModal(true)
+        }}
+        onClose={() => {
+          setNewVersionModalInfo({
+            open: false,
+            createdAt: '',
+            tagName: '',
+            body: '',
+          })
         }}
       />
 

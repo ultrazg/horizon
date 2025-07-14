@@ -1,0 +1,21 @@
+@import '@/assets/global/_variables.scss';
+
+.wrapper {
+  font-size: 14px;
+
+  .label {
+    color: $secondary-font-color;
+
+    span {
+      color: $primary-font-color;
+    }
+
+    pre {
+      font-size: 13px;
+      margin-top: .3rem;
+      color: $primary-font-color;
+      max-height: 200px;
+      overflow-y: scroll;
+    }
+  }
+}
