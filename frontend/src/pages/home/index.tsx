@@ -5,7 +5,6 @@ import EditorRecommended from './components/editorRecommended'
 import PeopleLike from './components/peopleLike'
 import { discovery, refreshEpisodeCommend } from '@/api/discover'
 import { DISCOVERY_TYPE_ENUM } from '@/types/discovery'
-import './index.modules.scss'
 import { EpisodeType } from '@/types/episode'
 import { PodcastType } from '@/types/podcast'
 import { useNavigate } from 'react-router-dom'
@@ -193,7 +192,7 @@ export const Home: React.FC = () => {
   }, [])
 
   return (
-    <div className="home-layout">
+    <>
       {/* 大家都在听 */}
       <Popular
         data={popular.records}
@@ -229,6 +228,6 @@ export const Home: React.FC = () => {
           goPodcastDetail(pid)
         }}
       />
-    </div>
+    </>
   )
 }

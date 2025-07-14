@@ -14,6 +14,7 @@
     flex: 1;
     justify-content: center;
     align-items: center;
+    padding-left: 11rem;
   }
 
   .middle {
@@ -25,6 +26,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    padding-right: 11rem;
   }
 
   .progress-layout {
@@ -37,28 +39,37 @@
     .progress-slider {
       cursor: pointer;
 
-      .rt-SliderTrack {
-        height: 2px;
-        border: none;
-        box-shadow: none;
-      }
+      :global {
+        .rt-SliderTrack {
+          height: 2px;
+          border: none;
+          box-shadow: none;
+        }
 
-      .rt-SliderThumb {
-        width: 6px;
-        height: 6px;
-        display: none;
-        cursor: ew-resize;
+        .rt-SliderThumb {
+          width: 6px;
+          height: 6px;
+          display: none;
+          cursor: grab;
 
-        &::after {
-          cursor: ew-resize;
+          &:active {
+            cursor: grabbing;
+          }
+
+          &::after {
+            cursor: grab;
+          }
         }
       }
 
       &:hover {
-        .rt-SliderThumb {
-          display: block;
+        :global {
+          .rt-SliderThumb {
+            display: block;
+          }
         }
       }
     }
   }
 }
+

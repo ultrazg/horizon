@@ -1,5 +1,5 @@
 import React from 'react'
-import './index.modules.scss'
+import styles from './index.module.scss'
 import { ColorfulShadow } from '@/components'
 import { ChatBubbleIcon, PlayIcon } from '@radix-ui/react-icons'
 import { Skeleton } from '@radix-ui/themes'
@@ -17,20 +17,20 @@ const EditorRecommended: React.FC<IProps> = ({ data, loading, onDetail }) => {
   const player = usePlayer()
 
   return (
-    <div className="editor-recommended-layout">
+    <div className={styles['editor-recommended-layout']}>
       <h3>编辑精选</h3>
 
       <Skeleton loading={loading}>
-        <div className="editor-recommended-content">
+        <div className={styles['editor-recommended-content']}>
           {data?.picks?.map((item: any) => {
             return (
               <div
-                className="editor-recommended-item"
+                className={styles['editor-recommended-item']}
                 key={item.episode.eid}
                 title={`@${item.comment.author.nickname}：\r\n${item.comment ? item.comment.text : item.recommendation}`}
               >
-                <div className="editor-recommended-info">
-                  <div className="cover-box">
+                <div className={styles['editor-recommended-info']}>
+                  <div className={styles['cover-box']}>
                     <ColorfulShadow
                       src={item.episode.podcast.image.picUrl}
                       mask
@@ -51,7 +51,7 @@ const EditorRecommended: React.FC<IProps> = ({ data, loading, onDetail }) => {
                       }}
                     />
                   </div>
-                  <div className="info-box">
+                  <div className={styles['info-box']}>
                     <p
                       onClick={() => {
                         onDetail(item.episode.podcast.pid)

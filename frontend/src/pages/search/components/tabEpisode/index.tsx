@@ -3,7 +3,7 @@ import { ColorfulShadow, Empty } from '@/components'
 import { SlBubble, SlEarphones } from 'react-icons/sl'
 import { EpisodeType } from '@/types/episode'
 import dayjs from 'dayjs'
-import './index.modules.scss'
+import styles from './index.module.scss'
 import { isEmpty } from 'lodash'
 import { Button } from '@radix-ui/themes'
 import { showEpisodeDetailModal } from '@/utils'
@@ -20,16 +20,16 @@ export const TabEpisode: React.FC<IProps> = ({ data, onLoadMore, loading }) => {
   const player = usePlayer()
 
   return (
-    <div className="search-result-episode-layout">
+    <div className={styles['search-result-episode-layout']}>
       {data.records.length === 0 && <Empty />}
       {data.records.map((item) => (
         <div
           key={item.eid}
-          className="search-result-episode-item"
+          className={styles['search-result-episode-item']}
         >
-          <div className="left">
+          <div className={styles['left']}>
             <ColorfulShadow
-              className="episode-cover"
+              className={styles['episode-cover']}
               curPointer
               mask
               src={item?.image ? item.image.picUrl : item.podcast.image.picUrl}
@@ -50,7 +50,7 @@ export const TabEpisode: React.FC<IProps> = ({ data, onLoadMore, loading }) => {
             />
           </div>
           <div
-            className="right"
+            className={styles['right']}
             onClick={() => {
               showEpisodeDetailModal(item.eid)
             }}
@@ -73,7 +73,7 @@ export const TabEpisode: React.FC<IProps> = ({ data, onLoadMore, loading }) => {
         </div>
       ))}
 
-      <div className="episode-load-more-button">
+      <div className={styles['episode-load-more-button']}>
         {!isEmpty(data.loadMoreKey) && (
           <Button
             color="gray"

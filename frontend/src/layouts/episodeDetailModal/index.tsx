@@ -10,11 +10,11 @@ import { ScrollArea, Spinner } from '@radix-ui/themes'
 import { setModalFunction } from '@/utils/showEpisodeDetailModal'
 import { EpisodeType } from '@/types/episode'
 import { episodeDetail } from '@/api/episode'
-import { useDisplayInfo } from '@/hooks'
+import { useWindowSize } from '@/hooks'
 import { DialogType, ShowMessageDialog } from '@/utils'
 import { BrowserOpenURL } from 'wailsjs/runtime'
 import dayjs from 'dayjs'
-import './index.modules.scss'
+import styles from './index.module.scss'
 
 type EpisodeDetailModalType = {
   showEpisodeDetailModal: (eid: string) => void
@@ -26,8 +26,7 @@ const EpisodeDetailModalContext = createContext<
 
 export const EpisodeDetailModalProvider = ({ children }: { children: any }) => {
   const [open, setOpen] = useState<boolean>(false)
-  const [width] = useState<number>(useDisplayInfo().Width)
-  const [height] = useState<number>(useDisplayInfo().Height)
+  const { width, height } = useWindowSize()
   const [loading, setLoading] = useState<boolean>(false)
   const [detailData, setDetailData] = useState<EpisodeType>()
 
@@ -116,15 +115,15 @@ export const EpisodeDetailModalProvider = ({ children }: { children: any }) => {
             scrollbars="vertical"
             style={{ maxHeight: `${height * 0.7}px` }}
           >
-            <div className="episode-detail-modal-layout">
+            <div className={styles['episode-detail-modal-layout']}>
               <h3>{detailData?.title}</h3>
 
-              <div className="info">
+              <div className={styles['info']}>
                 {detailData?.duration && Math.floor(detailData?.duration / 60)}
                 分钟 · {dayjs(detailData?.pubDate).format('YYYY/MM/DD')}
               </div>
 
-              <div className="episode-detail-html-content">
+              <div className={styles['episode-detail-html-content']}>
                 <div
                   ref={containerRef}
                   dangerouslySetInnerHTML={{ __html: detailData?.shownotes }}

@@ -2,7 +2,7 @@ import React from 'react'
 import APP_ICON from '@/assets/images/logo.png'
 import { APP_NAME, APP_VERSION } from '@/utils'
 import { Spinner } from '@radix-ui/themes'
-import './index.modules.scss'
+import styles from './index.module.scss'
 
 /**
  * 启动界面
@@ -10,8 +10,8 @@ import './index.modules.scss'
  */
 export const Launch: React.FC = () => {
   return (
-    <div className="launch-layout">
-      <div className="launch-wrapper">
+    <div className={styles['launch-layout']}>
+      <div className={styles['launch-wrapper']}>
         <img
           src={APP_ICON}
           alt="logo"

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { AspectRatio, Box, Card, Grid, Text, Spinner } from '@radix-ui/themes'
 import { subscription } from '@/api/subscription'
 import dayjs from 'dayjs'
-import './index.modules.scss'
+import styles from './index.module.scss'
 import { useNavigate } from 'react-router-dom'
 import { Empty } from '@/components'
 
@@ -37,11 +37,19 @@ export const Subscription: React.FC = () => {
   }, [])
 
   return (
-    <div className="subscription-layout">
-      <h3>我的订阅{lists.length > 0 ? `(${lists.length})` : null}</h3>
-
+    <div className={styles['subscription-layout']}>
       {loading ? (
-        <Spinner size="3" />
+        <div
+          style={{
+            width: '100%',
+            height: '100px',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <Spinner size="3" />
+        </div>
       ) : lists.length === 0 ? (
         <Empty />
       ) : (
@@ -54,7 +62,7 @@ export const Subscription: React.FC = () => {
           {lists.map((item: any) => (
             <Box key={item.pid}>
               <Card
-                className="podcast-cover"
+                className={styles['podcast-cover']}
                 title={item.title}
                 onClick={() => {
                   goPodcastDetail(item.pid)
@@ -63,14 +71,14 @@ export const Subscription: React.FC = () => {
                 <AspectRatio ratio={8 / 8}>
                   <img
                     src={item.image.picUrl}
-                    className="podcast-img"
+                    className={styles['podcast-img']}
                     alt={item.title}
                   />
                 </AspectRatio>
 
                 <Text
                   mt="3"
-                  className="podcast-title"
+                  className={styles['podcast-title']}
                   as="p"
                   size="4"
                   title={item.title}
@@ -79,7 +87,7 @@ export const Subscription: React.FC = () => {
                 </Text>
 
                 <Text
-                  className="podcast-brief"
+                  className={styles['podcast-brief']}
                   as="p"
                   size="2"
                   title={item.brief}
@@ -88,7 +96,7 @@ export const Subscription: React.FC = () => {
                 </Text>
 
                 <Text
-                  className="podcast-update-time"
+                  className={styles['podcast-update-time']}
                   as="p"
                   size="2"
                 >

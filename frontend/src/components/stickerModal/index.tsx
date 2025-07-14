@@ -10,7 +10,7 @@ import {
   Separator,
   Text,
 } from '@radix-ui/themes'
-import { useDisplayInfo } from '@/hooks'
+import { useWindowSize } from '@/hooks'
 import { stickerType } from '@/types/sticker'
 import './index.modules.scss'
 import dayjs from 'dayjs'
@@ -29,7 +29,7 @@ export const StickerModal: React.FC<IProps> = ({
   perspective,
   stickerLists,
 }) => {
-  const [height] = useState(useDisplayInfo().Height * 0.6)
+  const [height] = useState(useWindowSize().height * 0.6)
   const [activeImg, setActiveImg] = useState<any>()
   const [transformStyle, setTransformStyle] = useState({})
   const [maskOpen, setMaskOpen] = useState<boolean>(false)

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import './index.modules.scss'
-import { useDisplayInfo } from '@/hooks'
+import styles from './index.module.scss'
+import { useWindowSize } from '@/hooks'
 
 type IProps = {
   episodeCover: string | undefined
@@ -13,7 +13,7 @@ export const CoverBox: React.FC<IProps> = ({
   episodeCover,
   podcastCover,
 }) => {
-  const [height] = React.useState<number>(useDisplayInfo().Height - 35)
+  const [height] = React.useState<number>(useWindowSize().height - 35)
   const [toggle, setToggle] = useState<boolean>(false)
 
   const handleToggle = () => {
@@ -61,11 +61,11 @@ export const CoverBox: React.FC<IProps> = ({
 
   return (
     <div
-      className="cover-box-layout"
+      className={styles['cover-box-layout']}
       style={{ height: `${height * 0.4}px` }}
     >
       <div
-        className="cover-box"
+        className={styles['cover-box']}
         style={{ width: `${height * 0.4}px`, height: `${height * 0.4}px` }}
         onClick={() => {
           handleToggle()

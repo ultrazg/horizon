@@ -4,7 +4,7 @@ import { Spinner, Tooltip } from '@radix-ui/themes'
 import { HeartIcon, HeartFilledIcon } from '@radix-ui/react-icons'
 import FF_BUTTON_ICON from '@/assets/images/ff-button.png'
 import RW_BUTTON_ICON from '@/assets/images/rw-button.png'
-import './index.modules.scss'
+import styles from './index.module.scss'
 import { Player, toast } from '@/utils'
 import { PlayInfoType } from '@/utils/player'
 import { CONSTANT } from '@/types/constant'
@@ -104,15 +104,15 @@ export const PlayerButtons: React.FC<IProps> = ({ player, playInfo }) => {
   }, [player.playInfo.eid])
 
   return (
-    <div className="player-buttons-layout">
-      <div className="buttons">
+    <div className={styles['player-buttons-layout']}>
+      <div className={styles['buttons']}>
         <Tooltip
           content={
             playInfo.liked ? CONSTANT.PLAYER_UNLIKED : CONSTANT.PLAYER_LIKED
           }
         >
           <div
-            className="button"
+            className={styles['button']}
             onClick={() => {
               if (playInfo.eid != '') {
                 toggleLike(!playInfo.liked)
@@ -129,7 +129,7 @@ export const PlayerButtons: React.FC<IProps> = ({ player, playInfo }) => {
 
         <Tooltip content={CONSTANT.PLAYER_REWIND}>
           <div
-            className="button"
+            className={styles['button']}
             onClick={() => {
               onRewind()
             }}
@@ -146,7 +146,7 @@ export const PlayerButtons: React.FC<IProps> = ({ player, playInfo }) => {
           content={isPlaying ? CONSTANT.PLAYER_PAUSE : CONSTANT.PLAYER_PLAY}
         >
           <div
-            className="button"
+            className={styles['button']}
             onClick={() => {
               onPlay()
             }}
@@ -157,7 +157,7 @@ export const PlayerButtons: React.FC<IProps> = ({ player, playInfo }) => {
 
         <Tooltip content={CONSTANT.PLAYER_FAST_FORWARD}>
           <div
-            className="button"
+            className={styles['button']}
             onClick={() => {
               onFastForward()
             }}
@@ -170,7 +170,7 @@ export const PlayerButtons: React.FC<IProps> = ({ player, playInfo }) => {
           </div>
         </Tooltip>
 
-        <div className="player-speed">
+        <div className={styles['player-speed']}>
           <Tooltip content={CONSTANT.PLAYER_SPEED}>
             <select
               value={playbackRate}

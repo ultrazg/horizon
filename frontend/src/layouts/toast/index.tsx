@@ -9,7 +9,7 @@ import { setToastFunction } from '@/utils/toast'
 import TOAST_INFO_ICON from '@/assets/images/toast-info-icon.png'
 import TOAST_WARN_ICON from '@/assets/images/toast-warn-icon.png'
 import TOAST_SUCCESS_ICON from '@/assets/images/toast-success-icon.png'
-import './index.modules.scss'
+import './index.scss'
 
 export type ToastOptions = {
   type?: 'info' | 'warn' | 'success'

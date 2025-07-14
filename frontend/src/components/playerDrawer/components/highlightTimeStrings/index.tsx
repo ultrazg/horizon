@@ -1,6 +1,6 @@
 import React from 'react'
 import { Player, toast } from '@/utils'
-import './index.modules.scss'
+import styles from './index.module.scss'
 
 type IProps = {
   player: Player
@@ -46,7 +46,7 @@ const HighlightTimeStrings: React.FC<IProps> = ({ text, player }) => {
             return (
               <span
                 key={index}
-                className="time-string"
+                className={styles['time-string']}
                 onClick={() => {
                   onSeek(match)
                 }}

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Empty, Modal, ProfileModal } from '@/components'
 import { modalType } from '@/types/modal'
-import './index.modules.scss'
+import styles from './index.module.scss'
 import {
   Avatar,
   Button,
@@ -11,7 +11,7 @@ import {
   Spinner,
 } from '@radix-ui/themes'
 import { PaperPlaneIcon } from '@radix-ui/react-icons'
-import { useDisplayInfo } from '@/hooks'
+import { useWindowSize } from '@/hooks'
 import { IoMdThumbsUp } from 'react-icons/io'
 import { commentThread, commentThreadType } from '@/api/comment'
 import { CommentPrimaryType } from '@/types/comment'
@@ -35,7 +35,7 @@ export const CommentReplyModal: React.FC<IProps> = ({
   open,
   onClose,
 }) => {
-  const [height] = React.useState<number>(useDisplayInfo().Height)
+  const [height] = React.useState<number>(useWindowSize().height)
   const [loading, setLoading] = useState<boolean>(false)
   const [threadCommentData, setThreadCommentData] = useState<{
     total: number
@@ -113,11 +113,11 @@ export const CommentReplyModal: React.FC<IProps> = ({
           scrollbars="vertical"
         >
           <div
-            className="comment-reply-modal-layout"
+            className={styles['comment-reply-modal-layout']}
             style={{ maxHeight: `${height * 0.6}px` }}
           >
-            <div className="comment-reply-wrapper">
-              <div className="comment-reply-author">
+            <div className={styles['comment-reply-wrapper']}>
+              <div className={styles['comment-reply-author']}>
                 <div>
                   <Avatar
                     radius="full"
@@ -163,7 +163,9 @@ export const CommentReplyModal: React.FC<IProps> = ({
                   {primaryComment?.likeCount}
                 </div>
               </div>
-              <div className="player-comment-body">{primaryComment?.text}</div>
+              <div className={styles['player-comment-body']}>
+                {primaryComment?.text}
+              </div>
             </div>
 
             <Text color="gray">评论回复({threadCommentData?.total})</Text>
@@ -173,9 +175,9 @@ export const CommentReplyModal: React.FC<IProps> = ({
             {threadCommentData?.records.map((item) => (
               <div
                 key={item.id}
-                className="comment-reply-wrapper"
+                className={styles['comment-reply-wrapper']}
               >
-                <div className="comment-reply-author">
+                <div className={styles['comment-reply-author']}>
                   <div>
                     <Avatar
                       radius="full"
@@ -226,7 +228,7 @@ export const CommentReplyModal: React.FC<IProps> = ({
                     {item?.likeCount}
                   </div>
                 </div>
-                <div className="player-comment-body">
+                <div className={styles['player-comment-body']}>
                   {primaryComment.id !== item?.replyToComment?.id && (
                     <span>
                       回复{' '}

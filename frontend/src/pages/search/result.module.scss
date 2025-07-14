@@ -1,0 +1,46 @@
+@import '@/assets/global/_common.scss';
+@import '@/assets/global/_variables.scss';
+
+.title {
+  @include no-select;
+  color: $secondary-font-color;
+}
+
+.search-result-wrapper {
+  @include no-select;
+
+  margin-top: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 22px;
+
+  .search-result-item {
+    display: flex;
+    flex-direction: column;
+
+    .image {
+      aspect-ratio: 1 / 1;
+      width: 100%;
+    }
+
+    .name {
+      height: 48px;
+      line-height: 48px;
+      display: flex;
+
+      span {
+        max-width: 124px;
+        margin: 0 auto;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+}
+
+.loadMoreButton{
+  margin-top: 1.5rem;
+  width: 100%;
+  text-align: center;
+}

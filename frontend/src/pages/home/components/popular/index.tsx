@@ -2,7 +2,7 @@ import React from 'react'
 import { ColorfulShadow } from '@/components'
 import { QuoteIcon, UpdateIcon } from '@radix-ui/react-icons'
 import { Button, Skeleton } from '@radix-ui/themes'
-import './index.modules.scss'
+import styles from './index.module.scss'
 import { PopularType, TargetType } from '@/pages/home'
 import { showEpisodeDetailModal } from '@/utils'
 import { usePlayer } from '@/hooks'
@@ -28,18 +28,18 @@ const PopularPart: React.FC<IProps> = ({
   const player = usePlayer()
 
   return (
-    <div className="popular-layout">
+    <div className={styles['popular-layout']}>
       <h3>大家都在听</h3>
 
       <Skeleton loading={loading}>
-        <div className="popular-content">
+        <div className={styles['popular-content']}>
           {data?.target?.map((item: TargetType) => (
             <div
-              className="popular-item"
+              className={styles['popular-item']}
               key={item.episode.eid}
             >
-              <div className="popular-info">
-                <div className="cover-box">
+              <div className={styles['popular-info']}>
+                <div className={styles['cover-box']}>
                   <ColorfulShadow
                     src={
                       item.episode?.image
@@ -64,7 +64,7 @@ const PopularPart: React.FC<IProps> = ({
                     }}
                   />
                 </div>
-                <div className="info-box">
+                <div className={styles['info-box']}>
                   <p
                     onClick={() => {
                       onDetail(item.episode.podcast.pid)
@@ -95,7 +95,7 @@ const PopularPart: React.FC<IProps> = ({
         </div>
       </Skeleton>
 
-      <div className="reload-button">
+      <div className={styles['reload-button']}>
         <Button
           size="1"
           variant="soft"

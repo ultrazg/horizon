@@ -4,9 +4,6 @@
 .setting-layout {
   @include no-select;
 
-  padding: 0 14px;
-  height: 100%;
-
   h3 {
     font-size: 1.8rem;
     margin-bottom: 0.7rem;
@@ -20,6 +17,8 @@
   .content_text {
     color: $secondary-font-color;
     @include allow-select;
+    text-align: right;
+    width: 100%;
   }
 
   .app-logo {

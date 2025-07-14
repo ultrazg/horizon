@@ -1,5 +1,5 @@
-import { useNavigateTo, useBack } from './navigate'
-import { useDisplayInfo } from './display'
+import { useNavigateTo, useBack, useForward } from './navigate'
+import { useWindowSize } from './display'
 import { usePlayer } from '@/layouts/player'
 
-export { useNavigateTo, useBack, useDisplayInfo, usePlayer }
+export { useNavigateTo, useBack, useForward, useWindowSize, usePlayer }

@@ -4,7 +4,7 @@ import { ChevronRightIcon } from '@radix-ui/react-icons'
 import { MileageModal } from '@/pages/profile/components/mileageModal'
 import { mileageGet } from '@/api/mileage'
 import { mileageType } from '@/types/mileage'
-import './index.modules.scss'
+import styles from './index.module.scss'
 
 export const formatTime = (totalSeconds: number): number[] => {
   const hours: number = Math.floor(totalSeconds / 3600)
@@ -38,18 +38,18 @@ export const MileageDuration: React.FC = () => {
   }, [])
 
   return (
-    <div className="time-content">
+    <div className={styles['time-content']}>
       <h3>收听时长</h3>
 
       <Card
-        className="time-card"
+        className={styles['time-card']}
         onClick={() => {
           setMileageModalOpen(true)
         }}
       >
         <div>
-          <span className="num">{time[0]}</span>时
-          <span className="num">{time[1]}</span>分
+          <span className={styles['num']}>{time[0]}</span>时
+          <span className={styles['num']}>{time[1]}</span>分
         </div>
         <div>
           总收听时长

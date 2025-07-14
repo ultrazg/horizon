@@ -1,6 +1,5 @@
 import { RouterProvider } from 'react-router-dom'
 import { router } from './router/routes'
-import { TitleBar } from './components'
 import { useEffect } from 'react'
 import { SaveLastPlay } from '@/utils'
 import { usePlayer } from '@/hooks'
@@ -14,7 +13,6 @@ function App() {
 
   return (
     <>
-      <TitleBar />
       <RouterProvider router={router} />
     </>
   )

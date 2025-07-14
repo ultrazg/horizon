@@ -6,7 +6,7 @@ import { sticker } from '@/api/sticker'
 import { userType } from '@/types/user'
 import { Storage } from '@/utils'
 import { stickerType } from '@/types/sticker'
-import './index.modules.scss'
+import styles from './index.module.scss'
 
 export const Sticker = () => {
   const [stickerModalOpen, setStickerModalOpen] = useState<boolean>(false)
@@ -44,17 +44,17 @@ export const Sticker = () => {
   }, [])
 
   return (
-    <div className="sticker-content">
+    <div className={styles['sticker-content']}>
       <h3>我的贴纸库</h3>
 
       <Card
-        className="sticker-card"
+        className={styles['sticker-card']}
         onClick={() => {
           setStickerModalOpen(true)
         }}
       >
         <div
-          className="sticker-bgi"
+          className={styles['sticker-bgi']}
           style={{
             backgroundImage: `url(${data.records.length === 0 ? '' : data.records[0].image.picUrl})`,
           }}

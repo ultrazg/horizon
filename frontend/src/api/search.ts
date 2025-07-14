@@ -5,9 +5,9 @@ const api = {
   search: 'search',
 }
 
-type searchType = {
+export type searchType = {
   keyword: string
-  type: string
+  type: 'PODCAST' | 'EPISODE' | 'USER'
   loadMoreKey?: {}
 }
 

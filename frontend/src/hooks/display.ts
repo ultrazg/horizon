@@ -1,10 +1,23 @@
-import { useDisplayInfoType } from '@/types/display'
+import { useWindowSizeType } from '@/types/display'
+import { useEffect, useState } from 'react'
 
-export const useDisplayInfo = (): useDisplayInfoType => {
-  const { innerHeight, innerWidth } = window
+export const useWindowSize = () => {
+  const [windowSize, setWindowSize] = useState<useWindowSizeType>({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  })
 
-  return {
-    Height: innerHeight,
-    Width: innerWidth,
-  }
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      })
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  return windowSize
 }

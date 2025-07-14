@@ -1,0 +1,59 @@
+@import '@/assets/global/_common.scss';
+@import '@/assets/global/_variables.scss';
+
+.search-layout {
+  @include no-select;
+
+  .search-category-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    color: $secondary-font-color;
+  }
+
+  .search-result {
+    width: 100%;
+    height: 11rem;
+    margin-bottom: 1.3rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .search-result-wrapper {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 1.2rem;
+    box-sizing: border-box;
+
+    .image-container {
+      width: 157px;
+      height: 181px;
+
+      .image {
+        display: block;
+        width: 157px;
+        height: 157px;
+      }
+
+      .name {
+        width: 157px;
+        height: 24px;
+        margin-top: 12px;
+        line-height: 24px;
+        text-align: center;
+        align-items: center;
+        overflow: hidden;
+        display: -webkit-box;
+        line-clamp: 1;
+        box-orient: vertical;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+      }
+    }
+  }
+}

@@ -1,6 +1,6 @@
 import { useNavigateTo } from '@/hooks'
 import { Storage } from '@/utils'
-import './index.modules.scss'
+import styles from './index.module.scss'
 import { useEffect, useState } from 'react'
 import { userType } from '@/types/user'
 
@@ -18,19 +18,22 @@ export const NavUser = () => {
 
   return (
     <div
-      className="nav-user-layout"
+      className={styles['nav-user-layout']}
       onClick={() => {
         goProfile()
       }}
     >
-      <div className="left">
-        <div className="avatar-box">
-          <img src={info.avatar} />
+      <div className={styles['left']}>
+        <div className={styles['avatar-box']}>
+          <img
+            src={info.avatar}
+            alt="avatar"
+          />
         </div>
       </div>
-      <div className="right">
-        <div className="user-box">
-          <p className="nickname">{info.nickname}</p>
+      <div className={styles['right']}>
+        <div className={styles['user-box']}>
+          <p className={styles['nickname']}>{info.nickname}</p>
         </div>
       </div>
     </div>

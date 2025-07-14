@@ -1,14 +1,12 @@
 import { Box, Tabs } from '@radix-ui/themes'
-import './index.modules.scss'
+import styles from './index.module.scss'
 import TabEpisode from './components/tabEpisode'
 import TabComment from './components/tabComment'
 
 export const Favorites = () => {
   return (
     <div className="favorites-layout">
-      <h3>收藏</h3>
-
-      <div className="favorites-content">
+      <div className={styles['favorites-content']}>
         <Tabs.Root defaultValue="1">
           <Tabs.List>
             <Tabs.Trigger value="1">单集</Tabs.Trigger>

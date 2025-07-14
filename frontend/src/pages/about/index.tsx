@@ -1,5 +1,4 @@
-import { NavBackButton } from '@/components'
-import './index.modules.scss'
+import styles from './index.module.scss'
 import { APP_NAME } from '@/utils'
 import { BrowserOpenURL } from 'wailsjs/runtime'
 import { Text, Heading, Button, Flex, Separator } from '@radix-ui/themes'
@@ -7,11 +6,9 @@ import APP_ICON from '@/assets/images/logo.png'
 
 export const About = () => {
   return (
-    <div className="about-layout">
-      <NavBackButton />
-
-      <div className="app-logo">
-        <div className="logo">
+    <div className={styles['about-layout']}>
+      <div className={styles['app-logo']}>
+        <div className={styles['logo']}>
           <img
             alt="app_icon"
             src={APP_ICON}
@@ -19,7 +16,7 @@ export const About = () => {
         </div>
       </div>
 
-      <div className="app-info">
+      <div className={styles['app-info']}>
         <Heading
           size={'8'}
           mb={'3'}

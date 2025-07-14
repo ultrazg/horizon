@@ -2,9 +2,6 @@
 @import '@/assets/global/_variables.scss';
 
 .podcast-detail-layout {
-  padding: 0 14px;
-  height: 100%;
-
   .podcast-detail-info {
     padding-top: 1.7rem;
 
@@ -150,6 +147,10 @@
             }
           }
         }
+
+        .load-more-button{
+          text-align: center;
+        }
       }
     }
 
@@ -177,7 +178,7 @@
             width: 16rem;
             height: 14rem;
             display: flex;
-            justify-content: center;
+            justify-content: start;
 
             .cover {
               width: 13rem;

@@ -18,7 +18,7 @@ import { isValidPhoneNumber, UpdateConfig, toast, Storage } from '@/utils'
 import UserStore from '@/store/user'
 import { userType } from '@/types/user'
 import '@/assets/global/animate.css'
-import './index.modules.scss'
+import styles from './index.module.scss'
 import { CONSTANT } from '@/types/constant'
 
 export const Login: React.FC = () => {
@@ -138,11 +138,16 @@ export const Login: React.FC = () => {
     <>
       <Container
         size="1"
-        className="login-wrapper"
+        className={styles['login-wrapper']}
+        style={
+          {
+            '--wails-draggable': 'drag',
+          } as any
+        }
       >
         <Section size="3">
-          <div className="logo-layout">
-            <div className="logo">
+          <div className={styles['logo-layout']}>
+            <div className={styles['logo']}>
               <img
                 src={APP_ICON}
                 alt="APP_ICON"
@@ -150,8 +155,8 @@ export const Login: React.FC = () => {
             </div>
           </div>
 
-          <div className="form-layout">
-            <div className="form">
+          <div className={styles['form-layout']}>
+            <div className={styles['form']}>
               <Text style={{ display: 'flex', alignItems: 'center' }}>
                 手机验证登录
                 <Tooltip content={CONSTANT.LOGIN_TOOLTIP}>

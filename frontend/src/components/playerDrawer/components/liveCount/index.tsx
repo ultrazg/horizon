@@ -4,7 +4,7 @@ import {
   liveStatsReport,
   liveStatsReportType,
 } from '@/api/episode'
-import './index.modules.scss'
+import styles from './index.module.scss'
 
 type IProps = {
   open: boolean
@@ -57,9 +57,9 @@ export const LiveCount: React.FC<IProps> = ({ open, eid, pid }) => {
   }, [open])
 
   return (
-    <div className="live-count-layout">
-      <div className="live-dot" />
-      {liveCount || 'null'} 人正在听
+    <div className={styles['live-count-layout']}>
+      <div className={styles['live-dot']} />
+      {liveCount || 1} 人正在听
     </div>
   )
 }

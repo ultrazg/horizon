@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Modal, Empty } from '@/components'
-import './index.modules.scss'
+import styles from './index.module.scss'
 import { modalType } from '@/types/modal'
 import {
   Avatar,
@@ -21,7 +21,7 @@ import { imageType } from '@/types/image'
 import { genderType } from '@/types/user'
 import { toast } from '@/utils'
 import { SlSymbleFemale, SlSymbolMale } from 'react-icons/sl'
-import { useDisplayInfo } from '@/hooks'
+import { useWindowSize } from '@/hooks'
 
 /**
  * 取消黑名单用户
@@ -60,7 +60,7 @@ export const onBlockedUserCreate = (uid: string, cb?: () => void) => {
 }
 
 export const BlockedModal: React.FC<modalType> = ({ open, onClose }) => {
-  const [height] = useState<number>(useDisplayInfo().Height * 0.4)
+  const [height] = useState<number>(useWindowSize().height * 0.4)
   const [loading, setLoading] = useState<boolean>(false)
   const [profileModal, setProfileModal] = useState<{
     open: boolean
@@ -106,7 +106,7 @@ export const BlockedModal: React.FC<modalType> = ({ open, onClose }) => {
     >
       <Spinner loading={loading}>
         {lists.length > 0 ? (
-          <div className="blocked-modal-wrapper">
+          <div className={styles['blocked-modal-wrapper']}>
             <ScrollArea
               type="hover"
               scrollbars="vertical"
@@ -131,13 +131,13 @@ export const BlockedModal: React.FC<modalType> = ({ open, onClose }) => {
                     index: number,
                   ) => (
                     <Box
-                      className="chunk"
+                      className={styles['chunk']}
                       mb="4"
                       key={index}
                     >
                       <Flex gap="1">
                         <Avatar
-                          className="avatar"
+                          className={styles['avatar']}
                           src={item.avatar.picture.picUrl}
                           fallback={item.nickname}
                           onClick={() => {
@@ -149,7 +149,7 @@ export const BlockedModal: React.FC<modalType> = ({ open, onClose }) => {
                         />
                         <Box>
                           <Text
-                            className="nickname"
+                            className={styles['nickname']}
                             mb="1"
                             size="3"
                             title={item.nickname}

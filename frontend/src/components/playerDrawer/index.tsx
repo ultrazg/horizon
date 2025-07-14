@@ -1,21 +1,40 @@
 import React, { useEffect, useState } from 'react'
 import { IconButton, Slider, Text, Tooltip } from '@radix-ui/themes'
-import { CaretDownIcon } from '@radix-ui/react-icons'
-import { useDisplayInfo } from '@/hooks'
+import {
+  CaretDownIcon,
+  Cross1Icon,
+  EnterFullScreenIcon,
+  ExitFullScreenIcon,
+  MinusIcon,
+} from '@radix-ui/react-icons'
+import { useWindowSize } from '@/hooks'
 import { CoverBox } from './components/coverBox'
 import { LiveCount } from './components/liveCount'
 import { EpisodeComment } from './components/episodeComment'
-import './index.modules.scss'
+import styles from './index.module.scss'
 import { BsPauseFill, BsPlayFill } from 'react-icons/bs'
 import { IoMdThumbsUp, IoMdInformationCircleOutline } from 'react-icons/io'
 import { episodeDetail, episodeClapCreate } from '@/api/episode'
 import { EpisodeType } from '@/types/episode'
-import { Player, showEpisodeDetailModal, toast } from '@/utils'
+import {
+  APP_NAME,
+  APP_VERSION,
+  Player,
+  showEpisodeDetailModal,
+  toast,
+} from '@/utils'
 import { CONSTANT } from '@/types/constant'
 import FF_BUTTON_ICON from '@/assets/images/ff-button-colorful.png'
 import RW_BUTTON_ICON from '@/assets/images/rw-button-colorful.png'
 import { PlayInfoType } from '@/utils/player'
 import { secondsToHms } from '@/components/playerController/components/episodeCover'
+import {
+  Environment,
+  Quit,
+  WindowMinimise,
+  WindowToggleMaximise,
+} from 'wailsjs/runtime'
+import { envType } from '@/types/env'
 
 type IProps = {
   player: Player
@@ -30,14 +49,20 @@ export const PlayerDrawer: React.FC<IProps> = ({
   open,
   onClose,
 }) => {
-  const [height] = React.useState<number>(useDisplayInfo().Height - 35)
-  const [width] = React.useState<number>(useDisplayInfo().Width)
+  const { height } = useWindowSize()
 
+  const [envInfo, setEnvInfo] = useState<envType>()
   const [episodeDetailInfo, setEpisodeDetailInfo] = useState<EpisodeType>()
   const [isPlaying, setIsPlaying] = useState<boolean>(false)
   const [left, setLeft] = useState<boolean>(false)
   const [right, setRight] = useState<boolean>(false)
   const [progress, setProgress] = React.useState<number>(0)
+  const [isMaximised, setIsMaximised] = useState<boolean>(false)
+
+  const toggleWindowMaximised = (): void => {
+    WindowToggleMaximise()
+    setIsMaximised(!isMaximised)
+  }
 
   /**
    * 标记精彩时刻
@@ -110,6 +135,10 @@ export const PlayerDrawer: React.FC<IProps> = ({
   useEffect(() => {
     if (open) {
       getEpisodeDetail()
+
+      Environment().then((res: envType) => {
+        setEnvInfo(res)
+      })
     }
   }, [open])
 
@@ -121,22 +150,75 @@ export const PlayerDrawer: React.FC<IProps> = ({
   return (
     <div
       style={{
-        width,
-        height,
+        // width,
+        // height: envInfo?.platform === 'darwin' ? height - 50 : height,
+        // paddingTop: envInfo?.platform === 'darwin' ? 50 : 0,
+        paddingTop: 50,
         transform: open
           ? `translateY(-${height}px)`
           : `translateY(${height}px)`,
       }}
-      className="player-drawer-layout"
+      className={styles['player-drawer-layout']}
     >
+      {envInfo?.platform !== 'darwin' && (
+        <>
+          <div
+            className={styles['title-bar-text']}
+            style={
+              {
+                '--wails-draggable': 'drag',
+              } as any
+            }
+          >
+            {APP_NAME} v{APP_VERSION}
+          </div>
+          <div
+            className={styles['title-bar-button']}
+            style={
+              {
+                '--wails-draggable': 'none',
+              } as any
+            }
+          >
+            <div
+              onClick={() => {
+                WindowMinimise()
+              }}
+              title="最小化"
+            >
+              <MinusIcon />
+            </div>
+            <div
+              onClick={() => {
+                toggleWindowMaximised()
+              }}
+              title={isMaximised ? '还原' : '最大化'}
+            >
+              {isMaximised ? <ExitFullScreenIcon /> : <EnterFullScreenIcon />}
+            </div>
+            <div
+              onClick={() => {
+                Quit()
+              }}
+              title="退出"
+            >
+              <Cross1Icon />
+            </div>
+          </div>
+        </>
+      )}
+
       <div
-        className="player-background-image"
+        className={styles['player-background-image']}
         style={{
           background: `url(${episodeDetailInfo?.image ? episodeDetailInfo.image.picUrl : episodeDetailInfo?.podcast.image.picUrl}) no-repeat center center / cover`,
         }}
       />
 
-      <div className="close-button">
+      <div
+        style={{ '--wails-draggable': 'drag' } as any}
+        className={styles['close-button']}
+      >
         <IconButton
           onClick={onClose}
           variant="ghost"
@@ -157,11 +239,11 @@ export const PlayerDrawer: React.FC<IProps> = ({
       </div>
 
       <div
-        className="player-content"
+        className={styles['player-content']}
         style={{ height: `${height - 80}px` }}
       >
-        <div className="player-left">
-          <div className="player-left-content">
+        <div className={styles['player-left']}>
+          <div className={styles['player-left-content']}>
             <CoverBox
               open={open}
               episodeCover={
@@ -177,7 +259,7 @@ export const PlayerDrawer: React.FC<IProps> = ({
               mt="4"
               mb="1"
               align="center"
-              className="episode-name"
+              className={styles['episode-name']}
             >
               {episodeDetailInfo?.title}
             </Text>
@@ -186,18 +268,18 @@ export const PlayerDrawer: React.FC<IProps> = ({
               align="center"
               size="5"
               mb="6"
-              className="podcast-name"
+              className={styles['podcast-name']}
             >
               {episodeDetailInfo?.podcast.title}
             </Text>
 
-            <div className="control-button-layout">
+            <div className={styles['control-button-layout']}>
               <div>
                 <Tooltip content="单集详情">
                   <IconButton
                     variant="ghost"
                     radius="large"
-                    className="control-button"
+                    className={styles['control-button']}
                     onClick={() => {
                       showEpisodeDetailModal(playInfo.eid)
                     }}
@@ -210,7 +292,7 @@ export const PlayerDrawer: React.FC<IProps> = ({
                   <IconButton
                     variant="ghost"
                     radius="large"
-                    className="control-button"
+                    className={styles['control-button']}
                     onClick={() => {
                       onRewind()
                     }}
@@ -231,7 +313,7 @@ export const PlayerDrawer: React.FC<IProps> = ({
                   <IconButton
                     variant="ghost"
                     radius="large"
-                    className="control-button"
+                    className={styles['control-button']}
                     onClick={() => {
                       onPlay()
                     }}
@@ -244,7 +326,7 @@ export const PlayerDrawer: React.FC<IProps> = ({
                   <IconButton
                     variant="ghost"
                     radius="large"
-                    className="control-button"
+                    className={styles['control-button']}
                     onClick={() => {
                       onFastForward()
                     }}
@@ -261,7 +343,7 @@ export const PlayerDrawer: React.FC<IProps> = ({
                   <IconButton
                     variant="ghost"
                     radius="large"
-                    className="control-button"
+                    className={styles['control-button']}
                     onClick={() => {
                       onCreateClap(playInfo.eid)
                     }}
@@ -272,14 +354,14 @@ export const PlayerDrawer: React.FC<IProps> = ({
               </div>
             </div>
 
-            <div className="progress-bar-layout">
-              <div className="time-flag">
+            <div className={styles['progress-bar-layout']}>
+              <div className={styles['time-flag']}>
                 <span>{secondsToHms(Math.round(playInfo.current))}</span>
                 <span>{secondsToHms(Math.round(playInfo.duration))}</span>
               </div>
-              <div className="progress-bar">
+              <div className={styles['progress-bar']}>
                 <Slider
-                  className="progress-slider"
+                  className={styles['progress-slider']}
                   size="1"
                   step={1}
                   radius="full"
@@ -297,7 +379,7 @@ export const PlayerDrawer: React.FC<IProps> = ({
           </div>
         </div>
 
-        <div className="player-right">
+        <div className={styles['player-right']}>
           <EpisodeComment
             eid={playInfo.eid}
             open={open}

@@ -1,5 +1,5 @@
 import React from 'react'
-import './index.modules.scss'
+import styles from './index.module.scss'
 import { ColorfulShadow, Empty } from '@/components'
 import { Button } from '@radix-ui/themes'
 import { PlusIcon } from '@radix-ui/react-icons'
@@ -83,16 +83,16 @@ export const TabPodcast: React.FC<IProps> = ({
   }
 
   return (
-    <div className="search-result-podcast-layout">
+    <div className={styles['search-result-podcast-layout']}>
       {data.records.length === 0 && <Empty />}
       {data.records.map((item) => (
         <div
-          className="search-result-podcast-item"
+          className={styles['search-result-podcast-item']}
           key={item.pid}
         >
-          <div className="left">
+          <div className={styles['left']}>
             <ColorfulShadow
-              className="podcast-cover"
+              className={styles['podcast-cover']}
               curPointer
               src={item?.image?.picUrl}
               onClick={() => {
@@ -100,7 +100,7 @@ export const TabPodcast: React.FC<IProps> = ({
               }}
             />
 
-            <div className="podcast-info">
+            <div className={styles['podcast-info']}>
               <p>{item.title}</p>
               <p>{item.description}</p>
               <p>
@@ -109,7 +109,7 @@ export const TabPodcast: React.FC<IProps> = ({
               </p>
             </div>
           </div>
-          <div className="right">
+          <div className={styles['right']}>
             <Button
               variant="soft"
               color={item.subscriptionStatus === 'ON' ? 'gray' : undefined}
@@ -128,7 +128,7 @@ export const TabPodcast: React.FC<IProps> = ({
         </div>
       ))}
 
-      <div className="podcast-load-more-button">
+      <div className={styles['podcast-load-more-button']}>
         {!isEmpty(data.loadMoreKey) && (
           <Button
             color="gray"

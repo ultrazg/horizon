@@ -21,10 +21,10 @@ var icon []byte
 func AppOptions(app *bridge.App) *options.App {
 	return &options.App{
 		Title:     bridge.APP_NAME,
-		Width:     1024,
-		Height:    720,
-		MinWidth:  1024,
-		MinHeight: 720,
+		Width:     1420,
+		Height:    900,
+		MinWidth:  1420,
+		MinHeight: 900,
 		// DisableResize: true,
 		AssetServer: &assetserver.Options{
 			Assets:  assets,
@@ -38,9 +38,9 @@ func AppOptions(app *bridge.App) *options.App {
 		},
 		Frameless: runtime.GOOS == "windows",
 		Windows: &windows.Options{
-			WebviewIsTransparent:              true,
-			WindowIsTranslucent:               true,
-			BackdropType:                      windows.Acrylic,
+			WebviewIsTransparent: false,
+			WindowIsTranslucent:  false,
+			// BackdropType:                      windows.Acrylic,
 			DisableWindowIcon:                 false,
 			Theme:                             windows.Dark,
 			DisableFramelessWindowDecorations: false,
@@ -48,8 +48,8 @@ func AppOptions(app *bridge.App) *options.App {
 		Mac: &mac.Options{
 			TitleBar:             mac.TitleBarHiddenInset(),
 			Appearance:           mac.NSAppearanceNameDarkAqua,
-			WebviewIsTransparent: true,
-			WindowIsTranslucent:  true,
+			WebviewIsTransparent: false,
+			WindowIsTranslucent:  false,
 			About: &mac.AboutInfo{
 				Title:   fmt.Sprintf("%s %s", bridge.APP_NAME, bridge.APP_VERSION),
 				Message: "第三方小宇宙桌面客户端，支持 Windows 与 macOS\r\n\r\n© 2025 2bit",

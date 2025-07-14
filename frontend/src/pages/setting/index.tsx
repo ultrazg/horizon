@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Environment, EventsOn } from 'wailsjs/runtime'
+import { Environment } from 'wailsjs/runtime'
 import { envType } from '@/types/env'
 import {
   SETTING_CONFIG_ENUM,
@@ -41,7 +41,8 @@ import {
 import { BlockedModal } from './components/blockedModal'
 import { ProxyModal } from './components/proxyModal'
 import { UpgradeModal } from './components/upgradeModal'
-import './index.modules.scss'
+import { NewVersionModal } from './components/newVersionModal'
+import styles from './index.module.scss'
 import { CONSTANT } from '@/types/constant'
 import { CheckForUpgrade } from 'wailsjs/go/bridge/App'
 import dayjs from 'dayjs'
@@ -65,6 +66,17 @@ export const Setting: React.FC = () => {
   const [upgradeModal, setUpgradeModal] = useState<boolean>(false)
   const [proxyModal, setProxyModal] = useState<boolean>(false)
   const [checkLoading, setCheckLoading] = useState<boolean>(false)
+  const [newVersionModalInfo, setNewVersionModalInfo] = useState<{
+    open: boolean
+    createdAt: string
+    tagName: string
+    body: string
+  }>({
+    open: false,
+    createdAt: '',
+    tagName: '',
+    body: '',
+  })
   const player = usePlayer()
 
   const goAbout = useNavigateTo('/about')
@@ -82,14 +94,11 @@ export const Setting: React.FC = () => {
         }
 
         if (!res.isLatest) {
-          ShowMessageDialog(
-            DialogType.QUESTION,
-            '发现新版本！',
-            `发布时间：${dayjs(res.latest?.created_at).format('YYYY-MM-DD')}\r\n当前版本：v${APP_VERSION}\r\n最新版本：${res.latest?.tag_name}\r\n更新内容：\r\n${res.latest?.body}\r\n\r\n是否升级？`,
-          ).then((res) => {
-            if (res === 'Yes' || res === '是') {
-              setUpgradeModal(true)
-            }
+          setNewVersionModalInfo({
+            open: true,
+            createdAt: dayjs(res.latest?.created_at).format('YYYY-MM-DD'),
+            tagName: res.latest?.tag_name || '',
+            body: res.latest?.body || '',
           })
         } else {
           ShowMessageDialog(DialogType.INFO, '提示', '当前已是最新版本').then()
@@ -174,14 +183,14 @@ export const Setting: React.FC = () => {
   }, [])
 
   return (
-    <div className="setting-layout">
-      <h3>设置</h3>
-
+    <div className={styles['setting-layout']}>
       <h4>账号绑定</h4>
       <Card>
         <Flex>
-          <Box width="100%">手机号</Box>
-          <Box className="content_text">{userInfo.mobilePhoneNumber}</Box>
+          <Box width="70%">手机号</Box>
+          <Box className={styles['content_text']}>
+            {userInfo.mobilePhoneNumber}
+          </Box>
         </Flex>
         {userInfo.wechatUserInfo?.nickName && (
           <>
@@ -190,8 +199,8 @@ export const Setting: React.FC = () => {
               size="4"
             />
             <Flex>
-              <Box width="100%">微信</Box>
-              <Box className="content_text">
+              <Box width="70%">微信</Box>
+              <Box className={styles['content_text']}>
                 {userInfo.wechatUserInfo?.nickName}
               </Box>
             </Flex>
@@ -205,8 +214,8 @@ export const Setting: React.FC = () => {
               size="4"
             />
             <Flex>
-              <Box width="100%">即刻</Box>
-              <Box className="content_text">
+              <Box width="70%">即刻</Box>
+              <Box className={styles['content_text']}>
                 {userInfo.jikeUserInfo?.nickname}
               </Box>
             </Flex>
@@ -446,8 +455,8 @@ export const Setting: React.FC = () => {
         </Flex>
       </Card>
 
-      <div className="app-logo">
-        <div className="logo">
+      <div className={styles['app-logo']}>
+        <div className={styles['logo']}>
           <img
             src={APP_ICON}
             alt="app_icon"
@@ -455,7 +464,7 @@ export const Setting: React.FC = () => {
         </div>
       </div>
 
-      <div className="app-info">
+      <div className={styles['app-info']}>
         <div>{APP_NAME}</div>
         <p>
           v{APP_VERSION}_{envInfo?.platform}_{envInfo?.arch}
@@ -473,6 +482,32 @@ export const Setting: React.FC = () => {
         open={proxyModal}
         onClose={() => {
           setProxyModal(false)
+        }}
+      />
+
+      <NewVersionModal
+        open={newVersionModalInfo.open}
+        newVersionInfo={{
+          createdAt: newVersionModalInfo.createdAt,
+          tagName: newVersionModalInfo.tagName,
+          body: newVersionModalInfo.body,
+        }}
+        onOk={() => {
+          setNewVersionModalInfo({
+            open: false,
+            createdAt: '',
+            tagName: '',
+            body: '',
+          })
+          setUpgradeModal(true)
+        }}
+        onClose={() => {
+          setNewVersionModalInfo({
+            open: false,
+            createdAt: '',
+            tagName: '',
+            body: '',
+          })
         }}
       />
 

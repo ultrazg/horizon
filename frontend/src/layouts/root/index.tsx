@@ -1,26 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
-import {
-  MagnifyingGlassIcon,
-  GlobeIcon,
-  CardStackIcon,
-  StarIcon,
-  GearIcon,
-} from '@radix-ui/react-icons'
-import { ScrollArea } from '@radix-ui/themes'
-import { NavLink, Outlet, useLocation } from 'react-router-dom'
-import { PlayController, NavUser } from '@/components'
+import { Outlet, useLocation } from 'react-router-dom'
+import { PlayController, TitleBar } from '@/components'
 import { useNavigateTo } from '@/hooks'
-import {
-  ReadConfig,
-  ShowMessageDialog,
-  DialogType,
-  APP_VERSION,
-  Storage,
-} from '@/utils'
+import { ReadConfig, Storage, toast } from '@/utils'
 import { Launch } from '@/pages'
-import './index.modules.scss'
+import styles from './index.module.scss'
 import { CheckForUpgrade } from 'wailsjs/go/bridge/App'
-import dayjs from 'dayjs'
 import { UpgradeModal } from '@/pages/setting/components/upgradeModal'
 import { Profile } from '@/api/profile'
 import { userType } from '@/types/user'
@@ -28,7 +13,7 @@ import { userType } from '@/types/user'
 export const Root: React.FC = () => {
   const scrollRef = useRef<HTMLDivElement | null>(null)
   const [loading, setLoading] = useState<boolean>(true)
-  const [checkUpgrade, setcheckUpgrade] = useState<boolean>(false)
+  const [checkUpgrade, setCheckUpgrade] = useState<boolean>(false)
   const [upgradeModal, setUpgradeModal] = useState<boolean>(false)
   const location = useLocation()
 
@@ -62,7 +47,7 @@ export const Root: React.FC = () => {
     ReadConfig()
       .then(async (res) => {
         if (res.setting.checkUpdateOnStartup) {
-          setcheckUpgrade(true)
+          setCheckUpgrade(true)
         }
 
         if (res?.user?.accessToken) {
@@ -84,21 +69,10 @@ export const Root: React.FC = () => {
   const onCheckForUpgrade = () => {
     CheckForUpgrade()
       .then((res) => {
-        if (res.err !== '') {
-          ShowMessageDialog(DialogType.ERROR, '提示', res.err).then()
-
-          return
-        }
-
         if (!res.isLatest) {
-          ShowMessageDialog(
-            DialogType.QUESTION,
-            '发现新版本！',
-            `发布时间：${dayjs(res.latest?.created_at).format('YYYY-MM-DD')}\r\n当前版本：v${APP_VERSION}\r\n最新版本：${res.latest?.tag_name}\r\n更新内容：\r\n${res.latest?.body}\r\n\r\n是否升级？`,
-          ).then((res) => {
-            if (res === 'Yes' || res === '是') {
-              setUpgradeModal(true)
-            }
+          toast('发现新版本！', {
+            type: 'info',
+            duration: 15 * 1000,
           })
         }
       })
@@ -119,7 +93,7 @@ export const Root: React.FC = () => {
 
   useEffect(() => {
     if (scrollRef.current) {
-      scrollRef.current.scrollTo({ top: 0 })
+      scrollRef.current.scrollTo({ top: 0, behavior: 'smooth' })
     }
   }, [location])
 
@@ -129,87 +103,13 @@ export const Root: React.FC = () => {
         <Launch />
       ) : (
         <>
-          <div className="root-layout">
-            <nav className="nav-layout">
-              <NavUser />
+          <TitleBar />
 
-              <ul>
-                <li>
-                  <NavLink
-                    to="/"
-                    className={({ isActive, isPending }) =>
-                      isPending ? 'pending' : isActive ? 'active' : ''
-                    }
-                  >
-                    <span className="icon-box">
-                      <GlobeIcon className="icon" />
-                    </span>
-                    发现
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    to="search"
-                    className={({ isActive, isPending }) =>
-                      isPending ? 'pending' : isActive ? 'active' : ''
-                    }
-                  >
-                    <span className="icon-box">
-                      <MagnifyingGlassIcon className="icon" />
-                    </span>
-                    搜索
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    to="subscription"
-                    className={({ isActive, isPending }) =>
-                      isPending ? 'pending' : isActive ? 'active' : ''
-                    }
-                  >
-                    <span className="icon-box">
-                      <CardStackIcon className="icon" />
-                    </span>
-                    订阅
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    to="favorites"
-                    className={({ isActive, isPending }) =>
-                      isPending ? 'pending' : isActive ? 'active' : ''
-                    }
-                  >
-                    <span className="icon-box">
-                      <StarIcon className="icon" />
-                    </span>
-                    收藏
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    to="setting"
-                    className={({ isActive, isPending }) =>
-                      isPending ? 'pending' : isActive ? 'active' : ''
-                    }
-                  >
-                    <span className="icon-box">
-                      <GearIcon className="icon" />
-                    </span>
-                    设置
-                  </NavLink>
-                </li>
-              </ul>
-            </nav>
-
-            <div className="outlet-layout">
-              <ScrollArea
-                type="hover"
-                ref={scrollRef}
-              >
-                <Outlet />
-              </ScrollArea>
-            </div>
+          <div
+            className={styles['outlet-layout']}
+            ref={scrollRef}
+          >
+            <Outlet />
           </div>
 
           <PlayController />
