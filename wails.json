@@ -9,5 +9,11 @@
   "author": {
     "name": "2bit",
     "email": "742005790@qq.com"
+  },
+  "info": {
+    "productName": "horizon",
+    "productVersion": "0.2.0",
+    "comments": "第三方小宇宙桌面客户端，支持 Windows 与 macOS",
+    "copyright": "Copyright (c) 2025 2bit"
   }
 }
