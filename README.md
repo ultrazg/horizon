@@ -7,12 +7,23 @@
 
 ## 截图
 
+<details>
+
+<summary>展开/收起</summary>
+
 ![screenshot_01](./screenshots/screenshot_01.png)
+
 ![screenshot_02](./screenshots/screenshot_02.png)
+
 ![screenshot_03](./screenshots/screenshot_03.png)
+
 ![screenshot_04](./screenshots/screenshot_04.png)
+
 ![screenshot_05](./screenshots/screenshot_05.png)
+
 ![screenshot_06](./screenshots/screenshot_06.png)
+
+</details>
 
 ## 下载
 

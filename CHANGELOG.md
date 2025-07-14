@@ -1,3 +1,13 @@
+### v0.2.0
+
+Features
+
+- 新的 UI
+
+Fixes
+
+- 修复了一些问题
+
 ### v0.1.4
 
 Fixes
