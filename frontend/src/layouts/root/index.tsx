@@ -69,7 +69,7 @@ export const Root: React.FC = () => {
   const onCheckForUpgrade = () => {
     CheckForUpgrade()
       .then((res) => {
-        if (!res.isLatest) {
+        if (!res.isLatest && !res.err) {
           toast('发现新版本！', {
             type: 'info',
             duration: 15 * 1000,
@@ -78,6 +78,9 @@ export const Root: React.FC = () => {
       })
       .catch((err: any) => {
         console.error('error', err)
+        toast(err, {
+          type: 'warn',
+        })
       })
   }
 

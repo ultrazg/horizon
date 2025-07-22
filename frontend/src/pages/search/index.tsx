@@ -4,7 +4,7 @@ import { Button, Spinner } from '@radix-ui/themes'
 import { search, type searchType } from '@/api/search'
 import styles from './index.module.scss'
 import { toast } from '@/utils'
-import { ColorfulShadow, ProfileModal } from '@/components'
+import { ColorfulShadow, ProfileModal, Empty } from '@/components'
 import { baseUserType } from '@/types/user'
 import { EpisodeType } from '@/types/episode'
 import { PodcastType } from '@/types/podcast'
@@ -152,9 +152,9 @@ export const Search: React.FC = () => {
 
     const fetchData = async () => {
       await onSearchUser()
-      await delay(500)
+      await delay(1000)
       await onSearchPodcast()
-      await delay(500)
+      await delay(1000)
       await onSearchEpisode()
     }
 
@@ -165,23 +165,27 @@ export const Search: React.FC = () => {
     <div className={styles['search-layout']}>
       <div className={styles['search-category-title']}>
         <h3>用户</h3>
-        <Button
-          variant="ghost"
-          onClick={() => {
-            navigateTo('/search/user', {
-              state: {
-                keyword,
-              },
-            })
-          }}
-        >
-          查看更多
-        </Button>
+        {userResults.records.length >= 6 && (
+          <Button
+            variant="ghost"
+            onClick={() => {
+              navigateTo('/search/user', {
+                state: {
+                  keyword,
+                },
+              })
+            }}
+          >
+            查看更多
+          </Button>
+        )}
       </div>
 
       <div className={styles['search-result']}>
         <Spinner loading={userResults.loading}>
           <div className={styles['search-result-wrapper']}>
+            {userResults.records.length === 0 && <Empty />}
+
             {userResults.records.map((item) => (
               <div
                 key={item.uid}
@@ -210,23 +214,27 @@ export const Search: React.FC = () => {
 
       <div className={styles['search-category-title']}>
         <h3>节目</h3>
-        <Button
-          variant="ghost"
-          onClick={() => {
-            navigateTo('/search/podcast', {
-              state: {
-                keyword,
-              },
-            })
-          }}
-        >
-          查看更多
-        </Button>
+        {podcastResults.records.length >= 6 && (
+          <Button
+            variant="ghost"
+            onClick={() => {
+              navigateTo('/search/podcast', {
+                state: {
+                  keyword,
+                },
+              })
+            }}
+          >
+            查看更多
+          </Button>
+        )}
       </div>
 
       <div className={styles['search-result']}>
         <Spinner loading={podcastResults.loading}>
           <div className={styles['search-result-wrapper']}>
+            {podcastResults.records.length === 0 && <Empty />}
+
             {podcastResults.records.map((item) => (
               <div
                 key={item.pid}
@@ -251,23 +259,27 @@ export const Search: React.FC = () => {
 
       <div className={styles['search-category-title']}>
         <h3>单集</h3>
-        <Button
-          variant="ghost"
-          onClick={() => {
-            navigateTo('/search/episode', {
-              state: {
-                keyword,
-              },
-            })
-          }}
-        >
-          查看更多
-        </Button>
+        {episodeResults.records.length >= 6 && (
+          <Button
+            variant="ghost"
+            onClick={() => {
+              navigateTo('/search/episode', {
+                state: {
+                  keyword,
+                },
+              })
+            }}
+          >
+            查看更多
+          </Button>
+        )}
       </div>
 
       <div className={styles['search-result']}>
         <Spinner loading={episodeResults.loading}>
           <div className={styles['search-result-wrapper']}>
+            {episodeResults.records.length === 0 && <Empty />}
+
             {episodeResults.records.map((item) => (
               <div
                 key={item.eid}
@@ -305,8 +317,6 @@ export const Search: React.FC = () => {
           </div>
         </Spinner>
       </div>
-      {/*</div>*/}
-      {/*</div>*/}
 
       <ProfileModal
         uid={profileModal.uid}
