@@ -19,7 +19,7 @@ export type commentThreadType = {
   order: 'SMART' | 'TIME' // 全部评论（SMART）、最新评论（TIME）
 }
 
-type commentCollectCreateType = {
+export type commentCollectCreateType = {
   commentId: string
 }
 

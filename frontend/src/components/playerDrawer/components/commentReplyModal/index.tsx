@@ -4,13 +4,13 @@ import { modalType } from '@/types/modal'
 import styles from './index.module.scss'
 import {
   Avatar,
-  Button,
+  // Button,
   Text,
-  TextField,
+  // TextField,
   ScrollArea,
   Spinner,
 } from '@radix-ui/themes'
-import { PaperPlaneIcon } from '@radix-ui/react-icons'
+// import { PaperPlaneIcon } from '@radix-ui/react-icons'
 import { useWindowSize } from '@/hooks'
 import { IoMdThumbsUp } from 'react-icons/io'
 import { commentThread, commentThreadType } from '@/api/comment'
@@ -52,6 +52,9 @@ export const CommentReplyModal: React.FC<IProps> = ({
     uid: '',
   })
 
+  /**
+   * 查询回复评论详情
+   */
   const getThreadComment = () => {
     setLoading(true)
 
@@ -122,7 +125,7 @@ export const CommentReplyModal: React.FC<IProps> = ({
                   <Avatar
                     radius="full"
                     src={primaryComment?.author?.avatar?.picture?.picUrl}
-                    fallback="Avatar"
+                    fallback={primaryComment?.author?.nickname}
                     onClick={() => {
                       setProfileModal({
                         open: true,
@@ -160,7 +163,9 @@ export const CommentReplyModal: React.FC<IProps> = ({
                   }
                 >
                   <IoMdThumbsUp />
-                  {primaryComment?.likeCount}
+                  {primaryComment?.likeCount === 0
+                    ? null
+                    : primaryComment?.likeCount}
                 </div>
               </div>
               <div className={styles['player-comment-body']}>
@@ -217,15 +222,29 @@ export const CommentReplyModal: React.FC<IProps> = ({
                   <div
                     style={item?.liked ? { color: 'red' } : { color: 'gray' }}
                     onClick={() => {
-                      onCommentLikeUpdate(
-                        item.id,
-                        !item.liked,
-                        getThreadComment,
-                      )
+                      onCommentLikeUpdate(item.id, !item.liked, () => {
+                        const temp: CommentPrimaryType[] =
+                          threadCommentData.records.map((itm) => {
+                            if (itm.id === item.id) {
+                              return {
+                                ...itm,
+                                liked: !itm.liked,
+                                likeCount: itm.likeCount + (itm.liked ? -1 : 1),
+                              }
+                            }
+
+                            return itm
+                          })
+
+                        setThreadCommentData({
+                          ...threadCommentData,
+                          records: temp,
+                        })
+                      })
                     }}
                   >
                     <IoMdThumbsUp />
-                    {item?.likeCount}
+                    {item?.likeCount === 0 ? null : item?.likeCount}
                   </div>
                 </div>
                 <div className={styles['player-comment-body']}>

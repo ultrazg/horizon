@@ -12,7 +12,7 @@ type commentCollectListType = {
   loadMoreKey?: string
 }
 
-type commentCollectRemoveType = {
+export type commentCollectRemoveType = {
   commentId: string
 }
 

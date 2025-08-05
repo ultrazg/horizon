@@ -22,12 +22,16 @@ import {
   commentPrimary,
   commentPrimaryType,
   commentCollectCreate,
+  type commentCollectCreateType,
   commentLikeUpdate,
 } from '@/api/comment'
 import { CommentPrimaryType } from '@/types/comment'
 import { DialogType, ShowMessageDialog, toast } from '@/utils'
 import dayjs from 'dayjs'
-import { commentCollectRemove } from '@/api/favorite'
+import {
+  commentCollectRemove,
+  type commentCollectRemoveType,
+} from '@/api/favorite'
 import { isEmpty } from 'lodash'
 import HighlightTimeStrings from '@/components/playerDrawer/components/highlightTimeStrings'
 
@@ -45,7 +49,7 @@ type IProps = {
 export const onCommentLikeUpdate = (
   commentId: string,
   liked: boolean,
-  cb: () => void,
+  cb?: () => void,
 ) => {
   const params = {
     id: commentId,
@@ -53,7 +57,7 @@ export const onCommentLikeUpdate = (
   }
 
   commentLikeUpdate(params)
-    .then(() => cb())
+    .then(() => cb && cb())
     .catch(() => {
       toast('操作失败', { type: 'warn' })
     })
@@ -126,13 +130,28 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
    * @param commentId 评论 id
    */
   const onCommentCollectCreate = (commentId: string) => {
-    const params = {
+    const params: commentCollectCreateType = {
       commentId,
     }
 
     commentCollectCreate(params).then((res) => {
       toast(res.data.toast, { type: 'success' })
-      getComment()
+
+      const temp: CommentPrimaryType[] = commentData.records.map((item) => {
+        if (item.id === commentId) {
+          return {
+            ...item,
+            collected: true,
+          }
+        }
+
+        return item
+      })
+
+      setCommentData({
+        ...commentData,
+        records: temp,
+      })
     })
   }
 
@@ -147,14 +166,31 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
       '确定要取消收藏这条评论吗？',
     ).then((res) => {
       if (res === 'Yes' || res === '是') {
-        const params = {
+        const params: commentCollectRemoveType = {
           commentId,
         }
 
         commentCollectRemove(params)
           .then((res) => {
             toast(res.data.toast, { type: 'success' })
-            getComment()
+
+            const temp: CommentPrimaryType[] = commentData.records.map(
+              (item) => {
+                if (item.id === commentId) {
+                  return {
+                    ...item,
+                    collected: false,
+                  }
+                }
+
+                return item
+              },
+            )
+
+            setCommentData({
+              ...commentData,
+              records: temp,
+            })
           })
           .catch(() => {
             toast('操作失败', { type: 'warn' })
@@ -290,11 +326,29 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
                   <div
                     style={item.liked ? { color: 'red' } : { color: 'gray' }}
                     onClick={() => {
-                      onCommentLikeUpdate(item.id, !item.liked, getComment)
+                      onCommentLikeUpdate(item.id, !item.liked, () => {
+                        const temp: CommentPrimaryType[] =
+                          commentData.records.map((itm) => {
+                            if (itm.id === item.id) {
+                              return {
+                                ...itm,
+                                liked: !itm.liked,
+                                likeCount: itm.likeCount + (itm.liked ? -1 : 1),
+                              }
+                            }
+
+                            return itm
+                          })
+
+                        setCommentData({
+                          ...commentData,
+                          records: temp,
+                        })
+                      })
                     }}
                   >
                     <IoMdThumbsUp />
-                    {item.likeCount}
+                    {item.likeCount === 0 ? null : item.likeCount}
                   </div>
                 </div>
                 <div className={styles['player-comment-body']}>
