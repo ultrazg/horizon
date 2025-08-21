@@ -41,6 +41,7 @@ type pick = {
     text: string
   }
   user: baseUserType
+  type: 'PICK'
 }
 
 export const Home: React.FC = () => {
@@ -226,6 +227,27 @@ export const Home: React.FC = () => {
         loading={peopleLike.loading}
         onDetail={(pid) => {
           goPodcastDetail(pid)
+        }}
+        onChangeState={(id) => {
+          const temp: PeopleLikeType = peopleLike.records.map((item) => {
+            if (item.pick.id === id) {
+              return {
+                ...item,
+                pick: {
+                  ...item.pick,
+                  isLiked: !item.pick.isLiked,
+                  likeCount: item.pick.likeCount + (item.pick.isLiked ? -1 : 1),
+                },
+              }
+            }
+
+            return item
+          })
+
+          setPeopleLike({
+            ...peopleLike,
+            records: temp,
+          })
         }}
       />
     </>

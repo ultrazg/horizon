@@ -31,9 +31,10 @@
         .m {
           flex: 3;
           padding-left: 0.5rem;
-          cursor: pointer;
 
           p {
+            cursor: pointer;
+
             &:last-child {
               color: var(--white-a5);
               font-weight: 300;
@@ -50,7 +51,12 @@
           font-size: 0.9rem;
           font-weight: 300;
 
+          .unliked {
+            filter: grayscale(100%);
+          }
+
           img {
+            cursor: pointer;
             margin-left: .3rem;
             width: 1.1rem;
             height: 1.1rem;

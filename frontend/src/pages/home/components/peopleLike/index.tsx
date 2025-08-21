@@ -3,19 +3,26 @@ import { PlayIcon } from '@radix-ui/react-icons'
 import styles from './index.module.scss'
 import { ColorfulShadow, ProfileModal } from '@/components'
 import { PeopleLikeType } from '@/pages/home'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
 import { showEpisodeDetailModal } from '@/utils'
 import { usePlayer } from '@/hooks'
 import { PlayerEpisodeInfoType } from '@/utils/player'
+import { onCommentLikeUpdate } from '@/components/playerDrawer/components/episodeComment'
 
 type IProps = {
   data: PeopleLikeType
   loading: boolean
   onDetail: (pid: string) => void
+  onChangeState: (id: string) => void
 }
 
-const PeopleLike: React.FC<IProps> = ({ data, loading, onDetail }) => {
+const PeopleLike: React.FC<IProps> = ({
+  data,
+  loading,
+  onDetail,
+  onChangeState,
+}) => {
   const player = usePlayer()
   const [profileModal, setProfileModal] = useState<{
     open: boolean
@@ -76,8 +83,23 @@ const PeopleLike: React.FC<IProps> = ({ data, loading, onDetail }) => {
                       <div className={styles['r']}>
                         {item.pick.likeCount}
                         <img
+                          className={
+                            item.pick.isLiked ? undefined : styles['unliked']
+                          }
                           src={item.pick.story.iconUrl}
                           alt="like_icon"
+                          onClick={() => {
+                            onCommentLikeUpdate(
+                              {
+                                id: item.pick.id,
+                                liked: !item.pick.isLiked,
+                                type: item.pick.type,
+                              },
+                              () => {
+                                onChangeState(item.pick.id)
+                              },
+                            )
+                          }}
                         />
                       </div>
                     </div>
