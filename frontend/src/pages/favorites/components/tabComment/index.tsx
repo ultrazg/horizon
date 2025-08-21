@@ -159,7 +159,33 @@ const TabComment: React.FC = () => {
                 variant="soft"
                 mr="1"
                 onClick={() => {
-                  onCommentLikeUpdate(item.id, !item.liked, getLists)
+                  onCommentLikeUpdate(
+                    {
+                      id: item.id,
+                      liked: !item.liked,
+                      type: 'COMMENT',
+                    },
+                    () => {
+                      const temp: FavoriteCommentType[] = data.records.map(
+                        (itm) => {
+                          if (itm.id === item.id) {
+                            return {
+                              ...itm,
+                              liked: !itm.liked,
+                              likeCount: itm.likeCount + (itm.liked ? -1 : 1),
+                            }
+                          }
+
+                          return itm
+                        },
+                      )
+
+                      setData({
+                        ...data,
+                        records: temp,
+                      })
+                    },
+                  )
                 }}
               >
                 {item.liked ? <BiSolidLike /> : <BiLike />}

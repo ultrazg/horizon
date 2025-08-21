@@ -222,25 +222,29 @@ export const CommentReplyModal: React.FC<IProps> = ({
                   <div
                     style={item?.liked ? { color: 'red' } : { color: 'gray' }}
                     onClick={() => {
-                      onCommentLikeUpdate(item.id, !item.liked, () => {
-                        const temp: CommentPrimaryType[] =
-                          threadCommentData.records.map((itm) => {
-                            if (itm.id === item.id) {
-                              return {
-                                ...itm,
-                                liked: !itm.liked,
-                                likeCount: itm.likeCount + (itm.liked ? -1 : 1),
+                      onCommentLikeUpdate(
+                        { id: item.id, liked: !item.liked, type: 'COMMENT' },
+                        () => {
+                          const temp: CommentPrimaryType[] =
+                            threadCommentData.records.map((itm) => {
+                              if (itm.id === item.id) {
+                                return {
+                                  ...itm,
+                                  liked: !itm.liked,
+                                  likeCount:
+                                    itm.likeCount + (itm.liked ? -1 : 1),
+                                }
                               }
-                            }
 
-                            return itm
+                              return itm
+                            })
+
+                          setThreadCommentData({
+                            ...threadCommentData,
+                            records: temp,
                           })
-
-                        setThreadCommentData({
-                          ...threadCommentData,
-                          records: temp,
-                        })
-                      })
+                        },
+                      )
                     }}
                   >
                     <IoMdThumbsUp />

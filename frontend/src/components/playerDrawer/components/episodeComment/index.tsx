@@ -24,6 +24,7 @@ import {
   commentCollectCreate,
   type commentCollectCreateType,
   commentLikeUpdate,
+  type commentLikeUpdateType,
 } from '@/api/comment'
 import { CommentPrimaryType } from '@/types/comment'
 import { DialogType, ShowMessageDialog, toast } from '@/utils'
@@ -40,22 +41,17 @@ type IProps = {
   eid: string
 }
 
+type onCommentLikeUpdateFn = (
+  params: commentLikeUpdateType,
+  cb?: () => void,
+) => void
+
 /**
  * 点赞、取消点赞评论
- * @param commentId
- * @param liked
+ * @param params
  * @param cb
  */
-export const onCommentLikeUpdate = (
-  commentId: string,
-  liked: boolean,
-  cb?: () => void,
-) => {
-  const params = {
-    id: commentId,
-    liked,
-  }
-
+export const onCommentLikeUpdate: onCommentLikeUpdateFn = (params, cb) => {
   commentLikeUpdate(params)
     .then(() => cb && cb())
     .catch(() => {
@@ -326,25 +322,29 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
                   <div
                     style={item.liked ? { color: 'red' } : { color: 'gray' }}
                     onClick={() => {
-                      onCommentLikeUpdate(item.id, !item.liked, () => {
-                        const temp: CommentPrimaryType[] =
-                          commentData.records.map((itm) => {
-                            if (itm.id === item.id) {
-                              return {
-                                ...itm,
-                                liked: !itm.liked,
-                                likeCount: itm.likeCount + (itm.liked ? -1 : 1),
+                      onCommentLikeUpdate(
+                        { type: 'COMMENT', id: item.id, liked: !item.liked },
+                        () => {
+                          const temp: CommentPrimaryType[] =
+                            commentData.records.map((itm) => {
+                              if (itm.id === item.id) {
+                                return {
+                                  ...itm,
+                                  liked: !itm.liked,
+                                  likeCount:
+                                    itm.likeCount + (itm.liked ? -1 : 1),
+                                }
                               }
-                            }
 
-                            return itm
+                              return itm
+                            })
+
+                          setCommentData({
+                            ...commentData,
+                            records: temp,
                           })
-
-                        setCommentData({
-                          ...commentData,
-                          records: temp,
-                        })
-                      })
+                        },
+                      )
                     }}
                   >
                     <IoMdThumbsUp />

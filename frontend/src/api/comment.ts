@@ -23,9 +23,10 @@ export type commentCollectCreateType = {
   commentId: string
 }
 
-type commentLikeUpdateType = {
+export type commentLikeUpdateType = {
   id: string
   liked: boolean
+  type: 'COMMENT' | 'PICK'
 }
 
 /** 查询单集的评论 */
