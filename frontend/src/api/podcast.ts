@@ -6,6 +6,7 @@ const api = {
   podcastRelated: 'podcast_related',
   podcastGetInfo: 'podcast_get_info',
   podcastBulletin: 'podcast_bulletin',
+  ownedPodcasts: 'owned_podcasts',
 }
 
 type podcastDetailType = {
@@ -22,6 +23,10 @@ type podcastGetInfoType = {
 
 type podcastBulletinType = {
   pid: string
+}
+
+export type ownedPodcastType = {
+  uid: string
 }
 
 /** 根据 pid 查询单集内容详情 */
@@ -43,3 +48,8 @@ export const podcastGetInfo = (
 export const podcastBulletin = (
   params: podcastBulletinType,
 ): Promise<responseType> => httpRequest.post(api.podcastBulletin, params)
+
+/** 查询用户创建的播客节目 */
+export const ownedPodcasts = (
+  params: ownedPodcastType,
+): Promise<responseType> => httpRequest.post(api.ownedPodcasts, params)

@@ -47,8 +47,10 @@ import { onRelationUpdate } from '@/pages/profile/components/followModal'
 import { onBlockedUserCreate } from '@/pages/setting/components/blockedModal'
 import { CONSTANT } from '@/types/constant'
 import { pickListRecent } from '@/api/pick'
+import { ownedPodcasts, type ownedPodcastType } from '@/api/podcast'
 import { PickRecentType } from '@/types/pick'
 import { PlayerEpisodeInfoType } from '@/utils/player'
+import { PodcastType } from '@/types/podcast'
 
 type IProps = {
   uid: string
@@ -93,10 +95,26 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
     open: false,
     uid: '',
   })
+  const [ownedPodcastLists, setOwnedPodcastLists] = useState<PodcastType[]>()
   const player = usePlayer()
 
   const avoidDefaultDomBehavior = (e: Event) => {
     e.preventDefault()
+  }
+
+  /**
+   * 获取用户创建的播客节目
+   */
+  const fetchOwnedPodcastsInfo = () => {
+    const params: ownedPodcastType = {
+      uid,
+    }
+
+    ownedPodcasts(params)
+      .then((res) => setOwnedPodcastLists(res.data.data))
+      .catch((err) => {
+        console.error(err)
+      })
   }
 
   /**
@@ -220,6 +238,7 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
       onGetSticker()
       onGetPlayedList()
       getPickRecentList()
+      fetchOwnedPodcastsInfo()
     }
 
     return () => {
@@ -240,6 +259,7 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
         records: [],
         total: 0,
       })
+      setOwnedPodcastLists([])
     }
   }, [open])
 
@@ -428,12 +448,12 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
               </div>
             </div>
 
-            {profileData?.authorship.length !== 0 && (
+            {ownedPodcastLists?.length !== 0 && (
               <div className={styles['pm-podcast-layout']}>
                 <div className={styles['pm-podcast-content']}>
                   <h3>{renderGender(profileData?.gender)}的播客</h3>
 
-                  {profileData?.authorship.map((item) => (
+                  {ownedPodcastLists?.map((item) => (
                     <div
                       className={styles['pm-podcast-item']}
                       key={item.pid}
