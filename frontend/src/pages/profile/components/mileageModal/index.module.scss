@@ -10,6 +10,11 @@
   }
 }
 
-.played-time {
-  color: $secondary-font-color;
+.played-time-wrapper {
+  padding-top: 0.7rem;
+
+  .played-time {
+    color: $secondary-font-color;
+  }
 }
+
