@@ -363,10 +363,14 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
                     </Badge>
                   )}
 
-                  <HighlightTimeStrings
-                    text={item.text}
-                    player={player}
-                  />
+                  {/* TODO: 处理语音评论 */}
+
+                  {item.text && (
+                    <HighlightTimeStrings
+                      text={item.text}
+                      player={player}
+                    />
+                  )}
                 </div>
                 {item.replies && item.replies.length > 0 && (
                   <div className={styles['player-comment-replies']}>

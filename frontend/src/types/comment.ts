@@ -20,7 +20,12 @@ type CommentPrimaryType = {
   }
   pid: string
   pinned: boolean
-  text: string
+  text?: string
+  voice?: {
+    duration: number
+    url: string
+    waveform: any[]
+  }
   status: string
   type: string
   authorAssociation: string
