@@ -13,55 +13,66 @@ type IProps = {
  * @param player
  * @constructor
  */
-const HighlightTimeStrings: React.FC<IProps> = ({ text, player }) => {
-  const timeRegex = /\b(\d{1,2}:)?\d{1,2}:\d{2}\b/g
+const HighlightTimeStrings: React.FC<IProps> = React.memo(
+  ({ text = '', player }) => {
+    const timeRegex = /\b(\d{1,2}:)?\d{1,2}:\d{2}\b/g
 
-  const parts = text.split(timeRegex)
+    const parts = React.useMemo(() => text.split(timeRegex), [text])
 
-  const matches = text.match(timeRegex) || []
+    const matches = React.useMemo(() => text.match(timeRegex) || [], [text])
 
-  let matchIndex = 0
+    let matchIndex = 0
 
-  const onSeek = (time: string) => {
-    const [minutes, seconds] = time.split(':').map(Number)
-    const totalSeconds = minutes * 60 + seconds
+    const onSeek = React.useCallback(
+      (time: string) => {
+        const nums = time.split(':').map(Number)
+        let totalSeconds = 0
+        if (nums.length === 2) {
+          totalSeconds = nums[0] * 60 + nums[1]
+        } else if (nums.length === 3) {
+          totalSeconds = nums[0] * 3600 + nums[1] * 60 + nums[2]
+        }
 
-    player.seek(totalSeconds)
-    if (!player.isPlaying) {
-      player.play()
-    }
+        player.seek(totalSeconds)
+        if (!player.isPlaying) {
+          player.play()
+        }
 
-    toast(`已跳转到 ${time}`, { type: 'info' })
-  }
+        toast(`已跳转到 ${time}`, { type: 'info' })
+      },
+      [player],
+    )
 
-  return (
-    <>
-      <span>
-        {parts.map((part, index) => {
-          if (
-            (index % 2 === 1 || (index % 2 === 0 && part.match(timeRegex))) &&
-            matchIndex < matches.length
-          ) {
-            const match = matches[matchIndex++]
-            return (
-              <span
-                key={index}
-                className={styles['time-string']}
-                onClick={() => {
-                  onSeek(match)
-                }}
-                title={`点击跳转到 ${match}`}
-              >
-                {match}
-              </span>
-            )
-          } else {
-            return <React.Fragment key={index}>{part}</React.Fragment>
-          }
-        })}
-      </span>
-    </>
-  )
-}
+    return (
+      <>
+        <span>
+          {parts.map((part, index) => {
+            if (
+              (index % 2 === 1 || (index % 2 === 0 && part.match(timeRegex))) &&
+              matchIndex < matches.length
+            ) {
+              const match = matches[matchIndex++]
+              return (
+                <span
+                  key={index}
+                  className={styles['time-string']}
+                  onClick={() => {
+                    onSeek(match)
+                  }}
+                  title={`点击跳转到 ${match}`}
+                >
+                  {match}
+                </span>
+              )
+            } else {
+              return <React.Fragment key={index}>{part}</React.Fragment>
+            }
+          })}
+        </span>
+      </>
+    )
+  },
+  (prevProps, nextProps) => prevProps.text === nextProps.text,
+)
 
 export default HighlightTimeStrings
