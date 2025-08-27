@@ -1,0 +1,41 @@
+@import '@/assets/global/_variables.scss';
+
+.mileage-all-view-wrapper {
+  .progress-wrapper {
+    display: flex;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+    height: 3rem;
+    user-select: none;
+    -webkit-user-select: none;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .progress-bar {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .podcast-info {
+      width: 30%;
+      display: flex;
+      gap: 0.6rem;
+
+      .info-wrapper {
+        .podcast-title {
+          overflow: hidden;
+          display: -webkit-box;
+          line-clamp: 1;
+          box-orient: vertical;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 1;
+        }
+
+        .played-time {
+          color: $secondary-font-color;
+        }
+      }
+    }
+  }
+}

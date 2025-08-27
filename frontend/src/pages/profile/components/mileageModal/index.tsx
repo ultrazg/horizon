@@ -1,21 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { Modal } from '@/components'
 import { modalType } from '@/types/modal'
-import {
-  Flex,
-  Box,
-  Avatar,
-  Text,
-  Heading,
-  ScrollArea,
-  Tabs,
-} from '@radix-ui/themes'
+import { ScrollArea, Tabs, Spinner } from '@radix-ui/themes'
 import { useWindowSize } from '@/hooks'
 import { mileageList } from '@/api/mileage'
-import { formatTime } from '../mileageDuration'
 import { mileageType } from '@/types/mileage'
 import styles from './index.module.scss'
 import { PodcastType } from '@/types/podcast'
+import { Mileage30View } from './mileage30View'
+import { MileageAllView } from './mileageAllView'
 
 type IProps = {
   data: mileageType & { time: number[] }
@@ -41,22 +34,38 @@ export const MileageModal: React.FC<IProps> = ({ data, open, onClose }) => {
     useState<{ playedSeconds: number; podcast: PodcastType }[]>()
   const [mileageAllInfo, setMileageAllInfo] =
     useState<{ playedSeconds: number; podcast: PodcastType }[]>()
+  const [loading, setLoading] = useState<boolean>(false)
 
   /**
-   * 获取收听数据列表
+   * 获取最近三十天收听数据
    */
-  const getList = () => {
-    mileageList({ all: false })
+  const fetchMileage30Data = async () => {
+    await mileageList({ all: false })
       .then((res) => setMileage30Info(res.data.data))
       .catch((err) => {
         console.error(err)
       })
+  }
 
-    mileageList({ all: true })
+  /**
+   * 获取全部收听数据
+   */
+  const fetchMileageAllData = async () => {
+    await mileageList({ all: true })
       .then((res) => setMileageAllInfo(res.data.data))
       .catch((err) => {
         console.error(err)
       })
+  }
+
+  /**
+   * 获取收听数据列表
+   */
+  const fetchData = () => {
+    setLoading(true)
+    Promise.allSettled([fetchMileage30Data(), fetchMileageAllData()]).finally(
+      () => setLoading(false),
+    )
   }
 
   const onTabChange = (type: string) => {
@@ -66,7 +75,7 @@ export const MileageModal: React.FC<IProps> = ({ data, open, onClose }) => {
   useEffect(() => {
     if (open) {
       setPlayedData(data)
-      getList()
+      fetchData()
     }
 
     return () => {
@@ -104,77 +113,17 @@ export const MileageModal: React.FC<IProps> = ({ data, open, onClose }) => {
 
       <div className={styles['played-time-wrapper']}>
         <ScrollArea
-          type="auto"
+          type="hover"
           scrollbars="vertical"
           style={{ maxHeight: height }}
         >
-          {type === '0'
-            ? mileage30Info?.map((item) => (
-                <Box
-                  key={item.podcast.pid}
-                  width="100%"
-                  height="3rem"
-                  mb="4"
-                >
-                  <Flex gap="2">
-                    <Avatar
-                      style={{ width: '3rem', height: '3rem' }}
-                      src={item.podcast.image.picUrl}
-                      fallback={item.podcast.title}
-                    />
-                    <Box>
-                      <Heading
-                        mb="1"
-                        size="3"
-                      >
-                        {item.podcast.title}
-                      </Heading>
-                      <Text className={styles['played-time']}>
-                        {formatTime(item.playedSeconds)[0] === 0
-                          ? ''
-                          : formatTime(item.playedSeconds)[0] + '时'}
-                        {formatTime(item.playedSeconds)[1] === 0
-                          ? ''
-                          : formatTime(item.playedSeconds)[1] + '分'}
-                        {formatTime(item.playedSeconds)[2]}秒
-                      </Text>
-                    </Box>
-                  </Flex>
-                </Box>
-              ))
-            : mileageAllInfo?.map((item) => (
-                <Box
-                  key={item.podcast.pid}
-                  width="100%"
-                  height="3rem"
-                  mb="4"
-                >
-                  <Flex gap="2">
-                    <Avatar
-                      style={{ width: '3rem', height: '3rem' }}
-                      src={item.podcast.image.picUrl}
-                      fallback={item.podcast.title}
-                    />
-                    <Box>
-                      <Heading
-                        mb="1"
-                        size="3"
-                      >
-                        {item.podcast.title}
-                      </Heading>
-                      <Text className={styles['played-time']}>
-                        {formatTime(item.playedSeconds)[0] === 0
-                          ? ''
-                          : formatTime(item.playedSeconds)[0] + '时'}
-                        {formatTime(item.playedSeconds)[1] === 0
-                          ? ''
-                          : formatTime(item.playedSeconds)[1] + '分'}
-                        {formatTime(item.playedSeconds)[2]}秒
-                      </Text>
-                    </Box>
-                  </Flex>
-                </Box>
-              ))}
+          <Spinner loading={loading}>
+            {type === '0' ? (
+              <Mileage30View mileageData={mileage30Info} />
+            ) : (
+              <MileageAllView mileageData={mileageAllInfo} />
+            )}
+          </Spinner>
         </ScrollArea>
       </div>
     </Modal>

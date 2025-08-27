@@ -7,14 +7,16 @@
     color: $primary-font-color;
     font-weight: bold;
     font-size: 2.5rem;
+    margin-left: 0.3rem;
+    margin-right: 0.3rem;
+
+    &:first-child {
+      margin-left: 0;
+    }
   }
 }
 
 .played-time-wrapper {
   padding-top: 0.7rem;
-
-  .played-time {
-    color: $secondary-font-color;
-  }
 }
 
