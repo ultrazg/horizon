@@ -426,6 +426,7 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
       </div>
 
       <CommentReplyModal
+        eid={eid}
         primaryComment={replyModal.primaryComment}
         open={replyModal.open}
         onClose={() => {

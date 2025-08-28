@@ -9,6 +9,7 @@ import { MyDropdownMenu } from './dropdownMenu'
 import { StickerModal } from './stickerModal'
 import { PickModal } from './pickModal'
 import { Empty } from './empty'
+import { CreateCommentModal } from './createCommentModal'
 
 export {
   PlayController,
@@ -22,4 +23,5 @@ export {
   StickerModal,
   PickModal,
   Empty,
+  CreateCommentModal,
 }

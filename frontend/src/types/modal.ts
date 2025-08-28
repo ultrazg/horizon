@@ -1,7 +1,7 @@
 import React from 'react'
 
 type modalType = {
-  title?: string
+  title?: string | React.ReactNode
   width?: string
   open: boolean
   onClose: (refresh?: boolean) => void

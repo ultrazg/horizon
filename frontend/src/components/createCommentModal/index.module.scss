@@ -1,0 +1,8 @@
+@import '@/assets/global/_variables.scss';
+
+.char-count {
+  user-select: none;
+  -webkit-user-select: none;
+  margin-top: 0.3rem;
+  color: $secondary-font-color;
+}

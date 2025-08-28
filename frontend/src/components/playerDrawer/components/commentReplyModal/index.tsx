@@ -4,39 +4,48 @@ import { modalType } from '@/types/modal'
 import styles from './index.module.scss'
 import {
   Avatar,
-  // Button,
   Text,
-  // TextField,
   ScrollArea,
   Spinner,
+  TextField,
+  Button,
 } from '@radix-ui/themes'
-// import { PaperPlaneIcon } from '@radix-ui/react-icons'
 import { useWindowSize } from '@/hooks'
 import { IoMdThumbsUp } from 'react-icons/io'
-import { commentThread, commentThreadType } from '@/api/comment'
+import {
+  commentThread,
+  commentThreadType,
+  createComment,
+  type createCommentType,
+} from '@/api/comment'
 import { CommentPrimaryType } from '@/types/comment'
 import dayjs from 'dayjs'
 import { toast } from '@/utils'
 import { onCommentLikeUpdate } from '@/components/playerDrawer/components/episodeComment'
+import { PaperPlaneIcon } from '@radix-ui/react-icons'
 
 type IProps = {
+  eid: string
   primaryComment: CommentPrimaryType
 } & modalType
 
 /**
  * 评论回复弹窗
+ * @param eid
  * @param primaryComment
  * @param open 是否打开
  * @param onClose 关闭弹窗
  * @constructor
  */
 export const CommentReplyModal: React.FC<IProps> = ({
+  eid,
   primaryComment,
   open,
   onClose,
 }) => {
   const [height] = React.useState<number>(useWindowSize().height)
   const [loading, setLoading] = useState<boolean>(false)
+  const [submitLoading, setSubmitLoading] = useState<boolean>(false)
   const [threadCommentData, setThreadCommentData] = useState<{
     total: number
     records: CommentPrimaryType[]
@@ -51,6 +60,33 @@ export const CommentReplyModal: React.FC<IProps> = ({
     open: false,
     uid: '',
   })
+  const [text, setText] = useState<string>('')
+
+  const onSendComment = (replyToCommentId?: string, cb?: () => void) => {
+    const params: createCommentType = {
+      text,
+      id: eid,
+      type: 'EPISODE',
+    }
+
+    if (replyToCommentId) {
+      params.replyToCommentId = replyToCommentId
+    }
+
+    setSubmitLoading(true)
+
+    createComment(params)
+      .then((res) => {
+        console.log(res.data)
+        cb?.()
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+      .finally(() => {
+        setSubmitLoading(false)
+      })
+  }
 
   /**
    * 查询回复评论详情
@@ -88,6 +124,7 @@ export const CommentReplyModal: React.FC<IProps> = ({
         total: 0,
         records: [],
       })
+      setText('')
     }
   }, [open])
 
@@ -97,18 +134,30 @@ export const CommentReplyModal: React.FC<IProps> = ({
       open={open}
       onClose={onClose}
       // TODO: 评论回复
-      // options={
-      //   <>
-      //     <TextField.Root
-      //       style={{ width: '100%' }}
-      //       placeholder={`回复 ${primaryComment?.author?.nickname}`}
-      //     />
-      //     <Button variant="soft">
-      //       <PaperPlaneIcon />
-      //       评论
-      //     </Button>
-      //   </>
-      // }
+      options={
+        <>
+          <TextField.Root
+            style={{ width: '100%' }}
+            placeholder={`回复 @${primaryComment?.author?.nickname}`}
+            value={text}
+            onChange={(e) => {
+              setText(e.target.value)
+            }}
+            maxLength={250}
+          />
+          <Button
+            variant="soft"
+            onClick={() => {
+              onSendComment()
+            }}
+            disabled={text.length === 0}
+            loading={submitLoading}
+          >
+            <PaperPlaneIcon />
+            发送
+          </Button>
+        </>
+      }
     >
       <Spinner loading={loading}>
         <ScrollArea
