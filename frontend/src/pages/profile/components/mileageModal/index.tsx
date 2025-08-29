@@ -7,8 +7,7 @@ import { mileageList } from '@/api/mileage'
 import { mileageType } from '@/types/mileage'
 import styles from './index.module.scss'
 import { PodcastType } from '@/types/podcast'
-import { Mileage30View } from './mileage30View'
-import { MileageAllView } from './mileageAllView'
+import { MileageProgressView } from './mileageProgressView'
 
 type IProps = {
   data: mileageType & { time: number[] }
@@ -79,6 +78,7 @@ export const MileageModal: React.FC<IProps> = ({ data, open, onClose }) => {
     }
 
     return () => {
+      setType('0')
       setMileage30Info([])
       setMileageAllInfo([])
     }
@@ -118,11 +118,9 @@ export const MileageModal: React.FC<IProps> = ({ data, open, onClose }) => {
           style={{ maxHeight: height }}
         >
           <Spinner loading={loading}>
-            {type === '0' ? (
-              <Mileage30View mileageData={mileage30Info} />
-            ) : (
-              <MileageAllView mileageData={mileageAllInfo} />
-            )}
+            <MileageProgressView
+              mileageData={type === '0' ? mileage30Info : mileageAllInfo}
+            />
           </Spinner>
         </ScrollArea>
       </div>

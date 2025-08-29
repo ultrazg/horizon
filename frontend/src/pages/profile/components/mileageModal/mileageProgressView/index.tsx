@@ -14,18 +14,23 @@ type IProps = {
  * @param mileageData
  * @constructor
  */
-export const MileageAllView: React.FC<IProps> = ({ mileageData }) => {
+export const MileageProgressView: React.FC<IProps> = ({ mileageData }) => {
   const progressWrapperRef = useRef<HTMLDivElement>(null)
-  const [columnLength, setColumnLength] = useState<number[]>()
+  const [columnLength, setColumnLength] = useState<
+    { width: number; hasMinWidth: boolean }[]
+  >([])
 
   useEffect(() => {
     if (mileageData && mileageData.length != 0) {
       const maxValue: number = mileageData[0].playedSeconds
       const wrapperWidth: number = progressWrapperRef?.current?.offsetWidth || 1
-      const columnLength: number[] = []
+      const columnLength: { width: number; hasMinWidth: boolean }[] = []
 
       mileageData.forEach((item) => {
-        columnLength.push((item.playedSeconds / maxValue) * wrapperWidth * 0.7)
+        columnLength.push({
+          width: (item.playedSeconds / maxValue) * wrapperWidth * 0.7,
+          hasMinWidth: item.playedSeconds < maxValue / 10,
+        })
       })
 
       setColumnLength(columnLength)
@@ -33,23 +38,30 @@ export const MileageAllView: React.FC<IProps> = ({ mileageData }) => {
   }, [mileageData])
 
   return (
-    <div className={styles['mileage-all-view-wrapper']}>
+    <div
+      className={styles['mileage-all-view-wrapper']}
+      ref={progressWrapperRef}
+    >
       {(!mileageData || mileageData.length === 0) && <Empty />}
 
       {mileageData?.map((item, index: number) => (
         <div
-          ref={progressWrapperRef}
           className={styles['progress-wrapper']}
           key={item.podcast.pid}
           title={item.podcast.title}
         >
           <div
-            style={{ width: `${columnLength?.[index]}px` }}
+            style={{
+              width: `${columnLength?.[index]?.width}px`,
+              minWidth: `${columnLength?.[index]?.hasMinWidth ? '2%' : ''}`,
+              background: `${item.podcast.color.light}`,
+            }}
             className={styles['progress-bar']}
           />
           <div className={styles['podcast-info']}>
             <div>
               <Avatar
+                radius="none"
                 style={{ width: '3rem', height: '3rem' }}
                 src={item.podcast.image.picUrl}
                 fallback={item.podcast.title}
