@@ -5,14 +5,16 @@ import {
   liveStatsReportType,
 } from '@/api/episode'
 import styles from './index.module.scss'
+import { Player } from '@/utils'
 
 type IProps = {
+  player: Player
   open: boolean
   eid: string
   pid: string
 }
 
-export const LiveCount: React.FC<IProps> = ({ open, eid, pid }) => {
+export const LiveCount: React.FC<IProps> = ({ player, open, eid, pid }) => {
   const [liveCount, setLiveCount] = React.useState<string | number>(0)
 
   /**
@@ -48,7 +50,9 @@ export const LiveCount: React.FC<IProps> = ({ open, eid, pid }) => {
       getLiveCount()
 
       timer = setInterval(() => {
-        reportLiveStats()
+        if (player.isPlaying) {
+          reportLiveStats()
+        }
         getLiveCount()
       }, 1000 * 60)
     }

@@ -232,6 +232,7 @@ export const PlayerDrawer: React.FC<IProps> = ({
           />
         </IconButton>
         <LiveCount
+          player={player}
           open={open}
           eid={playInfo.eid}
           pid={player.episodeInfo.pid}
