@@ -40,7 +40,7 @@
           }
         }
 
-        &:last-child {
+        &:nth-child(3), &:nth-child(4), &:last-child {
           cursor: pointer;
           font-size: 0.9rem;
 
@@ -51,7 +51,7 @@
       }
     }
 
-    .player-comment-body{
+    .player-comment-body {
       margin-top: 0.3rem;
     }
   }

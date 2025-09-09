@@ -13,11 +13,14 @@ import {
   HeartFilledIcon,
   HeartIcon,
   ChatBubbleIcon,
+  UpdateIcon,
+  Pencil2Icon,
+  TrashIcon,
 } from '@radix-ui/react-icons'
 import { IoMdThumbsUp } from 'react-icons/io'
 import { useWindowSize, usePlayer } from '@/hooks'
 import { CommentReplyModal } from '@/components/playerDrawer/components/commentReplyModal'
-import { ProfileModal } from '@/components'
+import { ProfileModal, CreateCommentModal } from '@/components'
 import {
   commentPrimary,
   commentPrimaryType,
@@ -25,9 +28,11 @@ import {
   type commentCollectCreateType,
   commentLikeUpdate,
   type commentLikeUpdateType,
+  type createCommentType,
+  createComment,
 } from '@/api/comment'
 import { CommentPrimaryType } from '@/types/comment'
-import { DialogType, ShowMessageDialog, toast } from '@/utils'
+import { DialogType, ShowMessageDialog, Storage, toast } from '@/utils'
 import dayjs from 'dayjs'
 import {
   commentCollectRemove,
@@ -35,6 +40,7 @@ import {
 } from '@/api/favorite'
 import { isEmpty } from 'lodash'
 import HighlightTimeStrings from '@/components/playerDrawer/components/highlightTimeStrings'
+import { onRemoveCommentFunc } from '@/components/playerDrawer/components/commentReplyModal'
 
 type IProps = {
   open: boolean
@@ -85,6 +91,13 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
     primaryComment: {},
     open: false,
   })
+  const [CCM, setCCM] = useState<{
+    open: boolean
+    loading: boolean
+  }>({
+    open: false,
+    loading: false,
+  })
 
   const getComment = (loadMoreKey?: {}) => {
     setLoading(true)
@@ -118,6 +131,51 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
       })
       .finally(() => {
         setLoading(false)
+      })
+  }
+
+  const onSendComment = (text: string) => {
+    const params: createCommentType = {
+      text,
+      id: eid,
+      type: 'EPISODE',
+    }
+
+    setCCM({
+      ...CCM,
+      loading: true,
+    })
+
+    createComment(params)
+      .then((res) => {
+        toast(res.data.toast, {
+          type: 'success',
+        })
+
+        if (commentData.records[0].pinned) {
+          setCommentData({
+            ...commentData,
+            records: [
+              commentData.records[0],
+              res.data.data,
+              ...commentData.records.slice(1),
+            ],
+          })
+        } else {
+          setCommentData({
+            ...commentData,
+            records: [res.data.data, ...commentData.records],
+          })
+        }
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+      .finally(() => {
+        setCCM({
+          open: false,
+          loading: false,
+        })
       })
   }
 
@@ -216,6 +274,33 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
           style={{ fontWeight: 'bold' }}
         >
           {commentData.total} 条评论
+          <Tooltip content={'刷新评论'}>
+            <IconButton
+              color={'gray'}
+              ml={'3'}
+              mr={'3'}
+              size={'1'}
+              onClick={() => {
+                getComment()
+              }}
+            >
+              <UpdateIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip content={'添加评论'}>
+            <IconButton
+              size="1"
+              color={'gray'}
+              onClick={() => {
+                setCCM({
+                  ...CCM,
+                  open: true,
+                })
+              }}
+            >
+              <Pencil2Icon />
+            </IconButton>
+          </Tooltip>
         </Text>
 
         <ScrollArea
@@ -321,6 +406,43 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
                       </IconButton>
                     </Tooltip>
                   </div>
+
+                  {item.author.uid === Storage.get('user_info').uid && (
+                    <div>
+                      <Tooltip content={'删除评论'}>
+                        <IconButton
+                          variant="ghost"
+                          size="1"
+                          style={{ color: '#EB8E90' }}
+                          mr="3"
+                          onClick={() => {
+                            ShowMessageDialog(
+                              DialogType.QUESTION,
+                              '提示',
+                              '确定删除这条评论吗？',
+                            ).then((res) => {
+                              if (res === 'Yes' || res === '是') {
+                                onRemoveCommentFunc(item.id, () => {
+                                  const temp: CommentPrimaryType[] =
+                                    commentData.records.filter(
+                                      (i) => i.id !== item.id,
+                                    )
+
+                                  setCommentData({
+                                    ...commentData,
+                                    records: temp,
+                                  })
+                                })
+                              }
+                            })
+                          }}
+                        >
+                          <TrashIcon />
+                        </IconButton>
+                      </Tooltip>
+                    </div>
+                  )}
+
                   <div
                     style={item.liked ? { color: 'red' } : { color: 'gray' }}
                     onClick={() => {
@@ -444,6 +566,20 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
           setProfileModal({
             open: false,
             uid: '',
+          })
+        }}
+      />
+
+      <CreateCommentModal
+        loading={CCM.loading}
+        open={CCM.open}
+        onOk={(text) => {
+          onSendComment(text)
+        }}
+        onClose={() => {
+          setCCM({
+            open: false,
+            loading: false,
           })
         }}
       />

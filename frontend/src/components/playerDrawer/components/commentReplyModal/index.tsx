@@ -1,33 +1,51 @@
 import React, { useEffect, useState } from 'react'
-import { Empty, Modal, ProfileModal } from '@/components'
+import { Empty, Modal, ProfileModal, CreateCommentModal } from '@/components'
 import { modalType } from '@/types/modal'
 import styles from './index.module.scss'
 import {
   Avatar,
-  Text,
+  Button,
   ScrollArea,
   Spinner,
+  Text,
   TextField,
-  Button,
+  Tooltip,
 } from '@radix-ui/themes'
 import { useWindowSize } from '@/hooks'
-import { IoMdThumbsUp } from 'react-icons/io'
+import { IoMdThumbsUp, IoMdTrash } from 'react-icons/io'
 import {
   commentThread,
   commentThreadType,
   createComment,
   type createCommentType,
+  removeComment,
 } from '@/api/comment'
 import { CommentPrimaryType } from '@/types/comment'
 import dayjs from 'dayjs'
-import { toast } from '@/utils'
+import { DialogType, ShowMessageDialog, Storage, toast } from '@/utils'
 import { onCommentLikeUpdate } from '@/components/playerDrawer/components/episodeComment'
-import { PaperPlaneIcon } from '@radix-ui/react-icons'
+import { PaperPlaneIcon, Pencil2Icon } from '@radix-ui/react-icons'
 
 type IProps = {
   eid: string
   primaryComment: CommentPrimaryType
 } & modalType
+
+/**
+ * 删除评论
+ * @param commentId
+ * @param cb
+ */
+export const onRemoveCommentFunc = (commentId: string, cb?: () => void) => {
+  removeComment({ commentId })
+    .then((res) => {
+      toast(res.data.toast, { type: 'success' })
+      cb?.()
+    })
+    .catch((err) => {
+      console.error(err)
+    })
+}
 
 /**
  * 评论回复弹窗
@@ -46,6 +64,7 @@ export const CommentReplyModal: React.FC<IProps> = ({
   const [height] = React.useState<number>(useWindowSize().height)
   const [loading, setLoading] = useState<boolean>(false)
   const [submitLoading, setSubmitLoading] = useState<boolean>(false)
+  const [replyLoading, setReplyLoading] = useState<boolean>(false)
   const [threadCommentData, setThreadCommentData] = useState<{
     total: number
     records: CommentPrimaryType[]
@@ -61,29 +80,46 @@ export const CommentReplyModal: React.FC<IProps> = ({
     uid: '',
   })
   const [text, setText] = useState<string>('')
+  const [CCM, setCCM] = useState<{
+    open: boolean
+    replyTo: string
+    replyToCommentId: string
+  }>({
+    open: false,
+    replyTo: '',
+    replyToCommentId: '',
+  })
 
-  const onSendComment = (replyToCommentId?: string, cb?: () => void) => {
+  const onSendComment = (
+    replyToCommentId: string,
+    content?: string,
+    cb?: () => void,
+  ) => {
     const params: createCommentType = {
-      text,
+      text: content || text,
+      replyToCommentId,
       id: eid,
       type: 'EPISODE',
     }
 
-    if (replyToCommentId) {
-      params.replyToCommentId = replyToCommentId
+    if (content) {
+      setReplyLoading(true)
+    } else {
+      setSubmitLoading(true)
     }
-
-    setSubmitLoading(true)
 
     createComment(params)
       .then((res) => {
-        console.log(res.data)
+        toast(res.data.toast, {
+          type: 'success',
+        })
         cb?.()
       })
       .catch((err) => {
         console.error(err)
       })
       .finally(() => {
+        setReplyLoading(false)
         setSubmitLoading(false)
       })
   }
@@ -133,10 +169,10 @@ export const CommentReplyModal: React.FC<IProps> = ({
       title="回复详情"
       open={open}
       onClose={onClose}
-      // TODO: 评论回复
       options={
         <>
           <TextField.Root
+            autoFocus={false}
             style={{ width: '100%' }}
             placeholder={`回复 @${primaryComment?.author?.nickname}`}
             value={text}
@@ -148,7 +184,7 @@ export const CommentReplyModal: React.FC<IProps> = ({
           <Button
             variant="soft"
             onClick={() => {
-              onSendComment()
+              onSendComment(primaryComment.id, '', getThreadComment)
             }}
             disabled={text.length === 0}
             loading={submitLoading}
@@ -268,6 +304,43 @@ export const CommentReplyModal: React.FC<IProps> = ({
                       <span>IP属地：{item?.author.ipLoc}</span>
                     </p>
                   </div>
+
+                  <Tooltip content={`回复 @${item.author.nickname}`}>
+                    <div
+                      style={{ color: 'gray' }}
+                      onClick={() => {
+                        setCCM({
+                          open: true,
+                          replyTo: item.author.nickname,
+                          replyToCommentId: item.id,
+                        })
+                      }}
+                    >
+                      <Pencil2Icon />
+                    </div>
+                  </Tooltip>
+
+                  {item?.author?.uid === Storage.get('user_info').uid && (
+                    <Tooltip content={'删除评论'}>
+                      <div
+                        style={{ color: '#EB8E90' }}
+                        onClick={() => {
+                          ShowMessageDialog(
+                            DialogType.QUESTION,
+                            '提示',
+                            '确定删除这条评论吗？',
+                          ).then((res) => {
+                            if (res === 'Yes' || res === '是') {
+                              onRemoveCommentFunc(item.id, getThreadComment)
+                            }
+                          })
+                        }}
+                      >
+                        <IoMdTrash />
+                      </div>
+                    </Tooltip>
+                  )}
+
                   <div
                     style={item?.liked ? { color: 'red' } : { color: 'gray' }}
                     onClick={() => {
@@ -325,6 +398,29 @@ export const CommentReplyModal: React.FC<IProps> = ({
           setProfileModal({
             open: false,
             uid: '',
+          })
+        }}
+      />
+
+      <CreateCommentModal
+        loading={replyLoading}
+        replyTo={CCM.replyTo}
+        open={CCM.open}
+        onOk={(text) => {
+          onSendComment(CCM.replyToCommentId, text, () => {
+            setCCM({
+              open: false,
+              replyTo: '',
+              replyToCommentId: '',
+            })
+            getThreadComment()
+          })
+        }}
+        onClose={() => {
+          setCCM({
+            open: false,
+            replyTo: '',
+            replyToCommentId: '',
           })
         }}
       />
