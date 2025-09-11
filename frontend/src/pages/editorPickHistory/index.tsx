@@ -8,6 +8,8 @@ import {
   type editorPickListHistoryType,
 } from '@/api/pick'
 import { EditorPickHistoryType } from '@/types/pick'
+import { PlayerEpisodeInfoType } from '@/utils/player'
+import { usePlayer } from '@/layouts/player'
 
 /**
  * 往日精选
@@ -17,6 +19,7 @@ export const EditorPickHistory: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false)
   const [loadMoreKey, setLoadMoreKey] = useState<string>('')
   const [data, setData] = useState<EditorPickHistoryType[]>([])
+  const player = usePlayer()
 
   const fetchData = () => {
     const params: editorPickListHistoryType = {}
@@ -74,6 +77,20 @@ export const EditorPickHistory: React.FC = () => {
                         }
                         mask
                         curPointer
+                        onClick={() => {
+                          const episodeInfo: PlayerEpisodeInfoType = {
+                            title: itm.episode.title,
+                            eid: itm.episode.eid,
+                            pid: itm.episode.pid,
+                            cover: itm.episode.image
+                              ? itm.episode.image.picUrl
+                              : itm.episode.podcast.image.picUrl,
+                            liked: itm.episode.isFavorited,
+                          }
+
+                          player.load(itm.episode.media.source.url, episodeInfo)
+                          player.play()
+                        }}
                       />
                     </div>
                     <div className={styles['episode-info']}>
