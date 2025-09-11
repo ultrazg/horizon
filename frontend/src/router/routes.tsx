@@ -12,6 +12,7 @@ import {
   PodcastDetail,
   Launch,
   Crash,
+  EditorPickHistory,
 } from '@/pages'
 import { ResultUser } from '@/pages/search/resultUser'
 import { ResultEpisode } from '@/pages/search/resultEpisode'
@@ -67,6 +68,10 @@ export const router = createHashRouter([
       {
         path: 'podcast/detail',
         element: <PodcastDetail />,
+      },
+      {
+        path: 'editorPickHistory',
+        element: <EditorPickHistory />,
       },
     ],
   },

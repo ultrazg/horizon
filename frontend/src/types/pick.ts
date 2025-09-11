@@ -1,5 +1,6 @@
 import { EpisodeType } from '@/types/episode'
 import { baseUserType } from '@/types/user'
+import { CommentPrimaryType } from '@/types/comment'
 
 type PickRecentType = {
   commentCount: number
@@ -18,4 +19,14 @@ type PickRecentType = {
   user: baseUserType
 }
 
-export type { PickRecentType }
+type EditorPickHistoryType = {
+  date: string
+  dateIsoStr: string
+  picks: {
+    comment: CommentPrimaryType
+    episode: EpisodeType
+    recentAudiences: baseUserType[]
+  }[]
+}
+
+export type { PickRecentType, EditorPickHistoryType }

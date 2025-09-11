@@ -9,6 +9,7 @@ import { About } from './about'
 import { PodcastDetail } from './podcastDetail'
 import { Launch } from './launch'
 import { Crash } from './crash'
+import { EditorPickHistory } from './editorPickHistory'
 
 export {
   Home,
@@ -22,4 +23,5 @@ export {
   PodcastDetail,
   Launch,
   Crash,
+  EditorPickHistory,
 }

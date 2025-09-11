@@ -1,11 +1,12 @@
 import React from 'react'
 import styles from './index.module.scss'
 import { ColorfulShadow } from '@/components'
-import { ChatBubbleIcon, PlayIcon } from '@radix-ui/react-icons'
-import { Skeleton } from '@radix-ui/themes'
+import { ChatBubbleIcon, PlayIcon, CalendarIcon } from '@radix-ui/react-icons'
+import { Button, Skeleton } from '@radix-ui/themes'
 import { showEpisodeDetailModal } from '@/utils'
 import { usePlayer } from '@/hooks'
 import { PlayerEpisodeInfoType } from '@/utils/player'
+import { useNavigate } from 'react-router-dom'
 
 type IProps = {
   data: any
@@ -14,6 +15,7 @@ type IProps = {
 }
 
 const EditorRecommended: React.FC<IProps> = ({ data, loading, onDetail }) => {
+  const navigateTo = useNavigate()
   const player = usePlayer()
 
   return (
@@ -83,6 +85,20 @@ const EditorRecommended: React.FC<IProps> = ({ data, loading, onDetail }) => {
           })}
         </div>
       </Skeleton>
+
+      <div className={styles['extra-button']}>
+        <Button
+          size="2"
+          variant="soft"
+          color="gray"
+          onClick={() => {
+            navigateTo('/editorPickHistory')
+          }}
+        >
+          <CalendarIcon />
+          查看往日精选
+        </Button>
+      </div>
     </div>
   )
 }

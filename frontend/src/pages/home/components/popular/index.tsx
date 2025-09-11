@@ -97,7 +97,7 @@ const PopularPart: React.FC<IProps> = ({
 
       <div className={styles['reload-button']}>
         <Button
-          size="1"
+          size="2"
           variant="soft"
           color="gray"
           onClick={() => onRefresh()}

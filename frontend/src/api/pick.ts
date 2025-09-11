@@ -4,6 +4,7 @@ import { responseType } from '@/types/response'
 const api = {
   pickListRecent: 'pick_list_recent',
   pickListHistory: 'pick_list_history',
+  editorPickListHistory: 'editor_pick_list_history',
 }
 
 type pickListRecentType = {
@@ -15,6 +16,10 @@ type pickListHistoryType = {
   loadMoreKey?: {}
 }
 
+export type editorPickListHistoryType = {
+  loadMoreKey?: string
+}
+
 /** 查询个人主页「用户的喜欢」片段内容 */
 export const pickListRecent = (
   params: pickListRecentType,
@@ -24,3 +29,8 @@ export const pickListRecent = (
 export const pickListHistory = (
   params: pickListHistoryType,
 ): Promise<responseType> => httpRequest.post(api.pickListHistory, params)
+
+/** 编辑精选历史 */
+export const editorPickListHistory = (
+  params: editorPickListHistoryType,
+): Promise<responseType> => httpRequest.post(api.editorPickListHistory, params)
