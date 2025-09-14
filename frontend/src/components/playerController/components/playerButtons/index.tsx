@@ -15,6 +15,49 @@ type IProps = {
   playInfo: PlayInfoType
 }
 
+const PLAYER_SPEEDS = [
+  {
+    label: '0.5x',
+    value: '0.5',
+  },
+  {
+    label: '0.8x',
+    value: '0.8',
+  },
+  {
+    label: '1x',
+    value: '1',
+  },
+  {
+    label: '1.1x',
+    value: '1.1',
+  },
+  {
+    label: '1.2x',
+    value: '1.2',
+  },
+  {
+    label: '1.3x',
+    value: '1.3',
+  },
+  {
+    label: '1.5x',
+    value: '1.5',
+  },
+  {
+    label: '1.7x',
+    value: '1.7',
+  },
+  {
+    label: '2x',
+    value: '2',
+  },
+  {
+    label: '3x',
+    value: '3',
+  },
+]
+
 export const PlayerButtons: React.FC<IProps> = ({ player, playInfo }) => {
   const [isPlaying, setIsPlaying] = useState<boolean>(player.isPlaying)
   const [left, setLeft] = useState<boolean>(false)
@@ -176,16 +219,14 @@ export const PlayerButtons: React.FC<IProps> = ({ player, playInfo }) => {
               value={playbackRate}
               onChange={(value) => onSpeedChange(value)}
             >
-              <option value="0.5">0.5x</option>
-              <option value="0.8">0.8x</option>
-              <option value="1">1x</option>
-              <option value="1.1">1.1x</option>
-              <option value="1.2">1.2x</option>
-              <option value="1.3">1.3x</option>
-              <option value="1.3">1.5x</option>
-              <option value="1.7">1.7x</option>
-              <option value="2">2x</option>
-              <option value="3">3x</option>
+              {PLAYER_SPEEDS.map((item) => (
+                <option
+                  key={item.value}
+                  value={item.value}
+                >
+                  {item.label}
+                </option>
+              ))}
             </select>
           </Tooltip>
         </div>
