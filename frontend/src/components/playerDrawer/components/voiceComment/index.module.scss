@@ -1,0 +1,62 @@
+.voice-comment-wrapper {
+  height: 2.5rem;
+  display: flex;
+
+  .duration {
+    width: 3rem;
+    text-align: center;
+    line-height: 2.5rem;
+    background: rgba(0, 0, 0, 0.8);
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.4);
+
+    span {
+      color: white;
+    }
+  }
+
+  .wave-form-wrapper {
+    flex: 0 0 auto;
+    height: 100%;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.8);
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+    cursor: pointer;
+
+    .wave-form {
+      padding: 0 0.5rem;
+      display: flex;
+      gap: 0.2rem;
+      height: 100%;
+      align-items: center;
+
+      .wave-chunks {
+        border-radius: 4px;
+        width: 2px;
+        background: rgba(255, 255, 255, 0.4);
+      }
+
+      .wave-chunks-animate {
+        border-radius: 4px;
+        width: 2px;
+        background: rgba(255, 255, 255, 0.4);
+        animation: wave-chunks-animate 2s ease-in-out infinite;
+      }
+    }
+  }
+}
+
+@keyframes wave-chunks-animate {
+  from {
+    transform: scaleY(0.5);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+  to {
+    transform: scaleY(0.5);
+  }
+}

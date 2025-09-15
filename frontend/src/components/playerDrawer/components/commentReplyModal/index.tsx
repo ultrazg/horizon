@@ -11,7 +11,7 @@ import {
   TextField,
   Tooltip,
 } from '@radix-ui/themes'
-import { useWindowSize } from '@/hooks'
+import { usePlayer, useWindowSize } from '@/hooks'
 import { IoMdThumbsUp, IoMdTrash } from 'react-icons/io'
 import {
   commentThread,
@@ -25,6 +25,7 @@ import dayjs from 'dayjs'
 import { DialogType, ShowMessageDialog, Storage, toast } from '@/utils'
 import { onCommentLikeUpdate } from '@/components/playerDrawer/components/episodeComment'
 import { PaperPlaneIcon, Pencil2Icon } from '@radix-ui/react-icons'
+import VoiceComment from '@/components/playerDrawer/components/voiceComment'
 
 type IProps = {
   eid: string
@@ -89,6 +90,7 @@ export const CommentReplyModal: React.FC<IProps> = ({
     replyTo: '',
     replyToCommentId: '',
   })
+  const player = usePlayer()
 
   const onSendComment = (
     replyToCommentId: string,
@@ -239,7 +241,10 @@ export const CommentReplyModal: React.FC<IProps> = ({
                   </p>
                   <p>
                     {dayjs(primaryComment?.collectedAt).format('YYYY/MM/DD')}{' '}
-                    <span>IP属地：{primaryComment?.ipLoc}</span>
+                    <span>
+                      IP属地：
+                      {primaryComment?.ipLoc}
+                    </span>
                   </p>
                 </div>
                 <div
@@ -254,6 +259,14 @@ export const CommentReplyModal: React.FC<IProps> = ({
                 </div>
               </div>
               <div className={styles['player-comment-body']}>
+                {primaryComment.voice && (
+                  <VoiceComment
+                    duration={primaryComment.voice.duration}
+                    url={primaryComment.voice.url}
+                    waveform={primaryComment.voice.waveform}
+                  />
+                )}
+
                 {primaryComment?.text}
               </div>
             </div>
@@ -301,7 +314,10 @@ export const CommentReplyModal: React.FC<IProps> = ({
                     </p>
                     <p>
                       {dayjs(item?.createdAt).format('YYYY/MM/DD')}{' '}
-                      <span>IP属地：{item?.author.ipLoc}</span>
+                      <span>
+                        IP属地：
+                        {item?.author.ipLoc}
+                      </span>
                     </p>
                   </div>
 

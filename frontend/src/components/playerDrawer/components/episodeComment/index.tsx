@@ -41,6 +41,7 @@ import {
 import { isEmpty } from 'lodash'
 import HighlightTimeStrings from '@/components/playerDrawer/components/highlightTimeStrings'
 import { onRemoveCommentFunc } from '@/components/playerDrawer/components/commentReplyModal'
+import VoiceComment from '@/components/playerDrawer/components/voiceComment'
 
 type IProps = {
   open: boolean
@@ -485,7 +486,13 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
                     </Badge>
                   )}
 
-                  {/* TODO: 处理语音评论 */}
+                  {item.voice && (
+                    <VoiceComment
+                      duration={item.voice.duration}
+                      url={item.voice.url}
+                      waveform={item.voice.waveform}
+                    />
+                  )}
 
                   {item.text && (
                     <HighlightTimeStrings
