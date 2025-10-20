@@ -21,10 +21,10 @@ var icon []byte
 func AppOptions(app *bridge.App) *options.App {
 	return &options.App{
 		Title:     bridge.APP_NAME,
-		Width:     1420,
-		Height:    900,
-		MinWidth:  1420,
-		MinHeight: 900,
+		Width:     1280,
+		Height:    720,
+		MinWidth:  1280,
+		MinHeight: 720,
 		// DisableResize: true,
 		AssetServer: &assetserver.Options{
 			Assets:  assets,

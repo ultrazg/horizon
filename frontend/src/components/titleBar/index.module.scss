@@ -113,12 +113,13 @@
 
   .left-part {
     display: flex;
-    width: 250px;
+    flex: 1;
     justify-content: start;
   }
 
   .middle-part {
-    width: 250px;
+    display: flex;
+    flex: 2;
     justify-content: center;
 
     ul {
@@ -169,7 +170,7 @@
   .right-part {
     height: 32px;
     display: flex;
-    width: 250px;
+    flex: 1;
     align-items: center;
     justify-content: end;
 

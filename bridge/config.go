@@ -38,17 +38,35 @@ func initConfig() {
 	viper.SetConfigFile(configFile)
 	viper.SetConfigType("yaml")
 
-	setDefaults()
+	if _, err := os.Stat(configFile); os.IsNotExist(err) {
+		setDefaults()
 
-	if !IsExist(configFile) {
-		if err := viper.SafeWriteConfigAs(configFile); err != nil {
-			log.Printf("创建配置文件失败: %v", err)
+		err := viper.ReadInConfig()
+		if err != nil {
+			log.Printf("读取配置文件失败: %v", err)
+
+			if err = viper.SafeWriteConfigAs(configFile); err != nil {
+				log.Printf("写入配置文件失败: %v", err)
+			}
 		}
 	} else {
-		if err := viper.ReadInConfig(); err != nil {
+		err := viper.ReadInConfig()
+		if err != nil {
 			log.Printf("读取配置文件失败: %v", err)
 		}
 	}
+
+	// setDefaults()
+
+	// if !IsExist(configFile) {
+	// 	if err := viper.SafeWriteConfigAs(configFile); err != nil {
+	// 		log.Printf("创建配置文件失败: %v", err)
+	// 	}
+	// } else {
+	// 	if err := viper.ReadInConfig(); err != nil {
+	// 		log.Printf("读取配置文件失败: %v", err)
+	// 	}
+	// }
 }
 
 func setDefaults() {
