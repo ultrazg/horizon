@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Spinner } from '@radix-ui/themes'
 import { CaretUpIcon } from '@radix-ui/react-icons'
 import styles from './index.module.scss'

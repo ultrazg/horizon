@@ -1,9 +1,12 @@
+@import '@/assets/global/_variables.scss';
+@import '@/assets/global/_common.scss';
+
 .episode-cover-layout {
   width: 85%;
   height: 85%;
   display: flex;
-  user-select: none;
-  -webkit-user-select: none;
+
+  @include no-select;
 
   .episode-cover {
     display: flex;
@@ -38,10 +41,10 @@
   .episode-info {
     flex: 3;
 
+    @include no-select;
+
     .episode-title {
       cursor: default;
-      user-select: none;
-      -webkit-user-select: none;
       overflow: hidden;
       display: -webkit-box;
       line-clamp: 1;
@@ -56,7 +59,7 @@
 
       div {
         font-size: 14px;
-        color: var(--white-a6);
+        color: $secondary-font-color;
 
         span {
           &:nth-child(2) {

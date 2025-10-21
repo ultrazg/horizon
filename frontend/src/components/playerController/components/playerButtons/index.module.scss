@@ -1,3 +1,5 @@
+@import '@/assets/global/_variables.scss';
+
 .player-buttons-layout {
   width: 100%;
   height: 100%;
@@ -22,46 +24,15 @@
       cursor: pointer;
 
       &:hover {
-        background: var(--purple-6);
+        background: $player-controller-button-hover-color;
       }
 
       &:active {
-        background: var(--purple-5);
+        background: $player-controller-button-active-color;
       }
 
-      &:nth-child(1) {
-        svg {
-          width: 22px;
-          height: 22px;
-        }
-      }
-
-      &:nth-child(2) {
-        svg {
-          width: 26px;
-          height: 26px;
-        }
-      }
-
-      &:nth-child(3) {
-        svg {
-          width: 44px;
-          height: 44px;
-        }
-      }
-
-      &:last-child {
-        margin-right: 0;
-
-        svg {
-          width: 26px;
-          height: 26px;
-        }
-      }
-
-      img {
-        width: 26px;
-        height: 26px;
+      svg {
+        color: $player-controller-button-color;
       }
     }
   }

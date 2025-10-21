@@ -1,10 +1,12 @@
+@import '@/assets/global/_variables.scss';
+
 .play-controller-layout {
   width: 100vw;
   height: 69px;
   position: fixed;
-  border-top: 1px solid #646464;
+  border-top: 1px solid $border-color;
   bottom: 0;
-  background: var(--black-a6);
+  background: $player-controller-background-color;
   backdrop-filter: saturate(180%) blur(20px);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
   display: flex;

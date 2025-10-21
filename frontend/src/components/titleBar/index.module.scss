@@ -73,7 +73,7 @@
   display: flex;
   align-items: center;
   font-weight: bold;
-  background: rgba(38, 38, 38, 0.5);
+  background: $nav-background-color;
   backdrop-filter: saturate(180%) blur(20px);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
 }
@@ -93,7 +93,7 @@
     height: 32px;
     text-decoration: none;
     font-weight: 600;
-    color: white;
+    color: $nav-button-color;
     cursor: default;
     border-radius: 6px;
     transition: 0.2s;
@@ -103,11 +103,11 @@
     justify-content: center;
 
     &:hover {
-      background: rgba(255, 255, 255, 0.1);
+      background: $nav-button-hover-color;
     }
 
     &:active {
-      background: rgba(255, 255, 255, 0.2);
+      background: $nav-button-active-color;
     }
   }
 
@@ -144,24 +144,23 @@
           width: 64px;
           text-decoration: none;
           font-weight: 600;
-          color: white;
+          color: $nav-button-color;
           cursor: default;
           border-radius: 6px;
           transition: 0.2s;
           overflow: hidden;
 
           &:hover {
-            background: rgba(255, 255, 255, 0.1);
+            background: $nav-button-hover-color;
           }
 
           &:active {
-            background: $main-color-opacity-1;
+            background: $nav-button-active-color;
           }
         }
 
         .active {
-          background: $main-color-opacity-1;
-          color: $main-color;
+          background: $nav-button-hover-color;
         }
       }
     }

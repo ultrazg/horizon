@@ -1,9 +1,12 @@
 import React, { ChangeEvent, useEffect, useState } from 'react'
-import { BsPlayFill, BsPauseFill } from 'react-icons/bs'
+import {
+  BsPlayFill,
+  BsPauseFill,
+  BsArrowCounterclockwise,
+  BsArrowClockwise,
+} from 'react-icons/bs'
 import { Spinner, Tooltip } from '@radix-ui/themes'
 import { HeartIcon, HeartFilledIcon } from '@radix-ui/react-icons'
-import FF_BUTTON_ICON from '@/assets/images/ff-button.png'
-import RW_BUTTON_ICON from '@/assets/images/rw-button.png'
 import styles from './index.module.scss'
 import { Player, toast } from '@/utils'
 import { PlayInfoType } from '@/utils/player'
@@ -165,7 +168,14 @@ export const PlayerButtons: React.FC<IProps> = ({ player, playInfo }) => {
             }}
           >
             <Spinner loading={loading}>
-              {playInfo.liked ? <HeartFilledIcon color="red" /> : <HeartIcon />}
+              {playInfo.liked ? (
+                <HeartFilledIcon
+                  color="red"
+                  style={{ width: 22, height: 22 }}
+                />
+              ) : (
+                <HeartIcon style={{ width: 22, height: 22 }} />
+              )}
             </Spinner>
           </div>
         </Tooltip>
@@ -177,10 +187,9 @@ export const PlayerButtons: React.FC<IProps> = ({ player, playInfo }) => {
               onRewind()
             }}
           >
-            <img
+            <BsArrowCounterclockwise
               className={left ? 'rotateLeft' : ''}
-              src={RW_BUTTON_ICON}
-              alt="rewind"
+              style={{ width: 22, height: 22 }}
             />
           </div>
         </Tooltip>
@@ -194,7 +203,11 @@ export const PlayerButtons: React.FC<IProps> = ({ player, playInfo }) => {
               onPlay()
             }}
           >
-            {!isPlaying ? <BsPlayFill /> : <BsPauseFill />}
+            {!isPlaying ? (
+              <BsPlayFill style={{ width: 32, height: 32 }} />
+            ) : (
+              <BsPauseFill style={{ width: 32, height: 32 }} />
+            )}
           </div>
         </Tooltip>
 
@@ -205,10 +218,9 @@ export const PlayerButtons: React.FC<IProps> = ({ player, playInfo }) => {
               onFastForward()
             }}
           >
-            <img
+            <BsArrowClockwise
               className={right ? 'rotateRight' : ''}
-              src={FF_BUTTON_ICON}
-              alt="fast-forward"
+              style={{ width: 22, height: 22 }}
             />
           </div>
         </Tooltip>

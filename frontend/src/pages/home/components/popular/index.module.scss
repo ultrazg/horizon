@@ -6,6 +6,7 @@
 
   h3 {
     font-size: 1.8rem;
+    color: $h3-color;
   }
 
   .popular-content {
@@ -37,7 +38,7 @@
             &:first-child {
               height: 1rem;
               font-size: 0.8rem;
-              color: var(--white-a6);
+              color: $secondary-font-color;
               cursor: pointer;
             }
 
@@ -60,7 +61,7 @@
               display: flex;
               font-size: 0.8rem;
               vertical-align: bottom;
-              color: var(--white-a6);
+              color: $secondary-font-color;
 
               svg {
                 transform: scaleX(-1) scaleY(-1);

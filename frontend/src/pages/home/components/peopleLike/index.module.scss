@@ -8,6 +8,7 @@
 
   h3 {
     font-size: 1.8rem;
+    color: $h3-color;
   }
 
   .people-like-content {
@@ -36,7 +37,7 @@
             cursor: pointer;
 
             &:last-child {
-              color: var(--white-a5);
+              color: $secondary-font-color;
               font-weight: 300;
             }
           }
@@ -80,7 +81,7 @@
         margin-top: 0.5rem;
         padding-top: 0.5rem;
         height: 3rem;
-        border-top: 1px solid var(--white-a3);
+        border-top: 1px solid $border-color;
         display: flex;
 
         .l {
@@ -102,7 +103,7 @@
             cursor: pointer;
 
             &:last-child {
-              color: var(--white-a5);
+              color: $secondary-font-color;
               font-weight: 300;
             }
           }
@@ -117,7 +118,7 @@
           .play_button {
             width: 80%;
             height: 80%;
-            background: var(--white-a2);
+            background: var(--gray-7);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -126,11 +127,11 @@
             transition: 0.2s;
 
             &:hover {
-              background: var(--white-a4);
+              background: var(--gray-8);
             }
 
             &:active {
-              background: var(--white-a1);
+              background: var(--gray-5);
             }
 
             svg {

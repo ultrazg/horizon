@@ -11,6 +11,7 @@ import {
   Button,
   Card,
   Flex,
+  SegmentedControl,
   Separator,
   Switch,
   Tooltip,
@@ -358,6 +359,25 @@ export const Setting: React.FC = () => {
 
       <h4>其他</h4>
       <Card>
+        <Flex>
+          <Box width="100%">主题</Box>
+          <Box>
+            <SegmentedControl.Root
+              defaultValue="system"
+              size={'1'}
+            >
+              <SegmentedControl.Item value="system">
+                跟随系统
+              </SegmentedControl.Item>
+              <SegmentedControl.Item value="light">明亮</SegmentedControl.Item>
+              <SegmentedControl.Item value="dark">暗黑</SegmentedControl.Item>
+            </SegmentedControl.Root>
+          </Box>
+        </Flex>
+        <Separator
+          my="3"
+          size="4"
+        />
         <Flex>
           <Box width="100%">软件更新</Box>
           <Box>
