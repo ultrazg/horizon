@@ -84,6 +84,9 @@ export const Profile: React.FC = () => {
                 />
               ) : null}
             </span>
+            <span className={styles['profile-ip']}>
+              IP属地：{userInfo.ipLoc || '未知'}
+            </span>
           </div>
           <Separator
             my="1"
@@ -135,9 +138,6 @@ export const Profile: React.FC = () => {
           </div>
           <div className={styles['profile-bio']}>
             {userInfo.bio || '还没有设置签名'}
-          </div>
-          <div className={styles['profile-ip']}>
-            IP属地：{userInfo.ipLoc || '未知'}
           </div>
         </div>
       </div>

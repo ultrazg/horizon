@@ -1,29 +1,36 @@
 @import '@/assets/global/_variables.scss';
+@import '@/assets/global/_common.scss';
 
 .profile-layout {
   .profile-content {
+    @include no-select;
+
     display: flex;
 
     .profile-info {
       flex: 2;
-      padding-left: 1rem;
+      padding-left: 2rem;
 
       .profile-nickname {
         font-size: 1.5rem;
         font-weight: bold;
+        display: flex;
 
         .gender {
           margin-left: 0.7rem;
+        }
+
+        .profile-ip {
+          color: $secondary-font-color;
+          font-weight: 300;
+          font-size: 0.8rem;
+          text-align: right;
+          flex: 1;
         }
       }
 
       .profile-bio {
         margin-top: 0.7rem;
-      }
-
-      .profile-ip {
-        color: $secondary-font-color;
-        font-weight: 300;
       }
 
       .profile-follow {

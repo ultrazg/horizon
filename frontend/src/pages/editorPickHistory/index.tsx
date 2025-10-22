@@ -142,6 +142,7 @@ export const EditorPickHistory: React.FC = () => {
 
       <div className={styles['load-more-button']}>
         <Button
+          variant={'soft'}
           color="gray"
           onClick={() => {
             fetchData()
