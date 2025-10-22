@@ -60,7 +60,7 @@ export const Sticker = () => {
           }}
         />
         <div>
-          {data.total}张贴纸
+          {data.total} 张贴纸
           <ChevronRightIcon />
         </div>
         <div>

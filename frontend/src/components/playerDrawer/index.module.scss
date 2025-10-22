@@ -32,25 +32,26 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      color: $secondary-font-color;
 
       &:first-child,
       &:nth-child(2) {
         &:hover {
-          background: rgba(255, 255, 255, 0.1);
+          background: $window-zoom-button-hover-color;
         }
 
         &:active {
-          background: rgba(255, 255, 255, 0.3);
+          background: $window-zoom-button-active-color;
         }
       }
 
       &:last-child {
         &:hover {
-          background: rgba(255, 0, 0, 0.6);
+          background: $window-quit-button-hover-color;
         }
 
         &:active {
-          background: rgba(123, 2, 2, 0.6);
+          background: $window-quit-button-active-color;
         }
       }
     }
@@ -73,13 +74,18 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.8);
+      background: $player-drawer-background-color;
     }
   }
 
   .close-button {
     padding: 0.5rem 3rem;
     display: flex;
+    color: var(--white-a9);
+
+    svg {
+      color: var(--white-a9);
+    }
   }
 
   .player-content {
@@ -99,6 +105,7 @@
         padding: 0 3rem;
 
         .episode-name {
+          color: var(--white-a9);
           overflow: hidden;
           display: -webkit-box;
           line-clamp: 2;
@@ -127,13 +134,9 @@
             }
 
             svg {
-              width: 1.9rem;
-              height: 1.9rem;
-            }
-
-            img {
-              width: 26px;
-              height: 26px;
+              width: 2rem;
+              height: 2rem;
+              color: $player-controller-button-color;
             }
           }
         }

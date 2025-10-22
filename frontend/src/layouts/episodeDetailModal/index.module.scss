@@ -1,3 +1,5 @@
+@import '@/assets/global/_variables.scss';
+
 .episode-detail-modal-layout{
   padding: 0 0.7rem;
 
@@ -8,14 +10,12 @@
 
   .info{
     margin-bottom: 1rem;
-    color: rgba(255, 255, 255, 0.3);
+    color: $secondary-font-color;
   }
 
   .episode-detail-html-content {
-    color: rgba(255, 255, 255, 0.6) !important;
-
     a {
-      color: var(--purple-indicator);
+      color: $primary-font-color;
     }
 
     img {

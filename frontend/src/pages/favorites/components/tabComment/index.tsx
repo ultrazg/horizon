@@ -237,8 +237,7 @@ const TabComment: React.FC = () => {
 
       <div className={styles['load-more-button']}>
         <Button
-          size="1"
-          color="gray"
+          variant="soft"
           onClick={() => {
             getLists(data.loadMoreKey)
           }}

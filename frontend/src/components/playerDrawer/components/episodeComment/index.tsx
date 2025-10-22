@@ -272,12 +272,13 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
       <div className={styles['player-comment-layout']}>
         <Text
           size="5"
-          style={{ fontWeight: 'bold' }}
+          style={{ fontWeight: 'bold', color: 'var(--white-a11)' }}
         >
           {commentData.total} 条评论
           <Tooltip content={'刷新评论'}>
             <IconButton
-              color={'gray'}
+              variant={'soft'}
+              style={{ color: 'var(--white-a11)' }}
               ml={'3'}
               mr={'3'}
               size={'1'}
@@ -290,8 +291,9 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
           </Tooltip>
           <Tooltip content={'添加评论'}>
             <IconButton
+              variant={'soft'}
               size="1"
-              color={'gray'}
+              style={{ color: 'var(--white-a11)' }}
               onClick={() => {
                 setCCM({
                   ...CCM,
@@ -371,7 +373,7 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
                       <IconButton
                         variant="ghost"
                         size="1"
-                        color="gray"
+                        style={{ color: 'var(--white-a11)' }}
                         mr="1"
                         onClick={() => {
                           setReplyModal({
@@ -389,7 +391,7 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
                       <IconButton
                         variant="ghost"
                         size="1"
-                        color="gray"
+                        style={{ color: 'var(--white-a11)' }}
                         ml="3"
                         onClick={() => {
                           if (item.collected) {
@@ -438,14 +440,18 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
                             })
                           }}
                         >
-                          <TrashIcon />
+                          <TrashIcon style={{ color: 'var(--white-a11)' }} />
                         </IconButton>
                       </Tooltip>
                     </div>
                   )}
 
                   <div
-                    style={item.liked ? { color: 'red' } : { color: 'gray' }}
+                    style={
+                      item.liked
+                        ? { color: 'red' }
+                        : { color: 'var(--white-a11)' }
+                    }
                     onClick={() => {
                       onCommentLikeUpdate(
                         { type: 'COMMENT', id: item.id, liked: !item.liked },
@@ -479,7 +485,7 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
                 <div className={styles['player-comment-body']}>
                   {item.pinned && (
                     <Badge
-                      color="violet"
+                      style={{ color: 'var(--purple-9)' }}
                       mr="2"
                     >
                       置顶
@@ -539,7 +545,6 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
             {!isEmpty(loadMoreKey) && (
               <div className={styles['load-more-button']}>
                 <Button
-                  variant="soft"
                   color="gray"
                   onClick={() => {
                     getComment(loadMoreKey)

@@ -1,6 +1,10 @@
 @import '@/assets/global/_variables.scss';
 
-.time-string{
-  color: $main-color;
-  cursor: pointer;
+.comment-wrapper {
+  color: var(--white-a11);
+
+  .time-string {
+    color: $primary-font-color;
+    cursor: pointer;
+  }
 }

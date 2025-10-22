@@ -5,7 +5,7 @@
 
   &:hover {
     .sticker-name {
-      color: $primary-font-color;
+      color: #d9d9d9;
     }
   }
 
@@ -32,8 +32,8 @@
 .sticker-mask {
   position: absolute;
   z-index: 888;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(12px);
+  background: var(--black-a3);
+  backdrop-filter: blur(20px);
   width: 100%;
   height: 100%;
   left: 0;

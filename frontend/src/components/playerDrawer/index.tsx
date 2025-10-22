@@ -12,7 +12,12 @@ import { CoverBox } from './components/coverBox'
 import { LiveCount } from './components/liveCount'
 import { EpisodeComment } from './components/episodeComment'
 import styles from './index.module.scss'
-import { BsPauseFill, BsPlayFill } from 'react-icons/bs'
+import {
+  BsPauseFill,
+  BsPlayFill,
+  BsArrowCounterclockwise,
+  BsArrowClockwise,
+} from 'react-icons/bs'
 import { IoMdThumbsUp, IoMdInformationCircleOutline } from 'react-icons/io'
 import { episodeDetail, episodeClapCreate } from '@/api/episode'
 import { EpisodeType } from '@/types/episode'
@@ -24,8 +29,6 @@ import {
   toast,
 } from '@/utils'
 import { CONSTANT } from '@/types/constant'
-import FF_BUTTON_ICON from '@/assets/images/ff-button-colorful.png'
-import RW_BUTTON_ICON from '@/assets/images/rw-button-colorful.png'
 import { PlayInfoType } from '@/utils/player'
 import { secondsToHms } from '@/components/playerController/components/episodeCover'
 import {
@@ -298,10 +301,8 @@ export const PlayerDrawer: React.FC<IProps> = ({
                       onRewind()
                     }}
                   >
-                    <img
+                    <BsArrowCounterclockwise
                       className={left ? 'rotateLeft' : ''}
-                      src={RW_BUTTON_ICON}
-                      alt="icon"
                     />
                   </IconButton>
                 </Tooltip>
@@ -319,7 +320,11 @@ export const PlayerDrawer: React.FC<IProps> = ({
                       onPlay()
                     }}
                   >
-                    {!isPlaying ? <BsPlayFill /> : <BsPauseFill />}
+                    {!isPlaying ? (
+                      <BsPlayFill style={{ width: 48, height: 48 }} />
+                    ) : (
+                      <BsPauseFill style={{ width: 48, height: 48 }} />
+                    )}
                   </IconButton>
                 </Tooltip>
 
@@ -332,11 +337,7 @@ export const PlayerDrawer: React.FC<IProps> = ({
                       onFastForward()
                     }}
                   >
-                    <img
-                      className={right ? 'rotateRight' : ''}
-                      src={FF_BUTTON_ICON}
-                      alt="icon"
-                    />
+                    <BsArrowClockwise className={right ? 'rotateRight' : ''} />
                   </IconButton>
                 </Tooltip>
 

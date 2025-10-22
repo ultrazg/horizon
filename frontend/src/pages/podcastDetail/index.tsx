@@ -495,7 +495,7 @@ export const PodcastDetail: React.FC = () => {
                 className={styles['load-more-button']}
               >
                 <Button
-                  color="gray"
+                  variant="soft"
                   onClick={() => {
                     getEpisodeList(episodeData.loadMoreKey)
                   }}

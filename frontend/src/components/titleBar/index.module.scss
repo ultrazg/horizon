@@ -11,7 +11,7 @@
   -webkit-user-select: none;
   display: flex;
   align-items: center;
-  background: rgba(38, 38, 38, 0.5);
+  background: $nav-background-color;
   backdrop-filter: saturate(180%) blur(20px);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
 
@@ -36,25 +36,26 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      color: $secondary-font-color;
 
       &:first-child,
       &:nth-child(2) {
         &:hover {
-          background: rgba(255, 255, 255, 0.1);
+          background: $window-zoom-button-hover-color;
         }
 
         &:active {
-          background: rgba(255, 255, 255, 0.3);
+          background: $window-zoom-button-active-color;
         }
       }
 
       &:last-child {
         &:hover {
-          background: rgba(255, 0, 0, 0.6);
+          background: $window-quit-button-hover-color;
         }
 
         &:active {
-          background: rgba(123, 2, 2, 0.6);
+          background: $window-quit-button-active-color;
         }
       }
     }

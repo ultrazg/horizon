@@ -39,6 +39,7 @@
               cursor: pointer;
               display: flex;
               align-items: center;
+              color: var(--white-a11);
 
               img {
                 cursor: default;
@@ -82,7 +83,8 @@
       }
 
       .player-comment-replies {
-        background: rgba(255, 255, 255, 0.1);
+        background: var(--white-a2);
+        color: var(--white-a11);
         border-radius: 4px;
         font-size: 0.8rem;
         padding: 0.2rem 0.3rem;

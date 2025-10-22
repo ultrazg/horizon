@@ -45,7 +45,7 @@ const HighlightTimeStrings: React.FC<IProps> = React.memo(
 
     return (
       <>
-        <span>
+        <span className={styles['comment-wrapper']}>
           {parts.map((part, index) => {
             if (
               (index % 2 === 1 || (index % 2 === 0 && part.match(timeRegex))) &&

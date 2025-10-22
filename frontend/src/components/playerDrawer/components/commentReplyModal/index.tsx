@@ -393,7 +393,7 @@ export const CommentReplyModal: React.FC<IProps> = ({
                   {primaryComment.id !== item?.replyToComment?.id && (
                     <span>
                       回复{' '}
-                      <span style={{ color: 'rgb(209, 157, 255)' }}>
+                      <span style={{ color: 'var(--purple-9)' }}>
                         @{item?.replyToComment?.author?.nickname}
                       </span>
                       ：

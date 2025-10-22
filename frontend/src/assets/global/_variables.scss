@@ -1,8 +1,6 @@
-$primary-theme-background-color: rgba(67, 67, 67, 1);
 $main-color: rgb(209, 157, 255);
-$main-color-opacity-1: rgba(209, 157, 255, 0.1);
-$primary-font-color: #d9d9d9;
 
+$primary-font-color: var(--purple-9);
 $nav-background-color: var(--color-panel);
 $nav-button-color: var(--purple-11);
 $nav-button-hover-color: var(--purple-5);
@@ -14,3 +12,8 @@ $player-controller-background-color: var(--color-panel);
 $player-controller-button-hover-color: var(--purple-5);
 $player-controller-button-active-color: var(--purple-7);
 $player-controller-button-color: var(--purple-11);
+$player-drawer-background-color: var(--black-a8);
+$window-zoom-button-hover-color: var(--gray-7);
+$window-zoom-button-active-color: var(--gray-9);
+$window-quit-button-hover-color: rgba(255, 0, 0, 0.6);
+$window-quit-button-active-color: rgba(123, 2, 2, 0.6);

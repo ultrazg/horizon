@@ -24,12 +24,13 @@
       background-size: 90px 90px;
       background-position: 100% 0;
       background-repeat: repeat;
-      opacity: 0.3;
+      opacity: 0.7;
       transform: rotate(-45deg);
     }
 
     div {
       &:last-child {
+        font-size: 1rem;
         color: $secondary-font-color;
       }
     }
