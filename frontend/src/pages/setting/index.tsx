@@ -47,6 +47,7 @@ import styles from './index.module.scss'
 import { CONSTANT } from '@/types/constant'
 import { CheckForUpgrade } from 'wailsjs/go/bridge/App'
 import dayjs from 'dayjs'
+import { useTheme } from '@/layouts/theme'
 
 export const Setting: React.FC = () => {
   const [envInfo, setEnvInfo] = useState<envType>()
@@ -82,6 +83,8 @@ export const Setting: React.FC = () => {
 
   const goAbout = useNavigateTo('/about')
   const goLogin = useNavigateTo('/login')
+
+  const { toggle } = useTheme()
 
   const checkUpdate = () => {
     setCheckLoading(true)
@@ -165,6 +168,12 @@ export const Setting: React.FC = () => {
 
   const onUpdateConfig = (key: string, value: any) => {
     UpdateConfig(key, value).then()
+  }
+
+  const onThemeChange = (value: 'light' | 'dark' | 'system') => {
+    if (value !== 'system') {
+      toggle(value)
+    }
   }
 
   useEffect(() => {
@@ -365,6 +374,7 @@ export const Setting: React.FC = () => {
             <SegmentedControl.Root
               defaultValue="system"
               size={'1'}
+              onValueChange={onThemeChange}
             >
               <SegmentedControl.Item value="system">
                 跟随系统
