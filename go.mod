@@ -6,7 +6,7 @@ require (
 	github.com/spf13/viper v1.19.0
 	github.com/ultrazg/xyz v1.9.1
 	github.com/wailsapp/wails/v2 v2.10.2
-	golang.org/x/sys v0.36.0
+	golang.org/x/sys v0.37.0
 )
 
 require (
