@@ -22,9 +22,10 @@ export const ProxyModal: React.FC<modalType> = ({ open, onClose }) => {
   const [loading, setLoading] = useState<boolean>(false)
 
   const getSavedIpAndPort = async (): Promise<string[]> => {
-    const res = await ReadConfig()
+    const IP = await ReadConfig(PROXY_CONFIG_ENUM.IP)
+    const PORT = await ReadConfig(PROXY_CONFIG_ENUM.PORT)
 
-    return [res.proxy.ip, res.proxy.port]
+    return [IP, PORT]
   }
 
   const onChange = (
@@ -81,19 +82,23 @@ export const ProxyModal: React.FC<modalType> = ({ open, onClose }) => {
     return true
   }
 
+  const initConfig = async (): Promise<void> => {
+    const IP: string = await ReadConfig(PROXY_CONFIG_ENUM.IP)
+    const PORT: string = await ReadConfig(PROXY_CONFIG_ENUM.PORT)
+    const ENABLED: boolean = await ReadConfig(PROXY_CONFIG_ENUM.ENABLED)
+
+    setIp(IP || '')
+    setPort(PORT || '')
+    setEnabled(ENABLED || false)
+  }
+
   useEffect(() => {
     if (open) {
-      ReadConfig()
-        .then((res) => {
-          const { ip, port, enabled } = res.proxy
-
-          setIp(ip)
-          setPort(port)
-          setEnabled(enabled)
-        })
-        .catch((err) => {
-          console.error('err', err)
-        })
+      initConfig().catch(() => {
+        setIp('')
+        setPort('')
+        setEnabled(false)
+      })
     }
   }, [open])
 
@@ -125,7 +130,7 @@ export const ProxyModal: React.FC<modalType> = ({ open, onClose }) => {
                       `Google Status: ${googleResponse.code} ${googleResponse.code === 200 ? 'OK' : 'FAILED'}\r\nGithub Status: ${githubResponse.code} ${githubResponse.code === 200 ? 'OK' : 'FAILED'}`,
                     ).then()
                   })
-                  .catch((err) => {
+                  .catch(() => {
                     toast('错误', { type: 'warn' })
                   })
                   .finally(() => {

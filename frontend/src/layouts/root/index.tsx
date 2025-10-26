@@ -9,6 +9,7 @@ import { CheckForUpgrade } from 'wailsjs/go/bridge/App'
 import { UpgradeModal } from '@/pages/setting/components/upgradeModal'
 import { Profile } from '@/api/profile'
 import { userType } from '@/types/user'
+import { SETTING_CONFIG_ENUM, USER_CONFIG_ENUM } from '@/types/config'
 
 export const Root: React.FC = () => {
   const scrollRef = useRef<HTMLDivElement | null>(null)
@@ -44,13 +45,20 @@ export const Root: React.FC = () => {
   }
 
   const onReadConfigFunc = () => {
-    ReadConfig()
-      .then(async (res) => {
-        if (res.setting.checkUpdateOnStartup) {
-          setCheckUpgrade(true)
-        }
+    ReadConfig(SETTING_CONFIG_ENUM.checkUpdateOnStartup)
+      .then(async (config) => {
+        setCheckUpgrade(config)
+      })
+      .catch((err: any) => {
+        console.error('error', err)
+      })
+      .finally(() => {
+        setLoading(false)
+      })
 
-        if (res?.user?.accessToken) {
+    ReadConfig(USER_CONFIG_ENUM.accessToken)
+      .then(async (config) => {
+        if (config) {
           await updateProfile()
 
           return goHome()

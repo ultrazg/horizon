@@ -10,7 +10,6 @@ import { PlayInfoType } from '@/utils/player'
 import { episodePlayProgressUpdate } from '@/api/episode'
 import { updatePlayedList, updatePlayedListType } from '@/api/played'
 import { mileageUpdate, type mileageUpdateType } from '@/api/mileage'
-import { ReadConfig } from 'wailsjs/go/bridge/App'
 import dayjs from 'dayjs'
 
 export const PlayController: React.FC = () => {

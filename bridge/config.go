@@ -55,36 +55,26 @@ func initConfig() {
 			log.Printf("读取配置文件失败: %v", err)
 		}
 	}
-
-	// setDefaults()
-
-	// if !IsExist(configFile) {
-	// 	if err := viper.SafeWriteConfigAs(configFile); err != nil {
-	// 		log.Printf("创建配置文件失败: %v", err)
-	// 	}
-	// } else {
-	// 	if err := viper.ReadInConfig(); err != nil {
-	// 		log.Printf("读取配置文件失败: %v", err)
-	// 	}
-	// }
 }
 
 func setDefaults() {
 	viper.SetDefault("user.access_token", "")
 	viper.SetDefault("user.refresh_token", "")
 	viper.SetDefault("setting.check_update_on_startup", true)
+	viper.SetDefault("setting.theme", "light")
 	viper.SetDefault("proxy.enabled", false)
 	viper.SetDefault("proxy.ip", "")
 	viper.SetDefault("proxy.port", "")
 	viper.SetDefault("play.last_play_eid", "")
 }
 
-func (a *App) ReadConfig() Config {
-	var c Config
-	if err := viper.Unmarshal(&c); err != nil {
-		log.Printf("解析配置文件失败: %v", err)
-	}
-	return c
+func (a *App) ReadConfig(key string) any {
+	// var c Config
+	// if err := viper.Unmarshal(&c); err != nil {
+	// 	log.Printf("解析配置文件失败: %v", err)
+	// }
+	// return c
+	return viper.Get(key)
 }
 
 func (a *App) UpdateConfig(key string, value any) (bool, string) {

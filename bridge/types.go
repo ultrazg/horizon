@@ -23,8 +23,8 @@ type User struct {
 }
 
 type Setting struct {
-	CheckUpdateOnStartup bool `mapstructure:"check_update_on_startup" json:"checkUpdateOnStartup"`
-	IsIpLocHidden        bool `mapstructure:"is_ip_loc_hidden" json:"isIpLocHidden"`
+	CheckUpdateOnStartup bool   `mapstructure:"check_update_on_startup" json:"checkUpdateOnStartup"`
+	Theme                string `mapstructure:"theme" json:"theme"`
 }
 
 type Proxy struct {

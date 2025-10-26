@@ -53,10 +53,12 @@ func HTTPClientWithProxy(proxyURL string) (*http.Client, error) {
 }
 
 func GetProxyInfo(a *App) string {
-	config := a.ReadConfig()
+	proxyEnabled := a.ReadConfig("proxy.enabled").(bool)
+	proxyIp := a.ReadConfig("proxy.ip").(string)
+	proxyPort := a.ReadConfig("proxy.port").(string)
 
-	if config.Proxy.Ip != "" && config.Proxy.Enabled {
-		return fmt.Sprintf("http://%s:%s", config.Proxy.Ip, config.Proxy.Port)
+	if proxyEnabled && proxyIp != "" && proxyPort != "" {
+		return fmt.Sprintf("http://%s:%s", proxyIp, proxyPort)
 	}
 
 	return ""

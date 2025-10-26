@@ -30,6 +30,7 @@ import {
   ShowMessageDialog,
   Storage,
   UpdateConfig,
+  GetSystemTheme,
 } from '@/utils'
 import { getUserPreference, updateUserPreference } from '@/api/user'
 import { useNavigateTo, usePlayer } from '@/hooks'
@@ -53,7 +54,7 @@ export const Setting: React.FC = () => {
   const [envInfo, setEnvInfo] = useState<envType>()
   const [config, setConfig] = useState<settingConfigType>({
     checkUpdateOnStartup: false,
-    isIpLocHidden: false,
+    theme: 'light',
   })
   const [preferenceLists, setPreferenceLists] = useState<userPreferenceType>({
     isRecentPlayedHidden: false,
@@ -183,13 +184,19 @@ export const Setting: React.FC = () => {
 
     onGetUserPreference()
 
-    ReadConfig()
-      .then((res) => {
-        setConfig(res.setting)
+    ReadConfig(SETTING_CONFIG_ENUM.theme).then((theme) => {
+      setConfig({
+        ...config,
+        theme: theme || 'light',
       })
-      .catch((err) => {
-        console.error('error', err)
+    })
+
+    ReadConfig(SETTING_CONFIG_ENUM.checkUpdateOnStartup).then((config) => {
+      setConfig({
+        ...config,
+        checkUpdateOnStartup: config,
       })
+    })
   }, [])
 
   return (

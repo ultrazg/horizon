@@ -1,6 +1,6 @@
 type settingConfigType = {
   checkUpdateOnStartup: boolean
-  isIpLocHidden: boolean
+  theme: 'light' | 'dark'
 }
 
 type userConfigType = {
@@ -10,7 +10,7 @@ type userConfigType = {
 
 const SETTING_CONFIG_ENUM = {
   checkUpdateOnStartup: 'setting.check_update_on_startup',
-  isIpLocHidden: 'setting.is_ip_loc_hidden',
+  theme: 'setting.theme',
 }
 
 const USER_CONFIG_ENUM = {
