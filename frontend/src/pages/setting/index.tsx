@@ -216,7 +216,7 @@ export const Setting: React.FC = () => {
     onGetUserPreference()
 
     ReadConfig(SETTING_CONFIG_ENUM.theme).then((theme) => {
-      setConfig((prevState) => ({ ...prevState, theme }))
+      setConfig((prevState) => ({ ...prevState, theme: theme || 'light' }))
     })
 
     ReadConfig(SETTING_CONFIG_ENUM.checkUpdateOnStartup).then((config) => {
