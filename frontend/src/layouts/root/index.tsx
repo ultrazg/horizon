@@ -25,16 +25,16 @@ export const Root: React.FC = () => {
     await Profile()
       .then((res) => {
         const data: userType = {
-          uid: res.data.uid,
-          bio: res.data.bio,
-          avatar: res.data.avatar.picture.picUrl,
-          nickname: res.data.nickname,
-          gender: res.data.gender,
-          industry: res.data.industry,
-          mobilePhoneNumber: res.data.phoneNumber.mobilePhoneNumber,
-          ipLoc: res.data.ipLoc,
-          wechatUserInfo: res.data?.wechatUserInfo,
-          jikeUserInfo: res.data?.jikeUserInfo,
+          uid: res.data.data.uid,
+          bio: res.data.data.bio,
+          avatar: res.data.data.avatar.picture.picUrl,
+          nickname: res.data.data.nickname,
+          gender: res.data.data.gender,
+          industry: res.data.data.industry,
+          mobilePhoneNumber: res.data.data.phoneNumber.mobilePhoneNumber,
+          ipLoc: res.data.data.ipLoc,
+          wechatUserInfo: res.data.data?.wechatUserInfo,
+          jikeUserInfo: res.data.data?.jikeUserInfo,
         }
 
         Storage.set('user_info', data)
@@ -45,9 +45,17 @@ export const Root: React.FC = () => {
   }
 
   const onReadConfigFunc = () => {
-    ReadConfig(SETTING_CONFIG_ENUM.checkUpdateOnStartup)
+    ReadConfig(USER_CONFIG_ENUM.accessToken)
       .then(async (config) => {
-        setCheckUpgrade(config)
+        if (config) {
+          updateProfile()
+            .then(() => {
+              goHome()
+            })
+            .catch(() => {
+              goLogin()
+            })
+        }
       })
       .catch((err: any) => {
         console.error('error', err)
@@ -56,15 +64,9 @@ export const Root: React.FC = () => {
         setLoading(false)
       })
 
-    ReadConfig(USER_CONFIG_ENUM.accessToken)
+    ReadConfig(SETTING_CONFIG_ENUM.checkUpdateOnStartup)
       .then(async (config) => {
-        if (config) {
-          await updateProfile()
-
-          return goHome()
-        } else {
-          return goLogin()
-        }
+        setCheckUpgrade(config)
       })
       .catch((err: any) => {
         console.error('error', err)

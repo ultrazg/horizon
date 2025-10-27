@@ -17,15 +17,13 @@ const container = document.getElementById('root')
 const root = createRoot(container!)
 
 root.render(
-  <React.StrictMode>
-    <ToastProvider>
-      <ThemeProvider>
-        <PlayerProvider>
-          <EpisodeDetailModalProvider>
-            <App />
-          </EpisodeDetailModalProvider>
-        </PlayerProvider>
-      </ThemeProvider>
-    </ToastProvider>
-  </React.StrictMode>,
+  <ToastProvider>
+    <ThemeProvider>
+      <PlayerProvider>
+        <EpisodeDetailModalProvider>
+          <App />
+        </EpisodeDetailModalProvider>
+      </PlayerProvider>
+    </ThemeProvider>
+  </ToastProvider>,
 )
