@@ -31,6 +31,8 @@ import {
   Storage,
   UpdateConfig,
   GetSystemTheme,
+  WindowSetLightTheme,
+  WindowSetDarkTheme,
 } from '@/utils'
 import { getUserPreference, updateUserPreference } from '@/api/user'
 import { useNavigateTo, usePlayer } from '@/hooks'
@@ -48,7 +50,7 @@ import styles from './index.module.scss'
 import { CONSTANT } from '@/types/constant'
 import { CheckForUpgrade } from 'wailsjs/go/bridge/App'
 import dayjs from 'dayjs'
-import { useTheme } from '@/layouts/theme'
+import { ThemeMode, useTheme } from '@/layouts/theme'
 
 export const Setting: React.FC = () => {
   const [envInfo, setEnvInfo] = useState<envType>()
@@ -174,7 +176,36 @@ export const Setting: React.FC = () => {
   const onThemeChange = (value: 'light' | 'dark' | 'system') => {
     if (value !== 'system') {
       toggle(value)
+
+      if (value === 'light') {
+        WindowSetLightTheme()
+      }
+
+      if (value === 'dark') {
+        WindowSetDarkTheme()
+      }
+    } else {
+      GetSystemTheme().then((theme) => {
+        toggle(theme as ThemeMode)
+
+        if (theme === 'light') {
+          WindowSetLightTheme()
+        }
+
+        if (theme === 'dark') {
+          WindowSetDarkTheme()
+        }
+      })
     }
+
+    UpdateConfig(SETTING_CONFIG_ENUM.theme, value).catch((err) => {
+      console.error(err)
+    })
+
+    setConfig({
+      ...config,
+      theme: value,
+    })
   }
 
   useEffect(() => {
@@ -185,17 +216,11 @@ export const Setting: React.FC = () => {
     onGetUserPreference()
 
     ReadConfig(SETTING_CONFIG_ENUM.theme).then((theme) => {
-      setConfig({
-        ...config,
-        theme: theme || 'light',
-      })
+      setConfig((prevState) => ({ ...prevState, theme }))
     })
 
     ReadConfig(SETTING_CONFIG_ENUM.checkUpdateOnStartup).then((config) => {
-      setConfig({
-        ...config,
-        checkUpdateOnStartup: config,
-      })
+      setConfig((prevState) => ({ ...prevState, config }))
     })
   }, [])
 
@@ -379,7 +404,7 @@ export const Setting: React.FC = () => {
           <Box width="100%">主题</Box>
           <Box>
             <SegmentedControl.Root
-              defaultValue="system"
+              value={config.theme}
               size={'1'}
               onValueChange={onThemeChange}
             >

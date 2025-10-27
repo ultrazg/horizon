@@ -110,6 +110,10 @@
     &:active {
       background: $nav-button-active-color;
     }
+
+    &:last-child {
+      margin-left: 6px;
+    }
   }
 
   .left-part {

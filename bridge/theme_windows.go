@@ -20,7 +20,7 @@ func GetSystemThemeKey() (string, error) {
 
 	appsUseLightTheme, _, err := key.GetIntegerValue("AppsUseLightTheme")
 	if err != nil {
-		return "", err
+		return "light", err
 	}
 
 	if appsUseLightTheme == 0 {

@@ -1,6 +1,6 @@
 type settingConfigType = {
   checkUpdateOnStartup: boolean
-  theme: 'light' | 'dark'
+  theme: 'light' | 'dark' | 'system'
 }
 
 type userConfigType = {

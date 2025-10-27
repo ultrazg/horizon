@@ -25,12 +25,10 @@ func AppOptions(app *bridge.App) *options.App {
 		Height:    720,
 		MinWidth:  1280,
 		MinHeight: 720,
-		// DisableResize: true,
 		AssetServer: &assetserver.Options{
 			Assets:  assets,
 			Handler: bridge.NewHttpRequest(),
 		},
-		//BackgroundColour: &options.RGBA{R: 67, G: 67, B: 67, A: 1},
 		OnStartup:     app.Start,
 		OnBeforeClose: app.BeforeClose,
 		Bind: []interface{}{
@@ -38,16 +36,13 @@ func AppOptions(app *bridge.App) *options.App {
 		},
 		Frameless: runtime.GOOS == "windows",
 		Windows: &windows.Options{
-			WebviewIsTransparent: false,
-			WindowIsTranslucent:  false,
-			// BackdropType:                      windows.Acrylic,
+			WebviewIsTransparent:              false,
+			WindowIsTranslucent:               false,
 			DisableWindowIcon:                 false,
-			Theme:                             windows.Dark,
 			DisableFramelessWindowDecorations: false,
 		},
 		Mac: &mac.Options{
 			TitleBar:             mac.TitleBarHiddenInset(),
-			Appearance:           mac.NSAppearanceNameDarkAqua,
 			WebviewIsTransparent: false,
 			WindowIsTranslucent:  false,
 			About: &mac.AboutInfo{

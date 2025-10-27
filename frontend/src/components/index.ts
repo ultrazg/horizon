@@ -1,6 +1,5 @@
 import { PlayController } from './playerController'
 import { PlayerDrawer } from './playerDrawer'
-import { NavUser } from './navUser'
 import { ColorfulShadow } from './colorfulShadow'
 import { TitleBar } from './titleBar'
 import { Modal } from './modal'
@@ -14,7 +13,6 @@ import { CreateCommentModal } from './createCommentModal'
 export {
   PlayController,
   PlayerDrawer,
-  NavUser,
   ColorfulShadow,
   TitleBar,
   Modal,
