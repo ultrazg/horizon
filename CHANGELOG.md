@@ -1,3 +1,15 @@
+### v0.4.0
+
+Features
+
+- 新增亮暗主题（[#4](https://github.com/ultrazg/horizon/issues/4)）
+
+Fixes
+
+- 修复启动时无法获取个人信息的问题
+- 优化了配置文件的读取
+- 调整了部分 UI
+
 ### v0.3.0
 
 Features
