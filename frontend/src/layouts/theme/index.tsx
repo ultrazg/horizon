@@ -7,6 +7,7 @@ import {
   WindowSetDarkTheme,
 } from '@/utils'
 import { SETTING_CONFIG_ENUM, settingConfigType } from '@/types/config'
+import { useSystemTheme } from '@/hooks'
 
 export type ThemeMode = 'light' | 'dark'
 
@@ -26,6 +27,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [mode, setMode] = useState<ThemeMode>('light')
+  const systemTheme = useSystemTheme()
 
   const toggle = (theme: ThemeMode) => setMode(() => theme)
 
@@ -64,6 +66,27 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
       setMode(() => 'light')
     })
   }, [])
+
+  useEffect(() => {
+    const updateSystemTheme = async () => {
+      const themeConfig: settingConfigType['theme'] = await ReadConfig(
+        SETTING_CONFIG_ENUM.theme,
+      )
+      if (themeConfig === 'system') {
+        setMode(systemTheme)
+
+        if (systemTheme === 'light') {
+          WindowSetLightTheme()
+        }
+
+        if (systemTheme === 'dark') {
+          WindowSetDarkTheme()
+        }
+      }
+    }
+
+    updateSystemTheme()
+  }, [systemTheme])
 
   return (
     <ThemeContext.Provider value={{ mode, toggle }}>
