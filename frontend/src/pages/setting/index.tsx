@@ -220,7 +220,7 @@ export const Setting: React.FC = () => {
     })
 
     ReadConfig(SETTING_CONFIG_ENUM.checkUpdateOnStartup).then((config) => {
-      setConfig((prevState) => ({ ...prevState, config }))
+      setConfig((prevState) => ({ ...prevState, checkUpdateOnStartup: config }))
     })
   }, [])
 
