@@ -482,7 +482,7 @@ export const Setting: React.FC = () => {
                         type: 'warn',
                       })
 
-                      console.err(r)
+                      console.error(r)
                     }
                   })
                   .finally(() => {
