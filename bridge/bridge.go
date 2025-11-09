@@ -2,7 +2,7 @@ package bridge
 
 import (
 	"context"
-	"fmt"
+	"log"
 	"runtime"
 
 	"github.com/ultrazg/xyz/service"
@@ -15,11 +15,20 @@ func NewApp() *App {
 
 func (a *App) Start(ctx context.Context) {
 	a.ctx = ctx
-
-	err := service.Start()
+	logFile, err := initLog()
 	if err != nil {
-		fmt.Println(err.Error())
+		log.Printf("初始化日志失败: %v", err)
 	}
+
+	a.logFile = logFile
+
+	err = service.Start()
+	if err != nil {
+		log.Printf("启动 xyz 服务失败: %v", err)
+	}
+
+	log.Println("Start")
+	log.Printf("%s %s %s", APP_VERSION, runtime.GOOS, runtime.GOARCH)
 }
 
 func IsWindows() bool {
@@ -34,4 +43,12 @@ func (a *App) BeforeClose(ctx context.Context) bool {
 	r.EventsEmit(a.ctx, "SaveLastPlay")
 
 	return false
+}
+
+func (a *App) Shutdown(ctx context.Context) {
+	log.Println("Shutdown")
+
+	if a.logFile != nil {
+		a.logFile.Close()
+	}
 }

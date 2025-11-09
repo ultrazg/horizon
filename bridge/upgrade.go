@@ -22,8 +22,12 @@ var downloadUrl string
 func (a *App) CheckForUpgrade() *CheckUpgradeInfo {
 	latest, err := GetGithubReleaseInfo(a)
 	if err != nil {
+		log.Printf("获取远程版本失败: %v", err)
+
 		return &CheckUpgradeInfo{Err: err.Error(), IsLatest: false, Latest: nil}
 	}
+
+	log.Printf("远程仓库 tag name: %s", latest.TagName)
 
 	remoteVersion := strings.TrimPrefix(latest.TagName, "v")
 	if remoteVersion != APP_VERSION {
@@ -38,46 +42,50 @@ func GetGithubReleaseInfo(a *App) (*Latest, error) {
 
 	client, err := HTTPClientWithProxy(proxyUrl)
 	if err != nil {
+		log.Printf("创建 HTTP 客户端失败: %v", err)
+
 		return nil, err
 	}
 
 	req, err := http.NewRequest(http.MethodGet, GITHUB_REPO_RELEASE_URL, nil)
 	if err != nil {
-		log.Println(err.Error())
+		log.Printf("创建 HTTP 请求失败: %v", err)
 
 		return nil, err
 	}
 
 	res, err := client.Do(req)
 	if err != nil {
-		log.Println(err.Error())
+		log.Printf("发送 HTTP 请求失败: %v", err)
 
 		return nil, err
 	}
 	defer res.Body.Close()
 
 	if res.StatusCode != http.StatusOK {
-		log.Println(res.StatusCode)
+		log.Printf("HTTP 请求返回状态码: %d", res.StatusCode)
 
 		return nil, err
 	}
 
 	body, err := io.ReadAll(res.Body)
 	if err != nil {
-		log.Println(err.Error())
+		log.Printf("读取响应体失败: %v", err)
 
 		return nil, err
 	}
 
 	var githubReleaseInfo *GithubReleaseInfo
 	if err := json.Unmarshal(body, &githubReleaseInfo); err != nil {
-		log.Println(err.Error())
+		log.Printf("解析 JSON 失败: %v", err)
 
 		return nil, err
 	}
 
 	for _, assets := range githubReleaseInfo.Assets {
 		if strings.Contains(strings.ToLower(assets.Name), r.GOOS) && strings.Contains(strings.ToLower(assets.Name), r.GOARCH) {
+			log.Printf("更新包下载地址: %s", assets.BrowserDownloadURL)
+
 			downloadUrl = assets.BrowserDownloadURL
 		}
 	}
@@ -93,17 +101,23 @@ func DownloadLatestRelease(ctx context.Context, a *App, url string, path string,
 	proxyUrl := GetProxyInfo(a)
 	client, err := HTTPClientWithProxy(proxyUrl)
 	if err != nil {
+		log.Printf("创建 HTTP 客户端失败: %v", err)
+
 		return err
 	}
 
 	resp, err := client.Get(url)
 	if err != nil {
+		log.Printf("发送 HTTP 请求失败: %v", err)
+
 		return err
 	}
 	defer resp.Body.Close()
 
 	create, err := os.Create(path)
 	if err != nil {
+		log.Printf("创建文件失败: %v", err)
+
 		return err
 	}
 	defer create.Close()
@@ -123,9 +137,14 @@ func DownloadLatestRelease(ctx context.Context, a *App, url string, path string,
 			return fmt.Errorf("下载已取消")
 		default:
 			n, err := resp.Body.Read(buffer)
+			if err != nil {
+				log.Printf("读取响应体失败: %v", err)
+			}
 			if n > 0 {
 				_, writeErr := create.Write(buffer[:n])
 				if writeErr != nil {
+					log.Printf("写入文件失败: %v", writeErr)
+
 					return writeErr
 				}
 
@@ -165,6 +184,9 @@ func (a *App) Download() error {
 
 	if downloadUrl == "" {
 		err := fmt.Errorf("找不到更新包下载地址")
+
+		log.Printf("下载更新包失败: %v", err)
+
 		runtime.EventsEmit(a.ctx, "download-error", err)
 
 		return err
@@ -177,6 +199,8 @@ func (a *App) Download() error {
 		runtime.EventsEmit(a.ctx, "download-progress", progress, total, downloaded)
 	})
 	if err != nil {
+		log.Printf("下载更新包失败: %v", err)
+
 		runtime.EventsEmit(a.ctx, "download-error", err.Error())
 
 		return err
@@ -197,7 +221,7 @@ func (a *App) Upgrade() error {
 	if IsWindows() {
 		err := upgradeForWindows()
 		if err != nil {
-			log.Println("upgradeForWindows", err.Error())
+			log.Printf("升级版本失败: %v", err)
 
 			return err
 		}
@@ -206,7 +230,7 @@ func (a *App) Upgrade() error {
 	if IsMacOS() {
 		err := upgradeForMac()
 		if err != nil {
-			log.Println("upgradeForMac", err.Error())
+			log.Printf("升级版本失败: %v", err)
 
 			return err
 		}
@@ -222,7 +246,8 @@ func upgradeForWindows() error {
 
 	err := UnzipZIPFile(zipFilePath)
 	if err != nil {
-		log.Println("UnzipZIPFile", err.Error())
+		log.Printf("解压 ZIP 文件失败: %v", err)
+
 		return err
 	}
 
@@ -230,6 +255,8 @@ func upgradeForWindows() error {
 
 	oldExePath, err := os.Executable()
 	if err != nil {
+		log.Printf("获取当前可执行文件路径失败: %v", err)
+
 		return err
 	}
 
@@ -243,6 +270,8 @@ del "%%~f0"
 	batchFilePath := filepath.Join(os.TempDir(), "horizon_update.bat")
 	err = os.WriteFile(batchFilePath, []byte(batchScript), 0644)
 	if err != nil {
+		log.Printf("创建批处理文件失败: %v", err)
+
 		return err
 	}
 
@@ -250,6 +279,8 @@ del "%%~f0"
 	cmd.SysProcAttr = sysProcAttr
 	err = cmd.Start()
 	if err != nil {
+		log.Printf("启动批处理文件失败: %v", err)
+
 		return err
 	}
 
@@ -265,6 +296,8 @@ func upgradeForMac() error {
 
 	err := UnzipZIPFile(zipFilePath)
 	if err != nil {
+		log.Printf("解压 ZIP 文件失败: %v", err)
+
 		return err
 	}
 
@@ -272,6 +305,8 @@ func upgradeForMac() error {
 
 	oldAppExe, err := os.Executable()
 	if err != nil {
+		log.Printf("获取当前可执行文件路径失败: %v", err)
+
 		return err
 	}
 
@@ -288,12 +323,16 @@ rm -- "$0"
 	scriptPath := filepath.Join(os.TempDir(), "horizon_update.sh")
 	err = os.WriteFile(scriptPath, []byte(script), 0755)
 	if err != nil {
+		log.Printf("创建脚本文件失败: %v", err)
+
 		return err
 	}
 
 	cmd := exec.Command("bash", scriptPath)
 	err = cmd.Start()
 	if err != nil {
+		log.Printf("启动脚本文件失败: %v", err)
+
 		return err
 	}
 

@@ -33,7 +33,7 @@ func initConfig() {
 
 	configFile := filepath.Join(configFilePath, configFileName)
 
-	println("配置文件：", configFile)
+	log.Println("配置文件：", configFile)
 
 	viper.SetConfigFile(configFile)
 	viper.SetConfigType("yaml")
@@ -69,11 +69,8 @@ func setDefaults() {
 }
 
 func (a *App) ReadConfig(key string) any {
-	// var c Config
-	// if err := viper.Unmarshal(&c); err != nil {
-	// 	log.Printf("解析配置文件失败: %v", err)
-	// }
-	// return c
+	log.Printf("读取配置: %s = %v", key, viper.Get(key))
+
 	return viper.Get(key)
 }
 
@@ -85,6 +82,6 @@ func (a *App) UpdateConfig(key string, value any) (bool, string) {
 		return false, "无法写入配置文件"
 	}
 
-	log.Println("配置文件已更新")
+	log.Printf("配置文件已更新: %s = %v", key, value)
 	return true, "配置文件已更新"
 }

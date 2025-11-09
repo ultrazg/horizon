@@ -3,7 +3,12 @@ import { isValidPhoneNumber, isValidIp } from './regex'
 import { APP_NAME, APP_VERSION } from './appInfo'
 import { toast } from './toast'
 import Storage from '@/utils/storage'
-import { UpdateConfig, ReadConfig, GetSystemTheme } from 'wailsjs/go/bridge/App'
+import {
+  UpdateConfig,
+  ReadConfig,
+  GetSystemTheme,
+  OpenLogDir,
+} from 'wailsjs/go/bridge/App'
 import { WindowSetLightTheme, WindowSetDarkTheme } from 'wailsjs/runtime'
 import { ShowMessageDialog, DialogType } from './dialog'
 import { showEpisodeDetailModal } from './showEpisodeDetailModal'
@@ -30,4 +35,5 @@ export {
   GetSystemTheme,
   WindowSetLightTheme,
   WindowSetDarkTheme,
+  OpenLogDir,
 }

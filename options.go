@@ -31,6 +31,7 @@ func AppOptions(app *bridge.App) *options.App {
 		},
 		OnStartup:     app.Start,
 		OnBeforeClose: app.BeforeClose,
+		OnShutdown:    app.Shutdown,
 		Bind: []interface{}{
 			app,
 		},

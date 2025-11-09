@@ -2,29 +2,28 @@ package bridge
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"net/url"
 	"time"
 )
 
-type TestConnectResult struct {
-	Flag bool  `json:"flag"`
-	Code int   `json:"code"`
-	Err  error `json:"err"`
-}
-
 func (a *App) TestConnect(url, ip, port string) *TestConnectResult {
 	proxyURL := fmt.Sprintf("http://%s:%s", ip, port)
 
-	fmt.Println("proxyURL --->", proxyURL)
+	log.Println("proxyURL --->", proxyURL)
 
 	client, err := HTTPClientWithProxy(proxyURL)
 	if err != nil {
+		log.Println(err)
+
 		return &TestConnectResult{Flag: false, Code: 0, Err: err}
 	}
 
 	resp, err := client.Get(url)
 	if err != nil {
+		log.Println(err)
+
 		return &TestConnectResult{Flag: false, Code: 0, Err: err}
 	}
 	defer resp.Body.Close()
@@ -39,6 +38,8 @@ func HTTPClientWithProxy(proxyURL string) (*http.Client, error) {
 
 	proxy, err := url.Parse(proxyURL)
 	if err != nil {
+		log.Println(err)
+
 		return nil, fmt.Errorf("无法解析代理 URL: %v", err)
 	}
 

@@ -65,8 +65,8 @@ export const Root: React.FC = () => {
       })
 
     ReadConfig(SETTING_CONFIG_ENUM.checkUpdateOnStartup)
-      .then(async (config) => {
-        setCheckUpgrade(config)
+      .then(async (config: boolean) => {
+        setCheckUpgrade(() => config)
       })
       .catch((err: any) => {
         console.error('error', err)

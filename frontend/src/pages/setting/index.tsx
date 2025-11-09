@@ -33,6 +33,8 @@ import {
   GetSystemTheme,
   WindowSetLightTheme,
   WindowSetDarkTheme,
+  OpenLogDir,
+  toast,
 } from '@/utils'
 import { getUserPreference, updateUserPreference } from '@/api/user'
 import { useNavigateTo, usePlayer } from '@/hooks'
@@ -51,6 +53,7 @@ import { CONSTANT } from '@/types/constant'
 import { CheckForUpgrade } from 'wailsjs/go/bridge/App'
 import dayjs from 'dayjs'
 import { ThemeMode, useTheme } from '@/layouts/theme'
+import { BsFolder } from 'react-icons/bs'
 
 export const Setting: React.FC = () => {
   const [envInfo, setEnvInfo] = useState<envType>()
@@ -71,6 +74,7 @@ export const Setting: React.FC = () => {
   const [upgradeModal, setUpgradeModal] = useState<boolean>(false)
   const [proxyModal, setProxyModal] = useState<boolean>(false)
   const [checkLoading, setCheckLoading] = useState<boolean>(false)
+  const [openLogDirLoading, setOpenLogDirLoading] = useState<boolean>(false)
   const [newVersionModalInfo, setNewVersionModalInfo] = useState<{
     open: boolean
     createdAt: string
@@ -455,6 +459,41 @@ export const Setting: React.FC = () => {
                 )
               }}
             />
+          </Box>
+        </Flex>
+        <Separator
+          my="3"
+          size="4"
+        />
+        <Flex>
+          <Box width="100%">日志</Box>
+          <Box>
+            <Button
+              size={'1'}
+              variant={'soft'}
+              style={{ width: '130px' }}
+              onClick={() => {
+                setOpenLogDirLoading(true)
+
+                OpenLogDir()
+                  .then((r: any) => {
+                    if (r) {
+                      toast(r, {
+                        type: 'warn',
+                      })
+
+                      console.err(r)
+                    }
+                  })
+                  .finally(() => {
+                    setOpenLogDirLoading(false)
+                  })
+              }}
+              loading={openLogDirLoading}
+            >
+              <BsFolder />
+              打开应用日志目录
+            </Button>
           </Box>
         </Flex>
         <Separator
