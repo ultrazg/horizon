@@ -11,8 +11,8 @@ import {
   TextField,
   Tooltip,
 } from '@radix-ui/themes'
-import { usePlayer, useWindowSize } from '@/hooks'
-import { IoMdThumbsUp, IoMdTrash } from 'react-icons/io'
+import { useWindowSize } from '@/hooks'
+import { IoMdMicrophone, IoMdThumbsUp, IoMdTrash } from 'react-icons/io'
 import {
   commentThread,
   commentThreadType,
@@ -90,7 +90,6 @@ export const CommentReplyModal: React.FC<IProps> = ({
     replyTo: '',
     replyToCommentId: '',
   })
-  const player = usePlayer()
 
   const onSendComment = (
     replyToCommentId: string,
@@ -225,6 +224,17 @@ export const CommentReplyModal: React.FC<IProps> = ({
                   <p>
                     {primaryComment?.author?.nickname}
 
+                    {primaryComment?.authorAssociation === 'PODCASTER' && (
+                      <IoMdMicrophone
+                        style={{
+                          marginLeft: 6,
+                          color: 'var(--purple-9)',
+                          fontSize: 18,
+                          cursor: 'default',
+                        }}
+                      />
+                    )}
+
                     {primaryComment?.badges?.length > 0
                       ? primaryComment?.badges.map((item) => (
                           <img
@@ -232,6 +242,7 @@ export const CommentReplyModal: React.FC<IProps> = ({
                               width: item.icon.width * 0.4,
                               height: item.icon.height * 0.4,
                             }}
+                            key={item.icon.picUrl}
                             title={item.tip}
                             src={item.icon.picUrl}
                             alt="badge"
@@ -298,6 +309,17 @@ export const CommentReplyModal: React.FC<IProps> = ({
                     <p>
                       {item?.author?.nickname}
 
+                      {item?.authorAssociation === 'PODCASTER' && (
+                        <IoMdMicrophone
+                          style={{
+                            marginLeft: 6,
+                            color: 'var(--purple-9)',
+                            fontSize: 18,
+                            cursor: 'default',
+                          }}
+                        />
+                      )}
+
                       {item.badges.length > 0
                         ? item.badges.map((itm) => (
                             <img
@@ -307,6 +329,7 @@ export const CommentReplyModal: React.FC<IProps> = ({
                               }}
                               title={itm.tip}
                               src={itm.icon.picUrl}
+                              key={itm.icon.picUrl}
                               alt="badge"
                             />
                           ))
