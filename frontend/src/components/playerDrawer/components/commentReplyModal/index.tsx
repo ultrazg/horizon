@@ -240,7 +240,7 @@ export const CommentReplyModal: React.FC<IProps> = ({
                       : null}
                   </p>
                   <p>
-                    {dayjs(primaryComment?.collectedAt).format('YYYY/MM/DD')}{' '}
+                    {dayjs(primaryComment?.createdAt).format('YYYY/MM/DD')}{' '}
                     <span>
                       IP属地：
                       {primaryComment?.ipLoc}

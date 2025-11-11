@@ -359,7 +359,7 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
                         : null}
                     </span>
                     <p>
-                      {dayjs(item.collectedAt).format('YYYY/MM/DD')}
+                      {dayjs(item.createdAt).format('YYYY/MM/DD')}
                       <span className={styles['ip']}>
                         IP属地：{item.author.ipLoc}
                       </span>
