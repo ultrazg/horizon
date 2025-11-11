@@ -17,7 +17,7 @@ import {
   Pencil2Icon,
   TrashIcon,
 } from '@radix-ui/react-icons'
-import { IoMdThumbsUp } from 'react-icons/io'
+import { IoMdThumbsUp, IoMdMicrophone } from 'react-icons/io'
 import { useWindowSize, usePlayer } from '@/hooks'
 import { CommentReplyModal } from '@/components/playerDrawer/components/commentReplyModal'
 import { ProfileModal, CreateCommentModal } from '@/components'
@@ -342,6 +342,17 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
                       }}
                     >
                       {item.author.nickname}
+
+                      {item.authorAssociation === 'PODCASTER' && (
+                        <IoMdMicrophone
+                          style={{
+                            marginLeft: 6,
+                            color: 'var(--purple-9)',
+                            fontSize: 18,
+                            cursor: 'default',
+                          }}
+                        />
+                      )}
 
                       {item.badges.length > 0
                         ? item.badges.map((itm) => (
