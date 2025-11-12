@@ -3,11 +3,15 @@ import { Box, Button, Flex } from '@radix-ui/themes'
 import { isRouteErrorResponse, useRouteError } from 'react-router-dom'
 import './index.scss'
 import { BrowserOpenURL, WindowReloadApp } from 'wailsjs/runtime'
+import { Log } from '@/utils'
 
 export const Crash: React.FC = () => {
   const error = useRouteError()
 
   if (isRouteErrorResponse(error)) {
+    Log(
+      `crash error status:${error.status} - error status text:${error.statusText}`,
+    ).then()
     return (
       <div className="crashWrapper">
         <h3 className="crashTitle">⚠️ 出现异常</h3>
@@ -20,6 +24,9 @@ export const Crash: React.FC = () => {
       </div>
     )
   } else if (error instanceof Error) {
+    Log(
+      `crash error message:${error.message} - error stack:${error.stack}`,
+    ).then()
     return (
       <div className="crashWrapper">
         <h3 className="crashTitle">⚠️ 出现致命错误</h3>

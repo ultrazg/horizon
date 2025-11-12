@@ -54,3 +54,7 @@ func initLog() (*os.File, error) {
 
 	return f, nil
 }
+
+func (a *App) Log(msg string) {
+	log.Println(msg)
+}

@@ -4,7 +4,7 @@ import axios, {
   AxiosResponse,
   AxiosError,
 } from 'axios'
-import { toast, Storage, UpdateConfig } from '@/utils'
+import { toast, Storage, UpdateConfig, Log } from '@/utils'
 import { refreshToken } from '@/api/login'
 import { USER_CONFIG_ENUM } from '@/types/config'
 
@@ -25,6 +25,9 @@ httpRequest.interceptors.response.use(
     const statusCode = response?.status
 
     console.log('response', response)
+    Log(
+      `response status:${response?.status} url:${response?.request?.responseURL} data:${response?.config?.data}`,
+    ).then()
 
     if (statusCode === 401) {
       const XJikeAccessToken: string = Storage.get('x-jike-access-token')
@@ -69,6 +72,7 @@ httpRequest.interceptors.response.use(
             })
             .catch((err) => {
               console.error(err)
+              Log(`refresh token 发生异常：${err}`).then()
               window.location.href = '/#/login'
               return Promise.reject(err)
             })
@@ -87,6 +91,7 @@ httpRequest.interceptors.response.use(
         }
       } catch (err) {
         console.error(err)
+        Log(`httpRequest.interceptors.response error ${err}`).then()
       }
     }
 
@@ -98,6 +103,10 @@ httpRequest.interceptors.response.use(
           duration: 5000,
         },
       )
+
+      Log(
+        `请求失败（${statusCode}）访问${response.config.url}时遇到问题：${response.statusText}`,
+      ).then()
     }
 
     if (response) {
@@ -120,6 +129,7 @@ httpRequest.interceptors.request.use(
   },
   (err) => {
     console.error(err)
+    Log(`httpRequest.interceptors.request error ${err}`).then()
     return Promise.reject(err)
   },
 )

@@ -1,4 +1,4 @@
-import { toast } from '@/utils/toast'
+import { toast, Log } from '@/utils'
 
 export type PlayerEpisodeInfoType = {
   title: string
@@ -31,6 +31,7 @@ class Player {
       this.isLoading = false
 
       console.log('horizon player - 可以播放')
+      Log('horizon player - 可以播放').then()
     }
     this.audio.onplay = () => {
       console.log('horizon player - 开始播放')
@@ -41,11 +42,13 @@ class Player {
     this.audio.onerror = (e) => {
       toast(`加载或播放发生错误 ${e}`, { type: 'warn' })
       console.error(`horizon player - 加载或播放错误：${e}`)
+      Log(`horizon player - 加载或播放错误：${e}`).then()
     }
     this.audio.onloadstart = () => {
       this.isLoading = true
 
       console.log('horizon player - 开始加载')
+      Log('horizon player - 开始加载').then()
     }
   }
 
@@ -61,6 +64,7 @@ class Player {
     this.audio.load()
 
     console.log(`horizon player - 已加载远程地址 ${url}`)
+    Log(`horizon player - 已加载远程地址 ${url}`).then()
   }
 
   /**
@@ -69,6 +73,7 @@ class Player {
   play(): void {
     this.audio.play().catch((e) => {
       console.error(`horizon player - 播放失败 ${e}`)
+      Log(`horizon player - 播放失败 ${e}`).then()
     })
   }
 
