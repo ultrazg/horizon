@@ -52,7 +52,7 @@ export const Login: React.FC = () => {
 
     login(params)
       .then((res) => {
-        toast(`欢迎，${res.data.data.data.user.nickname}`, { type: 'success' })
+        toast(`欢迎，${res.data.data.nickname}`, { type: 'success' })
         UpdateConfig(
           USER_CONFIG_ENUM.accessToken,
           res.data['x-jike-access-token'],
@@ -63,17 +63,16 @@ export const Login: React.FC = () => {
         ).then()
 
         const data: userType = {
-          uid: res.data.data.data.user.uid,
-          bio: res.data.data.data.user?.bio,
-          avatar: res.data.data.data.user.avatar.picture.picUrl,
-          nickname: res.data.data.data.user.nickname,
-          mobilePhoneNumber:
-            res.data.data.data.user.phoneNumber.mobilePhoneNumber,
-          ipLoc: res.data.data.data.user.ipLoc,
-          gender: res.data.data.data.user?.gender,
-          industry: res.data.data.data.user?.industry,
-          wechatUserInfo: res.data.data.data.user?.wechatUserInfo,
-          jikeUserInfo: res.data.data.data.user?.jikeUserInfo,
+          uid: res.data.data.uid,
+          bio: res.data.data?.bio,
+          avatar: res.data.data.avatar.picture.picUrl,
+          nickname: res.data.data.nickname,
+          mobilePhoneNumber: res.data.data.phoneNumber.mobilePhoneNumber,
+          ipLoc: res.data.data.ipLoc,
+          gender: res.data.data?.gender,
+          industry: res.data.data?.industry,
+          wechatUserInfo: res.data.data?.wechatUserInfo,
+          jikeUserInfo: res.data.data?.jikeUserInfo,
         }
 
         UserStore.init(data)
@@ -139,11 +138,6 @@ export const Login: React.FC = () => {
       <Container
         size="1"
         className={styles['login-wrapper']}
-        style={
-          {
-            '--wails-draggable': 'drag',
-          } as any
-        }
       >
         <Section size="3">
           <div className={styles['logo-layout']}>
