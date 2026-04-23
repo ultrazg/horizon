@@ -399,7 +399,7 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
                   size="2"
                   mt="2"
                 >
-                  {profileData?.bio || CONSTANT.NO_BIO}
+                  {profileData?.bio}
                 </Text>
               </div>
 

@@ -1,9 +1,12 @@
 @import '@/assets/global/_variables.scss';
+@import '@/assets/global/_common.scss';
+@import '@/assets/global/_common.scss';
 
 .history-content {
   margin-top: 1.7rem;
 
   h3 {
+    @include no-select;
     font-size: 1.8rem;
     margin-bottom: 0.7rem;
     color: $secondary-font-color;
@@ -64,6 +67,7 @@
               flex: 1;
               display: flex;
               align-items: center;
+              justify-content: end;
 
               svg {
                 margin-left: 0.8rem;

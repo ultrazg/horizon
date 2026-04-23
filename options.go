@@ -43,7 +43,7 @@ func AppOptions(app *bridge.App) *options.App {
 			DisableFramelessWindowDecorations: false,
 		},
 		Mac: &mac.Options{
-			TitleBar:             mac.TitleBarHiddenInset(),
+			TitleBar:             mac.TitleBarDefault(),
 			WebviewIsTransparent: false,
 			WindowIsTranslucent:  false,
 			About: &mac.AboutInfo{

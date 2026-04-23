@@ -61,7 +61,7 @@ func setDefaults() {
 	viper.SetDefault("user.access_token", "")
 	viper.SetDefault("user.refresh_token", "")
 	viper.SetDefault("setting.check_update_on_startup", true)
-	viper.SetDefault("setting.theme", "light")
+	viper.SetDefault("setting.theme", "system")
 	viper.SetDefault("proxy.enabled", false)
 	viper.SetDefault("proxy.ip", "")
 	viper.SetDefault("proxy.port", "")

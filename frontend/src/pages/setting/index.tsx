@@ -21,6 +21,9 @@ import {
   ExitIcon,
   QuestionMarkCircledIcon,
   SymbolIcon,
+  DesktopIcon,
+  SunIcon,
+  MoonIcon,
 } from '@radix-ui/react-icons'
 import {
   APP_NAME,
@@ -413,10 +416,23 @@ export const Setting: React.FC = () => {
               onValueChange={onThemeChange}
             >
               <SegmentedControl.Item value="system">
-                跟随系统
+                <div className={styles['theme-segmented-item']}>
+                  <DesktopIcon />
+                  跟随系统
+                </div>
               </SegmentedControl.Item>
-              <SegmentedControl.Item value="light">明亮</SegmentedControl.Item>
-              <SegmentedControl.Item value="dark">暗黑</SegmentedControl.Item>
+              <SegmentedControl.Item value="light">
+                <div className={styles['theme-segmented-item']}>
+                  <SunIcon />
+                  明亮
+                </div>
+              </SegmentedControl.Item>
+              <SegmentedControl.Item value="dark">
+                <div className={styles['theme-segmented-item']}>
+                  <MoonIcon />
+                  暗黑
+                </div>
+              </SegmentedControl.Item>
             </SegmentedControl.Root>
           </Box>
         </Flex>

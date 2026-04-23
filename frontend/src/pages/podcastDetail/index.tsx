@@ -496,6 +496,7 @@ export const PodcastDetail: React.FC = () => {
               >
                 <Button
                   variant="soft"
+                  color="gray"
                   onClick={() => {
                     getEpisodeList(episodeData.loadMoreKey)
                   }}
