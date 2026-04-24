@@ -3,7 +3,6 @@ package main
 import (
 	"embed"
 	"fmt"
-	"runtime"
 
 	"github.com/ultrazg/horizon/bridge"
 	"github.com/wailsapp/wails/v2/pkg/options"
@@ -35,7 +34,7 @@ func AppOptions(app *bridge.App) *options.App {
 		Bind: []interface{}{
 			app,
 		},
-		Frameless: runtime.GOOS == "windows",
+		// Frameless: runtime.GOOS == "windows",
 		Windows: &windows.Options{
 			WebviewIsTransparent:              false,
 			WindowIsTranslucent:               false,

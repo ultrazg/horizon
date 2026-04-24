@@ -21,7 +21,7 @@ type EpisodeType = {
   labels?: Array<any>
   media: MediaType
   mediaKey: string
-  payType: string
+  payType: 'PAY_EPISODE' | 'FREE'
   permissions: any
   pid: string
   playCount: number

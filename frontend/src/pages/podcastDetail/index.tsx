@@ -468,16 +468,29 @@ export const PodcastDetail: React.FC = () => {
                     />
                   </div>
                   <div className={styles['right']}>
-                    <p>{item.title}</p>
+                    <p>
+                      {item.payType === 'PAY_EPISODE' && (
+                        <span className={styles['pay-episode-tag']}>试听</span>
+                      )}
+                      {item.title}
+                    </p>
                     <p>{item.description}</p>
                     <p>
+                      {item.isPlayed && !item.isFinished && (
+                        <span className={styles['played-tag']}>听过</span>
+                      )}
+                      {item.isFinished && (
+                        <span className={styles['finished-tag']}>已听完</span>
+                      )}
                       <span>
-                        {Math.floor(item.duration / 60)}分钟 ·{' '}
+                        {Math.floor(item.duration / 60)} 分钟 ·{' '}
                         {dayjs(item.pubDate).format('MM/DD')}
                       </span>
                       <span>
                         <SlEarphones />
                         {item.playCount}
+                      </span>
+                      <span>
                         <SlBubble />
                         {item.commentCount}
                       </span>

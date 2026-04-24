@@ -76,6 +76,8 @@ export const PlayedList: React.FC = () => {
               <span>
                 <SlEarphones />
                 {item.playCount}
+              </span>
+              <span>
                 <SlBubble />
                 {item.commentCount}
               </span>

@@ -83,6 +83,9 @@ export const Subscription: React.FC = () => {
                   size="4"
                   title={item.title}
                 >
+                  {item?.subscriptionOftenPlayed && (
+                    <span className={styles['often-played-tag']}>常听</span>
+                  )}
                   {item.title}
                 </Text>
 

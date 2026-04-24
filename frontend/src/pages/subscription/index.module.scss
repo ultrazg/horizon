@@ -32,6 +32,16 @@
       box-orient: vertical;
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 1;
+
+      .often-played-tag {
+        font-weight: normal;
+        padding: 0 0.2rem;
+        margin-right: 0.2rem;
+        border-radius: 6px;
+        font-size: 16px;
+        color: #f759ab;
+        border: 1px solid #f759ab;
+      }
     }
 
     .podcast-brief {

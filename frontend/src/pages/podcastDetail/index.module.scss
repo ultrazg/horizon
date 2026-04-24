@@ -97,6 +97,7 @@
           .right {
             padding-left: 0.7rem;
             position: relative;
+            cursor: default;
 
             p {
               &:first-child {
@@ -126,29 +127,53 @@
                 color: $secondary-font-color;
                 display: flex;
                 width: 100%;
+                gap: 1rem;
 
                 span {
-                  &:first-child {
-                    flex: 1;
-                  }
+                  display: flex;
+                  align-items: center;
 
-                  &:last-child {
-                    flex: 1;
-                    display: flex;
-                    align-items: center;
-
-                    svg {
-                      margin-left: 0.8rem;
-                      margin-right: 0.5rem;
-                    }
+                  svg {
+                    margin-right: 0.5rem;
                   }
                 }
               }
             }
+
+            .pay-episode-tag {
+              @include no-select;
+              color: #faad14;
+              font-weight: normal;
+              border: 1px solid #faad14;
+              padding: 0 0.3rem;
+              margin-right: 0.5rem;
+              border-radius: 6px;
+              font-size: 16px;
+            }
+
+            .played-tag {
+              @include no-select;
+              font-weight: normal;
+              padding: 0 0.3rem;
+              border-radius: 6px;
+              font-size: 12px;
+              color: #4096ff;
+              border: 1px solid #4096ff;
+            }
+
+            .finished-tag {
+              @include no-select;
+              font-weight: normal;
+              padding: 0 0.3rem;
+              border-radius: 6px;
+              font-size: 12px;
+              color: #73d13d;
+              border: 1px solid #73d13d;
+            }
           }
         }
 
-        .load-more-button{
+        .load-more-button {
           text-align: center;
         }
       }

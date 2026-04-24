@@ -8,7 +8,7 @@
     z-index: 9;
 
     .more-button {
-      margin-left: .3rem;
+      margin-left: 0.3rem;
     }
   }
 
@@ -227,7 +227,7 @@
             cursor: default;
 
             img {
-              margin-left: .3rem;
+              margin-left: 0.3rem;
               cursor: pointer;
               vertical-align: middle;
               width: 1.2rem;
@@ -352,21 +352,14 @@
             color: $secondary-font-color;
             display: flex;
             width: 100%;
+            gap: 1rem;
 
             span {
-              &:first-child {
-                flex: 1;
-              }
+              display: flex;
+              align-items: center;
 
-              &:last-child {
-                flex: 1;
-                display: flex;
-                align-items: center;
-
-                svg {
-                  margin-left: 0.8rem;
-                  margin-right: 0.5rem;
-                }
+              svg {
+                margin-right: 0.5rem;
               }
             }
           }

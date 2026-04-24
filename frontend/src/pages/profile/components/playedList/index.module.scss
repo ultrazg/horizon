@@ -1,6 +1,5 @@
 @import '@/assets/global/_variables.scss';
 @import '@/assets/global/_common.scss';
-@import '@/assets/global/_common.scss';
 
 .history-content {
   margin-top: 1.7rem;
@@ -57,22 +56,14 @@
           color: $secondary-font-color;
           display: flex;
           width: 100%;
+          gap: 1rem;
 
           span {
-            &:first-child {
-              flex: 1;
-            }
+            display: flex;
+            align-items: center;
 
-            &:last-child {
-              flex: 1;
-              display: flex;
-              align-items: center;
-              justify-content: end;
-
-              svg {
-                margin-left: 0.8rem;
-                margin-right: 0.5rem;
-              }
+            svg {
+              margin-right: 0.5rem;
             }
           }
         }
