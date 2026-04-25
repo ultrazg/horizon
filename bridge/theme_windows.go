@@ -9,7 +9,7 @@ import (
 	"golang.org/x/sys/windows/registry"
 )
 
-func GetSystemThemeKey() (string, error) {
+func GetSystemThemeKey() (SystemTheme, error) {
 	key, err := registry.OpenKey(
 		registry.CURRENT_USER,
 		`Software\Microsoft\Windows\CurrentVersion\Themes\Personalize`,
@@ -18,7 +18,7 @@ func GetSystemThemeKey() (string, error) {
 	if err != nil {
 		log.Printf("读取系统注册表失败: %v", err)
 
-		return "light", err
+		return SystemThemeLight, err
 	}
 	defer key.Close()
 
@@ -26,12 +26,12 @@ func GetSystemThemeKey() (string, error) {
 	if err != nil {
 		log.Printf("读取系统主题失败: %v", err)
 
-		return "light", err
+		return SystemThemeLight, err
 	}
 
 	if appsUseLightTheme == 0 {
-		return "dark", nil
+		return SystemThemeDark, nil
 	}
 
-	return "light", nil
+	return SystemThemeLight, nil
 }

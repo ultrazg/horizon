@@ -66,3 +66,10 @@ type TestConnectResult struct {
 	Code int   `json:"code"`
 	Err  error `json:"err"`
 }
+
+type SystemTheme string
+
+const (
+	SystemThemeLight SystemTheme = "light"
+	SystemThemeDark  SystemTheme = "dark"
+)

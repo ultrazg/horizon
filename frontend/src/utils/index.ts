@@ -7,6 +7,7 @@ import {
   UpdateConfig,
   ReadConfig,
   GetSystemTheme,
+  SetMacAppearance,
   OpenLogDir,
   Log,
 } from 'wailsjs/go/bridge/App'
@@ -34,6 +35,7 @@ export {
   Player,
   SaveLastPlay,
   GetSystemTheme,
+  SetMacAppearance,
   WindowSetLightTheme,
   WindowSetDarkTheme,
   OpenLogDir,

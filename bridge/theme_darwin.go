@@ -9,7 +9,7 @@ import (
 	"os/exec"
 )
 
-func GetSystemThemeKey() (string, error) {
+func GetSystemThemeKey() (SystemTheme, error) {
 	cmd := exec.Command("defaults", "read", "-g", "AppleInterfaceStyle")
 	var out bytes.Buffer
 	cmd.Stdout = &out
@@ -17,14 +17,14 @@ func GetSystemThemeKey() (string, error) {
 	if err != nil {
 		log.Printf("无法获取系统主题: %v", err)
 
-		return "light", err
+		return SystemThemeLight, err
 	}
 
 	log.Printf("系统主题: %s", out.String())
 
 	if out.String() == "Dark\n" {
-		return "dark", nil
+		return SystemThemeDark, nil
 	}
 
-	return "light", nil
+	return SystemThemeLight, nil
 }

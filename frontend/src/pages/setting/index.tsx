@@ -30,6 +30,7 @@ import {
   APP_VERSION,
   DialogType,
   ReadConfig,
+  SetMacAppearance,
   ShowMessageDialog,
   Storage,
   UpdateConfig,
@@ -191,6 +192,10 @@ export const Setting: React.FC = () => {
       if (value === 'dark') {
         WindowSetDarkTheme()
       }
+
+      SetMacAppearance(value).catch((err) => {
+        console.error(err)
+      })
     } else {
       GetSystemTheme().then((theme) => {
         toggle(theme as ThemeMode)
@@ -202,6 +207,10 @@ export const Setting: React.FC = () => {
         if (theme === 'dark') {
           WindowSetDarkTheme()
         }
+
+        SetMacAppearance('system').catch((err) => {
+          console.error(err)
+        })
       })
     }
 

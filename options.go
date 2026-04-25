@@ -34,7 +34,6 @@ func AppOptions(app *bridge.App) *options.App {
 		Bind: []interface{}{
 			app,
 		},
-		// Frameless: runtime.GOOS == "windows",
 		Windows: &windows.Options{
 			WebviewIsTransparent:              false,
 			WindowIsTranslucent:               false,
@@ -43,6 +42,7 @@ func AppOptions(app *bridge.App) *options.App {
 		},
 		Mac: &mac.Options{
 			TitleBar:             mac.TitleBarDefault(),
+			Appearance:           mac.DefaultAppearance,
 			WebviewIsTransparent: false,
 			WindowIsTranslucent:  false,
 			About: &mac.AboutInfo{

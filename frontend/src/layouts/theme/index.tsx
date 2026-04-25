@@ -3,6 +3,7 @@ import { Theme } from '@radix-ui/themes'
 import {
   ReadConfig,
   GetSystemTheme,
+  SetMacAppearance,
   WindowSetLightTheme,
   WindowSetDarkTheme,
 } from '@/utils'
@@ -48,6 +49,8 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
       if (systemTheme === 'dark') {
         WindowSetDarkTheme()
       }
+
+      SetMacAppearance('system').catch(() => {})
     } else {
       setMode(() => theme)
 
@@ -58,6 +61,8 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
       if (theme === 'dark') {
         WindowSetDarkTheme()
       }
+
+      SetMacAppearance(theme).catch(() => {})
     }
   }
 
@@ -82,6 +87,8 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
         if (systemTheme === 'dark') {
           WindowSetDarkTheme()
         }
+
+        SetMacAppearance('system').catch(() => {})
       }
     }
 

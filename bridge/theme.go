@@ -4,13 +4,13 @@ import (
 	"log"
 )
 
-func (a *App) GetSystemTheme() string {
+func (a *App) GetSystemTheme() SystemTheme {
 	theme, err := GetSystemThemeKey()
 	if err != nil {
 		log.Printf("get system theme error: %v", err)
 
-		return "light"
+		return SystemThemeLight
 	}
 
-	return theme
+	return SystemTheme(theme)
 }
