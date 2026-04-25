@@ -8,6 +8,7 @@ import { search, searchType } from '@/api/search'
 import { isEmpty } from 'lodash'
 import { PlayerEpisodeInfoType } from '@/utils/player'
 import { usePlayer } from '@/layouts/player'
+import { toast } from '@/utils'
 
 /**
  * 单集搜索结果页
@@ -39,6 +40,7 @@ export const ResultEpisode: React.FC = () => {
 
     search(params)
       .then((res) => {
+        console.log(res)
         if (loadMore) {
           setData({
             records: [...data.records, ...res.data.data],
@@ -83,7 +85,7 @@ export const ResultEpisode: React.FC = () => {
             <div
               key={item.eid}
               className={styles['search-result-item']}
-              title={item.description}
+              title={item.title}
             >
               <div className={styles['image']}>
                 <ColorfulShadow
@@ -102,8 +104,27 @@ export const ResultEpisode: React.FC = () => {
                         : item.podcast.image.picUrl,
                       liked: item.isFavorited,
                     }
+                    let url: string = ''
 
-                    player.load(item.media.source.url, episodeInfo)
+                    if (item.payType === 'FREE') {
+                      url = item.media.source.url
+                    } else if (
+                      item.payType === 'PAY_EPISODE' &&
+                      item.trial?.segment
+                    ) {
+                      url = item.trial?.segment
+                      toast('正在播放试听内容', {
+                        type: 'info',
+                        duration: 5000,
+                      })
+                    } else {
+                      toast('播放失败', {
+                        type: 'warn',
+                      })
+                      return
+                    }
+
+                    player.load(url, episodeInfo)
                     player.play()
                   }}
                 />
@@ -113,7 +134,12 @@ export const ResultEpisode: React.FC = () => {
                 className={styles['name']}
                 title={item.title}
               >
-                <span>{item.title}</span>
+                <span>
+                  {item.payType === 'PAY_EPISODE' && (
+                    <span className={styles['pay-episode-tag']}>试听</span>
+                  )}
+                  {item.title}
+                </span>
               </div>
             </div>
           ))}

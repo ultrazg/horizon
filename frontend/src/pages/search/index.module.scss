@@ -14,7 +14,7 @@
 
   .search-result {
     width: 100%;
-    height: 11rem;
+    height: 14rem;
     margin-bottom: 1.3rem;
 
     &:last-child {
@@ -53,6 +53,17 @@
         box-orient: vertical;
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 1;
+
+        .pay-episode-tag {
+          @include no-select;
+          color: #faad14;
+          font-weight: normal;
+          border: 1px solid #faad14;
+          padding: 0 0.3rem;
+          margin-right: 0.5rem;
+          border-radius: 6px;
+          font-size: 16px;
+        }
       }
     }
   }

@@ -271,7 +271,7 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
       <Dialog.Content
         style={{
           maxWidth: width * 0.7,
-          height: height * 0.9,
+          height: height * 0.8,
           padding: 0,
         }}
         onPointerDownOutside={avoidDefaultDomBehavior}
@@ -285,7 +285,7 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
         <ScrollArea
           type="scroll"
           scrollbars="vertical"
-          style={{ height: height * 0.9 }}
+          style={{ height: height * 0.8 }}
         >
           <div className={styles['profile-modal-layout']}>
             <div className={styles['pm-action-button']}>

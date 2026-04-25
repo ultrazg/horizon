@@ -28,6 +28,17 @@
       line-height: 48px;
       display: flex;
 
+      .pay-episode-tag {
+        @include no-select;
+        color: #faad14;
+        font-weight: normal;
+        border: 1px solid #faad14;
+        padding: 0 0.3rem;
+        margin-right: 0.5rem;
+        border-radius: 6px;
+        font-size: 16px;
+      }
+
       span {
         max-width: 124px;
         margin: 0 auto;
@@ -39,7 +50,7 @@
   }
 }
 
-.loadMoreButton{
+.loadMoreButton {
   margin-top: 1.5rem;
   width: 100%;
   text-align: center;

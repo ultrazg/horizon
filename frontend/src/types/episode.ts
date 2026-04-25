@@ -34,6 +34,13 @@ type EpisodeType = {
   title: string
   type: string
   wechatShare?: any
+  trial?: {
+    from: number
+    fullDuration: number
+    segment: string
+    to: number
+    type: string
+  }
 }
 
 export type { EpisodeType }
