@@ -68,7 +68,7 @@ export const onCommentLikeUpdate: onCommentLikeUpdateFn = (params, cb) => {
 
 export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
   const player = usePlayer()
-  const [height] = React.useState<number>(useWindowSize().height - 35)
+  const height = useWindowSize().height - 35
   const [loading, setLoading] = useState<boolean>(false)
   const [commentData, setCommentData] = useState<{
     total: number

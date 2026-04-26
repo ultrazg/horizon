@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { IconButton, Slider, Text, Tooltip } from '@radix-ui/themes'
-import {
-  CaretDownIcon,
-  Cross1Icon,
-  EnterFullScreenIcon,
-  ExitFullScreenIcon,
-  MinusIcon,
-} from '@radix-ui/react-icons'
+import { CaretDownIcon } from '@radix-ui/react-icons'
 import { useWindowSize } from '@/hooks'
 import { CoverBox } from './components/coverBox'
 import { LiveCount } from './components/liveCount'
@@ -21,23 +15,10 @@ import {
 import { IoMdThumbsUp, IoMdInformationCircleOutline } from 'react-icons/io'
 import { episodeDetail, episodeClapCreate } from '@/api/episode'
 import { EpisodeType } from '@/types/episode'
-import {
-  APP_NAME,
-  APP_VERSION,
-  Player,
-  showEpisodeDetailModal,
-  toast,
-} from '@/utils'
+import { Player, showEpisodeDetailModal, toast } from '@/utils'
 import { CONSTANT } from '@/types/constant'
 import { PlayInfoType } from '@/utils/player'
 import { secondsToHms } from '@/components/playerController/components/episodeCover'
-import {
-  Environment,
-  Quit,
-  WindowMinimise,
-  WindowToggleMaximise,
-} from 'wailsjs/runtime'
-import { envType } from '@/types/env'
 
 type IProps = {
   player: Player
@@ -54,18 +35,11 @@ export const PlayerDrawer: React.FC<IProps> = ({
 }) => {
   const { height } = useWindowSize()
 
-  const [envInfo, setEnvInfo] = useState<envType>()
   const [episodeDetailInfo, setEpisodeDetailInfo] = useState<EpisodeType>()
   const [isPlaying, setIsPlaying] = useState<boolean>(false)
   const [left, setLeft] = useState<boolean>(false)
   const [right, setRight] = useState<boolean>(false)
   const [progress, setProgress] = React.useState<number>(0)
-  const [isMaximised, setIsMaximised] = useState<boolean>(false)
-
-  const toggleWindowMaximised = (): void => {
-    WindowToggleMaximise()
-    setIsMaximised(!isMaximised)
-  }
 
   /**
    * 标记精彩时刻
@@ -138,10 +112,6 @@ export const PlayerDrawer: React.FC<IProps> = ({
   useEffect(() => {
     if (open) {
       getEpisodeDetail()
-
-      Environment().then((res: envType) => {
-        setEnvInfo(res)
-      })
     }
   }, [open])
 
@@ -153,64 +123,13 @@ export const PlayerDrawer: React.FC<IProps> = ({
   return (
     <div
       style={{
-        // width,
-        // height: envInfo?.platform === 'darwin' ? height - 50 : height,
-        // paddingTop: envInfo?.platform === 'darwin' ? 50 : 0,
-        paddingTop: 50,
+        paddingTop: 20,
         transform: open
           ? `translateY(-${height}px)`
           : `translateY(${height}px)`,
       }}
       className={styles['player-drawer-layout']}
     >
-      {envInfo?.platform !== 'darwin' && (
-        <>
-          <div
-            className={styles['title-bar-text']}
-            style={
-              {
-                '--wails-draggable': 'drag',
-              } as any
-            }
-          >
-            {APP_NAME} v{APP_VERSION}
-          </div>
-          <div
-            className={styles['title-bar-button']}
-            style={
-              {
-                '--wails-draggable': 'none',
-              } as any
-            }
-          >
-            <div
-              onClick={() => {
-                WindowMinimise()
-              }}
-              title="最小化"
-            >
-              <MinusIcon />
-            </div>
-            <div
-              onClick={() => {
-                toggleWindowMaximised()
-              }}
-              title={isMaximised ? '还原' : '最大化'}
-            >
-              {isMaximised ? <ExitFullScreenIcon /> : <EnterFullScreenIcon />}
-            </div>
-            <div
-              onClick={() => {
-                Quit()
-              }}
-              title="退出"
-            >
-              <Cross1Icon />
-            </div>
-          </div>
-        </>
-      )}
-
       <div
         className={styles['player-background-image']}
         style={{
@@ -218,10 +137,7 @@ export const PlayerDrawer: React.FC<IProps> = ({
         }}
       />
 
-      <div
-        style={{ '--wails-draggable': 'drag' } as any}
-        className={styles['close-button']}
-      >
+      <div className={styles['close-button']}>
         <IconButton
           onClick={onClose}
           variant="ghost"
@@ -244,7 +160,7 @@ export const PlayerDrawer: React.FC<IProps> = ({
 
       <div
         className={styles['player-content']}
-        style={{ height: `${height - 80}px` }}
+        style={{ height }}
       >
         <div className={styles['player-left']}>
           <div className={styles['player-left-content']}>

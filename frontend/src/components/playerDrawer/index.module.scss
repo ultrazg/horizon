@@ -9,54 +9,6 @@
   left: 0;
   transition: 0.7s ease-in-out;
 
-  .title-bar-text {
-    @include no-select;
-
-    color: $secondary-font-color;
-    padding-left: 10px;
-    width: 100%;
-    position: absolute;
-    top: 4px;
-  }
-
-  .title-bar-button {
-    position: absolute;
-    top: 0;
-    right: 0;
-    height: 30px;
-    display: flex;
-
-    div {
-      width: 50px;
-      transition: 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: $secondary-font-color;
-
-      &:first-child,
-      &:nth-child(2) {
-        &:hover {
-          background: $window-zoom-button-hover-color;
-        }
-
-        &:active {
-          background: $window-zoom-button-active-color;
-        }
-      }
-
-      &:last-child {
-        &:hover {
-          background: $window-quit-button-hover-color;
-        }
-
-        &:active {
-          background: $window-quit-button-active-color;
-        }
-      }
-    }
-  }
-
   .player-background-image {
     position: absolute;
     z-index: -1;
