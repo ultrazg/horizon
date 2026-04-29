@@ -1,6 +1,14 @@
 @import '@/assets/global/_variables.scss';
+@import '@/assets/global/_common.scss';
 
 .profile-modal-layout {
+  h3 {
+    @include no-select;
+    font-size: 1rem;
+    margin-bottom: 0.7rem;
+    color: $secondary-font-color;
+  }
+
   .pm-action-button {
     position: absolute;
     top: 1rem;
@@ -68,9 +76,11 @@
         p {
           &:first-child {
             font-size: 1.3rem;
+            color: $primary-font-color;
 
             span {
               font-size: 0.8rem;
+              color: $secondary-font-color;
             }
           }
 
@@ -92,12 +102,6 @@
 
     .pm-podcast-content {
       margin-top: 1.7rem;
-
-      h3 {
-        font-size: 1rem;
-        margin-bottom: 0.7rem;
-        color: $secondary-font-color;
-      }
 
       .pm-podcast-item {
         height: 10rm;
@@ -160,12 +164,6 @@
     .pm-sticker-content {
       margin-top: 1.7rem;
 
-      h3 {
-        font-size: 1rem;
-        margin-bottom: 0.7rem;
-        color: $secondary-font-color;
-      }
-
       .sticker-card {
         font-size: 1rem;
         padding: 2rem 4rem;
@@ -185,6 +183,11 @@
         }
 
         div {
+          span {
+            font-weight: bold;
+            color: $primary-font-color;
+          }
+
           &:last-child {
             color: $secondary-font-color;
           }
@@ -197,12 +200,6 @@
     margin-top: 1.7rem;
     padding-left: 4rem;
     padding-right: 4rem;
-
-    h3 {
-      font-size: 1rem;
-      margin-bottom: 0.7rem;
-      color: $secondary-font-color;
-    }
 
     .pm-like-item {
       margin-bottom: 1.7rem;
@@ -283,6 +280,7 @@
             font-weight: 300;
 
             &:first-child {
+              font-weight: bold;
             }
 
             &:last-child {
@@ -298,12 +296,6 @@
     margin-top: 1.7rem;
     padding-left: 4rem;
     padding-right: 4rem;
-
-    h3 {
-      font-size: 1rem;
-      margin-bottom: 0.7rem;
-      color: $secondary-font-color;
-    }
 
     .pm-history-episode-item {
       height: 10rm;

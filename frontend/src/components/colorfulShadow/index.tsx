@@ -1,6 +1,8 @@
 import React from 'react'
 import styles from './index.module.scss'
-import { PlayIcon } from '@radix-ui/react-icons'
+import {
+  BsPlayFill,
+} from 'react-icons/bs'
 
 type ColorfulShadowType = {
   className?: string
@@ -55,7 +57,7 @@ export const ColorfulShadow: React.FC<ColorfulShadowType> = ({
         {mask && (
           <div className={styles['mask']}>
             <div className={styles['circle']}>
-              <PlayIcon />
+              <BsPlayFill />
             </div>
           </div>
         )}

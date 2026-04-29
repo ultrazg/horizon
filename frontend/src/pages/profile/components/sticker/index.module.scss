@@ -31,6 +31,11 @@
     }
 
     div {
+      span {
+        font-weight: bold;
+        color: $primary-font-color;
+      }
+
       &:last-child {
         font-size: 1rem;
         color: $secondary-font-color;

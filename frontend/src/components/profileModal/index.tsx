@@ -382,14 +382,14 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
                     <SlSymbolMale
                       fontSize="16"
                       color="royalblue"
-                      style={{ marginLeft: '6px' }}
+                      style={{ marginLeft: '8px' }}
                     />
                   ) : null}
                   {profileData?.gender === 'FEMALE' ? (
                     <SlSymbleFemale
                       fontSize="16"
                       color="pink"
-                      style={{ marginLeft: '6px' }}
+                      style={{ marginLeft: '8px' }}
                     />
                   ) : null}
                 </Text>
@@ -504,7 +504,7 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
                     key={item.id}
                   >
                     <div className={styles['top']}>
-                      <span>{dayjs(item.pickedAt).format('MM/DD')}</span>
+                      <span>{dayjs(item.pickedAt).format('YYYY/MM/DD')}</span>
                       <span>
                         <span>{item.likeCount}</span>
                         <img
@@ -590,7 +590,8 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
                       }}
                     />
                     <div>
-                      {stickerData.total}张贴纸
+                      <span>{stickerData.total}</span>
+                       张贴纸
                       <ChevronRightIcon />
                     </div>
                     <div>

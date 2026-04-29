@@ -1,15 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { ColorfulShadow, Modal } from '@/components'
 import { modalType } from '@/types/modal'
-import {
-  Button,
-  Card,
-  Dialog,
-  Flex,
-  ScrollArea,
-  Separator,
-  Spinner,
-} from '@radix-ui/themes'
+import { Card, ScrollArea, Separator, Spinner } from '@radix-ui/themes'
 import { useWindowSize } from '@/hooks'
 import { pickListHistory } from '@/api/pick'
 import { PickRecentType } from '@/types/pick'
