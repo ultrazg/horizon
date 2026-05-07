@@ -4,10 +4,7 @@
 .subscription-layout {
   @include no-select;
 
-  h3 {
-    font-size: 1.8rem;
-    margin-bottom: 0.7rem;
-  }
+  padding-top: 1rem;
 
   .podcast-cover {
     cursor: pointer;

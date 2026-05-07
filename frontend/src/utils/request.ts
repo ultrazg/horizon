@@ -4,7 +4,7 @@ import axios, {
   AxiosResponse,
   AxiosError,
 } from 'axios'
-import { toast, Storage, UpdateConfig, Log } from '@/utils'
+import { toast, UpdateConfig, Log, ReadConfig } from '@/utils'
 import { refreshToken } from '@/api/login'
 import { USER_CONFIG_ENUM } from '@/types/config'
 
@@ -20,7 +20,7 @@ httpRequest.interceptors.response.use(
   (response: AxiosResponse) => {
     return response.data
   },
-  (error: AxiosError) => {
+  async (error: AxiosError) => {
     const { response } = error
     const statusCode = response?.status
 
@@ -30,8 +30,12 @@ httpRequest.interceptors.response.use(
     ).then()
 
     if (statusCode === 401) {
-      const XJikeAccessToken: string = Storage.get('x-jike-access-token')
-      const XJikeRefreshToken: string = Storage.get('x-jike-refresh-token')
+      const XJikeAccessToken: string = await ReadConfig(
+        USER_CONFIG_ENUM.accessToken,
+      )
+      const XJikeRefreshToken: string = await ReadConfig(
+        USER_CONFIG_ENUM.refreshToken,
+      )
 
       const params = {
         'x-jike-access-token': XJikeAccessToken,
@@ -55,9 +59,6 @@ httpRequest.interceptors.response.use(
                 USER_CONFIG_ENUM.refreshToken,
                 XJikeRefreshToken,
               ).then()
-
-              Storage.set('x-jike-access-token', XJikeAccessToken)
-              Storage.set('x-jike-refresh-token', XJikeRefreshToken)
 
               if (response) {
                 response.headers['x-jike-access-token'] = XJikeAccessToken
@@ -116,14 +117,16 @@ httpRequest.interceptors.response.use(
 )
 
 httpRequest.interceptors.request.use(
-  (config: AxiosRequestConfig | any) => {
-    const XJikeAccessToken: string = Storage.get('x-jike-access-token')
+  async (config: AxiosRequestConfig | any) => {
+    const XJikeAccessToken: string = await ReadConfig(
+      USER_CONFIG_ENUM.accessToken,
+    )
 
     if (XJikeAccessToken == null) {
       window.location.href = '/#/login'
     }
 
-    config.headers['x-jike-access-token'] = `${XJikeAccessToken}`
+    config.headers['x-jike-access-token'] = XJikeAccessToken
 
     return config
   },

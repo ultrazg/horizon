@@ -78,8 +78,6 @@ export const Login: React.FC = () => {
         UserStore.init(data)
 
         Storage.set('user_info', data)
-        Storage.set('x-jike-access-token', res.data['x-jike-access-token'])
-        Storage.set('x-jike-refresh-token', res.data['x-jike-refresh-token'])
 
         goHome()
       })
