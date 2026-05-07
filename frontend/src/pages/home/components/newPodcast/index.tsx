@@ -1,51 +1,35 @@
 import React from 'react'
-import { ColorfulShadow } from '@/components'
-import { QuoteIcon, UpdateIcon } from '@radix-ui/react-icons'
-import { Button, Skeleton } from '@radix-ui/themes'
+import { NewPodcastType } from '@/pages/home'
 import styles from './index.module.scss'
-import { PopularType, TargetType } from '@/pages/home'
-import { showEpisodeDetailModal } from '@/utils'
-import { usePlayer } from '@/hooks'
+import { ColorfulShadow } from '@/components'
 import { PlayerEpisodeInfoType } from '@/utils/player'
+import { showEpisodeDetailModal } from '@/utils'
+import { usePlayer } from '@/layouts/player'
+import { QuoteIcon } from '@radix-ui/react-icons'
 
 type IProps = {
-  data: PopularType
-  loading: boolean
-  onRefresh: () => void
+  data: NewPodcastType
   onDetail: (pid: string) => void
 }
 
-/**
- * 发现-大家都在听
- * @constructor
- */
-const PopularPart: React.FC<IProps> = ({
-  data,
-  loading,
-  onRefresh,
-  onDetail,
-}) => {
+const NewPodcast: React.FC<IProps> = ({ data, onDetail }) => {
   const player = usePlayer()
 
   return (
-    <div className={styles['popular-layout']}>
-      <h3>大家都在听</h3>
+    <div className={styles['new-podcast-layout']}>
+      <h3>TA 们开始创作新播客</h3>
 
-      <Skeleton loading={loading}>
-        <div className={styles['popular-content']}>
-          {data?.target?.map((item: TargetType) => (
+      <div className={styles['new-podcast-content']}>
+        {data?.map((item) => {
+          return (
             <div
-              className={styles['popular-item']}
+              className={styles['new-podcast-item']}
               key={item.episode.eid}
             >
-              <div className={styles['popular-info']}>
+              <div className={styles['new-podcast-info']}>
                 <div className={styles['cover-box']}>
                   <ColorfulShadow
-                    src={
-                      item.episode?.image
-                        ? item.episode.image.picUrl
-                        : item.episode.podcast.image.picUrl
-                    }
+                    src={item.episode.podcast.image.picUrl}
                     mask
                     curPointer
                     onClick={() => {
@@ -69,14 +53,15 @@ const PopularPart: React.FC<IProps> = ({
                     onClick={() => {
                       onDetail(item.episode.podcast.pid)
                     }}
+                    title={item.episode.podcast.title}
                   >
                     {item.episode.podcast.title}
                   </p>
                   <p
-                    title={item.episode.title}
                     onClick={() => {
                       showEpisodeDetailModal(item.episode.eid)
                     }}
+                    title={item.episode.title}
                   >
                     {item.episode.title}
                   </p>
@@ -87,24 +72,11 @@ const PopularPart: React.FC<IProps> = ({
                 </div>
               </div>
             </div>
-          ))}
-        </div>
-      </Skeleton>
-
-      <div className={styles['reload-button']}>
-        <Button
-          size="2"
-          variant="soft"
-          color="gray"
-          onClick={() => onRefresh()}
-          loading={loading}
-        >
-          <UpdateIcon />
-          换一换
-        </Button>
+          )
+        })}
       </div>
     </div>
   )
 }
 
-export default PopularPart
+export default NewPodcast

@@ -29,7 +29,6 @@ const EditorRecommended: React.FC<IProps> = ({ data, loading, onDetail }) => {
               <div
                 className={styles['editor-recommended-item']}
                 key={item.episode.eid}
-                title={`@${item.comment.author.nickname}：\r\n${item.comment ? item.comment.text : item.recommendation}`}
               >
                 <div className={styles['editor-recommended-info']}>
                   <div className={styles['cover-box']}>
@@ -58,6 +57,7 @@ const EditorRecommended: React.FC<IProps> = ({ data, loading, onDetail }) => {
                       onClick={() => {
                         onDetail(item.episode.podcast.pid)
                       }}
+                      title={item.episode.podcast.title}
                     >
                       {item.episode.podcast.title}
                     </p>
@@ -65,6 +65,7 @@ const EditorRecommended: React.FC<IProps> = ({ data, loading, onDetail }) => {
                       onClick={() => {
                         showEpisodeDetailModal(item.episode.eid)
                       }}
+                      title={item.episode.title}
                     >
                       {item.episode.title}
                     </p>

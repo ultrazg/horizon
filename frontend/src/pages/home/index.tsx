@@ -3,6 +3,7 @@ import Popular from './components/popular'
 import Recommended from './components/recommended'
 import EditorRecommended from './components/editorRecommended'
 import PeopleLike from './components/peopleLike'
+import NewPodcast from './components/newPodcast'
 import { discovery, refreshEpisodeCommend } from '@/api/discover'
 import { DISCOVERY_TYPE_ENUM } from '@/types/discovery'
 import { EpisodeType } from '@/types/episode'
@@ -28,6 +29,11 @@ export type RecommendedType = {
 
 export type PeopleLikeType = { pick: pick }[]
 
+export type NewPodcastType = {
+  episode: EpisodeType
+  recommendation: string
+}[]
+
 type pick = {
   commentCount: number
   episode: EpisodeType
@@ -45,34 +51,56 @@ type pick = {
 }
 
 export const Home: React.FC = () => {
+  /**
+   * 大家都在听
+   */
   const [popular, setPopular] = useState<{
     records: PopularType
     loading: boolean
   }>({
     records: {},
     loading: false,
-  }) // 大家都在听
+  })
+
+  /**
+   * 编辑精选
+   */
   const [editorRecommended, setEditorRecommended] = useState<{
     records: {}
     loading: boolean
   }>({
     records: {},
     loading: false,
-  }) // 编辑精选
+  })
+
+  /**
+   * 精选节目
+   */
   const [recommended, setRecommended] = useState<{
     records: RecommendedType
     loading: boolean
   }>({
     records: {},
     loading: false,
-  }) // 精选节目
+  })
+
+  /**
+   * TA 们的喜欢
+   */
   const [peopleLike, setPeopleLike] = useState<{
     records: PeopleLikeType
-    loading: boolean
   }>({
     records: [],
-    loading: false,
-  }) // TA 们的喜欢
+  })
+
+  /**
+   * 新播客
+   */
+  const [newPodcast, setNewPodcast] = useState<{
+    records: NewPodcastType
+  }>({
+    records: [],
+  })
 
   const navigateTo = useNavigate()
   const goPodcastDetail = (pid: string) => {
@@ -105,18 +133,16 @@ export const Home: React.FC = () => {
    * 获取「TA 们的喜欢」
    */
   const getPeopleLike = () => {
-    setPeopleLike({
-      records: [],
-      loading: true,
-    })
-
     discovery({ loadMoreKey: 'pick' })
       .then((res) => {
         res.data.data.forEach((item: any) => {
           if (item.type === DISCOVERY_TYPE_ENUM.PEOPLE_LIKE) {
             setPeopleLike({
               records: item.data,
-              loading: false,
+            })
+          } else if (item.type === DISCOVERY_TYPE_ENUM.PILOT) {
+            setNewPodcast({
+              records: item.data.target,
             })
           }
         })
@@ -222,34 +248,46 @@ export const Home: React.FC = () => {
         }}
       />
       {/* TA 们的喜欢 */}
-      <PeopleLike
-        data={peopleLike.records}
-        loading={peopleLike.loading}
-        onDetail={(pid) => {
-          goPodcastDetail(pid)
-        }}
-        onChangeState={(id) => {
-          const temp: PeopleLikeType = peopleLike.records.map((item) => {
-            if (item.pick.id === id) {
-              return {
-                ...item,
-                pick: {
-                  ...item.pick,
-                  isLiked: !item.pick.isLiked,
-                  likeCount: item.pick.likeCount + (item.pick.isLiked ? -1 : 1),
-                },
+      {peopleLike.records.length > 0 && (
+        <PeopleLike
+          data={peopleLike.records}
+          onDetail={(pid) => {
+            goPodcastDetail(pid)
+          }}
+          onChangeState={(id) => {
+            const temp: PeopleLikeType = peopleLike.records.map((item) => {
+              if (item.pick.id === id) {
+                return {
+                  ...item,
+                  pick: {
+                    ...item.pick,
+                    isLiked: !item.pick.isLiked,
+                    likeCount:
+                      item.pick.likeCount + (item.pick.isLiked ? -1 : 1),
+                  },
+                }
               }
-            }
 
-            return item
-          })
+              return item
+            })
 
-          setPeopleLike({
-            ...peopleLike,
-            records: temp,
-          })
-        }}
-      />
+            setPeopleLike({
+              ...peopleLike,
+              records: temp,
+            })
+          }}
+        />
+      )}
+
+      {/*TA们开始创作新播客*/}
+      {newPodcast.records.length > 0 && (
+        <NewPodcast
+          data={newPodcast.records}
+          onDetail={(pid) => {
+            goPodcastDetail(pid)
+          }}
+        />
+      )}
     </>
   )
 }
