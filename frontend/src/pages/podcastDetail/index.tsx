@@ -333,13 +333,20 @@ export const PodcastDetail: React.FC = () => {
               >
                 {podcastDetailData?.description}
               </Text>
-              <div className={styles['sub']}>
+              <div>
                 <Text
                   size="5"
                   mr="5"
                   style={{ fontWeight: '300' }}
                 >
                   {podcastDetailData?.subscriptionCount} 订阅
+                </Text>
+                <Text
+                  size="5"
+                  mr="5"
+                  style={{ fontWeight: '300' }}
+                >
+                  {podcastDetailData?.episodeCount} 期
                 </Text>
                 <Button
                   variant="soft"

@@ -91,6 +91,8 @@ export const Subscription: React.FC = () => {
 
                 <Text
                   className={styles['podcast-brief']}
+                  mt="1"
+                  mb="1"
                   as="p"
                   size="2"
                   title={item.brief}
@@ -103,7 +105,7 @@ export const Subscription: React.FC = () => {
                   as="p"
                   size="2"
                 >
-                  更新于{dayjs(item.latestEpisodePubDate).format('MM/DD')}
+                  更新于{dayjs(item.latestEpisodePubDate).format('YYYY/MM/DD')}
                 </Text>
               </Card>
             </Box>
