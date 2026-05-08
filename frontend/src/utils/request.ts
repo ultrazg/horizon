@@ -122,7 +122,7 @@ httpRequest.interceptors.request.use(
       USER_CONFIG_ENUM.accessToken,
     )
 
-    if (XJikeAccessToken == null) {
+    if (XJikeAccessToken == '') {
       window.location.href = '/#/login'
     }
 
