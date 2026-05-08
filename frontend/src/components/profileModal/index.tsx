@@ -590,8 +590,7 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
                       }}
                     />
                     <div>
-                      <span>{stickerData.total}</span>
-                       张贴纸
+                      <span>{stickerData.total}</span>&nbsp;张贴纸
                       <ChevronRightIcon />
                     </div>
                     <div>
@@ -665,7 +664,7 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
           </div>
 
           <StickerModal
-            stickerLists={stickerData.records}
+            uid={uid}
             perspective={renderGender(profileData?.gender)}
             open={stickerModalOpen}
             onClose={() => {

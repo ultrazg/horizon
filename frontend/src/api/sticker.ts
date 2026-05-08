@@ -7,6 +7,9 @@ const api = {
 
 type stickerType = {
   uid: string
+  loadMoreKey?: {
+    skip: number
+  }
 }
 
 /** 查询用户已获得的贴纸 */

@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Modal } from '@/components'
+import React, { useEffect, useState } from 'react'
+import { Empty, Modal } from '@/components'
 import { modalType } from '@/types/modal'
 import {
   AspectRatio,
@@ -9,15 +9,17 @@ import {
   ScrollArea,
   Separator,
   Text,
+  Spinner,
 } from '@radix-ui/themes'
 import { useWindowSize } from '@/hooks'
 import { stickerType } from '@/types/sticker'
 import './index.modules.scss'
 import dayjs from 'dayjs'
+import { sticker } from '@/api/sticker'
 
 type IProps = {
+  uid: string
   perspective: '我' | '他' | '她' | 'TA'
-  stickerLists: stickerType[]
 } & modalType
 
 /**
@@ -26,8 +28,8 @@ type IProps = {
 export const StickerModal: React.FC<IProps> = ({
   open,
   onClose,
+  uid,
   perspective,
-  stickerLists,
 }) => {
   const [height] = useState(useWindowSize().height * 0.6)
   const [activeImg, setActiveImg] = useState<any>()
@@ -46,6 +48,38 @@ export const StickerModal: React.FC<IProps> = ({
     ownedAt: '',
     number: '',
   })
+  const [stickerLists, setStickerLists] = useState<stickerType[]>([])
+  const [total, setTotal] = useState<number>(0)
+  const [loading, setLoading] = useState<boolean>(false)
+
+  async function fetchData(
+    loadMoreKey?: { skip: number },
+    isRecursive: boolean = false,
+  ): Promise<void> {
+    if (!isRecursive) {
+      setLoading(true)
+    }
+
+    try {
+      const res = await sticker({
+        uid,
+        loadMoreKey,
+      })
+
+      setStickerLists((prev) => [...prev, ...res.data.data])
+      setTotal(res.data.total)
+
+      if (res.data?.loadMoreKey) {
+        await fetchData(res.data.loadMoreKey, true)
+      }
+    } catch (err) {
+      console.error(err)
+    } finally {
+      if (!isRecursive) {
+        setLoading(false)
+      }
+    }
+  }
 
   const handleClick = (event: any, index: number) => {
     const img = event.target
@@ -66,65 +100,78 @@ export const StickerModal: React.FC<IProps> = ({
     setMaskOpen(true)
   }
 
+  useEffect(() => {
+    if (open) fetchData().then()
+
+    return () => {
+      setStickerLists([])
+      setTotal(0)
+    }
+  }, [open])
+
   return (
     <Modal
-      title={`${perspective}的贴纸库(${stickerLists.length})`}
+      title={`${perspective}的贴纸库(${total})`}
       open={open}
       onClose={onClose}
     >
-      <ScrollArea
-        type="hover"
-        scrollbars="vertical"
-        style={{ height }}
-      >
-        <Grid
-          columns="4"
-          mt="3"
-          gap="3"
-          width="auto"
-          mr="2"
+      {!loading && total === 0 && <Empty />}
+
+      <Spinner loading={loading}>
+        <ScrollArea
+          type="hover"
+          scrollbars="vertical"
+          style={loading || total === 0 ? { display: 'none' } : { height }}
         >
-          {stickerLists.map((sticker: stickerType, index: number) => (
-            <Box
-              width="100%"
-              key={sticker.id}
-              className="sticker-box"
-            >
-              <AspectRatio ratio={6 / 6}>
-                <img
-                  src={sticker.image.largePicUrl}
-                  alt={sticker.name}
-                  className={`sticker-image ${activeImg === index ? 'active' : ''}`}
-                  onClick={(event) => {
-                    if (!maskOpen) {
-                      handleClick(event, index)
-                      setCurrentActive({
-                        name: sticker.name,
-                        description: sticker.description,
-                        issuer: sticker.issuer,
-                        ownedAt: sticker.ownedAt,
-                        number: sticker.number,
-                      })
-                    } else {
-                      setMaskOpen(false)
-                      setActiveImg(undefined)
-                      setCurrentActive({
-                        name: '',
-                        description: '',
-                        issuer: '',
-                        ownedAt: '',
-                        number: '',
-                      })
-                    }
-                  }}
-                  style={activeImg === index ? transformStyle : {}}
-                />
-              </AspectRatio>
-              <Text className="sticker-name">{sticker.name}</Text>
-            </Box>
-          ))}
-        </Grid>
-      </ScrollArea>
+          <Grid
+            columns="4"
+            mt="3"
+            gap="3"
+            width="auto"
+            mr="2"
+          >
+            {stickerLists.map((sticker: stickerType, index: number) => (
+              <Box
+                width="100%"
+                key={sticker.id}
+                className="sticker-box"
+              >
+                <AspectRatio ratio={6 / 6}>
+                  <img
+                    src={sticker.image.largePicUrl}
+                    alt={sticker.name}
+                    className={`sticker-image ${activeImg === index ? 'active' : ''}`}
+                    onClick={(event) => {
+                      if (!maskOpen) {
+                        handleClick(event, index)
+                        setCurrentActive({
+                          name: sticker.name,
+                          description: sticker.description,
+                          issuer: sticker.issuer,
+                          ownedAt: sticker.ownedAt,
+                          number: sticker.number,
+                        })
+                      } else {
+                        setMaskOpen(false)
+                        setActiveImg(undefined)
+                        setCurrentActive({
+                          name: '',
+                          description: '',
+                          issuer: '',
+                          ownedAt: '',
+                          number: '',
+                        })
+                      }
+                    }}
+                    style={activeImg === index ? transformStyle : {}}
+                  />
+                </AspectRatio>
+                <Text className="sticker-name">{sticker.name}</Text>
+              </Box>
+            ))}
+          </Grid>
+        </ScrollArea>
+      </Spinner>
 
       {maskOpen && (
         <div className="sticker-mask">

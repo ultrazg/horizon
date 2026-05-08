@@ -17,14 +17,14 @@ export const Sticker = () => {
     records: [],
     total: 0,
   })
+  const { uid }: userType = Storage.get('user_info')
 
   /**
    * 获取贴纸数据
    */
   const getData = () => {
-    const info: userType = Storage.get('user_info')
     const params = {
-      uid: info.uid,
+      uid,
     }
 
     sticker(params)
@@ -69,8 +69,8 @@ export const Sticker = () => {
       </Card>
 
       <StickerModal
+        uid={uid}
         perspective="我"
-        stickerLists={data.records}
         open={stickerModalOpen}
         onClose={() => {
           setStickerModalOpen(false)
