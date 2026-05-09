@@ -37,6 +37,43 @@ func (a *App) CheckForUpgrade() *CheckUpgradeInfo {
 	}
 }
 
+func GetChangelogInfo(a *App) (string, error) {
+	proxyUrl := GetProxyInfo(a)
+	client, err := HTTPClientWithProxy(proxyUrl)
+	if err != nil {
+		log.Printf("创建 HTTP 客户端失败: %v", err)
+		return "", err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, CHANGELOG_URL, nil)
+	if err != nil {
+		log.Printf("创建 HTTP 请求失败: %v", err)
+		return "", err
+	}
+
+	req.Header.Set("User-Agent", fmt.Sprintf("%s/%s", APP_NAME, APP_VERSION))
+
+	res, err := client.Do(req)
+	if err != nil {
+		log.Printf("发送 HTTP 请求失败: %v", err)
+		return "", err
+	}
+	defer res.Body.Close()
+
+	if res.StatusCode != http.StatusOK {
+		log.Printf("HTTP 请求返回状态码: %d", res.StatusCode)
+		return "", err
+	}
+
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		log.Printf("读取响应体失败: %v", err)
+		return "", err
+	}
+
+	return string(body), nil
+}
+
 func GetGithubReleaseInfo(a *App) (*Latest, error) {
 	proxyUrl := GetProxyInfo(a)
 
@@ -237,6 +274,16 @@ func (a *App) Upgrade() error {
 	}
 
 	return nil
+}
+
+func (a *App) ShowChangelog() *ShowChangelogResult {
+	changelogInfo, err := GetChangelogInfo(a)
+	if err != nil {
+		log.Printf("获取更新日志失败: %v", err)
+		return &ShowChangelogResult{Flag: false, Err: "无法获取更新日志，请检查网络连接", Info: ""}
+	}
+
+	return &ShowChangelogResult{Flag: true, Err: "", Info: changelogInfo}
 }
 
 func upgradeForWindows() error {

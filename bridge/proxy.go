@@ -33,7 +33,9 @@ func (a *App) TestConnect(url, ip, port string) *TestConnectResult {
 
 func HTTPClientWithProxy(proxyURL string) (*http.Client, error) {
 	if proxyURL == "" {
-		return &http.Client{}, nil
+		return &http.Client{
+			Timeout: time.Second * 15,
+		}, nil
 	}
 
 	proxy, err := url.Parse(proxyURL)

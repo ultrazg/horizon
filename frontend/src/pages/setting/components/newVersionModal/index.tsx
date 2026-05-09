@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { modalType } from '@/types/modal'
 import styles from './index.module.scss'
 import { Modal } from '@/components'
-import { APP_VERSION } from '@/utils'
+import { APP_VERSION, ShowChangelog, toast } from '@/utils'
 import { Button } from '@radix-ui/themes'
-import { UpdateIcon } from '@radix-ui/react-icons'
+import { UpdateIcon, ClockIcon } from '@radix-ui/react-icons'
+import ChangelogModal from '../changelogModal'
 
 type IProps = {
   newVersionInfo: {
@@ -28,6 +29,33 @@ export const NewVersionModal: React.FC<modalType & IProps> = ({
   onClose,
   newVersionInfo,
 }) => {
+  const [loading, setLoading] = useState<boolean>(false)
+  const [changelogModalOpen, setChangelogModalOpen] = useState<boolean>(false)
+  const [changelogStr, setChangelogStr] = useState<string>('')
+
+  function onShowChangelog(): void {
+    setLoading(true)
+
+    ShowChangelog()
+      .then((res) => {
+        if (res.flag) {
+          setChangelogStr(res.info)
+          setChangelogModalOpen(true)
+        } else {
+          toast(res.err, { type: 'warn', duration: 5000 })
+        }
+      })
+      .finally(() => {
+        setLoading(false)
+      })
+  }
+
+  useEffect(() => {
+    return () => {
+      setChangelogStr('')
+    }
+  }, [])
+
   return (
     <Modal
       title="发现新版本"
@@ -36,6 +64,15 @@ export const NewVersionModal: React.FC<modalType & IProps> = ({
       onClose={onClose}
       options={
         <>
+          <Button
+            variant="soft"
+            color="gray"
+            onClick={onShowChangelog}
+            loading={loading}
+          >
+            <ClockIcon />
+            版本历史
+          </Button>
           <Button
             onClick={() => {
               onOk?.()
@@ -62,6 +99,14 @@ export const NewVersionModal: React.FC<modalType & IProps> = ({
           <pre>{newVersionInfo.body}</pre>
         </p>
       </div>
+
+      <ChangelogModal
+        open={changelogModalOpen}
+        onClose={() => {
+          setChangelogModalOpen(false)
+        }}
+        changelog={changelogStr}
+      />
     </Modal>
   )
 }

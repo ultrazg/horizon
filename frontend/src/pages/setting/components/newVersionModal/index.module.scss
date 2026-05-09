@@ -16,6 +16,9 @@
       color: $primary-font-color;
       max-height: 200px;
       overflow-y: scroll;
+      white-space: pre-wrap;
+      word-break: break-word;
+      overflow-wrap: break-word;
     }
   }
 }

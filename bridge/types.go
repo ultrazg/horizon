@@ -73,3 +73,9 @@ const (
 	SystemThemeLight SystemTheme = "light"
 	SystemThemeDark  SystemTheme = "dark"
 )
+
+type ShowChangelogResult struct {
+	Flag bool   `json:"flag"`
+	Err  string `json:"err"`
+	Info string `json:"info"`
+}
