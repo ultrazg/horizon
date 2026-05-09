@@ -79,6 +79,18 @@ export const ToastProvider = ({ children }: { children: any }) => {
     )
   }, [])
 
+  const closeToast = (id: number) => {
+    const toastElement = document.getElementById(`toast-${id}`)
+
+    if (toastElement) {
+      toastElement.classList.remove('show')
+
+      setTimeout(() => {
+        removeToast(id)
+      }, 300)
+    }
+  }
+
   useEffect(() => {
     setToastFunction(addToast)
   }, [addToast])
@@ -100,7 +112,7 @@ export const ToastProvider = ({ children }: { children: any }) => {
             {toast.message}
             <button
               onClick={() => {
-                removeToast(toast.id)
+                closeToast(toast.id)
               }}
             >
               ×
