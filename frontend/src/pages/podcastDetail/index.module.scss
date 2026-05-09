@@ -100,6 +100,7 @@
 
             p {
               &:first-child {
+                cursor: pointer;
                 font-size: 1.2rem;
                 font-weight: bold;
                 overflow: hidden;
@@ -111,6 +112,7 @@
               }
 
               &:nth-child(2) {
+                cursor: pointer;
                 color: $secondary-font-color;
                 overflow: hidden;
                 display: -webkit-box;

@@ -26,7 +26,12 @@ import '@/assets/global/animate.css'
 import { EpisodeType } from '@/types/episode'
 import { isEmpty } from 'lodash'
 import dayjs from 'dayjs'
-import { DialogType, ShowMessageDialog, toast } from '@/utils'
+import {
+  DialogType,
+  ShowMessageDialog,
+  toast,
+  showEpisodeDetailModal,
+} from '@/utils'
 import { updateSubscription } from '@/api/subscription'
 import { PodcastBulletinModal } from './components/podcastBulletinModal'
 import { usePlayer } from '@/hooks'
@@ -494,13 +499,23 @@ export const PodcastDetail: React.FC = () => {
                     />
                   </div>
                   <div className={styles['right']}>
-                    <p>
+                    <p
+                      onClick={() => {
+                        showEpisodeDetailModal(item.eid)
+                      }}
+                    >
                       {item.payType === 'PAY_EPISODE' && (
                         <span className={styles['pay-episode-tag']}>试听</span>
                       )}
                       {item.title}
                     </p>
-                    <p>{item.description}</p>
+                    <p
+                      onClick={() => {
+                        showEpisodeDetailModal(item.eid)
+                      }}
+                    >
+                      {item.description}
+                    </p>
                     <p>
                       {item.isPlayed && !item.isFinished && (
                         <span className={styles['played-tag']}>听过</span>
