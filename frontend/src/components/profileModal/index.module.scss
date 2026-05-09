@@ -37,6 +37,7 @@
       width: 8rem;
       height: 8rem;
       bottom: 0;
+      border: 1px solid rgba(5, 5, 5, 0.1);
     }
 
     .pm-ip-loc {
@@ -49,7 +50,7 @@
       top: 1rem;
       right: 1rem;
       color: rgba(255, 255, 255, 0.7);
-      text-shadow: 0 0 6px #3f3f3f;
+      text-shadow: 0 0 4px #3f3f3f;
     }
   }
 
