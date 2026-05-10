@@ -1,5 +1,4 @@
 import { Box, Card, Flex, ScrollArea, Avatar } from '@radix-ui/themes'
-import { PlayIcon } from '@radix-ui/react-icons'
 import styles from './index.module.scss'
 import { ColorfulShadow, ProfileModal } from '@/components'
 import { PeopleLikeType } from '@/pages/home'
@@ -9,6 +8,7 @@ import { showEpisodeDetailModal } from '@/utils'
 import { usePlayer } from '@/hooks'
 import { PlayerEpisodeInfoType } from '@/utils/player'
 import { onCommentLikeUpdate } from '@/components/playerDrawer/components/episodeComment'
+import { BsPlayFill } from 'react-icons/bs'
 
 type IProps = {
   data: PeopleLikeType
@@ -153,7 +153,7 @@ const PeopleLike: React.FC<IProps> = ({ data, onDetail, onChangeState }) => {
                       }}
                     >
                       <div className={styles['play_button']}>
-                        <PlayIcon />
+                        <BsPlayFill />
                       </div>
                     </div>
                   </div>
