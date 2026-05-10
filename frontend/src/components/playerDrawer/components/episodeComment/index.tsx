@@ -32,7 +32,13 @@ import {
   createComment,
 } from '@/api/comment'
 import { CommentPrimaryType } from '@/types/comment'
-import { DialogType, ShowMessageDialog, Storage, toast } from '@/utils'
+import {
+  DialogType,
+  hexToRgba,
+  ShowMessageDialog,
+  Storage,
+  toast,
+} from '@/utils'
 import dayjs from 'dayjs'
 import {
   commentCollectRemove,
@@ -46,6 +52,7 @@ import VoiceComment from '@/components/playerDrawer/components/voiceComment'
 type IProps = {
   open: boolean
   eid: string
+  themeColor: string
 }
 
 type onCommentLikeUpdateFn = (
@@ -66,7 +73,7 @@ export const onCommentLikeUpdate: onCommentLikeUpdateFn = (params, cb) => {
     })
 }
 
-export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
+export const EpisodeComment: React.FC<IProps> = ({ eid, open, themeColor }) => {
   const player = usePlayer()
   const height = useWindowSize().height - 35
   const [loading, setLoading] = useState<boolean>(false)
@@ -280,7 +287,13 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
           <Tooltip content={'刷新评论'}>
             <IconButton
               variant={'soft'}
-              style={{ color: 'var(--white-a11)' }}
+              style={
+                {
+                  '--accent-a3': hexToRgba(themeColor, 0.1),
+                  '--accent-a4': hexToRgba(themeColor, 0.3),
+                  '--accent-a11': themeColor,
+                } as React.CSSProperties
+              }
               ml={'3'}
               mr={'3'}
               size={'1'}
@@ -295,7 +308,13 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
             <IconButton
               variant={'soft'}
               size="1"
-              style={{ color: 'var(--white-a11)' }}
+              style={
+                {
+                  '--accent-a3': hexToRgba(themeColor, 0.1),
+                  '--accent-a4': hexToRgba(themeColor, 0.3),
+                  '--accent-a11': themeColor,
+                } as React.CSSProperties
+              }
               onClick={() => {
                 setCCM({
                   ...CCM,
@@ -349,7 +368,7 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
                         <IoMdMicrophone
                           style={{
                             marginLeft: 6,
-                            color: 'var(--purple-9)',
+                            color: themeColor,
                             fontSize: 18,
                             cursor: 'default',
                           }}
@@ -358,15 +377,20 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
 
                       {item.badges.length > 0
                         ? item.badges.map((itm) => (
-                            <img
+                            <div
                               key={itm.icon.picUrl}
+                              title={itm.tip}
                               style={{
+                                cursor: 'default',
+                                marginLeft: '0.4rem',
                                 width: itm.icon.width * 0.4,
                                 height: itm.icon.height * 0.4,
+                                backgroundColor: themeColor,
+                                maskImage: `url(${itm.icon.picUrl})`,
+                                maskRepeat: 'no-repeat',
+                                maskPosition: 'center',
+                                maskSize: 'contain',
                               }}
-                              title={itm.tip}
-                              src={itm.icon.picUrl}
-                              alt="badge"
                             />
                           ))
                         : null}
@@ -382,11 +406,15 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
                     className={styles['player-comment-more-action']}
                     style={item.collected ? { opacity: 1 } : {}}
                   >
-                    <span>
+                    <span style={{ color: 'white' }}>
                       <IconButton
                         variant="ghost"
                         size="1"
-                        style={{ color: 'var(--white-a11)' }}
+                        style={
+                          {
+                            '--accent-a3': hexToRgba(themeColor, 0.3),
+                          } as React.CSSProperties
+                        }
                         mr="1"
                         onClick={() => {
                           setReplyModal({
@@ -395,7 +423,7 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
                           })
                         }}
                       >
-                        <ChatBubbleIcon />
+                        <ChatBubbleIcon style={{ color: themeColor }} />
                       </IconButton>
                       {item?.replyCount === 0 ? null : item?.replyCount}
                     </span>
@@ -404,7 +432,11 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
                       <IconButton
                         variant="ghost"
                         size="1"
-                        style={{ color: 'var(--white-a11)' }}
+                        style={
+                          {
+                            '--accent-a3': hexToRgba(themeColor, 0.3),
+                          } as React.CSSProperties
+                        }
                         ml="3"
                         onClick={() => {
                           if (item.collected) {
@@ -417,7 +449,7 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
                         {item.collected ? (
                           <HeartFilledIcon color="red" />
                         ) : (
-                          <HeartIcon />
+                          <HeartIcon style={{ color: themeColor }} />
                         )}
                       </IconButton>
                     </Tooltip>
@@ -429,7 +461,11 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
                         <IconButton
                           variant="ghost"
                           size="1"
-                          style={{ color: '#EB8E90' }}
+                          style={
+                            {
+                              '--accent-a3': hexToRgba(themeColor, 0.3),
+                            } as React.CSSProperties
+                          }
                           mr="3"
                           onClick={() => {
                             ShowMessageDialog(
@@ -498,7 +534,12 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
                 <div className={styles['player-comment-body']}>
                   {item.pinned && (
                     <Badge
-                      style={{ color: 'var(--purple-9)' }}
+                      style={
+                        {
+                          color: themeColor,
+                          '--accent-a3': hexToRgba(themeColor, 0.3),
+                        } as React.CSSProperties
+                      }
                       mr="2"
                     >
                       置顶
@@ -515,6 +556,7 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
 
                   {item.text && (
                     <HighlightTimeStrings
+                      themeColor={themeColor}
                       text={item.text}
                       player={player}
                     />
@@ -558,7 +600,12 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
             {!isEmpty(loadMoreKey) && (
               <div className={styles['load-more-button']}>
                 <Button
-                  color="gray"
+                  style={
+                    {
+                      '--accent-10': themeColor,
+                      '--accent-9': hexToRgba(themeColor, 0.5),
+                    } as React.CSSProperties
+                  }
                   onClick={() => {
                     getComment(loadMoreKey)
                   }}
@@ -573,6 +620,7 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
       </div>
 
       <CommentReplyModal
+        themeColor={themeColor}
         eid={eid}
         primaryComment={replyModal.primaryComment}
         open={replyModal.open}

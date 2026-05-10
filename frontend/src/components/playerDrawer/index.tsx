@@ -15,7 +15,7 @@ import {
 import { IoMdThumbsUp, IoMdInformationCircleOutline } from 'react-icons/io'
 import { episodeDetail, episodeClapCreate } from '@/api/episode'
 import { EpisodeType } from '@/types/episode'
-import { Player, showEpisodeDetailModal, toast } from '@/utils'
+import { Player, showEpisodeDetailModal, toast, hexToRgba } from '@/utils'
 import { CONSTANT } from '@/types/constant'
 import { PlayInfoType } from '@/utils/player'
 import { secondsToHms } from '@/components/playerController/components/episodeCover'
@@ -40,6 +40,7 @@ export const PlayerDrawer: React.FC<IProps> = ({
   const [left, setLeft] = useState<boolean>(false)
   const [right, setRight] = useState<boolean>(false)
   const [progress, setProgress] = React.useState<number>(0)
+  const [themeColor, setThemeColor] = useState<string>('')
 
   /**
    * 标记精彩时刻
@@ -103,6 +104,7 @@ export const PlayerDrawer: React.FC<IProps> = ({
     episodeDetail(params)
       .then((res) => {
         setEpisodeDetailInfo(res.data.data)
+        setThemeColor(res.data.data.podcast?.color?.light)
       })
       .catch(() => {
         toast('获取单集详情失败', { type: 'warn' })
@@ -112,6 +114,10 @@ export const PlayerDrawer: React.FC<IProps> = ({
   useEffect(() => {
     if (open) {
       getEpisodeDetail()
+    }
+
+    return () => {
+      setThemeColor('')
     }
   }, [open])
 
@@ -189,6 +195,7 @@ export const PlayerDrawer: React.FC<IProps> = ({
               size="5"
               mb="6"
               className={styles['podcast-name']}
+              style={{ color: themeColor }}
             >
               {episodeDetailInfo?.podcast.title}
             </Text>
@@ -203,8 +210,15 @@ export const PlayerDrawer: React.FC<IProps> = ({
                     onClick={() => {
                       showEpisodeDetailModal(playInfo.eid)
                     }}
+                    style={
+                      {
+                        '--accent-a3': hexToRgba(themeColor, 0.3),
+                      } as React.CSSProperties
+                    }
                   >
-                    <IoMdInformationCircleOutline />
+                    <IoMdInformationCircleOutline
+                      style={{ color: themeColor }}
+                    />
                   </IconButton>
                 </Tooltip>
 
@@ -216,8 +230,14 @@ export const PlayerDrawer: React.FC<IProps> = ({
                     onClick={() => {
                       onRewind()
                     }}
+                    style={
+                      {
+                        '--accent-a3': hexToRgba(themeColor, 0.3),
+                      } as React.CSSProperties
+                    }
                   >
                     <BsArrowCounterclockwise
+                      style={{ color: themeColor }}
                       className={left ? 'rotateLeft' : ''}
                     />
                   </IconButton>
@@ -235,11 +255,20 @@ export const PlayerDrawer: React.FC<IProps> = ({
                     onClick={() => {
                       onPlay()
                     }}
+                    style={
+                      {
+                        '--accent-a3': hexToRgba(themeColor, 0.3),
+                      } as React.CSSProperties
+                    }
                   >
                     {!isPlaying ? (
-                      <BsPlayFill style={{ width: 48, height: 48 }} />
+                      <BsPlayFill
+                        style={{ width: 48, height: 48, color: themeColor }}
+                      />
                     ) : (
-                      <BsPauseFill style={{ width: 48, height: 48 }} />
+                      <BsPauseFill
+                        style={{ width: 48, height: 48, color: themeColor }}
+                      />
                     )}
                   </IconButton>
                 </Tooltip>
@@ -252,8 +281,16 @@ export const PlayerDrawer: React.FC<IProps> = ({
                     onClick={() => {
                       onFastForward()
                     }}
+                    style={
+                      {
+                        '--accent-a3': hexToRgba(themeColor, 0.3),
+                      } as React.CSSProperties
+                    }
                   >
-                    <BsArrowClockwise className={right ? 'rotateRight' : ''} />
+                    <BsArrowClockwise
+                      style={{ color: themeColor }}
+                      className={right ? 'rotateRight' : ''}
+                    />
                   </IconButton>
                 </Tooltip>
 
@@ -265,8 +302,13 @@ export const PlayerDrawer: React.FC<IProps> = ({
                     onClick={() => {
                       onCreateClap(playInfo.eid)
                     }}
+                    style={
+                      {
+                        '--accent-a3': hexToRgba(themeColor, 0.3),
+                      } as React.CSSProperties
+                    }
                   >
-                    <IoMdThumbsUp />
+                    <IoMdThumbsUp style={{ color: themeColor }} />
                   </IconButton>
                 </Tooltip>
               </div>
@@ -279,6 +321,11 @@ export const PlayerDrawer: React.FC<IProps> = ({
               </div>
               <div className={styles['progress-bar']}>
                 <Slider
+                  style={
+                    {
+                      '--accent-track': themeColor,
+                    } as React.CSSProperties
+                  }
                   className={styles['progress-slider']}
                   size="1"
                   step={1}
@@ -299,6 +346,7 @@ export const PlayerDrawer: React.FC<IProps> = ({
 
         <div className={styles['player-right']}>
           <EpisodeComment
+            themeColor={themeColor}
             eid={playInfo.eid}
             open={open}
           />

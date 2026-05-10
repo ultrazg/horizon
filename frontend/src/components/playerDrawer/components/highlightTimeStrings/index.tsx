@@ -5,6 +5,7 @@ import styles from './index.module.scss'
 type IProps = {
   player: Player
   text: string
+  themeColor: string
 }
 
 /**
@@ -14,7 +15,7 @@ type IProps = {
  * @constructor
  */
 const HighlightTimeStrings: React.FC<IProps> = React.memo(
-  ({ text = '', player }) => {
+  ({ text = '', player, themeColor }) => {
     const timeRegex = /\b(\d{1,2}:)?\d{1,2}:\d{2}\b/g
 
     const parts = React.useMemo(() => text.split(timeRegex), [text])
@@ -55,6 +56,7 @@ const HighlightTimeStrings: React.FC<IProps> = React.memo(
               return (
                 <span
                   key={index}
+                  style={{ color: themeColor }}
                   className={styles['time-string']}
                   onClick={() => {
                     onSeek(match)

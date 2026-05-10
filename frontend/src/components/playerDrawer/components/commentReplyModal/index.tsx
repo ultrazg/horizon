@@ -30,6 +30,7 @@ import VoiceComment from '@/components/playerDrawer/components/voiceComment'
 type IProps = {
   eid: string
   primaryComment: CommentPrimaryType
+  themeColor: string
 } & modalType
 
 /**
@@ -61,6 +62,7 @@ export const CommentReplyModal: React.FC<IProps> = ({
   primaryComment,
   open,
   onClose,
+  themeColor,
 }) => {
   const [height] = React.useState<number>(useWindowSize().height)
   const [loading, setLoading] = useState<boolean>(false)
@@ -228,7 +230,7 @@ export const CommentReplyModal: React.FC<IProps> = ({
                       <IoMdMicrophone
                         style={{
                           marginLeft: 6,
-                          color: 'var(--purple-9)',
+                          color: themeColor,
                           fontSize: 18,
                           cursor: 'default',
                         }}
@@ -237,15 +239,20 @@ export const CommentReplyModal: React.FC<IProps> = ({
 
                     {primaryComment?.badges?.length > 0
                       ? primaryComment?.badges.map((item) => (
-                          <img
-                            style={{
-                              width: item.icon.width * 0.4,
-                              height: item.icon.height * 0.4,
-                            }}
+                          <div
                             key={item.icon.picUrl}
                             title={item.tip}
-                            src={item.icon.picUrl}
-                            alt="badge"
+                            style={{
+                              cursor: 'default',
+                              marginLeft: '0.4rem',
+                              width: item.icon.width * 0.4,
+                              height: item.icon.height * 0.4,
+                              backgroundColor: themeColor,
+                              maskImage: `url(${item.icon.picUrl})`,
+                              maskRepeat: 'no-repeat',
+                              maskPosition: 'center',
+                              maskSize: 'contain',
+                            }}
                           />
                         ))
                       : null}
@@ -313,7 +320,7 @@ export const CommentReplyModal: React.FC<IProps> = ({
                         <IoMdMicrophone
                           style={{
                             marginLeft: 6,
-                            color: 'var(--purple-9)',
+                            color: themeColor,
                             fontSize: 18,
                             cursor: 'default',
                           }}
@@ -322,15 +329,20 @@ export const CommentReplyModal: React.FC<IProps> = ({
 
                       {item.badges.length > 0
                         ? item.badges.map((itm) => (
-                            <img
+                            <div
+                              key={itm.icon.picUrl}
+                              title={itm.tip}
                               style={{
+                                cursor: 'default',
+                                marginLeft: '0.4rem',
                                 width: itm.icon.width * 0.4,
                                 height: itm.icon.height * 0.4,
+                                backgroundColor: themeColor,
+                                maskImage: `url(${itm.icon.picUrl})`,
+                                maskRepeat: 'no-repeat',
+                                maskPosition: 'center',
+                                maskSize: 'contain',
                               }}
-                              title={itm.tip}
-                              src={itm.icon.picUrl}
-                              key={itm.icon.picUrl}
-                              alt="badge"
                             />
                           ))
                         : null}
@@ -416,7 +428,7 @@ export const CommentReplyModal: React.FC<IProps> = ({
                   {primaryComment.id !== item?.replyToComment?.id && (
                     <span>
                       回复{' '}
-                      <span style={{ color: 'var(--purple-9)' }}>
+                      <span style={{ color: themeColor }}>
                         @{item?.replyToComment?.author?.nickname}
                       </span>
                       ：

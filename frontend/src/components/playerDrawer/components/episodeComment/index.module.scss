@@ -40,12 +40,6 @@
               display: flex;
               align-items: center;
               color: var(--white-a11);
-
-              img {
-                cursor: default;
-                margin-left: 0.4rem;
-                filter: invert(41%) sepia(62%) saturate(574%) hue-rotate(239deg) brightness(92%) contrast(90%);
-              }
             }
 
             p {

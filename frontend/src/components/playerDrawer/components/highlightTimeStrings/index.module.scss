@@ -1,10 +1,6 @@
-@import '@/assets/global/_variables.scss';
-
 .comment-wrapper {
-  color: var(--white-a11);
-
   .time-string {
-    color: $primary-font-color;
     cursor: pointer;
+    text-decoration: underline;
   }
 }

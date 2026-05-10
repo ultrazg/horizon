@@ -18,6 +18,7 @@ import { showEpisodeDetailModal } from './showEpisodeDetailModal'
 import { testConnect } from './proxy'
 import Player from './player'
 import { SaveLastPlay } from './event'
+import { hexToRgba } from './string'
 
 export {
   httpRequest,
@@ -42,4 +43,5 @@ export {
   OpenLogDir,
   Log,
   ShowChangelog,
+  hexToRgba,
 }
