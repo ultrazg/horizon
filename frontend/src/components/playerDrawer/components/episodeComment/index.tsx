@@ -125,6 +125,8 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open }) => {
 
         if (res.data?.loadMoreKey) {
           setLoadMoreKey(res.data.loadMoreKey)
+        } else {
+          setLoadMoreKey({})
         }
       })
       .catch(() => {
