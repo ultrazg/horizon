@@ -1,14 +1,15 @@
 import { Box, Card, Flex, ScrollArea, Avatar } from '@radix-ui/themes'
 import styles from './index.module.scss'
-import { ColorfulShadow, ProfileModal } from '@/components'
+import { ColorfulShadow } from '@/components'
 import { PeopleLikeType } from '@/pages/home'
-import React, { useState } from 'react'
+import React from 'react'
 import dayjs from 'dayjs'
-import { showEpisodeDetailModal } from '@/utils'
+import { showEpisodeDetailModal, ShowProfileModal, toast } from '@/utils'
 import { usePlayer } from '@/hooks'
 import { PlayerEpisodeInfoType } from '@/utils/player'
 import { onCommentLikeUpdate } from '@/components/playerDrawer/components/episodeComment'
 import { BsPlayFill } from 'react-icons/bs'
+import { CONSTANT } from '@/types/constant'
 
 type IProps = {
   data: PeopleLikeType
@@ -18,13 +19,6 @@ type IProps = {
 
 const PeopleLike: React.FC<IProps> = ({ data, onDetail, onChangeState }) => {
   const player = usePlayer()
-  const [profileModal, setProfileModal] = useState<{
-    open: boolean
-    uid: string
-  }>({
-    open: false,
-    uid: '',
-  })
 
   return (
     <div className={styles['people-like-layout']}>
@@ -48,9 +42,12 @@ const PeopleLike: React.FC<IProps> = ({ data, onDetail, onChangeState }) => {
                     <div
                       className={styles['l']}
                       onClick={() => {
-                        setProfileModal({
-                          open: true,
+                        ShowProfileModal({
                           uid: item.pick.user.uid,
+                        }).catch(() => {
+                          toast(CONSTANT.ERROR_PROFILE_VIEW, {
+                            type: 'warn',
+                          })
                         })
                       }}
                     >
@@ -64,9 +61,12 @@ const PeopleLike: React.FC<IProps> = ({ data, onDetail, onChangeState }) => {
                     <div
                       className={styles['m']}
                       onClick={() => {
-                        setProfileModal({
-                          open: true,
+                        ShowProfileModal({
                           uid: item.pick.user.uid,
+                        }).catch(() => {
+                          toast(CONSTANT.ERROR_PROFILE_VIEW, {
+                            type: 'warn',
+                          })
                         })
                       }}
                     >
@@ -163,17 +163,6 @@ const PeopleLike: React.FC<IProps> = ({ data, onDetail, onChangeState }) => {
           </Flex>
         </ScrollArea>
       </div>
-
-      <ProfileModal
-        uid={profileModal.uid}
-        open={profileModal.open}
-        onClose={() => {
-          setProfileModal({
-            open: false,
-            uid: '',
-          })
-        }}
-      />
     </div>
   )
 }

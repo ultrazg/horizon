@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import styles from './result.module.scss'
 import { useLocation } from 'react-router-dom'
-import { ColorfulShadow, Empty, ProfileModal } from '@/components'
+import { ColorfulShadow, Empty } from '@/components'
 import { search, type searchType } from '@/api/search'
 import { baseUserType } from '@/types/user'
 import { Button, Spinner } from '@radix-ui/themes'
 import { isEmpty } from 'lodash'
+import { toast, ShowProfileModal } from '@/utils'
+import { CONSTANT } from '@/types/constant'
 
 /**
  * 用户搜索结果页
@@ -20,13 +22,6 @@ export const ResultUser: React.FC = () => {
   }>({
     records: [],
     loadMoreKey: {},
-  })
-  const [profileModal, setProfileModal] = useState<{
-    open: boolean
-    uid: string
-  }>({
-    open: false,
-    uid: '',
   })
 
   const onSearch = (loadMore: boolean) => {
@@ -95,9 +90,12 @@ export const ResultUser: React.FC = () => {
                   curPointer
                   circle
                   onClick={() => {
-                    setProfileModal({
-                      open: true,
+                    ShowProfileModal({
                       uid: item.uid,
+                    }).catch(() => {
+                      toast(CONSTANT.ERROR_PROFILE_VIEW, {
+                        type: 'warn',
+                      })
                     })
                   }}
                 />
@@ -124,17 +122,6 @@ export const ResultUser: React.FC = () => {
           </div>
         )}
       </Spinner>
-
-      <ProfileModal
-        uid={profileModal.uid}
-        open={profileModal.open}
-        onClose={() => {
-          setProfileModal({
-            open: false,
-            uid: '',
-          })
-        }}
-      />
     </>
   )
 }

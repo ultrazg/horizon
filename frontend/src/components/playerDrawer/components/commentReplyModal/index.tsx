@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Empty, Modal, ProfileModal, CreateCommentModal } from '@/components'
+import { Empty, Modal, CreateCommentModal } from '@/components'
 import { modalType } from '@/types/modal'
 import styles from './index.module.scss'
 import {
@@ -22,10 +22,17 @@ import {
 } from '@/api/comment'
 import { CommentPrimaryType } from '@/types/comment'
 import dayjs from 'dayjs'
-import { DialogType, ShowMessageDialog, Storage, toast } from '@/utils'
+import {
+  DialogType,
+  ShowMessageDialog,
+  ShowProfileModal,
+  Storage,
+  toast,
+} from '@/utils'
 import { onCommentLikeUpdate } from '@/components/playerDrawer/components/episodeComment'
 import { PaperPlaneIcon, Pencil2Icon } from '@radix-ui/react-icons'
 import VoiceComment from '@/components/playerDrawer/components/voiceComment'
+import { CONSTANT } from '@/types/constant'
 
 type IProps = {
   eid: string
@@ -55,6 +62,7 @@ export const onRemoveCommentFunc = (commentId: string, cb?: () => void) => {
  * @param primaryComment
  * @param open 是否打开
  * @param onClose 关闭弹窗
+ * @param themeColor
  * @constructor
  */
 export const CommentReplyModal: React.FC<IProps> = ({
@@ -74,13 +82,6 @@ export const CommentReplyModal: React.FC<IProps> = ({
   }>({
     total: 0,
     records: [],
-  })
-  const [profileModal, setProfileModal] = useState<{
-    open: boolean
-    uid: string
-  }>({
-    open: false,
-    uid: '',
   })
   const [text, setText] = useState<string>('')
   const [CCM, setCCM] = useState<{
@@ -215,9 +216,12 @@ export const CommentReplyModal: React.FC<IProps> = ({
                     src={primaryComment?.author?.avatar?.picture?.picUrl}
                     fallback={primaryComment?.author?.nickname}
                     onClick={() => {
-                      setProfileModal({
-                        open: true,
+                      ShowProfileModal({
                         uid: primaryComment?.author?.uid,
+                      }).catch(() => {
+                        toast(CONSTANT.ERROR_PROFILE_VIEW, {
+                          type: 'warn',
+                        })
                       })
                     }}
                   />
@@ -305,9 +309,12 @@ export const CommentReplyModal: React.FC<IProps> = ({
                       src={item?.author.avatar.picture.picUrl}
                       fallback="Avatar"
                       onClick={() => {
-                        setProfileModal({
-                          open: true,
+                        ShowProfileModal({
                           uid: item?.author?.uid,
+                        }).catch(() => {
+                          toast(CONSTANT.ERROR_PROFILE_VIEW, {
+                            type: 'warn',
+                          })
                         })
                       }}
                     />
@@ -441,17 +448,6 @@ export const CommentReplyModal: React.FC<IProps> = ({
           </div>
         </ScrollArea>
       </Spinner>
-
-      <ProfileModal
-        uid={profileModal.uid}
-        open={profileModal.open}
-        onClose={() => {
-          setProfileModal({
-            open: false,
-            uid: '',
-          })
-        }}
-      />
 
       <CreateCommentModal
         loading={replyLoading}

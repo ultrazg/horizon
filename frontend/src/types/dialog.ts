@@ -5,4 +5,8 @@ type showStickerModalType = {
   perspective: perspectiveType
 }
 
-export type { showStickerModalType }
+type showProfileModalType = {
+  uid: string
+}
+
+export type { showStickerModalType, showProfileModalType }

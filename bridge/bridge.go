@@ -56,3 +56,7 @@ func (a *App) Shutdown(ctx context.Context) {
 func (a *App) ShowStickerModal(options ShowStickerModalOptions) {
 	r.EventsEmit(a.ctx, "ShowStickerModal", options)
 }
+
+func (a *App) ShowProfileModal(options ShowProfileModalOptions) {
+	r.EventsEmit(a.ctx, "ShowProfileModal", options)
+}

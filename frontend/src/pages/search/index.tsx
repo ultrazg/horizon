@@ -3,13 +3,14 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { Button, Spinner } from '@radix-ui/themes'
 import { search, type searchType } from '@/api/search'
 import styles from './index.module.scss'
-import { toast } from '@/utils'
-import { ColorfulShadow, ProfileModal, Empty } from '@/components'
+import { ShowProfileModal, toast } from '@/utils'
+import { ColorfulShadow, Empty } from '@/components'
 import { baseUserType } from '@/types/user'
 import { EpisodeType } from '@/types/episode'
 import { PodcastType } from '@/types/podcast'
 import { PlayerEpisodeInfoType } from '@/utils/player'
 import { usePlayer } from '@/hooks'
+import { CONSTANT } from '@/types/constant'
 
 export const Search: React.FC = () => {
   const location = useLocation()
@@ -36,13 +37,6 @@ export const Search: React.FC = () => {
   }>({
     records: [],
     loading: false,
-  })
-  const [profileModal, setProfileModal] = useState<{
-    open: boolean
-    uid: string
-  }>({
-    open: false,
-    uid: '',
   })
 
   const goPodcastDetail = (pid: string) => {
@@ -192,9 +186,12 @@ export const Search: React.FC = () => {
                 className={styles['image-container']}
                 title={item.nickname}
                 onClick={() => {
-                  setProfileModal({
-                    open: true,
+                  ShowProfileModal({
                     uid: item.uid,
+                  }).catch(() => {
+                    toast(CONSTANT.ERROR_PROFILE_VIEW, {
+                      type: 'warn',
+                    })
                   })
                 }}
               >
@@ -341,17 +338,6 @@ export const Search: React.FC = () => {
           </div>
         </Spinner>
       </div>
-
-      <ProfileModal
-        uid={profileModal.uid}
-        open={profileModal.open}
-        onClose={() => {
-          setProfileModal({
-            open: false,
-            uid: '',
-          })
-        }}
-      />
     </div>
   )
 }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { ColorfulShadow, ProfileModal } from '@/components'
+import { ColorfulShadow } from '@/components'
 import { useLocation, useNavigate } from 'react-router-dom'
 import {
   AspectRatio,
@@ -31,11 +31,13 @@ import {
   ShowMessageDialog,
   toast,
   showEpisodeDetailModal,
+  ShowProfileModal,
 } from '@/utils'
 import { updateSubscription } from '@/api/subscription'
 import { PodcastBulletinModal } from './components/podcastBulletinModal'
 import { usePlayer } from '@/hooks'
 import { PlayerEpisodeInfoType } from '@/utils/player'
+import { CONSTANT } from '@/types/constant'
 
 export const PodcastDetail: React.FC = () => {
   const { pid } = useLocation().state
@@ -79,13 +81,6 @@ export const PodcastDetail: React.FC = () => {
     title: '',
     topicLabels: null,
     type: '',
-  })
-  const [profileModal, setProfileModal] = useState<{
-    open: boolean
-    uid: string
-  }>({
-    open: false,
-    uid: '',
   })
   const [episodeData, setEpisodeData] = useState<{
     records: EpisodeType[]
@@ -422,9 +417,12 @@ export const PodcastDetail: React.FC = () => {
                     key={item.uid}
                     className={styles['podcaster']}
                     onClick={() => {
-                      setProfileModal({
-                        open: true,
+                      ShowProfileModal({
                         uid: item.uid,
+                      }).catch(() => {
+                        toast(CONSTANT.ERROR_PROFILE_VIEW, {
+                          type: 'warn',
+                        })
                       })
                     }}
                     title={item.nickname}
@@ -603,17 +601,6 @@ export const PodcastDetail: React.FC = () => {
           </div>
         </div>
       </div>
-
-      <ProfileModal
-        uid={profileModal.uid}
-        open={profileModal.open}
-        onClose={() => {
-          setProfileModal({
-            open: false,
-            uid: '',
-          })
-        }}
-      />
 
       <PodcastBulletinModal
         data={bulletinData}

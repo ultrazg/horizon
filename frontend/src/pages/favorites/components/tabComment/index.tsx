@@ -6,11 +6,11 @@ import styles from './index.module.scss'
 import { commentCollectList, commentCollectRemove } from '@/api/favorite'
 import { FavoriteCommentType } from '@/types/comment'
 import dayjs from 'dayjs'
-import { ProfileModal } from '@/components'
 import {
   DialogType,
   showEpisodeDetailModal,
   ShowMessageDialog,
+  ShowProfileModal,
   toast,
 } from '@/utils'
 import { CONSTANT } from '@/types/constant'
@@ -24,13 +24,6 @@ const TabComment: React.FC = () => {
   }>({
     records: [],
     loadMoreKey: '',
-  })
-  const [profileModal, setProfileModal] = useState<{
-    open: boolean
-    uid: string
-  }>({
-    open: false,
-    uid: '',
   })
 
   /**
@@ -115,9 +108,12 @@ const TabComment: React.FC = () => {
                     return toast(CONSTANT.BLOCKED_BY_VIEWER)
                   }
 
-                  setProfileModal({
-                    open: true,
+                  ShowProfileModal({
                     uid: item.author.uid,
+                  }).catch(() => {
+                    toast(CONSTANT.ERROR_PROFILE_VIEW, {
+                      type: 'warn',
+                    })
                   })
                 }}
               />
@@ -129,9 +125,12 @@ const TabComment: React.FC = () => {
                     return toast(CONSTANT.BLOCKED_BY_VIEWER)
                   }
 
-                  setProfileModal({
-                    open: true,
+                  ShowProfileModal({
                     uid: item.author.uid,
+                  }).catch(() => {
+                    toast(CONSTANT.ERROR_PROFILE_VIEW, {
+                      type: 'warn',
+                    })
                   })
                 }}
               >
@@ -246,17 +245,6 @@ const TabComment: React.FC = () => {
           加载更多
         </Button>
       </div>
-
-      <ProfileModal
-        uid={profileModal.uid}
-        open={profileModal.open}
-        onClose={() => {
-          setProfileModal({
-            open: false,
-            uid: '',
-          })
-        }}
-      />
     </>
   )
 }

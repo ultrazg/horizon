@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Avatar, Button } from '@radix-ui/themes'
-import { ProfileModal, Empty } from '@/components'
+import { Empty } from '@/components'
 import { baseUserType } from '@/types/user'
 import { SlSymbleFemale, SlSymbolMale } from 'react-icons/sl'
 import { isEmpty } from 'lodash'
 import styles from './index.module.scss'
+import { toast, ShowProfileModal } from '@/utils'
+import { CONSTANT } from '@/types/constant'
 
 type IProps = {
   data: { records: baseUserType[]; loadMoreKey: {} }
@@ -13,14 +15,6 @@ type IProps = {
 }
 
 export const TabUser: React.FC<IProps> = ({ data, onLoadMore, loading }) => {
-  const [profileModal, setProfileModal] = useState<{
-    open: boolean
-    uid: string
-  }>({
-    open: false,
-    uid: '',
-  })
-
   return (
     <>
       <div className={styles['search-result-user-layout']}>
@@ -30,9 +24,12 @@ export const TabUser: React.FC<IProps> = ({ data, onLoadMore, loading }) => {
             key={item.uid}
             className={styles['search-result-user-item']}
             onClick={() => {
-              setProfileModal({
-                open: true,
+              ShowProfileModal({
                 uid: item.uid,
+              }).catch(() => {
+                toast(CONSTANT.ERROR_PROFILE_VIEW, {
+                  type: 'warn',
+                })
               })
             }}
           >
@@ -80,17 +77,6 @@ export const TabUser: React.FC<IProps> = ({ data, onLoadMore, loading }) => {
           )}
         </div>
       </div>
-
-      <ProfileModal
-        uid={profileModal.uid}
-        open={profileModal.open}
-        onClose={() => {
-          setProfileModal({
-            open: false,
-            uid: '',
-          })
-        }}
-      />
     </>
   )
 }

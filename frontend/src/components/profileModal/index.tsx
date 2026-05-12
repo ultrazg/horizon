@@ -582,8 +582,8 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
                       ShowStickerModal({
                         uid,
                         perspective: renderGender(profileData?.gender),
-                      }).catch((err) => {
-                        toast('无法查看贴纸库', {
+                      }).catch(() => {
+                        toast(CONSTANT.ERROR_STICKER_VIEW, {
                           type: 'warn',
                         })
                       })

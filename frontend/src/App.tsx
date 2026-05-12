@@ -3,9 +3,9 @@ import { router } from './router/routes'
 import { useEffect, useState } from 'react'
 import { SaveLastPlay } from '@/utils'
 import { usePlayer } from '@/hooks'
-import { StickerModal } from '@/components'
+import { StickerModal, ProfileModal } from '@/components'
 import { EventsOn } from '../wailsjs/runtime'
-import { showStickerModalType } from '@/types/dialog'
+import { showProfileModalType, showStickerModalType } from '@/types/dialog'
 import { perspectiveType } from '@/types/user'
 
 function App() {
@@ -18,6 +18,13 @@ function App() {
     open: false,
     uid: '',
     perspective: '我',
+  })
+  const [profileModalOptions, setProfileModalOptions] = useState<{
+    open: boolean
+    uid: string
+  }>({
+    open: false,
+    uid: '',
   })
 
   useEffect(() => {
@@ -32,8 +39,19 @@ function App() {
       },
     )
 
+    const profileModalFunc = EventsOn(
+      'ShowProfileModal',
+      (data: showProfileModalType) => {
+        setProfileModalOptions({
+          open: true,
+          uid: data.uid,
+        })
+      },
+    )
+
     return () => {
       stickerModalFunc()
+      profileModalFunc()
     }
   }, [])
 
@@ -54,6 +72,17 @@ function App() {
             uid: '',
             open: false,
             perspective: '我',
+          })
+        }}
+      />
+
+      <ProfileModal
+        uid={profileModalOptions.uid}
+        open={profileModalOptions.open}
+        onClose={() => {
+          setProfileModalOptions({
+            uid: '',
+            open: false,
           })
         }}
       />

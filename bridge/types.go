@@ -84,3 +84,7 @@ type ShowStickerModalOptions struct {
 	Uid         string `json:"uid"`
 	Perspective string `json:"perspective"`
 }
+
+type ShowProfileModalOptions struct {
+	Uid string `json:"uid"`
+}

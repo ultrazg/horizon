@@ -23,4 +23,6 @@ export enum CONSTANT {
   PLAYER_LIKED = '收藏',
   PLAYER_UNLIKED = '取消收藏',
   CREATE_EPISODE_CLAP = '标记精彩时刻',
+  ERROR_STICKER_VIEW = '无法查看贴纸库',
+  ERROR_PROFILE_VIEW = '无法查看个人信息',
 }

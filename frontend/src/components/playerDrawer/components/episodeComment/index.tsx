@@ -20,7 +20,7 @@ import {
 import { IoMdThumbsUp, IoMdMicrophone } from 'react-icons/io'
 import { useWindowSize, usePlayer } from '@/hooks'
 import { CommentReplyModal } from '@/components/playerDrawer/components/commentReplyModal'
-import { ProfileModal, CreateCommentModal } from '@/components'
+import { CreateCommentModal } from '@/components'
 import {
   commentPrimary,
   commentPrimaryType,
@@ -36,6 +36,7 @@ import {
   DialogType,
   hexToRgba,
   ShowMessageDialog,
+  ShowProfileModal,
   Storage,
   toast,
 } from '@/utils'
@@ -48,6 +49,7 @@ import { isEmpty } from 'lodash'
 import HighlightTimeStrings from '@/components/playerDrawer/components/highlightTimeStrings'
 import { onRemoveCommentFunc } from '@/components/playerDrawer/components/commentReplyModal'
 import VoiceComment from '@/components/playerDrawer/components/voiceComment'
+import { CONSTANT } from '@/types/constant'
 
 type IProps = {
   open: boolean
@@ -83,13 +85,6 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open, themeColor }) => {
   }>({
     total: 0,
     records: [],
-  })
-  const [profileModal, setProfileModal] = useState<{
-    open: boolean
-    uid: string
-  }>({
-    open: false,
-    uid: '',
   })
   const [loadMoreKey, setLoadMoreKey] = useState<any>({})
   const [replyModal, setReplyModal] = useState<{
@@ -341,9 +336,12 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open, themeColor }) => {
                 <div className={styles['player-comment-author']}>
                   <div
                     onClick={() => {
-                      setProfileModal({
-                        open: true,
+                      ShowProfileModal({
                         uid: item.author.uid,
+                      }).catch(() => {
+                        toast(CONSTANT.ERROR_PROFILE_VIEW, {
+                          type: 'warn',
+                        })
                       })
                     }}
                   >
@@ -356,9 +354,12 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open, themeColor }) => {
                   <div>
                     <span
                       onClick={() => {
-                        setProfileModal({
-                          open: true,
+                        ShowProfileModal({
                           uid: item.author.uid,
+                        }).catch(() => {
+                          toast(CONSTANT.ERROR_PROFILE_VIEW, {
+                            type: 'warn',
+                          })
                         })
                       }}
                     >
@@ -628,17 +629,6 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open, themeColor }) => {
           setReplyModal({
             primaryComment: {},
             open: false,
-          })
-        }}
-      />
-
-      <ProfileModal
-        uid={profileModal.uid}
-        open={profileModal.open}
-        onClose={() => {
-          setProfileModal({
-            open: false,
-            uid: '',
           })
         }}
       />

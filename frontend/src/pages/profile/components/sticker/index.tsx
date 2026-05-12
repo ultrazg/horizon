@@ -6,6 +6,7 @@ import { userType } from '@/types/user'
 import { ShowStickerModal, Storage, toast } from '@/utils'
 import { stickerType } from '@/types/sticker'
 import styles from './index.module.scss'
+import { CONSTANT } from '@/types/constant'
 
 export const Sticker = () => {
   const [data, setData] = useState<{
@@ -52,7 +53,7 @@ export const Sticker = () => {
             uid,
             perspective: '我',
           }).catch((err) => {
-            toast('无法查看贴纸库', {
+            toast(CONSTANT.ERROR_STICKER_VIEW, {
               type: 'warn',
             })
           })
