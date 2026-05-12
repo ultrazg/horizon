@@ -52,3 +52,7 @@ func (a *App) Shutdown(ctx context.Context) {
 		a.logFile.Close()
 	}
 }
+
+func (a *App) ShowStickerModal(options ShowStickerModalOptions) {
+	r.EventsEmit(a.ctx, "ShowStickerModal", options)
+}

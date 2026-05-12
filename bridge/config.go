@@ -69,7 +69,7 @@ func setDefaults() {
 }
 
 func (a *App) ReadConfig(key string) any {
-	log.Printf("读取配置: %s = %v", key, viper.Get(key))
+	log.Printf("读取配置: %s", key)
 
 	return viper.Get(key)
 }

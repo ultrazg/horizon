@@ -17,6 +17,7 @@ export const Empty: React.FC<IProps> = ({ description }) => {
         padding: '1rem 0',
         userSelect: 'none',
         WebkitUserSelect: 'none',
+        fontStyle: 'italic',
       }}
     >
       {description || '暂无数据'}

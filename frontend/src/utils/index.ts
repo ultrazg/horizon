@@ -11,6 +11,7 @@ import {
   OpenLogDir,
   Log,
   ShowChangelog,
+  ShowStickerModal,
 } from 'wailsjs/go/bridge/App'
 import { WindowSetLightTheme, WindowSetDarkTheme } from 'wailsjs/runtime'
 import { ShowMessageDialog, DialogType } from './dialog'
@@ -44,4 +45,5 @@ export {
   Log,
   ShowChangelog,
   hexToRgba,
+  ShowStickerModal,
 }

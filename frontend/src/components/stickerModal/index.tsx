@@ -16,10 +16,11 @@ import { stickerType } from '@/types/sticker'
 import './index.modules.scss'
 import dayjs from 'dayjs'
 import { sticker } from '@/api/sticker'
+import { perspectiveType } from '@/types/user'
 
 type IProps = {
   uid: string
-  perspective: '我' | '他' | '她' | 'TA'
+  perspective: perspectiveType
 } & modalType
 
 /**
@@ -107,7 +108,7 @@ export const StickerModal: React.FC<IProps> = ({
       setStickerLists([])
       setTotal(0)
     }
-  }, [open])
+  }, [open, uid])
 
   return (
     <Modal

@@ -18,13 +18,7 @@ import {
 import { modalType } from '@/types/modal'
 import { useWindowSize, usePlayer } from '@/hooks'
 import styles from './index.module.scss'
-import {
-  ColorfulShadow,
-  MyDropdownMenu,
-  StickerModal,
-  PickModal,
-  Empty,
-} from '@/components'
+import { ColorfulShadow, MyDropdownMenu, PickModal, Empty } from '@/components'
 import {
   SlBubble,
   SlEarphones,
@@ -33,7 +27,13 @@ import {
 } from 'react-icons/sl'
 import { getProfile } from '@/api/profile'
 import { getUserStats } from '@/api/user'
-import { DialogType, ShowMessageDialog, Storage, toast } from '@/utils'
+import {
+  DialogType,
+  ShowMessageDialog,
+  ShowStickerModal,
+  Storage,
+  toast,
+} from '@/utils'
 import { UserProfileType } from '@/types/profile'
 import { renderGender } from '@/utils/string'
 import { userStats, userType } from '@/types/user'
@@ -66,7 +66,6 @@ type IProps = {
 export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
   const userInfo: userType = Storage.get('user_info')
   const { width, height } = useWindowSize()
-  const [stickerModalOpen, setStickerModalOpen] = useState<boolean>(false)
   const [dropDownMenuOpen, setDropDownMenuOpen] = useState<boolean>(false)
   const [profileData, setProfileData] = useState<UserProfileType>()
   const [stats, setStats] = useState<userStats>({
@@ -580,7 +579,14 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
                   <Card
                     className={styles['sticker-card']}
                     onClick={() => {
-                      setStickerModalOpen(true)
+                      ShowStickerModal({
+                        uid,
+                        perspective: renderGender(profileData?.gender),
+                      }).catch((err) => {
+                        toast('无法查看贴纸库', {
+                          type: 'warn',
+                        })
+                      })
                     }}
                   >
                     <div
@@ -662,15 +668,6 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
               ))}
             </div>
           </div>
-
-          <StickerModal
-            uid={uid}
-            perspective={renderGender(profileData?.gender)}
-            open={stickerModalOpen}
-            onClose={() => {
-              setStickerModalOpen(false)
-            }}
-          />
 
           <PickModal
             perspective={renderGender(profileData?.gender)}

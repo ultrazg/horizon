@@ -79,3 +79,8 @@ type ShowChangelogResult struct {
 	Err  string `json:"err"`
 	Info string `json:"info"`
 }
+
+type ShowStickerModalOptions struct {
+	Uid         string `json:"uid"`
+	Perspective string `json:"perspective"`
+}

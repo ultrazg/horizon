@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { Card } from '@radix-ui/themes'
 import { ChevronRightIcon } from '@radix-ui/react-icons'
-import { StickerModal } from '@/components'
 import { sticker } from '@/api/sticker'
 import { userType } from '@/types/user'
-import { Storage } from '@/utils'
+import { ShowStickerModal, Storage, toast } from '@/utils'
 import { stickerType } from '@/types/sticker'
 import styles from './index.module.scss'
 
 export const Sticker = () => {
-  const [stickerModalOpen, setStickerModalOpen] = useState<boolean>(false)
   const [data, setData] = useState<{
     records: stickerType[]
     total: number
@@ -50,7 +48,14 @@ export const Sticker = () => {
       <Card
         className={styles['sticker-card']}
         onClick={() => {
-          setStickerModalOpen(true)
+          ShowStickerModal({
+            uid,
+            perspective: '我',
+          }).catch((err) => {
+            toast('无法查看贴纸库', {
+              type: 'warn',
+            })
+          })
         }}
       >
         <div
@@ -67,15 +72,6 @@ export const Sticker = () => {
           最新：{data.records.length === 0 ? '-' : data.records[0].name}
         </div>
       </Card>
-
-      <StickerModal
-        uid={uid}
-        perspective="我"
-        open={stickerModalOpen}
-        onClose={() => {
-          setStickerModalOpen(false)
-        }}
-      />
     </div>
   )
 }

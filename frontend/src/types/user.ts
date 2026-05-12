@@ -31,6 +31,8 @@ type baseUserType = {
 
 type genderType = 'MALE' | 'FEMALE'
 
+type perspectiveType = '我' | '他' | '她' | 'TA'
+
 type wechatUserInfoType = {
   nickName?: string
 }
@@ -70,4 +72,5 @@ export type {
   userPreferenceType,
   genderType,
   baseUserType,
+  perspectiveType,
 }
