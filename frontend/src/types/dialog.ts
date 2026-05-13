@@ -9,4 +9,13 @@ type showProfileModalType = {
   uid: string
 }
 
-export type { showStickerModalType, showProfileModalType }
+type showSubscriptionModalType = {
+  uid: string
+  perspective: perspectiveType
+}
+
+export type {
+  showStickerModalType,
+  showProfileModalType,
+  showSubscriptionModalType,
+}

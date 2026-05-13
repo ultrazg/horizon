@@ -60,3 +60,7 @@ func (a *App) ShowStickerModal(options ShowStickerModalOptions) {
 func (a *App) ShowProfileModal(options ShowProfileModalOptions) {
 	r.EventsEmit(a.ctx, "ShowProfileModal", options)
 }
+
+func (a *App) ShowSubscriptionModal(options ShowSubscriptionModalOptions) {
+	r.EventsEmit(a.ctx, "ShowSubscriptionModal", options)
+}

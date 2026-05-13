@@ -3,9 +3,13 @@ import { router } from './router/routes'
 import { useEffect, useState } from 'react'
 import { SaveLastPlay } from '@/utils'
 import { usePlayer } from '@/hooks'
-import { StickerModal, ProfileModal } from '@/components'
+import { StickerModal, ProfileModal, SubscriptionModal } from '@/components'
 import { EventsOn } from '../wailsjs/runtime'
-import { showProfileModalType, showStickerModalType } from '@/types/dialog'
+import {
+  showProfileModalType,
+  showStickerModalType,
+  showSubscriptionModalType,
+} from '@/types/dialog'
 import { perspectiveType } from '@/types/user'
 
 function App() {
@@ -25,6 +29,15 @@ function App() {
   }>({
     open: false,
     uid: '',
+  })
+  const [subscriptionModalOptions, setSubscriptionModalOptions] = useState<{
+    open: boolean
+    uid: string
+    perspective: perspectiveType
+  }>({
+    open: false,
+    uid: '',
+    perspective: '我',
   })
 
   useEffect(() => {
@@ -49,9 +62,21 @@ function App() {
       },
     )
 
+    const subscriptionModalFunc = EventsOn(
+      'ShowSubscriptionModal',
+      (data: showSubscriptionModalType) => {
+        setSubscriptionModalOptions({
+          open: true,
+          uid: data.uid,
+          perspective: data.perspective,
+        })
+      },
+    )
+
     return () => {
       stickerModalFunc()
       profileModalFunc()
+      subscriptionModalFunc()
     }
   }, [])
 
@@ -83,6 +108,19 @@ function App() {
           setProfileModalOptions({
             uid: '',
             open: false,
+          })
+        }}
+      />
+
+      <SubscriptionModal
+        uid={subscriptionModalOptions.uid}
+        perspective={subscriptionModalOptions.perspective}
+        open={subscriptionModalOptions.open}
+        onClose={() => {
+          setSubscriptionModalOptions({
+            uid: '',
+            open: false,
+            perspective: '我',
           })
         }}
       />

@@ -31,6 +31,7 @@ import {
   DialogType,
   ShowMessageDialog,
   ShowStickerModal,
+  ShowSubscriptionModal,
   Storage,
   toast,
 } from '@/utils'
@@ -425,7 +426,26 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
                     size="2"
                     orientation="vertical"
                   />
-                  <div className={styles['chunk']}>
+                  <div
+                    style={{ cursor: 'pointer' }}
+                    className={styles['chunk']}
+                    onClick={() => {
+                      if (profileData?.uid) {
+                        ShowSubscriptionModal({
+                          uid: profileData?.uid,
+                          perspective: renderGender(profileData?.gender),
+                        }).catch(() => {
+                          toast(CONSTANT.ERROR_SUBSCRIPTIONS_VIEW, {
+                            type: 'warn',
+                          })
+                        })
+                      } else {
+                        toast(CONSTANT.ERROR_SUBSCRIPTIONS_VIEW, {
+                          type: 'warn',
+                        })
+                      }
+                    }}
+                  >
                     <p>{stats.subscriptionCount}</p>
                     <p>订阅</p>
                   </div>

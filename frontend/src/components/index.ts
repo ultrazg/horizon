@@ -9,6 +9,7 @@ import { StickerModal } from './stickerModal'
 import { PickModal } from './pickModal'
 import { Empty } from './empty'
 import { CreateCommentModal } from './createCommentModal'
+import { SubscriptionModal } from './subscriptionModal'
 
 export {
   PlayController,
@@ -21,5 +22,6 @@ export {
   StickerModal,
   PickModal,
   Empty,
+  SubscriptionModal,
   CreateCommentModal,
 }
