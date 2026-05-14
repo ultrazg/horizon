@@ -13,6 +13,7 @@ import { modalType } from '@/types/modal'
  * @param width 宽度
  * @param options 附加操作
  * @param hiddenCloseBtn 是否显示关闭按钮
+ * @param backgroundImage 背景图片
  * @constructor
  */
 export const Modal: React.FC<modalType> = ({
@@ -23,6 +24,7 @@ export const Modal: React.FC<modalType> = ({
   width,
   options,
   hiddenCloseBtn = false,
+  backgroundImage,
 }) => {
   // https://github.com/radix-ui/primitives/discussions/1997
   const avoidDefaultDomBehavior = (e: Event) => {
@@ -38,40 +40,105 @@ export const Modal: React.FC<modalType> = ({
         onPointerDownOutside={avoidDefaultDomBehavior}
         onInteractOutside={avoidDefaultDomBehavior}
         maxWidth={width}
+        style={{
+          position: 'relative',
+          overflow: 'hidden',
+          background: 'white',
+        }}
       >
-        {title ? (
-          <Dialog.Title
-            style={
-              {
-                '--wails-draggable': 'drag',
-                userSelect: 'none',
-                cursor: 'default',
-              } as any
-            }
+        {backgroundImage && (
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              zIndex: 0,
+              pointerEvents: 'none',
+            }}
           >
-            {title}
-          </Dialog.Title>
-        ) : (
-          <VisuallyHidden.Root>
-            <Dialog.Title />
-          </VisuallyHidden.Root>
+            <div
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                height: '50%',
+                backgroundImage: `url(${backgroundImage})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                filter: 'blur(20px)',
+                transform: 'scale(1.08)',
+                opacity: 0.55,
+              }}
+            />
+            <div
+              style={{
+                position: 'absolute',
+                top: '45%',
+                left: 0,
+                right: 0,
+                height: '40%',
+                background:
+                  'linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,1))',
+              }}
+            />
+            <div
+              style={{
+                position: 'absolute',
+                top: '60%',
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: 'white',
+              }}
+            />
+          </div>
         )}
 
-        <VisuallyHidden.Root>
-          <Dialog.Description />
-        </VisuallyHidden.Root>
-
-        {children}
-
-        <Flex
-          gap="3"
-          mt="4"
-          justify="end"
-        >
-          {options}
-
-          {hiddenCloseBtn ? (
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          {title ? (
+            <Dialog.Title
+              style={
+                {
+                  '--wails-draggable': 'drag',
+                  userSelect: 'none',
+                  cursor: 'default',
+                } as any
+              }
+            >
+              {title}
+            </Dialog.Title>
+          ) : (
             <VisuallyHidden.Root>
+              <Dialog.Title />
+            </VisuallyHidden.Root>
+          )}
+
+          <VisuallyHidden.Root>
+            <Dialog.Description />
+          </VisuallyHidden.Root>
+
+          {children}
+
+          <Flex
+            gap="3"
+            mt="4"
+            justify="end"
+          >
+            {options}
+
+            {hiddenCloseBtn ? (
+              <VisuallyHidden.Root>
+                <Dialog.Close>
+                  <Button
+                    variant="soft"
+                    color="gray"
+                  >
+                    <MinusCircledIcon />
+                    关闭
+                  </Button>
+                </Dialog.Close>
+              </VisuallyHidden.Root>
+            ) : (
               <Dialog.Close>
                 <Button
                   variant="soft"
@@ -81,19 +148,9 @@ export const Modal: React.FC<modalType> = ({
                   关闭
                 </Button>
               </Dialog.Close>
-            </VisuallyHidden.Root>
-          ) : (
-            <Dialog.Close>
-              <Button
-                variant="soft"
-                color="gray"
-              >
-                <MinusCircledIcon />
-                关闭
-              </Button>
-            </Dialog.Close>
-          )}
-        </Flex>
+            )}
+          </Flex>
+        </div>
       </Dialog.Content>
     </Dialog.Root>
   )

@@ -10,6 +10,7 @@ import { PickModal } from './pickModal'
 import { Empty } from './empty'
 import { CreateCommentModal } from './createCommentModal'
 import { SubscriptionModal } from './subscriptionModal'
+import { PodcastDetailModal } from './podcastDetailModal'
 
 export {
   PlayController,
@@ -24,4 +25,5 @@ export {
   Empty,
   SubscriptionModal,
   CreateCommentModal,
+  PodcastDetailModal,
 }

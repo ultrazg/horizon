@@ -14,6 +14,7 @@ import {
   ShowStickerModal,
   ShowProfileModal,
   ShowSubscriptionModal,
+  ShowPodcastDetailModal,
 } from 'wailsjs/go/bridge/App'
 import { WindowSetLightTheme, WindowSetDarkTheme } from 'wailsjs/runtime'
 import { ShowMessageDialog, DialogType } from './dialog'
@@ -50,4 +51,5 @@ export {
   ShowStickerModal,
   ShowProfileModal,
   ShowSubscriptionModal,
+  ShowPodcastDetailModal,
 }

@@ -4,27 +4,22 @@ import { QuoteIcon, UpdateIcon } from '@radix-ui/react-icons'
 import { Button, Skeleton } from '@radix-ui/themes'
 import styles from './index.module.scss'
 import { PopularType, TargetType } from '@/pages/home'
-import { showEpisodeDetailModal } from '@/utils'
+import { showEpisodeDetailModal, ShowPodcastDetailModal, toast } from '@/utils'
 import { usePlayer } from '@/hooks'
 import { PlayerEpisodeInfoType } from '@/utils/player'
+import { CONSTANT } from '@/types/constant'
 
 type IProps = {
   data: PopularType
   loading: boolean
   onRefresh: () => void
-  onDetail: (pid: string) => void
 }
 
 /**
  * 发现-大家都在听
  * @constructor
  */
-const PopularPart: React.FC<IProps> = ({
-  data,
-  loading,
-  onRefresh,
-  onDetail,
-}) => {
+const PopularPart: React.FC<IProps> = ({ data, loading, onRefresh }) => {
   const player = usePlayer()
 
   return (
@@ -67,7 +62,13 @@ const PopularPart: React.FC<IProps> = ({
                 <div className={styles['info-box']}>
                   <p
                     onClick={() => {
-                      onDetail(item.episode.podcast.pid)
+                      ShowPodcastDetailModal({
+                        pid: item.episode.podcast.pid,
+                      }).catch(() => {
+                        toast(CONSTANT.ERROR_PODCAST_DETAIL_VIEW, {
+                          type: 'warn',
+                        })
+                      })
                     }}
                   >
                     {item.episode.podcast.title}

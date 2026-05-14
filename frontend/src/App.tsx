@@ -3,12 +3,18 @@ import { router } from './router/routes'
 import { useEffect, useState } from 'react'
 import { SaveLastPlay } from '@/utils'
 import { usePlayer } from '@/hooks'
-import { StickerModal, ProfileModal, SubscriptionModal } from '@/components'
+import {
+  StickerModal,
+  ProfileModal,
+  SubscriptionModal,
+  PodcastDetailModal,
+} from '@/components'
 import { EventsOn } from '../wailsjs/runtime'
 import {
   showProfileModalType,
   showStickerModalType,
   showSubscriptionModalType,
+  showPodcastDetailModalType,
 } from '@/types/dialog'
 import { perspectiveType } from '@/types/user'
 
@@ -38,6 +44,13 @@ function App() {
     open: false,
     uid: '',
     perspective: '我',
+  })
+  const [podcastDetailModalOptions, setPodcastDetailModalOptions] = useState<{
+    open: boolean
+    pid: string
+  }>({
+    open: false,
+    pid: '',
   })
 
   useEffect(() => {
@@ -73,10 +86,21 @@ function App() {
       },
     )
 
+    const podcastDetailModalFunc = EventsOn(
+      'ShowPodcastDetailModal',
+      (data: showPodcastDetailModalType) => {
+        setPodcastDetailModalOptions({
+          open: true,
+          pid: data.pid,
+        })
+      },
+    )
+
     return () => {
       stickerModalFunc()
       profileModalFunc()
       subscriptionModalFunc()
+      podcastDetailModalFunc()
     }
   }, [])
 
@@ -121,6 +145,17 @@ function App() {
             uid: '',
             open: false,
             perspective: '我',
+          })
+        }}
+      />
+
+      <PodcastDetailModal
+        pid={podcastDetailModalOptions.pid}
+        open={podcastDetailModalOptions.open}
+        onClose={() => {
+          setPodcastDetailModalOptions({
+            pid: '',
+            open: false,
           })
         }}
       />

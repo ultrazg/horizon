@@ -26,4 +26,5 @@ export enum CONSTANT {
   ERROR_STICKER_VIEW = '无法查看贴纸库',
   ERROR_PROFILE_VIEW = '无法查看个人信息',
   ERROR_SUBSCRIPTIONS_VIEW = '无法查看订阅信息',
+  ERROR_PODCAST_DETAIL_VIEW = '无法查看播客详情',
 }

@@ -93,3 +93,7 @@ type ShowSubscriptionModalOptions struct {
 	Uid         string `json:"uid"`
 	Perspective string `json:"perspective"`
 }
+
+type ShowPodcastDetailModalOptions struct {
+	Pid string `json:"pid"`
+}

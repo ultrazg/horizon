@@ -14,8 +14,13 @@ type showSubscriptionModalType = {
   perspective: perspectiveType
 }
 
+type showPodcastDetailModalType = {
+  pid: string
+}
+
 export type {
   showStickerModalType,
   showProfileModalType,
   showSubscriptionModalType,
+  showPodcastDetailModalType,
 }

@@ -64,3 +64,7 @@ func (a *App) ShowProfileModal(options ShowProfileModalOptions) {
 func (a *App) ShowSubscriptionModal(options ShowSubscriptionModalOptions) {
 	r.EventsEmit(a.ctx, "ShowSubscriptionModal", options)
 }
+
+func (a *App) ShowPodcastDetailModal(options ShowPodcastDetailModalOptions) {
+	r.EventsEmit(a.ctx, "ShowPodcastDetailModal", options)
+}

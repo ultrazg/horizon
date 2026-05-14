@@ -9,6 +9,7 @@ type modalType = {
   children?: React.ReactNode
   options?: React.ReactNode
   hiddenCloseBtn?: boolean
+  backgroundImage?: string
 }
 
 export type { modalType }
