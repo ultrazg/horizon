@@ -1,0 +1,52 @@
+@import '@/assets/global/_variables.scss';
+
+.chunk {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+
+  .left {
+    width: 9rem;
+    height: 9rem;
+  }
+
+  .middle {
+    flex: 1;
+    cursor: default;
+    display: flex;
+    flex-direction: column;
+
+    p{
+      &:first-child{
+        height: 2rem;
+        font-weight: bold;
+        font-size: 1.2rem;
+        overflow: hidden;
+        display: -webkit-box;
+        line-clamp: 1;
+        box-orient: vertical;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+      }
+
+      &:nth-child(2){
+        height: 4.2rem;
+        overflow: hidden;
+        display: -webkit-box;
+        line-clamp: 3;
+        box-orient: vertical;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+      }
+
+      &:last-child{
+        margin-top: auto;
+        color: $secondary-font-color;
+      }
+    }
+  }
+
+  .right {
+    width: 5rem;
+  }
+}
