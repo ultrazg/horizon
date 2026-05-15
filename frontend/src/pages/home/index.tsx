@@ -227,9 +227,6 @@ export const Home: React.FC = () => {
         onRefresh={() => {
           onRefreshEpisodeCommend()
         }}
-        onDetail={(pid) => {
-          goPodcastDetail(pid)
-        }}
       />
       {/* 精选节目 */}
       <Recommended

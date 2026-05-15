@@ -94,7 +94,7 @@ export const Modal: React.FC<modalType> = ({
           </div>
         )}
 
-        <div style={{ position: 'relative', zIndex: 1 }}>
+        <div style={backgroundImage ? { position: 'relative', zIndex: 1 } : {}}>
           {title ? (
             <Dialog.Title
               style={
