@@ -37,7 +37,7 @@ export const SubscriptionModal: React.FC<IProps> = ({
       loadMoreKey,
     })
       .then((res) => {
-        setRecords(res.data.data)
+        setRecords([...records, ...res.data.data])
         if (res.data?.loadMoreKey) {
           setLoadMoreKey({
             skip: res.data.loadMoreKey.skip,
@@ -80,6 +80,7 @@ export const SubscriptionModal: React.FC<IProps> = ({
             onClick={() => {
               fetchData({ skip: loadMoreKey.skip })
             }}
+            loading={loading}
           >
             <UpdateIcon />
             加载更多
@@ -87,48 +88,44 @@ export const SubscriptionModal: React.FC<IProps> = ({
         )
       }
     >
-      <Spinner loading={loading}>
-        {records.length === 0 ? (
-          <Empty />
-        ) : (
-          <div
-            style={{
-              maxHeight: height,
-              overflowY: 'scroll',
-              padding: '18px 0 0 18px',
-            }}
-          >
-            {records.map((item) => (
-              <div
-                className={styles['chunk']}
-                key={item.pid}
-              >
-                <div className={styles['left']}>
-                  <ColorfulShadow src={item.image.picUrl} />
-                </div>
-                <div className={styles['middle']}>
-                  <p title={item.title}>{item.title}</p>
-                  <p title={item.description}>{item.description}</p>
-                  <p>
-                    {`${item.subscriptionCount} 人订阅 · ${dayjs(item.latestEpisodePubDate).format('YYYY/MM/DD')} 更新`}
-                  </p>
-                </div>
-                <div className={styles['right']}>
-                  <Button
-                    variant="soft"
-                    color={
-                      item.subscriptionStatus === 'ON' ? 'gray' : undefined
-                    }
-                  >
-                    {item.subscriptionStatus === 'ON' ? null : <PlusIcon />}
-                    {item.subscriptionStatus === 'ON' ? '已订阅' : '订阅'}
-                  </Button>
-                </div>
+      {records.length === 0 ? (
+        <Empty />
+      ) : (
+        <div
+          style={{
+            maxHeight: height,
+            overflowY: 'scroll',
+            padding: '18px 18px 0 18px',
+          }}
+        >
+          {records.map((item) => (
+            <div
+              className={styles['chunk']}
+              key={item.pid}
+            >
+              <div className={styles['left']}>
+                <ColorfulShadow src={item.image.picUrl} />
               </div>
-            ))}
-          </div>
-        )}
-      </Spinner>
+              <div className={styles['middle']}>
+                <p title={item.title}>{item.title}</p>
+                <p title={item.description}>{item.description}</p>
+                <p>
+                  {`${item.subscriptionCount} 人订阅 · ${dayjs(item.latestEpisodePubDate).format('YYYY/MM/DD')} 更新`}
+                </p>
+              </div>
+              <div className={styles['right']}>
+                <Button
+                  variant="soft"
+                  color={item.subscriptionStatus === 'ON' ? 'gray' : undefined}
+                >
+                  {item.subscriptionStatus === 'ON' ? null : <PlusIcon />}
+                  {item.subscriptionStatus === 'ON' ? '已订阅' : '订阅'}
+                </Button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </Modal>
   )
 }
