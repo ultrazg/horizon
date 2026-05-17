@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { Spinner } from '@radix-ui/themes'
+import { Spinner, Button } from '@radix-ui/themes'
 import { Modal } from '@/components'
 import { modalType } from '@/types/modal'
 import { podcastDetail } from '@/api/podcast'
 import { PodcastType } from '@/types/podcast'
-import { useWindowSize } from '@/hooks'
+import { useSystemTheme, useWindowSize } from '@/hooks'
+import styles from './index.module.scss'
+import { PlusIcon } from '@radix-ui/react-icons'
+import { DialogType, ShowMessageDialog, toast } from '@/utils'
+import { updateSubscription } from '@/api/subscription'
+import dayjs from 'dayjs'
+import { ThemeMode } from '@/layouts/theme'
 
 type IProps = {
   pid: string
@@ -15,6 +21,7 @@ export const PodcastDetailModal: React.FC<IProps> = ({
   open,
   onClose,
 }) => {
+  const theme: ThemeMode = useSystemTheme()
   const height = useWindowSize().height
   const [loading, setLoading] = useState<boolean>(false)
   const [data, setData] = useState<PodcastType>()
@@ -34,6 +41,54 @@ export const PodcastDetailModal: React.FC<IProps> = ({
       })
   }
 
+  /**
+   * 更新订阅
+   * @param pid 节目id
+   * @param podcastTitle 节目标题
+   * @param mode 是否订阅
+   */
+  function onUpdateSubscription(
+    pid: string,
+    podcastTitle: string,
+    mode: 'ON' | 'OFF',
+  ): void {
+    const params = {
+      pid,
+      mode,
+    }
+    let toastText = '订阅成功'
+
+    if (mode === 'OFF') {
+      toastText = '取消订阅成功'
+      ShowMessageDialog(
+        DialogType.QUESTION,
+        '提示',
+        `确定不再订阅「${podcastTitle}」吗？`,
+      ).then((res) => {
+        if (res === 'Yes' || res === '是') {
+          updateSubscription(params)
+            .then(() => {
+              toast(toastText, { duration: 1000 })
+              fetchData()
+            })
+            .catch(() => {
+              toast('操作失败')
+            })
+        }
+      })
+    } else {
+      updateSubscription(params)
+        .then(() => {
+          toast(toastText, { duration: 1000 }, () => {
+            fetchData()
+          })
+        })
+        .catch(() => {
+          toast('操作失败')
+        })
+    }
+  }
+
   useEffect(() => {
     if (open) {
       fetchData()
@@ -46,10 +101,60 @@ export const PodcastDetailModal: React.FC<IProps> = ({
       open={open}
       onClose={onClose}
       backgroundImage={data?.image.picUrl}
+      options={
+        <Button
+          variant="soft"
+          onClick={() => {
+            onUpdateSubscription(
+              data?.pid || '',
+              data?.title || '',
+              data?.subscriptionStatus === 'ON' ? 'OFF' : 'ON',
+            )
+          }}
+          color={data?.subscriptionStatus === 'ON' ? 'gray' : undefined}
+        >
+          {data?.subscriptionStatus === 'ON' ? null : <PlusIcon />}
+          {data?.subscriptionStatus === 'ON' ? '已订阅' : '订阅'}
+        </Button>
+      }
     >
       <Spinner loading={loading}>
         <div style={{ maxHeight: height * 0.6, overflowY: 'auto' }}>
-          {data?.title}
+          <div className={styles['top']}>
+            <img
+              className={styles['podcast-cover']}
+              src={data?.image.picUrl}
+              alt={data?.title}
+            />
+
+            <div className={styles['podcast-info']}>
+              <h2 title={data?.title}>{data?.title}</h2>
+              <p title={data?.brief}>{data?.brief}</p>
+              <div className={styles['subscription']}>
+                {`${data?.subscriptionCount} 人订阅 · ${dayjs(data?.latestEpisodePubDate).format('YYYY/MM/DD')} 更新`}
+              </div>
+            </div>
+          </div>
+
+          <div className={styles['podcast-description']}>
+            <pre>{data?.description}</pre>
+          </div>
+
+          <h4
+            style={{
+              color: theme === 'dark' ? data?.color.dark : data?.color.light,
+            }}
+          >
+            节目荣誉墙
+          </h4>
+
+          <h4
+            style={{
+              color: theme === 'dark' ? data?.color.dark : data?.color.light,
+            }}
+          >
+            联系方式
+          </h4>
         </div>
       </Spinner>
     </Modal>
