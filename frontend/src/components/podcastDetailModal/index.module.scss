@@ -1,0 +1,64 @@
+@import '@/assets/global/_variables.scss';
+@import '@/assets/global/_common.scss';
+
+.top {
+  display: flex;
+  gap: 1rem;
+  cursor: default;
+
+  .podcast-cover {
+    width: 12rem;
+    height: 12rem;
+    border-radius: 6px;
+  }
+
+  .podcast-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 12rem;
+
+    h2 {
+      height: 2rem;
+      overflow: hidden;
+      display: -webkit-box;
+      line-clamp: 1;
+      box-orient: vertical;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 1;
+    }
+
+    p {
+      margin-top: 0.5rem;
+      height: 4.5rem;
+      overflow: hidden;
+      display: -webkit-box;
+      line-clamp: 3;
+      box-orient: vertical;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+      color: $secondary-font-color;
+    }
+
+    .subscription {
+      margin-top: auto;
+    }
+  }
+}
+
+h4 {
+  @include no-select;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.podcast-description {
+  margin-top: 2rem;
+
+  pre {
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+}

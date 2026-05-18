@@ -3,6 +3,8 @@ import { Button, Dialog, Flex } from '@radix-ui/themes'
 import { MinusCircledIcon } from '@radix-ui/react-icons'
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden'
 import { modalType } from '@/types/modal'
+import { ThemeMode } from '@/layouts/theme'
+import { useSystemTheme } from '@/hooks'
 
 /**
  * @description 模态框
@@ -26,6 +28,8 @@ export const Modal: React.FC<modalType> = ({
   hiddenCloseBtn = false,
   backgroundImage,
 }) => {
+  const theme: ThemeMode = useSystemTheme()
+
   // https://github.com/radix-ui/primitives/discussions/1997
   const avoidDefaultDomBehavior = (e: Event) => {
     e.preventDefault()
@@ -43,7 +47,7 @@ export const Modal: React.FC<modalType> = ({
         style={{
           position: 'relative',
           overflow: 'hidden',
-          background: 'white',
+          background: 'var(--color-panel-solid)',
         }}
       >
         {backgroundImage && (
@@ -78,7 +82,7 @@ export const Modal: React.FC<modalType> = ({
                 right: 0,
                 height: '40%',
                 background:
-                  'linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,1))',
+                  'linear-gradient(to bottom, rgba(255,255,255,0), var(--color-panel-solid))',
               }}
             />
             <div
@@ -88,7 +92,7 @@ export const Modal: React.FC<modalType> = ({
                 left: 0,
                 right: 0,
                 bottom: 0,
-                background: 'white',
+                background: 'var(--color-panel-solid)',
               }}
             />
           </div>
