@@ -27,4 +27,10 @@ export enum CONSTANT {
   ERROR_PROFILE_VIEW = '无法查看个人信息',
   ERROR_SUBSCRIPTIONS_VIEW = '无法查看订阅信息',
   ERROR_PODCAST_DETAIL_VIEW = '无法查看播客详情',
+  CONTACTS_WECHAT_OFFICIAL_ACCOUNTS = 'wechatOfficialAccounts',
+  CONTACTS_WECHAT = 'wechat',
+  CONTACTS_WEIBO = 'weibo',
+  CONTACTS_JIKE = 'jike',
+  CONTACTS_EMAIL = 'email',
+  CONTACTS_CUSTOM = 'custom',
 }

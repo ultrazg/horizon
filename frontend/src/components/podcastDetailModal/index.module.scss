@@ -41,15 +41,15 @@
     }
 
     .subscription {
+      font-size: 14px;
       margin-top: auto;
     }
   }
 }
 
-h4 {
+.part-title {
   @include no-select;
-  margin-top: 2rem;
-  margin-bottom: 2rem;
+  margin: 2rem 0;
   text-align: center;
 }
 
@@ -60,5 +60,16 @@ h4 {
     white-space: pre-wrap;
     word-break: break-word;
     overflow-wrap: break-word;
+  }
+}
+
+.contacts-item {
+  font-size: 14px;
+  .link {
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }
