@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Spinner, Button, Card } from '@radix-ui/themes'
+import { Spinner, Button } from '@radix-ui/themes'
 import { Modal } from '@/components'
 import { modalType } from '@/types/modal'
 import { podcastDetail } from '@/api/podcast'
@@ -11,34 +11,32 @@ import { DialogType, ShowMessageDialog, toast } from '@/utils'
 import { updateSubscription } from '@/api/subscription'
 import dayjs from 'dayjs'
 import { ThemeMode } from '@/layouts/theme'
-import { CONSTANT } from '@/types/constant'
-import { BrowserOpenURL } from 'wailsjs/runtime'
+import PodcastContactView from './components/PodcastContactView'
+import PodcastHonorView from './components/PodcastHonorView'
+import { useNavigate } from 'react-router-dom'
 
 type IProps = {
   pid: string
 } & modalType
-
-function onLinkClick(url: string): void {
-  ShowMessageDialog(
-    DialogType.QUESTION,
-    '跳转提示',
-    `是否在浏览器中打开链接？\r\n${url}`,
-  ).then((res) => {
-    if (res === 'Yes' || res === '是') {
-      BrowserOpenURL(url)
-    }
-  })
-}
 
 export const PodcastDetailModal: React.FC<IProps> = ({
   pid,
   open,
   onClose,
 }) => {
+  const navigateTo = useNavigate()
   const theme: ThemeMode = useSystemTheme()
   const height = useWindowSize().height
   const [loading, setLoading] = useState<boolean>(false)
   const [data, setData] = useState<PodcastType>()
+
+  function goPodcastDetail(pid: string): void {
+    navigateTo('/podcast/detail', {
+      state: {
+        pid,
+      },
+    })
+  }
 
   function fetchData(): void {
     setLoading(true)
@@ -137,6 +135,10 @@ export const PodcastDetailModal: React.FC<IProps> = ({
           <Button
             variant="soft"
             color="gray"
+            onClick={() => {
+              goPodcastDetail(data?.pid || '')
+              onClose()
+            }}
           >
             <ExternalLinkIcon />
             查看单集
@@ -166,186 +168,16 @@ export const PodcastDetailModal: React.FC<IProps> = ({
             <pre>{data?.description}</pre>
           </div>
 
-          <div
-            className={styles['part-title']}
-            style={{
-              color: theme === 'dark' ? data?.color.dark : data?.color.light,
-            }}
-          >
-            节目荣誉墙
-          </div>
+          <PodcastHonorView
+            pid={data?.pid}
+            color={theme === 'dark' ? data?.color.dark : data?.color.light}
+          />
 
           {data?.contacts && data?.contacts.length > 0 && (
-            <React.Fragment>
-              <div
-                className={styles['part-title']}
-                style={{
-                  color:
-                    theme === 'dark' ? data?.color.dark : data?.color.light,
-                }}
-              >
-                联系方式
-              </div>
-
-              <Card>
-                {data?.contacts?.map((item) => {
-                  switch (item.type) {
-                    case CONSTANT.CONTACTS_WECHAT:
-                      return (
-                        <p
-                          key={item.type}
-                          className={styles['contacts-item']}
-                        >
-                          <span
-                            style={{
-                              color:
-                                theme === 'dark'
-                                  ? data?.color.dark
-                                  : data?.color.light,
-                            }}
-                          >
-                            {item.note || '添加微信'}：
-                          </span>
-                          <span>{item.name}</span>
-                        </p>
-                      )
-
-                    case CONSTANT.CONTACTS_WECHAT_OFFICIAL_ACCOUNTS:
-                      return (
-                        <p
-                          key={item.type}
-                          className={styles['contacts-item']}
-                        >
-                          <span
-                            style={{
-                              color:
-                                theme === 'dark'
-                                  ? data?.color.dark
-                                  : data?.color.light,
-                            }}
-                          >
-                            {item.note}：
-                          </span>
-                          <span>{item.name}</span>
-                        </p>
-                      )
-
-                    case CONSTANT.CONTACTS_WEIBO:
-                      return (
-                        <p
-                          key={item.type}
-                          className={styles['contacts-item']}
-                        >
-                          <span
-                            style={{
-                              color:
-                                theme === 'dark'
-                                  ? data?.color.dark
-                                  : data?.color.light,
-                            }}
-                          >
-                            微博：
-                          </span>
-                          <span
-                            className={styles['link']}
-                            onClick={() => onLinkClick(item?.url || '')}
-                            style={{
-                              color:
-                                theme === 'dark'
-                                  ? data?.color.dark
-                                  : data?.color.light,
-                            }}
-                          >
-                            {item.name}
-                          </span>
-                        </p>
-                      )
-
-                    case CONSTANT.CONTACTS_JIKE:
-                      return (
-                        <p
-                          key={item.type}
-                          className={styles['contacts-item']}
-                        >
-                          <span
-                            style={{
-                              color:
-                                theme === 'dark'
-                                  ? data?.color.dark
-                                  : data?.color.light,
-                            }}
-                          >
-                            即刻：
-                          </span>
-                          <span
-                            className={styles['link']}
-                            onClick={() => onLinkClick(item?.url || '')}
-                            style={{
-                              color:
-                                theme === 'dark'
-                                  ? data?.color.dark
-                                  : data?.color.light,
-                            }}
-                          >
-                            {item.name}
-                          </span>
-                        </p>
-                      )
-
-                    case CONSTANT.CONTACTS_EMAIL:
-                      return (
-                        <p
-                          key={item.type}
-                          className={styles['contacts-item']}
-                        >
-                          <span
-                            style={{
-                              color:
-                                theme === 'dark'
-                                  ? data?.color.dark
-                                  : data?.color.light,
-                            }}
-                          >
-                            {item.note || '邮箱'}：
-                          </span>
-                          <span>{item.name}</span>
-                        </p>
-                      )
-
-                    case CONSTANT.CONTACTS_CUSTOM:
-                      return (
-                        <p
-                          key={item.type}
-                          className={styles['contacts-item']}
-                        >
-                          <span
-                            style={{
-                              color:
-                                theme === 'dark'
-                                  ? data?.color.dark
-                                  : data?.color.light,
-                            }}
-                          >
-                            链接：
-                          </span>
-                          <span
-                            className={styles['link']}
-                            onClick={() => onLinkClick(item?.url || '')}
-                            style={{
-                              color:
-                                theme === 'dark'
-                                  ? data?.color.dark
-                                  : data?.color.light,
-                            }}
-                          >
-                            {item.name}
-                          </span>
-                        </p>
-                      )
-                  }
-                })}
-              </Card>
-            </React.Fragment>
+            <PodcastContactView
+              contacts={data.contacts}
+              color={theme === 'dark' ? data?.color.dark : data?.color.light}
+            />
           )}
         </div>
       </Spinner>

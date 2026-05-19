@@ -48,4 +48,11 @@ type PodcastBulletinType = {
   uniqueVisitorCount: number
 }
 
-export type { PodcastType, PodcastBulletinType }
+type PodcastHonorType = {
+  campaignTitle: string
+  id: string
+  title: string
+  url: string
+}
+
+export type { PodcastType, PodcastBulletinType, PodcastHonorType }

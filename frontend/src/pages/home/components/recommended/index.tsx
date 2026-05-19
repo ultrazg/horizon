@@ -3,14 +3,15 @@ import { Box, Flex, ScrollArea, Skeleton } from '@radix-ui/themes'
 import styles from './index.module.scss'
 import { ColorfulShadow } from '@/components'
 import { RecommendedType } from '@/pages/home'
+import { toast, ShowPodcastDetailModal } from '@/utils'
+import { CONSTANT } from '@/types/constant'
 
 type IProps = {
   data: RecommendedType
   loading: boolean
-  onDetail: (pid: string) => void
 }
 
-const Recommended: React.FC<IProps> = ({ data, loading, onDetail }) => {
+const Recommended: React.FC<IProps> = ({ data, loading }) => {
   return (
     <div className={styles['recommended-layout']}>
       <h3>精选节目</h3>
@@ -36,7 +37,13 @@ const Recommended: React.FC<IProps> = ({ data, loading, onDetail }) => {
                         src={item.podcast.image.picUrl}
                         curPointer
                         onClick={() => {
-                          onDetail(item.podcast.pid)
+                          ShowPodcastDetailModal({
+                            pid: item.podcast.pid,
+                          }).catch(() => {
+                            toast(CONSTANT.ERROR_PODCAST_DETAIL_VIEW, {
+                              type: 'warn',
+                            })
+                          })
                         }}
                       />
                     </div>

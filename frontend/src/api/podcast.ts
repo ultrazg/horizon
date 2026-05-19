@@ -7,6 +7,7 @@ const api = {
   podcastGetInfo: 'podcast_get_info',
   podcastBulletin: 'podcast_bulletin',
   ownedPodcasts: 'owned_podcasts',
+  podcastHonorList: 'podcast_honor_list',
 }
 
 type podcastDetailType = {
@@ -27,6 +28,10 @@ type podcastBulletinType = {
 
 export type ownedPodcastType = {
   uid: string
+}
+
+export type podcastHonorListReq = {
+  pid: string
 }
 
 /** 根据 pid 查询单集内容详情 */
@@ -53,3 +58,8 @@ export const podcastBulletin = (
 export const ownedPodcasts = (
   params: ownedPodcastType,
 ): Promise<responseType> => httpRequest.post(api.ownedPodcasts, params)
+
+/** 获取节目所获得的荣誉 */
+export const podcastHonorList = (
+  params: podcastHonorListReq,
+): Promise<responseType> => httpRequest.post(api.podcastHonorList, params)

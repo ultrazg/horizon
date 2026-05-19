@@ -1,0 +1,20 @@
+@import '@/assets/global/_common.scss';
+
+.podcast-contact-view {
+  .part-title {
+    @include no-select;
+    margin: 2rem 0;
+    text-align: center;
+  }
+
+  .contacts-item {
+    font-size: 14px;
+    .link {
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}

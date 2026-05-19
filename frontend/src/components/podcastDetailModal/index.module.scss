@@ -1,5 +1,4 @@
 @import '@/assets/global/_variables.scss';
-@import '@/assets/global/_common.scss';
 
 .top {
   display: flex;
@@ -47,12 +46,6 @@
   }
 }
 
-.part-title {
-  @include no-select;
-  margin: 2rem 0;
-  text-align: center;
-}
-
 .podcast-description {
   margin-top: 2rem;
 
@@ -62,16 +55,5 @@
     overflow-wrap: break-word;
     font-size: 14px;
     font-family: Consolas, Monaco, 'Courier New', monospace;
-  }
-}
-
-.contacts-item {
-  font-size: 14px;
-  .link {
-    cursor: pointer;
-
-    &:hover {
-      text-decoration: underline;
-    }
   }
 }

@@ -3,16 +3,16 @@ import { NewPodcastType } from '@/pages/home'
 import styles from './index.module.scss'
 import { ColorfulShadow } from '@/components'
 import { PlayerEpisodeInfoType } from '@/utils/player'
-import { showEpisodeDetailModal } from '@/utils'
+import { showEpisodeDetailModal, ShowPodcastDetailModal, toast } from '@/utils'
 import { usePlayer } from '@/layouts/player'
 import { QuoteIcon } from '@radix-ui/react-icons'
+import { CONSTANT } from '@/types/constant'
 
 type IProps = {
   data: NewPodcastType
-  onDetail: (pid: string) => void
 }
 
-const NewPodcast: React.FC<IProps> = ({ data, onDetail }) => {
+const NewPodcast: React.FC<IProps> = ({ data }) => {
   const player = usePlayer()
 
   return (
@@ -51,7 +51,13 @@ const NewPodcast: React.FC<IProps> = ({ data, onDetail }) => {
                 <div className={styles['info-box']}>
                   <p
                     onClick={() => {
-                      onDetail(item.episode.podcast.pid)
+                      ShowPodcastDetailModal({
+                        pid: item.episode.podcast.pid,
+                      }).catch(() => {
+                        toast(CONSTANT.ERROR_PODCAST_DETAIL_VIEW, {
+                          type: 'warn',
+                        })
+                      })
                     }}
                     title={item.episode.podcast.title}
                   >

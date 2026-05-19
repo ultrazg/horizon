@@ -3,18 +3,18 @@ import styles from './index.module.scss'
 import { ColorfulShadow } from '@/components'
 import { ChatBubbleIcon, PlayIcon, CalendarIcon } from '@radix-ui/react-icons'
 import { Button, Skeleton } from '@radix-ui/themes'
-import { showEpisodeDetailModal } from '@/utils'
+import { showEpisodeDetailModal, ShowPodcastDetailModal, toast } from '@/utils'
 import { usePlayer } from '@/hooks'
 import { PlayerEpisodeInfoType } from '@/utils/player'
 import { useNavigate } from 'react-router-dom'
+import { CONSTANT } from '@/types/constant'
 
 type IProps = {
   data: any
   loading: boolean
-  onDetail: (pid: string) => void
 }
 
-const EditorRecommended: React.FC<IProps> = ({ data, loading, onDetail }) => {
+const EditorRecommended: React.FC<IProps> = ({ data, loading }) => {
   const navigateTo = useNavigate()
   const player = usePlayer()
 
@@ -55,7 +55,13 @@ const EditorRecommended: React.FC<IProps> = ({ data, loading, onDetail }) => {
                   <div className={styles['info-box']}>
                     <p
                       onClick={() => {
-                        onDetail(item.episode.podcast.pid)
+                        ShowPodcastDetailModal({
+                          pid: item.episode.podcast.pid,
+                        }).catch(() => {
+                          toast(CONSTANT.ERROR_PODCAST_DETAIL_VIEW, {
+                            type: 'warn',
+                          })
+                        })
                       }}
                       title={item.episode.podcast.title}
                     >

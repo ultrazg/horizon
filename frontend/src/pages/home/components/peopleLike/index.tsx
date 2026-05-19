@@ -4,7 +4,12 @@ import { ColorfulShadow } from '@/components'
 import { PeopleLikeType } from '@/pages/home'
 import React from 'react'
 import dayjs from 'dayjs'
-import { showEpisodeDetailModal, ShowProfileModal, toast } from '@/utils'
+import {
+  showEpisodeDetailModal,
+  ShowProfileModal,
+  toast,
+  ShowPodcastDetailModal,
+} from '@/utils'
 import { usePlayer } from '@/hooks'
 import { PlayerEpisodeInfoType } from '@/utils/player'
 import { onCommentLikeUpdate } from '@/components/playerDrawer/components/episodeComment'
@@ -13,11 +18,10 @@ import { CONSTANT } from '@/types/constant'
 
 type IProps = {
   data: PeopleLikeType
-  onDetail: (pid: string) => void
   onChangeState: (id: string) => void
 }
 
-const PeopleLike: React.FC<IProps> = ({ data, onDetail, onChangeState }) => {
+const PeopleLike: React.FC<IProps> = ({ data, onChangeState }) => {
   const player = usePlayer()
 
   return (
@@ -126,7 +130,13 @@ const PeopleLike: React.FC<IProps> = ({ data, onDetail, onChangeState }) => {
                       </p>
                       <p
                         onClick={() => {
-                          onDetail(item.pick.episode.podcast.pid)
+                          ShowPodcastDetailModal({
+                            pid: item.pick.episode.podcast.pid,
+                          }).catch(() => {
+                            toast(CONSTANT.ERROR_PODCAST_DETAIL_VIEW, {
+                              type: 'warn',
+                            })
+                          })
                         }}
                       >
                         {item.pick.episode.podcast.title}

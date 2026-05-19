@@ -1,6 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
-import { PlayController, TitleBar } from '@/components'
+import {
+  PlayController,
+  TitleBar,
+  StickerModal,
+  ProfileModal,
+  SubscriptionModal,
+  PodcastDetailModal,
+} from '@/components'
 import { useNavigateTo } from '@/hooks'
 import { ReadConfig, Storage, toast } from '@/utils'
 import { Launch } from '@/pages'
@@ -8,8 +15,15 @@ import styles from './index.module.scss'
 import { CheckForUpgrade } from 'wailsjs/go/bridge/App'
 import { UpgradeModal } from '@/pages/setting/components/upgradeModal'
 import { Profile } from '@/api/profile'
-import { userType } from '@/types/user'
+import { perspectiveType, userType } from '@/types/user'
 import { SETTING_CONFIG_ENUM, USER_CONFIG_ENUM } from '@/types/config'
+import { EventsOn } from 'wailsjs/runtime'
+import {
+  showPodcastDetailModalType,
+  showProfileModalType,
+  showStickerModalType,
+  showSubscriptionModalType,
+} from '@/types/dialog'
 
 export const Root: React.FC = () => {
   const scrollRef = useRef<HTMLDivElement | null>(null)
@@ -17,6 +31,38 @@ export const Root: React.FC = () => {
   const [checkUpgrade, setCheckUpgrade] = useState<boolean>(false)
   const [upgradeModal, setUpgradeModal] = useState<boolean>(false)
   const location = useLocation()
+  const [stickerModalOptions, setStickerModalOptions] = useState<{
+    open: boolean
+    uid: string
+    perspective: perspectiveType
+  }>({
+    open: false,
+    uid: '',
+    perspective: '我',
+  })
+  const [profileModalOptions, setProfileModalOptions] = useState<{
+    open: boolean
+    uid: string
+  }>({
+    open: false,
+    uid: '',
+  })
+  const [subscriptionModalOptions, setSubscriptionModalOptions] = useState<{
+    open: boolean
+    uid: string
+    perspective: perspectiveType
+  }>({
+    open: false,
+    uid: '',
+    perspective: '我',
+  })
+  const [podcastDetailModalOptions, setPodcastDetailModalOptions] = useState<{
+    open: boolean
+    pid: string
+  }>({
+    open: false,
+    pid: '',
+  })
 
   const goLogin = useNavigateTo('/login')
   const goHome = useNavigateTo('/')
@@ -96,6 +142,55 @@ export const Root: React.FC = () => {
 
   useEffect(() => {
     onReadConfigFunc()
+
+    const stickerModalFunc = EventsOn(
+      'ShowStickerModal',
+      (data: showStickerModalType) => {
+        setStickerModalOptions({
+          open: true,
+          uid: data.uid,
+          perspective: data.perspective,
+        })
+      },
+    )
+
+    const profileModalFunc = EventsOn(
+      'ShowProfileModal',
+      (data: showProfileModalType) => {
+        setProfileModalOptions({
+          open: true,
+          uid: data.uid,
+        })
+      },
+    )
+
+    const subscriptionModalFunc = EventsOn(
+      'ShowSubscriptionModal',
+      (data: showSubscriptionModalType) => {
+        setSubscriptionModalOptions({
+          open: true,
+          uid: data.uid,
+          perspective: data.perspective,
+        })
+      },
+    )
+
+    const podcastDetailModalFunc = EventsOn(
+      'ShowPodcastDetailModal',
+      (data: showPodcastDetailModalType) => {
+        setPodcastDetailModalOptions({
+          open: true,
+          pid: data.pid,
+        })
+      },
+    )
+
+    return () => {
+      stickerModalFunc()
+      profileModalFunc()
+      subscriptionModalFunc()
+      podcastDetailModalFunc()
+    }
   }, [])
 
   useEffect(() => {
@@ -132,6 +227,54 @@ export const Root: React.FC = () => {
       <UpgradeModal
         open={upgradeModal}
         onClose={() => setUpgradeModal(false)}
+      />
+
+      <StickerModal
+        uid={stickerModalOptions.uid}
+        perspective={stickerModalOptions.perspective}
+        open={stickerModalOptions.open}
+        onClose={() => {
+          setStickerModalOptions({
+            uid: '',
+            open: false,
+            perspective: '我',
+          })
+        }}
+      />
+
+      <ProfileModal
+        uid={profileModalOptions.uid}
+        open={profileModalOptions.open}
+        onClose={() => {
+          setProfileModalOptions({
+            uid: '',
+            open: false,
+          })
+        }}
+      />
+
+      <SubscriptionModal
+        uid={subscriptionModalOptions.uid}
+        perspective={subscriptionModalOptions.perspective}
+        open={subscriptionModalOptions.open}
+        onClose={() => {
+          setSubscriptionModalOptions({
+            uid: '',
+            open: false,
+            perspective: '我',
+          })
+        }}
+      />
+
+      <PodcastDetailModal
+        pid={podcastDetailModalOptions.pid}
+        open={podcastDetailModalOptions.open}
+        onClose={() => {
+          setPodcastDetailModalOptions({
+            pid: '',
+            open: false,
+          })
+        }}
       />
     </>
   )

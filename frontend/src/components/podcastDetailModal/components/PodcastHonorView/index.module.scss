@@ -1,0 +1,47 @@
+@import '@/assets/global/_common.scss';
+
+.podcast-honor-view {
+  .part-title {
+    @include no-select;
+    margin: 2rem 0;
+    text-align: center;
+  }
+
+  .podcast-honor-list {
+    display: grid;
+    grid-template-columns: repeat(2, max-content);
+    justify-content: center;
+    gap: 16px;
+
+    > *:last-child:nth-child(odd) {
+      grid-column: span 2;
+      justify-self: center;
+    }
+
+    .podcast-honor-item {
+      @include no-select;
+      text-align: center;
+      position: relative;
+
+      svg {
+        position: absolute;
+        font-size: 30px;
+        top: 8px;
+        left: 8px;
+        color: #fff1b8;
+        z-index: -1;
+      }
+
+      p {
+        &:nth-child(2) {
+          color: #faad14;
+        }
+
+        &:last-child {
+          color: #bfbfbf;
+          font-size: 14px;
+        }
+      }
+    }
+  }
+}

@@ -8,7 +8,6 @@ import { discovery, refreshEpisodeCommend } from '@/api/discover'
 import { DISCOVERY_TYPE_ENUM } from '@/types/discovery'
 import { EpisodeType } from '@/types/episode'
 import { PodcastType } from '@/types/podcast'
-import { useNavigate } from 'react-router-dom'
 import { baseUserType } from '@/types/user'
 
 export type PopularType = {
@@ -101,15 +100,6 @@ export const Home: React.FC = () => {
   }>({
     records: [],
   })
-
-  const navigateTo = useNavigate()
-  const goPodcastDetail = (pid: string) => {
-    navigateTo('/podcast/detail', {
-      state: {
-        pid,
-      },
-    })
-  }
 
   const onRefreshEpisodeCommend = () => {
     setPopular({
@@ -232,25 +222,16 @@ export const Home: React.FC = () => {
       <Recommended
         data={recommended.records}
         loading={recommended.loading}
-        onDetail={(pid) => {
-          goPodcastDetail(pid)
-        }}
       />
       {/* 编辑精选 */}
       <EditorRecommended
         data={editorRecommended.records}
         loading={editorRecommended.loading}
-        onDetail={(pid) => {
-          goPodcastDetail(pid)
-        }}
       />
       {/* TA 们的喜欢 */}
       {peopleLike.records.length > 0 && (
         <PeopleLike
           data={peopleLike.records}
-          onDetail={(pid) => {
-            goPodcastDetail(pid)
-          }}
           onChangeState={(id) => {
             const temp: PeopleLikeType = peopleLike.records.map((item) => {
               if (item.pick.id === id) {
@@ -278,12 +259,7 @@ export const Home: React.FC = () => {
 
       {/*TA们开始创作新播客*/}
       {newPodcast.records.length > 0 && (
-        <NewPodcast
-          data={newPodcast.records}
-          onDetail={(pid) => {
-            goPodcastDetail(pid)
-          }}
-        />
+        <NewPodcast data={newPodcast.records} />
       )}
     </>
   )
