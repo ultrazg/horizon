@@ -11,6 +11,9 @@ import { Empty } from './empty'
 import { CreateCommentModal } from './createCommentModal'
 import { SubscriptionModal } from './subscriptionModal'
 import { PodcastDetailModal } from './podcastDetailModal'
+import { PayEpisodeTag } from './tags/PayEpisodeTag'
+import { PlayedTag } from './tags/PlayedTag'
+import { FinishedTag } from './tags/FinishedTag'
 
 export {
   PlayController,
@@ -26,4 +29,7 @@ export {
   SubscriptionModal,
   CreateCommentModal,
   PodcastDetailModal,
+  PayEpisodeTag,
+  PlayedTag,
+  FinishedTag,
 }

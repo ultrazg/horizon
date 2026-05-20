@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { ColorfulShadow } from '@/components'
+import {
+  ColorfulShadow,
+  FinishedTag,
+  PayEpisodeTag,
+  PlayedTag,
+} from '@/components'
 import { useLocation, useNavigate } from 'react-router-dom'
 import {
   AspectRatio,
@@ -502,9 +507,7 @@ export const PodcastDetail: React.FC = () => {
                         showEpisodeDetailModal(item.eid)
                       }}
                     >
-                      {item.payType === 'PAY_EPISODE' && (
-                        <span className={styles['pay-episode-tag']}>试听</span>
-                      )}
+                      {item.payType === 'PAY_EPISODE' && <PayEpisodeTag />}
                       {item.title}
                     </p>
                     <p
@@ -515,12 +518,8 @@ export const PodcastDetail: React.FC = () => {
                       {item.description}
                     </p>
                     <p>
-                      {item.isPlayed && !item.isFinished && (
-                        <span className={styles['played-tag']}>听过</span>
-                      )}
-                      {item.isFinished && (
-                        <span className={styles['finished-tag']}>已听完</span>
-                      )}
+                      {item.isPlayed && !item.isFinished && <PlayedTag />}
+                      {item.isFinished && <FinishedTag />}
                       <span>
                         {Math.floor(item.duration / 60)} 分钟 ·{' '}
                         {dayjs(item.pubDate).format('YYYY/MM/DD')}

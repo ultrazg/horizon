@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { ColorfulShadow } from '@/components'
+import {
+  ColorfulShadow,
+  FinishedTag,
+  PayEpisodeTag,
+  PlayedTag,
+} from '@/components'
 import dayjs from 'dayjs'
 import { SlBubble, SlEarphones } from 'react-icons/sl'
 import { userType } from '@/types/user'
@@ -66,9 +71,14 @@ export const PlayedList: React.FC = () => {
             />
           </div>
           <div className={styles['right']}>
-            <p>{item.title}</p>
+            <p>
+              {item.payType === 'PAY_EPISODE' && <PayEpisodeTag />}
+              {item.title}
+            </p>
             <p>{item.description}</p>
             <p>
+              {item.isPlayed && !item.isFinished && <PlayedTag />}
+              {item.isFinished && <FinishedTag />}
               <span>
                 {Math.floor(item.duration / 60)}分钟 ·{' '}
                 {dayjs(item.pubDate).format('YYYY/MM/DD')}

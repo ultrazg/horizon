@@ -82,6 +82,6 @@ func (a *App) UpdateConfig(key string, value any) (bool, string) {
 		return false, "无法写入配置文件"
 	}
 
-	log.Printf("配置文件已更新: %s = %v", key, value)
+	log.Printf("配置文件已更新: %s", key)
 	return true, "配置文件已更新"
 }

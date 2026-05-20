@@ -62,25 +62,19 @@
           display: flex;
           width: 100%;
 
-          span {
-            &:first-child {
-              flex: 1;
-            }
+          .favorites-episode-item-info {
+            display: flex;
+            align-items: center;
 
-            &:nth-child(2) {
-              flex: 1;
-              display: flex;
-              align-items: center;
-
-              svg {
-                margin-left: 0.8rem;
-                margin-right: 0.5rem;
-              }
+            svg {
+              margin-left: 0.8rem;
+              margin-right: 0.5rem;
             }
+          }
 
-            &:last-child {
-              opacity: 0;
-            }
+          .delete-button {
+            margin-left: 1rem;
+            opacity: 0;
           }
         }
       }

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { EpisodeType } from '@/types/episode'
 import styles from './result.module.scss'
-import { ColorfulShadow, Empty } from '@/components'
+import { ColorfulShadow, Empty, PayEpisodeTag } from '@/components'
 import { Spinner, Button } from '@radix-ui/themes'
 import { search, searchType } from '@/api/search'
 import { isEmpty } from 'lodash'
@@ -135,9 +135,7 @@ export const ResultEpisode: React.FC = () => {
                 title={item.title}
               >
                 <span>
-                  {item.payType === 'PAY_EPISODE' && (
-                    <span className={styles['pay-episode-tag']}>试听</span>
-                  )}
+                  {item.payType === 'PAY_EPISODE' && <PayEpisodeTag />}
                   {item.title}
                 </span>
               </div>

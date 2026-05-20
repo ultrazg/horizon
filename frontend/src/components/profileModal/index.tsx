@@ -18,7 +18,13 @@ import {
 import { modalType } from '@/types/modal'
 import { useWindowSize, usePlayer } from '@/hooks'
 import styles from './index.module.scss'
-import { ColorfulShadow, MyDropdownMenu, PickModal, Empty } from '@/components'
+import {
+  ColorfulShadow,
+  MyDropdownMenu,
+  PickModal,
+  Empty,
+  PayEpisodeTag,
+} from '@/components'
 import {
   SlBubble,
   SlEarphones,
@@ -685,14 +691,36 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
                             : item.podcast.image.picUrl,
                           liked: item.isFavorited,
                         }
+                        let url: string = ''
 
-                        player.load(item.media.source.url, episodeInfo)
+                        if (item.payType === 'FREE') {
+                          url = item.media.source.url
+                        } else if (
+                          item.payType === 'PAY_EPISODE' &&
+                          item.trial?.segment
+                        ) {
+                          url = item.trial?.segment
+                          toast('正在播放试听内容', {
+                            type: 'info',
+                            duration: 5000,
+                          })
+                        } else {
+                          toast('播放失败', {
+                            type: 'warn',
+                          })
+                          return
+                        }
+
+                        player.load(url, episodeInfo)
                         player.play()
                       }}
                     />
                   </div>
                   <div className={styles['right']}>
-                    <p>{item.title}</p>
+                    <p>
+                      {item.payType === 'PAY_EPISODE' && <PayEpisodeTag />}
+                      {item.title}
+                    </p>
                     <p title={item.description}>{item.description}</p>
                     <p>
                       <span>

@@ -88,10 +88,6 @@ export const Profile: React.FC = () => {
               IP属地：{userInfo.ipLoc || '未知'}
             </span>
           </div>
-          <Separator
-            my="1"
-            size="4"
-          />
           <div className={styles['profile-follow']}>
             <Flex
               gap="3"

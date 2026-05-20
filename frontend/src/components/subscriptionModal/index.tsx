@@ -9,7 +9,13 @@ import { PodcastType } from '@/types/podcast'
 import { useWindowSize } from '@/hooks'
 import dayjs from 'dayjs'
 import styles from './index.module.scss'
-import { DialogType, ShowMessageDialog, toast } from '@/utils'
+import {
+  DialogType,
+  ShowMessageDialog,
+  toast,
+  ShowPodcastDetailModal,
+} from '@/utils'
+import { CONSTANT } from '@/types/constant'
 
 type IProps = {
   uid: string
@@ -173,10 +179,35 @@ export const SubscriptionModal: React.FC<IProps> = ({
               key={item.pid}
             >
               <div className={styles['left']}>
-                <ColorfulShadow src={item.image.picUrl} />
+                <ColorfulShadow
+                  src={item.image.picUrl}
+                  curPointer
+                  onClick={() => {
+                    ShowPodcastDetailModal({
+                      pid: item.pid,
+                    }).catch(() => {
+                      toast(CONSTANT.ERROR_PODCAST_DETAIL_VIEW, {
+                        type: 'warn',
+                      })
+                    })
+                  }}
+                />
               </div>
               <div className={styles['middle']}>
-                <p title={item.title}>{item.title}</p>
+                <p
+                  title={item.title}
+                  onClick={() => {
+                    ShowPodcastDetailModal({
+                      pid: item.pid,
+                    }).catch(() => {
+                      toast(CONSTANT.ERROR_PODCAST_DETAIL_VIEW, {
+                        type: 'warn',
+                      })
+                    })
+                  }}
+                >
+                  {item.title}
+                </p>
                 <p title={item.description}>{item.description}</p>
                 <p>
                   {`${item.subscriptionCount} 人订阅 · ${dayjs(item.latestEpisodePubDate).format('YYYY/MM/DD')} 更新`}

@@ -4,7 +4,7 @@ import { Button, Spinner } from '@radix-ui/themes'
 import { search, type searchType } from '@/api/search'
 import styles from './index.module.scss'
 import { ShowPodcastDetailModal, ShowProfileModal, toast } from '@/utils'
-import { ColorfulShadow, Empty } from '@/components'
+import { ColorfulShadow, Empty, PayEpisodeTag } from '@/components'
 import { baseUserType } from '@/types/user'
 import { EpisodeType } from '@/types/episode'
 import { PodcastType } from '@/types/podcast'
@@ -326,9 +326,7 @@ export const Search: React.FC = () => {
                   />
                 </div>
                 <div className={styles['name']}>
-                  {item.payType === 'PAY_EPISODE' && (
-                    <span className={styles['pay-episode-tag']}>试听</span>
-                  )}
+                  {item.payType === 'PAY_EPISODE' && <PayEpisodeTag />}
                   {item.title}
                 </div>
               </div>

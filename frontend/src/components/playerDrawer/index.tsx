@@ -15,7 +15,13 @@ import {
 import { IoMdThumbsUp, IoMdInformationCircleOutline } from 'react-icons/io'
 import { episodeDetail, episodeClapCreate } from '@/api/episode'
 import { EpisodeType } from '@/types/episode'
-import { Player, showEpisodeDetailModal, toast, hexToRgba } from '@/utils'
+import {
+  Player,
+  showEpisodeDetailModal,
+  toast,
+  hexToRgba,
+  ShowPodcastDetailModal,
+} from '@/utils'
 import { CONSTANT } from '@/types/constant'
 import { PlayInfoType } from '@/utils/player'
 import { secondsToHms } from '@/components/playerController/components/episodeCover'
@@ -196,6 +202,15 @@ export const PlayerDrawer: React.FC<IProps> = ({
               mb="6"
               className={styles['podcast-name']}
               style={{ color: themeColor }}
+              onClick={() => {
+                ShowPodcastDetailModal({
+                  pid: episodeDetailInfo?.pid as string,
+                }).catch(() => {
+                  toast(CONSTANT.ERROR_PODCAST_DETAIL_VIEW, {
+                    type: 'warn',
+                  })
+                })
+              }}
             >
               {episodeDetailInfo?.podcast.title}
             </Text>

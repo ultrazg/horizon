@@ -40,7 +40,7 @@ class Player {
       console.log('horizon player - 暂停播放')
     }
     this.audio.onerror = (e) => {
-      toast(`加载或播放发生错误 ${e}`, { type: 'warn' })
+      toast(`播放发生错误`, { type: 'warn' })
       console.error(`horizon player - 加载或播放错误：${e}`)
       Log(`horizon player - 加载或播放错误：${e}`).then()
     }

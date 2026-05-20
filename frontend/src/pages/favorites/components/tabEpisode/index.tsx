@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import styles from './index.module.scss'
-import { ColorfulShadow } from '@/components'
+import {
+  ColorfulShadow,
+  FinishedTag,
+  PayEpisodeTag,
+  PlayedTag,
+} from '@/components'
 import { SlBubble, SlEarphones } from 'react-icons/sl'
 import { favoriteEpisodeList, favoriteEpisodeUpdate } from '@/api/favorite'
 import { EpisodeType } from '@/types/episode'
@@ -86,15 +91,34 @@ const TabEpisode: React.FC = () => {
                 onClick={() => {
                   const episodeInfo: PlayerEpisodeInfoType = {
                     title: item.title,
-                    pid: item.podcast.pid,
                     eid: item.eid,
+                    pid: item.podcast.pid,
                     cover: item?.image
                       ? item.image.picUrl
                       : item.podcast.image.picUrl,
                     liked: item.isFavorited,
                   }
+                  let url: string = ''
 
-                  player.load(item.media.source.url, episodeInfo)
+                  if (item.payType === 'FREE') {
+                    url = item.media.source.url
+                  } else if (
+                    item.payType === 'PAY_EPISODE' &&
+                    item.trial?.segment
+                  ) {
+                    url = item.trial?.segment
+                    toast('正在播放试听内容', {
+                      type: 'info',
+                      duration: 5000,
+                    })
+                  } else {
+                    toast('播放失败', {
+                      type: 'warn',
+                    })
+                    return
+                  }
+
+                  player.load(url, episodeInfo)
                   player.play()
                 }}
               />
@@ -106,6 +130,7 @@ const TabEpisode: React.FC = () => {
                   showEpisodeDetailModal(item.eid)
                 }}
               >
+                {item.payType === 'PAY_EPISODE' && <PayEpisodeTag />}
                 {item.title}
               </p>
               <p
@@ -117,17 +142,27 @@ const TabEpisode: React.FC = () => {
                 {item.description}
               </p>
               <p>
+                {item.isPlayed && !item.isFinished && (
+                  <span style={{ marginRight: '0.5rem' }}>
+                    <PlayedTag />
+                  </span>
+                )}
+                {item.isFinished && (
+                  <span style={{ marginRight: '0.5rem' }}>
+                    <FinishedTag />
+                  </span>
+                )}
                 <span>
                   {Math.floor(item.duration / 60)}分钟 ·{' '}
-                  {dayjs(item.pubDate).format('MM/DD')}
+                  {dayjs(item.pubDate).format('YYYY/MM/DD')}
                 </span>
-                <span>
+                <span className={styles['favorites-episode-item-info']}>
                   <SlEarphones />
                   {item.playCount}
                   <SlBubble />
                   {item.commentCount}
                 </span>
-                <span>
+                <span className={styles['delete-button']}>
                   <IconButton
                     size="1"
                     color="red"
