@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { Button, Spinner } from '@radix-ui/themes'
 import { search, type searchType } from '@/api/search'
 import styles from './index.module.scss'
-import { ShowProfileModal, toast } from '@/utils'
+import { ShowPodcastDetailModal, ShowProfileModal, toast } from '@/utils'
 import { ColorfulShadow, Empty } from '@/components'
 import { baseUserType } from '@/types/user'
 import { EpisodeType } from '@/types/episode'
@@ -38,14 +38,6 @@ export const Search: React.FC = () => {
     records: [],
     loading: false,
   })
-
-  const goPodcastDetail = (pid: string) => {
-    navigateTo('/podcast/detail', {
-      state: {
-        pid,
-      },
-    })
-  }
 
   /**
    * 搜索
@@ -243,7 +235,13 @@ export const Search: React.FC = () => {
                     src={item.image.picUrl}
                     curPointer
                     onClick={() => {
-                      goPodcastDetail(item.pid)
+                      ShowPodcastDetailModal({
+                        pid: item.pid,
+                      }).catch(() => {
+                        toast(CONSTANT.ERROR_PODCAST_DETAIL_VIEW, {
+                          type: 'warn',
+                        })
+                      })
                     }}
                   />
                 </div>

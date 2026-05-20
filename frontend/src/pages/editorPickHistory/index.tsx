@@ -10,6 +10,8 @@ import {
 import { EditorPickHistoryType } from '@/types/pick'
 import { PlayerEpisodeInfoType } from '@/utils/player'
 import { usePlayer } from '@/layouts/player'
+import { toast, ShowPodcastDetailModal } from '@/utils'
+import { CONSTANT } from '@/types/constant'
 
 /**
  * 往日精选
@@ -94,7 +96,19 @@ export const EditorPickHistory: React.FC = () => {
                       />
                     </div>
                     <div className={styles['episode-info']}>
-                      <p>{itm.episode.podcast.title}</p>
+                      <p
+                        onClick={() => {
+                          ShowPodcastDetailModal({
+                            pid: itm.episode.podcast.pid,
+                          }).catch(() => {
+                            toast(CONSTANT.ERROR_PODCAST_DETAIL_VIEW, {
+                              type: 'warn',
+                            })
+                          })
+                        }}
+                      >
+                        {itm.episode.podcast.title}
+                      </p>
                       <p>{itm.episode.title}</p>
                     </div>
                   </div>

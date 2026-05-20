@@ -8,9 +8,11 @@ import { PickRecentType } from '@/types/pick'
 import dayjs from 'dayjs'
 import { CONSTANT } from '@/types/constant'
 import styles from './index.module.scss'
+import { perspectiveType } from '@/types/user'
+import { toast, ShowPodcastDetailModal } from '@/utils'
 
 type IProps = {
-  perspective: '他' | '她' | 'TA'
+  perspective: perspectiveType
   uid: string
   total: number
 } & modalType
@@ -117,7 +119,19 @@ export const PickModal: React.FC<IProps> = ({
                       </div>
                       <div className={styles['right']}>
                         <p>{item.episode.title}</p>
-                        <p>{item.episode.podcast.title}</p>
+                        <p
+                          onClick={() => {
+                            ShowPodcastDetailModal({
+                              pid: item.episode.podcast.pid,
+                            }).catch(() => {
+                              toast(CONSTANT.ERROR_PODCAST_DETAIL_VIEW, {
+                                type: 'warn',
+                              })
+                            })
+                          }}
+                        >
+                          {item.episode.podcast.title}
+                        </p>
                       </div>
                     </>
                   )}

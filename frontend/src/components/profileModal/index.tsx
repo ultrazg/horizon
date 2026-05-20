@@ -30,6 +30,7 @@ import { getUserStats } from '@/api/user'
 import {
   DialogType,
   ShowMessageDialog,
+  ShowPodcastDetailModal,
   ShowStickerModal,
   ShowSubscriptionModal,
   Storage,
@@ -485,7 +486,19 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
                         />
                       </div>
                       <div className={styles['right']}>
-                        <p>{item.title}</p>
+                        <p
+                          onClick={() => {
+                            ShowPodcastDetailModal({
+                              pid: item.pid,
+                            }).catch(() => {
+                              toast(CONSTANT.ERROR_PODCAST_DETAIL_VIEW, {
+                                type: 'warn',
+                              })
+                            })
+                          }}
+                        >
+                          {item.title}
+                        </p>
                         <p>{item.brief}</p>
                         {item.episodeCount !== 0 && (
                           <p>更新至第{item.episodeCount}期</p>
@@ -579,7 +592,19 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
                           </div>
                           <div className={styles['right']}>
                             <p>{item.episode.title}</p>
-                            <p>{item.episode.podcast.title}</p>
+                            <p
+                              onClick={() => {
+                                ShowPodcastDetailModal({
+                                  pid: item.episode.podcast.pid,
+                                }).catch(() => {
+                                  toast(CONSTANT.ERROR_PODCAST_DETAIL_VIEW, {
+                                    type: 'warn',
+                                  })
+                                })
+                              }}
+                            >
+                              {item.episode.podcast.title}
+                            </p>
                           </div>
                         </>
                       )}

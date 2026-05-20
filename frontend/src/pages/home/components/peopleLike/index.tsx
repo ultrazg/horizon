@@ -75,7 +75,7 @@ const PeopleLike: React.FC<IProps> = ({ data, onChangeState }) => {
                       }}
                     >
                       <p>{item.pick.user.nickname}</p>
-                      <p>{dayjs(item.pick.pickedAt).format('MM/DD')}</p>
+                      <p>{dayjs(item.pick.pickedAt).format('YYYY/MM/DD')}</p>
                     </div>
                     <div className={styles['r']}>
                       {item.pick.likeCount}

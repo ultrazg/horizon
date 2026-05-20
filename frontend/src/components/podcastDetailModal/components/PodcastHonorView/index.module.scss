@@ -23,17 +23,8 @@
       text-align: center;
       position: relative;
 
-      svg {
-        position: absolute;
-        font-size: 30px;
-        top: 8px;
-        left: 8px;
-        color: #fff1b8;
-        z-index: -1;
-      }
-
       p {
-        &:nth-child(2) {
+        &:nth-child(1) {
           color: #faad14;
         }
 

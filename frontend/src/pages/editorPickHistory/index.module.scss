@@ -33,6 +33,7 @@
               width: 100%;
 
               &:first-child {
+                cursor: pointer;
                 color: $secondary-font-color;
                 font-size: 1.2rem;
                 overflow: hidden;

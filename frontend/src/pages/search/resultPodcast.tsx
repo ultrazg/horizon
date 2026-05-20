@@ -6,6 +6,8 @@ import styles from '@/pages/search/result.module.scss'
 import { ColorfulShadow, Empty } from '@/components'
 import { Button, Spinner } from '@radix-ui/themes'
 import { PodcastType } from '@/types/podcast'
+import { toast, ShowPodcastDetailModal } from '@/utils'
+import { CONSTANT } from '@/types/constant'
 
 /**
  * 单集搜索结果页
@@ -22,14 +24,6 @@ export const ResultPodcast: React.FC = () => {
     records: [],
     loadMoreKey: {},
   })
-
-  const goPodcastDetail = (pid: string) => {
-    navigateTo('/podcast/detail', {
-      state: {
-        pid,
-      },
-    })
-  }
 
   const onSearch = (loadMore: boolean) => {
     setLoading(true)
@@ -96,7 +90,13 @@ export const ResultPodcast: React.FC = () => {
                   src={item.image.picUrl}
                   curPointer
                   onClick={() => {
-                    goPodcastDetail(item.pid)
+                    ShowPodcastDetailModal({
+                      pid: item.pid,
+                    }).catch(() => {
+                      toast(CONSTANT.ERROR_PODCAST_DETAIL_VIEW, {
+                        type: 'warn',
+                      })
+                    })
                   }}
                 />
               </div>

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { podcastHonorList } from '@/api/podcast'
 import styles from './index.module.scss'
 import { PodcastHonorType } from '@/types/podcast'
-import { GoTrophy } from 'react-icons/go'
 import { Card } from '@radix-ui/themes'
 
 type IProps = {
@@ -46,7 +45,6 @@ const PodcastHonorView: React.FC<IProps> = ({ pid, color }) => {
             key={item.id}
             className={styles['podcast-honor-item']}
           >
-            <GoTrophy />
             <p>{item.title}</p>
             <p>{item.campaignTitle}</p>
           </Card>
