@@ -30,6 +30,7 @@
         }
 
         &:nth-child(2) {
+          cursor: default;
           font-weight: 300;
           font-size: 0.8rem;
           color: $secondary-font-color;

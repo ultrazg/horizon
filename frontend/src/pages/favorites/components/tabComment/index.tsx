@@ -12,6 +12,7 @@ import {
   ShowMessageDialog,
   ShowProfileModal,
   toast,
+  ShowPodcastDetailModal,
 } from '@/utils'
 import { CONSTANT } from '@/types/constant'
 import { onCommentLikeUpdate } from '@/components/playerDrawer/components/episodeComment'
@@ -137,7 +138,7 @@ const TabComment: React.FC = () => {
                 {item.author.nickname}
               </p>
               <p>
-                {dayjs(item.collectedAt).format('MM/DD')} {item.ipLoc}
+                {`${dayjs(item.collectedAt).format('YYYY/MM/DD')} IP属地：${item.ipLoc}`}
               </p>
             </div>
             <div className={styles['remove-like']}>
@@ -228,7 +229,19 @@ const TabComment: React.FC = () => {
               >
                 {item.episode.title}
               </p>
-              <p>{item.episode.podcast.title}</p>
+              <p
+                onClick={() => {
+                  ShowPodcastDetailModal({
+                    pid: item.episode.podcast.pid,
+                  }).catch(() => {
+                    toast(CONSTANT.ERROR_PODCAST_DETAIL_VIEW, {
+                      type: 'warn',
+                    })
+                  })
+                }}
+              >
+                {item.episode.podcast.title}
+              </p>
             </div>
           </div>
         </Card>
