@@ -6,7 +6,7 @@ import dayjs from 'dayjs'
 import styles from './index.module.scss'
 import { isEmpty } from 'lodash'
 import { Button } from '@radix-ui/themes'
-import { showEpisodeDetailModal } from '@/utils'
+import { showEpisodeDetailModal, toast } from '@/utils'
 import { usePlayer } from '@/hooks'
 import { PlayerEpisodeInfoType } from '@/utils/player'
 
@@ -46,6 +46,23 @@ export const TabEpisode: React.FC<IProps> = ({ data, onLoadMore, loading }) => {
 
                 player.load(item.media.source.url, episodeInfo)
                 player.play()
+              }}
+              onAddToPlaylist={() => {
+                const episodeInfo: PlayerEpisodeInfoType = {
+                  title: item.title,
+                  eid: item.eid,
+                  pid: item.podcast.pid,
+                  cover: item?.image
+                    ? item.image.picUrl
+                    : item.podcast.image.picUrl,
+                  liked: item.isFavorited,
+                }
+
+                const added = player.addToPlaylist(
+                  item.media.source.url,
+                  episodeInfo,
+                )
+                toast(added ? '已添加到播放列表' : '已在播放列表中')
               }}
             />
           </div>

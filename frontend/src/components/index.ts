@@ -1,5 +1,6 @@
 import { PlayController } from './playerController'
 import { PlayerDrawer } from './playerDrawer'
+import { PlaylistDrawer } from './playlistDrawer'
 import { ColorfulShadow } from './colorfulShadow'
 import { TitleBar } from './titleBar'
 import { Modal } from './modal'
@@ -18,6 +19,7 @@ import { FinishedTag } from './tags/FinishedTag'
 export {
   PlayController,
   PlayerDrawer,
+  PlaylistDrawer,
   ColorfulShadow,
   TitleBar,
   Modal,

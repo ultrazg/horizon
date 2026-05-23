@@ -50,6 +50,23 @@ const EditorRecommended: React.FC<IProps> = ({ data, loading }) => {
                         player.load(item.episode.media.source.url, episodeInfo)
                         player.play()
                       }}
+                      onAddToPlaylist={() => {
+                        const episodeInfo: PlayerEpisodeInfoType = {
+                          title: item.episode.title,
+                          eid: item.episode.eid,
+                          pid: item.episode.pid,
+                          cover: item.episode?.image
+                            ? item.episode.image.picUrl
+                            : item.episode.podcast.image.picUrl,
+                          liked: item.episode.isFavorited,
+                        }
+
+                        const added = player.addToPlaylist(
+                          item.episode.media.source.url,
+                          episodeInfo,
+                        )
+                        toast(added ? '已添加到播放列表' : '已在播放列表中')
+                      }}
                     />
                   </div>
                   <div className={styles['info-box']}>

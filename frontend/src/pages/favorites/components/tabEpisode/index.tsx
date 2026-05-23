@@ -121,6 +121,33 @@ const TabEpisode: React.FC = () => {
                   player.load(url, episodeInfo)
                   player.play()
                 }}
+                onAddToPlaylist={() => {
+                  const episodeInfo: PlayerEpisodeInfoType = {
+                    title: item.title,
+                    eid: item.eid,
+                    pid: item.podcast.pid,
+                    cover: item?.image
+                      ? item.image.picUrl
+                      : item.podcast.image.picUrl,
+                    liked: item.isFavorited,
+                  }
+                  let url: string = ''
+
+                  if (item.payType === 'FREE') {
+                    url = item.media.source.url
+                  } else if (
+                    item.payType === 'PAY_EPISODE' &&
+                    item.trial?.segment
+                  ) {
+                    url = item.trial?.segment
+                  } else {
+                    toast('添加失败', { type: 'warn' })
+                    return
+                  }
+
+                  const added = player.addToPlaylist(url, episodeInfo)
+                  toast(added ? '已添加到播放列表' : '已在播放列表中')
+                }}
               />
             </div>
             <div className={styles['right']}>

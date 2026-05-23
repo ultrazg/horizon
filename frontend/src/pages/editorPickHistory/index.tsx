@@ -93,6 +93,23 @@ export const EditorPickHistory: React.FC = () => {
                           player.load(itm.episode.media.source.url, episodeInfo)
                           player.play()
                         }}
+                        onAddToPlaylist={() => {
+                          const episodeInfo: PlayerEpisodeInfoType = {
+                            title: itm.episode.title,
+                            eid: itm.episode.eid,
+                            pid: itm.episode.pid,
+                            cover: itm.episode.image
+                              ? itm.episode.image.picUrl
+                              : itm.episode.podcast.image.picUrl,
+                            liked: itm.episode.isFavorited,
+                          }
+
+                          const added = player.addToPlaylist(
+                            itm.episode.media.source.url,
+                            episodeInfo,
+                          )
+                          toast(added ? '已添加到播放列表' : '已在播放列表中')
+                        }}
                       />
                     </div>
                     <div className={styles['episode-info']}>

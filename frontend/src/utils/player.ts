@@ -13,7 +13,16 @@ export type PlayInfoType = {
   current: number
 } & PlayerEpisodeInfoType
 
+export type PlaylistItem = {
+  url: string
+  episodeInfo: PlayerEpisodeInfoType
+}
+
+type PlaylistListener = () => void
+
 class Player {
+  private playlistListeners: PlaylistListener[] = []
+  public playlist: PlaylistItem[] = []
   private audio: HTMLAudioElement
   public isLoading: boolean = false
   public episodeInfo: PlayerEpisodeInfoType = {
@@ -50,6 +59,28 @@ class Player {
       console.log('horizon player - 开始加载')
       Log('horizon player - 开始加载').then()
     }
+    this.audio.onended = () => {
+      console.log('horizon player - 播放结束')
+      Log('horizon player - 播放结束').then()
+      this.playNextInPlaylist()
+    }
+  }
+
+  /** 播放待播列表中的下一个单集 */
+  private playNextInPlaylist(): void {
+    if (this.playlist.length === 0) return
+
+    const currentIndex = this.playlist.findIndex(
+      (item) => item.episodeInfo.eid === this.episodeInfo.eid,
+    )
+
+    if (currentIndex === -1) return
+
+    this.removeFromPlaylist(currentIndex)
+
+    if (currentIndex < this.playlist.length) {
+      this.playFromPlaylist(currentIndex)
+    }
   }
 
   /**
@@ -62,6 +93,14 @@ class Player {
     this.audio.src = url
     this.episodeInfo = episodeInfo
     this.audio.load()
+
+    const exists = this.playlist.findIndex(
+      (item) => item.episodeInfo.eid === episodeInfo.eid,
+    )
+    if (exists === -1) {
+      this.playlist.push({ url, episodeInfo })
+      this.notifyPlaylistChange()
+    }
 
     console.log(`horizon player - 已加载远程地址 ${url}`)
     Log(`horizon player - 已加载远程地址 ${url}`).then()
@@ -157,6 +196,54 @@ class Player {
    */
   updatePlayInfo(playInfo: PlayInfoType): void {
     this.episodeInfo = playInfo
+  }
+
+  /** 播放列表变更监听 */
+  onPlaylistChange(listener: PlaylistListener): () => void {
+    this.playlistListeners.push(listener)
+    return () => {
+      this.playlistListeners = this.playlistListeners.filter(
+        (l) => l !== listener,
+      )
+    }
+  }
+
+  private notifyPlaylistChange(): void {
+    this.playlistListeners.forEach((l) => l())
+  }
+
+  /** 从播放列表移除 */
+  removeFromPlaylist(index: number): void {
+    this.playlist.splice(index, 1)
+    this.notifyPlaylistChange()
+  }
+
+  /** 添加到播放列表（不播放） */
+  addToPlaylist(url: string, episodeInfo: PlayerEpisodeInfoType): boolean {
+    const exists = this.playlist.findIndex(
+      (item) => item.episodeInfo.eid === episodeInfo.eid,
+    )
+    if (exists !== -1) {
+      return false
+    }
+    this.playlist.push({ url, episodeInfo })
+    this.notifyPlaylistChange()
+    return true
+  }
+
+  /** 播放播放列表中指定项 */
+  playFromPlaylist(index: number): void {
+    const item = this.playlist[index]
+    if (item) {
+      this.load(item.url, item.episodeInfo)
+      this.play()
+    }
+  }
+
+  /** 清空播放列表 */
+  clearPlaylist(): void {
+    this.playlist = []
+    this.notifyPlaylistChange()
   }
 
   /**
