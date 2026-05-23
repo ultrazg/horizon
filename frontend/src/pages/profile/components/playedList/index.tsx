@@ -8,7 +8,7 @@ import {
 import dayjs from 'dayjs'
 import { SlBubble, SlEarphones } from 'react-icons/sl'
 import { userType } from '@/types/user'
-import { Storage } from '@/utils'
+import { Storage, toast } from '@/utils'
 import { playedList } from '@/api/played'
 import styles from './index.module.scss'
 import { usePlayer } from '@/hooks'
@@ -67,6 +67,23 @@ export const PlayedList: React.FC = () => {
 
                 player.load(item.media.source.url, episodeInfo)
                 player.play()
+              }}
+              onAddToPlaylist={() => {
+                const episodeInfo: PlayerEpisodeInfoType = {
+                  eid: item.eid,
+                  pid: item.podcast.pid,
+                  cover: item?.image
+                    ? item.image.picUrl
+                    : item.podcast.image.picUrl,
+                  title: item.title,
+                  liked: item.isFavorited,
+                }
+
+                const added = player.addToPlaylist(
+                  item.media.source.url,
+                  episodeInfo,
+                )
+                toast(added ? '已添加到播放列表' : '已在播放列表中')
               }}
             />
           </div>

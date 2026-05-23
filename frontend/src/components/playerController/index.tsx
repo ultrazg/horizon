@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { PlayerDrawer } from '@/components'
+import { PlayerDrawer, PlaylistDrawer } from '@/components'
 import { EpisodeCover } from './components/episodeCover'
 import { VolumeController } from './components/volumeController'
 import { PlayerButtons } from './components/playerButtons'
@@ -15,6 +15,7 @@ import dayjs from 'dayjs'
 export const PlayController: React.FC = () => {
   const player = usePlayer()
   const [open, setOpen] = React.useState<boolean>(false)
+  const [playlistOpen, setPlaylistOpen] = React.useState<boolean>(false)
   const [progress, setProgress] = React.useState<number>(0)
   const [playerLoading, setPlayerLoading] = useState<boolean>(player.isLoading)
   const [playInfo, setPlayInfo] = useState<PlayInfoType>({
@@ -174,6 +175,7 @@ export const PlayController: React.FC = () => {
           <PlayerButtons
             player={player}
             playInfo={playInfo}
+            onPlaylistOpen={() => setPlaylistOpen(true)}
           />
         </div>
 
@@ -188,6 +190,13 @@ export const PlayController: React.FC = () => {
         open={open}
         onClose={() => {
           setOpen(false)
+        }}
+      />
+
+      <PlaylistDrawer
+        open={playlistOpen}
+        onClose={() => {
+          setPlaylistOpen(false)
         }}
       />
     </>

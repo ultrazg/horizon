@@ -1,8 +1,7 @@
 import React from 'react'
 import styles from './index.module.scss'
-import {
-  BsPlayFill,
-} from 'react-icons/bs'
+import { BsPlayFill, BsPlus } from 'react-icons/bs'
+import { CONSTANT } from '@/types/constant'
 
 type ColorfulShadowType = {
   className?: string
@@ -12,6 +11,7 @@ type ColorfulShadowType = {
   curPointer?: boolean
   circle?: boolean
   onClick?: () => void
+  onAddToPlaylist?: () => void
 }
 
 /**
@@ -23,6 +23,7 @@ type ColorfulShadowType = {
  * @param curPointer 光标指针是否展示为「手型」
  * @param circle 是否以圆形展示
  * @param onClick 点击事件
+ * @param onAddToPlaylist 添加到播放列表事件
  * @returns
  */
 export const ColorfulShadow: React.FC<ColorfulShadowType> = ({
@@ -33,12 +34,12 @@ export const ColorfulShadow: React.FC<ColorfulShadowType> = ({
   curPointer = false,
   circle = false,
   onClick,
+  onAddToPlaylist,
 }): JSX.Element => {
   return (
     <div
       className={`${styles['colorful-shadow-layout']} ${className} ${circle ? styles['circle'] : ''}`}
       style={style}
-      onClick={onClick}
     >
       <div
         className={`${styles['pic-box']} ${circle ? styles['circle'] : ''}`}
@@ -56,8 +57,22 @@ export const ColorfulShadow: React.FC<ColorfulShadowType> = ({
         />
         {mask && (
           <div className={styles['mask']}>
-            <div className={styles['circle']}>
+            <div
+              className={styles['play-button']}
+              onClick={onClick}
+            >
               <BsPlayFill />
+            </div>
+
+            <div
+              className={styles['add-player-list-button']}
+              title={CONSTANT.PLAYER_ADD_TO_PLAYLIST}
+              onClick={(e) => {
+                e.stopPropagation()
+                onAddToPlaylist?.()
+              }}
+            >
+              <BsPlus />
             </div>
           </div>
         )}

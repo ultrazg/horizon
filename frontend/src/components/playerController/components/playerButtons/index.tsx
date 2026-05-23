@@ -6,7 +6,11 @@ import {
   BsArrowClockwise,
 } from 'react-icons/bs'
 import { Spinner, Tooltip } from '@radix-ui/themes'
-import { HeartIcon, HeartFilledIcon } from '@radix-ui/react-icons'
+import {
+  HeartIcon,
+  HeartFilledIcon,
+  HamburgerMenuIcon,
+} from '@radix-ui/react-icons'
 import styles from './index.module.scss'
 import { Player, toast } from '@/utils'
 import { PlayInfoType } from '@/utils/player'
@@ -16,6 +20,7 @@ import { favoriteEpisodeUpdate } from '@/api/favorite'
 type IProps = {
   player: Player
   playInfo: PlayInfoType
+  onPlaylistOpen: () => void
 }
 
 const PLAYER_SPEEDS = [
@@ -61,7 +66,11 @@ const PLAYER_SPEEDS = [
   },
 ]
 
-export const PlayerButtons: React.FC<IProps> = ({ player, playInfo }) => {
+export const PlayerButtons: React.FC<IProps> = ({
+  player,
+  playInfo,
+  onPlaylistOpen,
+}) => {
   const [isPlaying, setIsPlaying] = useState<boolean>(player.isPlaying)
   const [left, setLeft] = useState<boolean>(false)
   const [right, setRight] = useState<boolean>(false)
@@ -222,6 +231,17 @@ export const PlayerButtons: React.FC<IProps> = ({ player, playInfo }) => {
               className={right ? 'rotateRight' : ''}
               style={{ width: 22, height: 22 }}
             />
+          </div>
+        </Tooltip>
+
+        <Tooltip content={CONSTANT.PLAYER_PLAYLIST}>
+          <div
+            className={styles['button']}
+            onClick={() => {
+              onPlaylistOpen()
+            }}
+          >
+            <HamburgerMenuIcon style={{ width: 22, height: 22 }} />
           </div>
         </Tooltip>
 
