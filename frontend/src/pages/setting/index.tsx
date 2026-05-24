@@ -24,6 +24,7 @@ import {
   DesktopIcon,
   SunIcon,
   MoonIcon,
+  TrashIcon,
 } from '@radix-ui/react-icons'
 import {
   APP_NAME,
@@ -39,6 +40,7 @@ import {
   WindowSetDarkTheme,
   OpenLogDir,
   toast,
+  CleanOldLogs,
 } from '@/utils'
 import { getUserPreference, updateUserPreference } from '@/api/user'
 import { useNavigateTo, usePlayer } from '@/hooks'
@@ -78,6 +80,7 @@ export const Setting: React.FC = () => {
   const [upgradeModal, setUpgradeModal] = useState<boolean>(false)
   const [proxyModal, setProxyModal] = useState<boolean>(false)
   const [checkLoading, setCheckLoading] = useState<boolean>(false)
+  const [cleanOldLogsLoading, setCleanOldLogsLoading] = useState<boolean>(false)
   const [openLogDirLoading, setOpenLogDirLoading] = useState<boolean>(false)
   const [newVersionModalInfo, setNewVersionModalInfo] = useState<{
     open: boolean
@@ -119,9 +122,42 @@ export const Setting: React.FC = () => {
           ShowMessageDialog(DialogType.INFO, '提示', '当前已是最新版本').then()
         }
       })
+      .catch((e) => {
+        toast('检查更新失败', {
+          type: 'warn',
+        })
+        console.error(e)
+      })
       .finally(() => {
         setCheckLoading(false)
       })
+  }
+
+  function onCleanOldLogs(): void {
+    ShowMessageDialog(
+      DialogType.QUESTION,
+      '提示',
+      '确定要清理七天前的日志文件吗？',
+    ).then(async (res) => {
+      if (res === 'Yes' || res === '是') {
+        setCleanOldLogsLoading(true)
+        CleanOldLogs()
+          .then((n) => {
+            toast(n === 0 ? '没有要清理的日志文件' : `已清理 ${n} 个过期日志`, {
+              type: n === 0 ? 'info' : 'success',
+            })
+          })
+          .catch((err) => {
+            toast('日志文件清理失败', {
+              type: 'warn',
+            })
+            console.error(err)
+          })
+          .finally(() => {
+            setCleanOldLogsLoading(false)
+          })
+      }
+    })
   }
 
   /**
@@ -492,7 +528,20 @@ export const Setting: React.FC = () => {
         />
         <Flex>
           <Box width="100%">日志</Box>
-          <Box>
+          <Box
+            width="70%"
+            style={{ textAlign: 'right' }}
+          >
+            <Button
+              size={'1'}
+              variant={'soft'}
+              mr={'3'}
+              onClick={onCleanOldLogs}
+              loading={cleanOldLogsLoading}
+            >
+              <TrashIcon />
+              清理日志文件
+            </Button>
             <Button
               size={'1'}
               variant={'soft'}
