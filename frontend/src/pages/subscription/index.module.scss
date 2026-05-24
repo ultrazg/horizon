@@ -9,6 +9,7 @@
   .podcast-cover {
     cursor: pointer;
     transition: 0.2s;
+    height: 100%;
 
     &:hover {
       transform: translateY(-3px) scale(1.05);

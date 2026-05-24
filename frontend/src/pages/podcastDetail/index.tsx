@@ -30,13 +30,13 @@ import styles from './index.module.scss'
 import '@/assets/global/animate.css'
 import { EpisodeType } from '@/types/episode'
 import { isEmpty } from 'lodash'
-import dayjs from 'dayjs'
 import {
   DialogType,
   ShowMessageDialog,
   toast,
   showEpisodeDetailModal,
   ShowProfileModal,
+  formatRelativeDate,
 } from '@/utils'
 import { updateSubscription } from '@/api/subscription'
 import { PodcastBulletinModal } from './components/podcastBulletinModal'
@@ -549,7 +549,7 @@ export const PodcastDetail: React.FC = () => {
                       {item.isFinished && <FinishedTag />}
                       <span>
                         {Math.floor(item.duration / 60)} 分钟 ·{' '}
-                        {dayjs(item.pubDate).format('YYYY/MM/DD')}
+                        {formatRelativeDate(item.pubDate)}
                       </span>
                       <span>
                         <SlEarphones />

@@ -23,6 +23,7 @@ import { testConnect } from './proxy'
 import Player from './player'
 import { SaveLastPlay } from './event'
 import { hexToRgba } from './string'
+import { formatRelativeDate } from './date'
 
 export {
   httpRequest,
@@ -48,6 +49,7 @@ export {
   Log,
   ShowChangelog,
   hexToRgba,
+  formatRelativeDate,
   ShowStickerModal,
   ShowProfileModal,
   ShowSubscriptionModal,

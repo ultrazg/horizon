@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { AspectRatio, Box, Card, Grid, Text, Spinner } from '@radix-ui/themes'
 import { subscription } from '@/api/subscription'
-import dayjs from 'dayjs'
 import styles from './index.module.scss'
 import { useNavigate } from 'react-router-dom'
 import { Empty } from '@/components'
+import { formatRelativeDate } from '@/utils'
 
 // TODO: 分页
 export const Subscription: React.FC = () => {
@@ -105,7 +105,7 @@ export const Subscription: React.FC = () => {
                   as="p"
                   size="2"
                 >
-                  更新于{dayjs(item.latestEpisodePubDate).format('YYYY/MM/DD')}
+                  更新于{formatRelativeDate(item.latestEpisodePubDate)}
                 </Text>
               </Card>
             </Box>
