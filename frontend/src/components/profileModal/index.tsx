@@ -760,7 +760,7 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
                     <p>
                       <span>
                         {Math.floor(item.duration / 60)}分钟 ·{' '}
-                        {dayjs(item.pubDate).format('MM/DD')}
+                        {dayjs(item.pubDate).format('YYYY/MM/DD')}
                       </span>
                       <span>
                         <SlEarphones />
