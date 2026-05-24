@@ -36,7 +36,7 @@ const EditorRecommended: React.FC<IProps> = ({ data, loading }) => {
                       src={item.episode.podcast.image.picUrl}
                       mask
                       curPointer
-                      onClick={() => {
+                      onPlay={() => {
                         const episodeInfo: PlayerEpisodeInfoType = {
                           title: item.episode.title,
                           eid: item.episode.eid,

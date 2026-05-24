@@ -32,7 +32,7 @@ const NewPodcast: React.FC<IProps> = ({ data }) => {
                     src={item.episode.podcast.image.picUrl}
                     mask
                     curPointer
-                    onClick={() => {
+                    onPlay={() => {
                       const episodeInfo: PlayerEpisodeInfoType = {
                         title: item.episode.title,
                         eid: item.episode.eid,

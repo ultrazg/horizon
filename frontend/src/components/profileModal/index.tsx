@@ -41,6 +41,7 @@ import {
   ShowSubscriptionModal,
   Storage,
   toast,
+  showEpisodeDetailModal,
 } from '@/utils'
 import { UserProfileType } from '@/types/profile'
 import { renderGender } from '@/utils/string'
@@ -572,12 +573,13 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
                             <ColorfulShadow
                               className={styles['episode-cover']}
                               curPointer
+                              mask
                               src={
                                 item.episode?.image
                                   ? item.episode.image.picUrl
                                   : item.episode.podcast.image.picUrl
                               }
-                              onClick={() => {
+                              onPlay={() => {
                                 const episodeInfo: PlayerEpisodeInfoType = {
                                   title: item.episode.title,
                                   eid: item.episode.eid,
@@ -597,7 +599,13 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
                             />
                           </div>
                           <div className={styles['right']}>
-                            <p>{item.episode.title}</p>
+                            <p
+                              onClick={() => {
+                                showEpisodeDetailModal(item.episode.eid)
+                              }}
+                            >
+                              {item.episode.title}
+                            </p>
                             <p
                               onClick={() => {
                                 ShowPodcastDetailModal({
@@ -681,7 +689,7 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
                           ? item.image.picUrl
                           : item.podcast.image.picUrl
                       }
-                      onClick={() => {
+                      onPlay={() => {
                         const episodeInfo: PlayerEpisodeInfoType = {
                           title: item.title,
                           eid: item.eid,

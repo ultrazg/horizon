@@ -33,7 +33,7 @@ export const TabEpisode: React.FC<IProps> = ({ data, onLoadMore, loading }) => {
               curPointer
               mask
               src={item?.image ? item.image.picUrl : item.podcast.image.picUrl}
-              onClick={() => {
+              onPlay={() => {
                 const episodeInfo: PlayerEpisodeInfoType = {
                   title: item.title,
                   eid: item.eid,

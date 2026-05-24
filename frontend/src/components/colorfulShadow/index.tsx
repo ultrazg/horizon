@@ -11,6 +11,7 @@ type ColorfulShadowType = {
   curPointer?: boolean
   circle?: boolean
   onClick?: () => void
+  onPlay?: () => void
   onAddToPlaylist?: () => void
 }
 
@@ -23,6 +24,7 @@ type ColorfulShadowType = {
  * @param curPointer 光标指针是否展示为「手型」
  * @param circle 是否以圆形展示
  * @param onClick 点击事件
+ * @param onPlay 点击播放事件
  * @param onAddToPlaylist 添加到播放列表事件
  * @returns
  */
@@ -34,12 +36,14 @@ export const ColorfulShadow: React.FC<ColorfulShadowType> = ({
   curPointer = false,
   circle = false,
   onClick,
+  onPlay,
   onAddToPlaylist,
 }): JSX.Element => {
   return (
     <div
       className={`${styles['colorful-shadow-layout']} ${className} ${circle ? styles['circle'] : ''}`}
       style={style}
+      onClick={onClick}
     >
       <div
         className={`${styles['pic-box']} ${circle ? styles['circle'] : ''}`}
@@ -59,7 +63,7 @@ export const ColorfulShadow: React.FC<ColorfulShadowType> = ({
           <div className={styles['mask']}>
             <div
               className={styles['play-button']}
-              onClick={onClick}
+              onClick={onPlay}
             >
               <BsPlayFill />
             </div>

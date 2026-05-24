@@ -1,19 +1,21 @@
 @import '@/assets/global/_variables.scss';
 
-.episode-detail-modal-layout{
+.episode-detail-modal-layout {
   padding: 0 0.7rem;
 
-  h3{
+  h3 {
     margin-bottom: 1rem;
     font-size: 2rem;
   }
 
-  .info{
+  .info {
     margin-bottom: 1rem;
     color: $secondary-font-color;
   }
 
   .episode-detail-html-content {
+    font-size: 14px;
+
     a {
       color: $primary-font-color;
     }

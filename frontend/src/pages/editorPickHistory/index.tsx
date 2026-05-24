@@ -79,7 +79,7 @@ export const EditorPickHistory: React.FC = () => {
                         }
                         mask
                         curPointer
-                        onClick={() => {
+                        onPlay={() => {
                           const episodeInfo: PlayerEpisodeInfoType = {
                             title: itm.episode.title,
                             eid: itm.episode.eid,

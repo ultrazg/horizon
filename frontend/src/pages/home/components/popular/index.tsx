@@ -43,7 +43,7 @@ const PopularPart: React.FC<IProps> = ({ data, loading, onRefresh }) => {
                     }
                     mask
                     curPointer
-                    onClick={() => {
+                    onPlay={() => {
                       const episodeInfo: PlayerEpisodeInfoType = {
                         title: item.episode.title,
                         eid: item.episode.eid,

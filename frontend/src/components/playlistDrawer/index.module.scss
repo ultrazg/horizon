@@ -28,6 +28,7 @@
   flex-direction: column;
 
   .header {
+    @include no-select;
     display: flex;
     justify-content: space-between;
     align-items: center;

@@ -290,7 +290,7 @@ export const Search: React.FC = () => {
                     }
                     curPointer
                     mask
-                    onClick={() => {
+                    onPlay={() => {
                       const episodeInfo: PlayerEpisodeInfoType = {
                         title: item.title,
                         eid: item.eid,

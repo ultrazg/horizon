@@ -54,7 +54,7 @@ export const PlayedList: React.FC = () => {
               curPointer
               mask
               src={item?.image ? item.image.picUrl : item.podcast.image.picUrl}
-              onClick={() => {
+              onPlay={() => {
                 const episodeInfo: PlayerEpisodeInfoType = {
                   eid: item.eid,
                   pid: item.podcast.pid,
