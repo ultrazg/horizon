@@ -9,6 +9,15 @@ import (
 	"time"
 )
 
+type safeWriter struct {
+	w io.Writer
+}
+
+func (s safeWriter) Write(p []byte) (int, error) {
+	_, _ = s.w.Write(p)
+	return len(p), nil
+}
+
 func initLog() (*os.File, error) {
 	var logDir string
 
@@ -45,7 +54,7 @@ func initLog() (*os.File, error) {
 		return nil, fmt.Errorf("打开日志文件失败: %w", err)
 	}
 
-	multiWriter := io.MultiWriter(os.Stdout, f)
+	multiWriter := io.MultiWriter(safeWriter{os.Stdout}, f)
 	log.SetOutput(multiWriter)
 
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
