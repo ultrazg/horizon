@@ -1,10 +1,33 @@
+import { useState } from 'react'
 import styles from './index.module.scss'
-import { APP_NAME } from '@/utils'
+import { APP_NAME, ShowChangelog, toast } from '@/utils'
 import { BrowserOpenURL } from 'wailsjs/runtime'
 import { Text, Heading, Button, Flex, Separator } from '@radix-ui/themes'
 import APP_ICON from '@/assets/images/logo.png'
+import ChangelogModal from '@/pages/setting/components/changelogModal'
 
 export const About = () => {
+  const [changelogLoading, setChangelogLoading] = useState<boolean>(false)
+  const [changelogModalOpen, setChangelogModalOpen] = useState<boolean>(false)
+  const [changelogStr, setChangelogStr] = useState<string>('')
+
+  function onShowChangelog(): void {
+    setChangelogLoading(true)
+
+    ShowChangelog()
+      .then((res) => {
+        if (res.flag) {
+          setChangelogStr(res.info)
+          setChangelogModalOpen(true)
+        } else {
+          toast(res.err, { type: 'warn', duration: 5000 })
+        }
+      })
+      .finally(() => {
+        setChangelogLoading(false)
+      })
+  }
+
   return (
     <div className={styles['about-layout']}>
       <div className={styles['app-logo']}>
@@ -69,8 +92,24 @@ export const About = () => {
           >
             Bug report & Issue
           </Button>
+          <Separator orientation="vertical" />
+          <Button
+            variant="ghost"
+            loading={changelogLoading}
+            onClick={onShowChangelog}
+          >
+            Changelog
+          </Button>
         </Flex>
       </div>
+
+      <ChangelogModal
+        open={changelogModalOpen}
+        onClose={() => {
+          setChangelogModalOpen(false)
+        }}
+        changelog={changelogStr}
+      />
     </div>
   )
 }
