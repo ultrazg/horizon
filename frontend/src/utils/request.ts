@@ -47,24 +47,21 @@ httpRequest.interceptors.response.use(
           isRefreshing = true
 
           return refreshToken(params)
-            .then((res) => {
+            .then(async (res) => {
               const XJikeAccessToken = res.data['x-jike-access-token']
               const XJikeRefreshToken = res.data['x-jike-refresh-token']
 
-              UpdateConfig(
-                USER_CONFIG_ENUM.accessToken,
-                XJikeAccessToken,
-              ).then()
-              UpdateConfig(
+              await UpdateConfig(USER_CONFIG_ENUM.accessToken, XJikeAccessToken)
+              await UpdateConfig(
                 USER_CONFIG_ENUM.refreshToken,
                 XJikeRefreshToken,
-              ).then()
+              )
 
               if (response) {
                 response.headers['x-jike-access-token'] = XJikeAccessToken
 
                 queue.forEach((cb) => {
-                  cb(response)
+                  cb(XJikeAccessToken)
                 })
                 queue = []
 
@@ -136,5 +133,52 @@ httpRequest.interceptors.request.use(
     return Promise.reject(err)
   },
 )
+
+const TOKEN_REFRESH_INTERVAL = 10 * 60 * 1000
+
+setInterval(async () => {
+  if (isRefreshing) return
+  isRefreshing = true
+
+  try {
+    const accessToken: string = await ReadConfig(USER_CONFIG_ENUM.accessToken)
+    const refreshTokenVal: string = await ReadConfig(
+      USER_CONFIG_ENUM.refreshToken,
+    )
+
+    if (!accessToken || !refreshTokenVal) return
+
+    const res = await axios.post(
+      '/refresh_token',
+      {
+        'x-jike-access-token': accessToken,
+        'x-jike-refresh-token': refreshTokenVal,
+      },
+      {
+        timeout: 15000,
+        headers: { 'x-jike-access-token': accessToken },
+      },
+    )
+
+    const newAccess = res.data?.data?.['x-jike-access-token']
+    const newRefresh = res.data?.data?.['x-jike-refresh-token']
+
+    if (!newAccess || !newRefresh) {
+      Log('定时刷新 token：响应缺少 token 字段，跳过').then()
+      return
+    }
+
+    await UpdateConfig(USER_CONFIG_ENUM.accessToken, newAccess)
+    await UpdateConfig(USER_CONFIG_ENUM.refreshToken, newRefresh)
+
+    queue.forEach((cb) => cb(newAccess))
+    queue = []
+  } catch (err) {
+    console.error('定时刷新 token 失败:', err)
+    Log(`定时刷新 token 失败：${err}`).then()
+  } finally {
+    isRefreshing = false
+  }
+}, TOKEN_REFRESH_INTERVAL)
 
 export default httpRequest
