@@ -259,7 +259,7 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open, themeColor }) => {
   }
 
   useEffect(() => {
-    if (open) {
+    if (open && eid) {
       getComment()
     }
 
@@ -269,7 +269,7 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open, themeColor }) => {
         records: [],
       })
     }
-  }, [open])
+  }, [open, eid])
 
   return (
     <>

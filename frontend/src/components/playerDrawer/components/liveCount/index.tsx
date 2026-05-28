@@ -45,7 +45,7 @@ export const LiveCount: React.FC<IProps> = ({ player, open, eid, pid }) => {
   useEffect(() => {
     let timer: any
 
-    if (open) {
+    if (open && eid) {
       reportLiveStats()
       getLiveCount()
 
@@ -58,7 +58,7 @@ export const LiveCount: React.FC<IProps> = ({ player, open, eid, pid }) => {
     }
 
     return () => clearInterval(timer)
-  }, [open])
+  }, [open, eid])
 
   return (
     <div className={styles['live-count-layout']}>

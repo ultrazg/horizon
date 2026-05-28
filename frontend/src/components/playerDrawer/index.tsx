@@ -118,14 +118,16 @@ export const PlayerDrawer: React.FC<IProps> = ({
   }
 
   useEffect(() => {
-    if (open) {
+    if (open && playInfo.eid) {
       getEpisodeDetail()
     }
 
     return () => {
-      setThemeColor('')
+      if (!open) {
+        setThemeColor('')
+      }
     }
-  }, [open])
+  }, [open, playInfo.eid])
 
   useEffect(() => {
     setProgress(Math.round(playInfo.current))
