@@ -98,7 +98,8 @@ export const UpgradeModal: React.FC<modalType> = ({ open, onClose }) => {
         />
         <div style={{ marginTop: 8 }}>
           {(downloadInfo.downloaded / 1024 / 1024).toFixed(2)}M /{' '}
-          {(downloadInfo.total / 1024 / 1024).toFixed(2)}M
+          {(downloadInfo.total / 1024 / 1024).toFixed(2)}M (
+          {downloadInfo.progress.toFixed(2)}%)
         </div>
       </div>
     </Modal>

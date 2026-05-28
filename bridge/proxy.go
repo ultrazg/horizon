@@ -55,6 +55,30 @@ func HTTPClientWithProxy(proxyURL string) (*http.Client, error) {
 	return client, nil
 }
 
+// HTTPClientForDownload 用于大文件下载，不设整体超时
+// （http.Client.Timeout 会限制 body 读，导致大包必定中断）。
+// 取消应通过 context 控制；阶段性超时由 Transport 字段把控。
+func HTTPClientForDownload(proxyURL string) (*http.Client, error) {
+	transport := &http.Transport{
+		ResponseHeaderTimeout: 30 * time.Second,
+		IdleConnTimeout:       90 * time.Second,
+		TLSHandshakeTimeout:   15 * time.Second,
+	}
+
+	if proxyURL != "" {
+		proxy, err := url.Parse(proxyURL)
+		if err != nil {
+			log.Println(err)
+			return nil, fmt.Errorf("无法解析代理 URL: %v", err)
+		}
+		transport.Proxy = http.ProxyURL(proxy)
+	}
+
+	return &http.Client{
+		Transport: transport,
+	}, nil
+}
+
 func GetProxyInfo(a *App) string {
 	proxyEnabled := a.ReadConfig("proxy.enabled").(bool)
 	proxyIp := a.ReadConfig("proxy.ip").(string)
