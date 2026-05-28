@@ -9,6 +9,7 @@ import (
 	"os/exec"
 	"os/user"
 	"path/filepath"
+	"strings"
 )
 
 func IsExist(path string) bool {
@@ -45,9 +46,26 @@ func UnzipZIPFile(path string) error {
 	defer archive.Close()
 
 	output := GetUserDownloadPath()
+	outputAbs, err := filepath.Abs(output)
+	if err != nil {
+		log.Println(err)
+
+		return err
+	}
 
 	for _, f := range archive.File {
 		filePath := filepath.Join(output, f.Name)
+
+		// zip slip 防御：解压目标必须落在 output 目录内
+		absPath, err := filepath.Abs(filePath)
+		if err != nil {
+			log.Println(err)
+
+			return err
+		}
+		if absPath != outputAbs && !strings.HasPrefix(absPath, outputAbs+string(os.PathSeparator)) {
+			return fmt.Errorf("非法的 zip 路径（zip slip）: %s", f.Name)
+		}
 
 		if f.FileInfo().IsDir() {
 			err := os.MkdirAll(filePath, f.Mode())

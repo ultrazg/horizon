@@ -29,6 +29,8 @@ func (a *App) Start(ctx context.Context) {
 
 	log.Println("Start")
 	log.Printf("%s %s %s", APP_VERSION, runtime.GOOS, runtime.GOARCH)
+
+	go CleanupStaleBackups()
 }
 
 func IsWindows() bool {
