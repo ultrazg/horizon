@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import {
   ColorfulShadow,
   FinishedTag,
+  OwnedEpisodeTag,
   PayEpisodeTag,
   PlayedTag,
 } from '@/components'
@@ -89,7 +90,10 @@ export const PlayedList: React.FC = () => {
           </div>
           <div className={styles['right']}>
             <p>
-              {item.payType === 'PAY_EPISODE' && <PayEpisodeTag />}
+              {item.isOwned && <OwnedEpisodeTag />}
+              {item.payType === 'PAY_EPISODE' && !item.isOwned && (
+                <PayEpisodeTag />
+              )}
               {item.title}
             </p>
             <p>{item.description}</p>

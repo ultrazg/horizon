@@ -72,11 +72,10 @@ export const MileageProgressView: React.FC<IProps> = ({ mileageData }) => {
               <p className={styles['played-time']}>
                 {formatTime(item.playedSeconds)[0] === 0
                   ? ''
-                  : formatTime(item.playedSeconds)[0] + '时'}
+                  : formatTime(item.playedSeconds)[0] + ' 时 '}
                 {formatTime(item.playedSeconds)[1] === 0
                   ? ''
-                  : formatTime(item.playedSeconds)[1] + '分'}
-                {formatTime(item.playedSeconds)[2]}秒
+                  : formatTime(item.playedSeconds)[1] + ' 分钟 '}
               </p>
             </div>
           </div>

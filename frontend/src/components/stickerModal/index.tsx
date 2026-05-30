@@ -212,7 +212,9 @@ export const StickerModal: React.FC<IProps> = ({
                 />
                 <Flex direction="column">
                   <Text size="3">
-                    {dayjs(currentActive.ownedAt).format('YYYY.MM.DD')}
+                    <pre>
+                      {dayjs(currentActive.ownedAt).format('YYYY.MM.DD')}
+                    </pre>
                   </Text>
                   <Text
                     size="2"
@@ -226,7 +228,9 @@ export const StickerModal: React.FC<IProps> = ({
                   size="2"
                 />
                 <Flex direction="column">
-                  <Text size="3">{currentActive.number}</Text>
+                  <Text size="3">
+                    <pre>{currentActive.number}</pre>
+                  </Text>
                   <Text
                     size="2"
                     className="secondary"

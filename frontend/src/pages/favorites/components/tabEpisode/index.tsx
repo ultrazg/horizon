@@ -5,6 +5,7 @@ import {
   FinishedTag,
   PayEpisodeTag,
   PlayedTag,
+  OwnedEpisodeTag,
 } from '@/components'
 import { SlBubble, SlEarphones } from 'react-icons/sl'
 import { favoriteEpisodeList, favoriteEpisodeUpdate } from '@/api/favorite'
@@ -157,7 +158,10 @@ const TabEpisode: React.FC = () => {
                   showEpisodeDetailModal(item.eid)
                 }}
               >
-                {item.payType === 'PAY_EPISODE' && <PayEpisodeTag />}
+                {item.isOwned && <OwnedEpisodeTag />}
+                {item.payType === 'PAY_EPISODE' && !item.isOwned && (
+                  <PayEpisodeTag />
+                )}
                 {item.title}
               </p>
               <p

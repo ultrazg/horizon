@@ -47,7 +47,7 @@ func AppOptions(app *bridge.App) *options.App {
 			WindowIsTranslucent:  false,
 			About: &mac.AboutInfo{
 				Title:   fmt.Sprintf("%s %s", bridge.APP_NAME, bridge.APP_VERSION),
-				Message: "第三方小宇宙桌面客户端，支持 Windows 与 macOS\r\n\r\n© 2025 2bit",
+				Message: "第三方小宇宙桌面客户端，支持 Windows 与 macOS\r\n\r\n© 2026 2bit",
 				Icon:    icon,
 			},
 		},

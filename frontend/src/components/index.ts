@@ -15,6 +15,7 @@ import { PodcastDetailModal } from './podcastDetailModal'
 import { PayEpisodeTag } from './tags/PayEpisodeTag'
 import { PlayedTag } from './tags/PlayedTag'
 import { FinishedTag } from './tags/FinishedTag'
+import { OwnedEpisodeTag } from './tags/OwnedEpisodeTag'
 
 export {
   PlayController,
@@ -34,4 +35,5 @@ export {
   PayEpisodeTag,
   PlayedTag,
   FinishedTag,
+  OwnedEpisodeTag,
 }

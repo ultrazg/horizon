@@ -24,6 +24,7 @@ import {
   PickModal,
   Empty,
   PayEpisodeTag,
+  OwnedEpisodeTag,
 } from '@/components'
 import {
   SlBubble,
@@ -753,7 +754,10 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
                   </div>
                   <div className={styles['right']}>
                     <p>
-                      {item.payType === 'PAY_EPISODE' && <PayEpisodeTag />}
+                      {item.isOwned && <OwnedEpisodeTag />}
+                      {item.payType === 'PAY_EPISODE' && !item.isOwned && (
+                        <PayEpisodeTag />
+                      )}
                       {item.title}
                     </p>
                     <p title={item.description}>{item.description}</p>

@@ -18,6 +18,7 @@ type EpisodeType = {
   isPicked: boolean
   isPlayed: boolean
   isPrivateMedia: boolean
+  isOwned?: boolean
   labels?: Array<any>
   media: MediaType
   mediaKey: string

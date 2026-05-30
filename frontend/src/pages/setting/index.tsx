@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { Environment } from 'wailsjs/runtime'
-import { envType } from '@/types/env'
 import {
   SETTING_CONFIG_ENUM,
   settingConfigType,
@@ -62,7 +60,6 @@ import { ThemeMode, useTheme } from '@/layouts/theme'
 import { BsFolder } from 'react-icons/bs'
 
 export const Setting: React.FC = () => {
-  const [envInfo, setEnvInfo] = useState<envType>()
   const [config, setConfig] = useState<settingConfigType>({
     checkUpdateOnStartup: false,
     theme: 'light',
@@ -261,10 +258,6 @@ export const Setting: React.FC = () => {
   }
 
   useEffect(() => {
-    Environment().then((res: envType) => {
-      setEnvInfo(res)
-    })
-
     onGetUserPreference()
 
     ReadConfig(SETTING_CONFIG_ENUM.theme).then((theme) => {
@@ -283,7 +276,7 @@ export const Setting: React.FC = () => {
         <Flex>
           <Box width="70%">手机号</Box>
           <Box className={styles['content_text']}>
-            {userInfo.mobilePhoneNumber}
+            <pre>{userInfo.mobilePhoneNumber}</pre>
           </Box>
         </Flex>
         {userInfo.wechatUserInfo?.nickName && (
@@ -295,7 +288,7 @@ export const Setting: React.FC = () => {
             <Flex>
               <Box width="70%">微信</Box>
               <Box className={styles['content_text']}>
-                {userInfo.wechatUserInfo?.nickName}
+                <pre>{userInfo.wechatUserInfo?.nickName}</pre>
               </Box>
             </Flex>
           </>
@@ -310,7 +303,7 @@ export const Setting: React.FC = () => {
             <Flex>
               <Box width="70%">即刻</Box>
               <Box className={styles['content_text']}>
-                {userInfo.jikeUserInfo?.nickname}
+                <pre>{userInfo.jikeUserInfo?.nickname}</pre>
               </Box>
             </Flex>
           </>
@@ -641,9 +634,7 @@ export const Setting: React.FC = () => {
 
       <div className={styles['app-info']}>
         <div>{APP_NAME}</div>
-        <p>
-          v{APP_VERSION}_{envInfo?.platform}_{envInfo?.arch}
-        </p>
+        <pre>v{APP_VERSION}</pre>
       </div>
 
       <BlockedModal

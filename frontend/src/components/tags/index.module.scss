@@ -11,6 +11,17 @@
   font-size: 16px;
 }
 
+.owned-episode-tag {
+  @include no-select;
+  color: #faad14;
+  font-weight: normal;
+  border: 1px solid #faad14;
+  padding: 0 0.3rem;
+  margin-right: 0.5rem;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
 .played-tag {
   @include no-select;
   font-weight: normal;

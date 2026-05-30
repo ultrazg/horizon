@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import {
   ColorfulShadow,
   FinishedTag,
+  OwnedEpisodeTag,
   PayEpisodeTag,
   PlayedTag,
 } from '@/components'
@@ -534,7 +535,10 @@ export const PodcastDetail: React.FC = () => {
                         showEpisodeDetailModal(item.eid)
                       }}
                     >
-                      {item.payType === 'PAY_EPISODE' && <PayEpisodeTag />}
+                      {item.isOwned && <OwnedEpisodeTag />}
+                      {item.payType === 'PAY_EPISODE' && !item.isOwned && (
+                        <PayEpisodeTag />
+                      )}
                       {item.title}
                     </p>
                     <p

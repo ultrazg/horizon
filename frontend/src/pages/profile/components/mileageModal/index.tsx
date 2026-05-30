@@ -14,7 +14,7 @@ type IProps = {
 } & modalType
 
 /**
- * 收听数据弹窗
+ * 收听时长弹窗
  */
 export const MileageModal: React.FC<IProps> = ({ data, open, onClose }) => {
   const [height] = useState(useWindowSize().height * 0.4)
@@ -86,7 +86,7 @@ export const MileageModal: React.FC<IProps> = ({ data, open, onClose }) => {
 
   return (
     <Modal
-      title="收听数据"
+      title="收听时长"
       open={open}
       onClose={onClose}
       width={`${width * 0.6}px`}
