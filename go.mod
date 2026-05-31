@@ -4,7 +4,7 @@ go 1.24.0
 
 require (
 	github.com/spf13/viper v1.19.0
-	github.com/ultrazg/xyz v1.9.4
+	github.com/ultrazg/xyz v1.10.0
 	github.com/wailsapp/wails/v2 v2.10.2
 	golang.org/x/sys v0.37.0
 )
