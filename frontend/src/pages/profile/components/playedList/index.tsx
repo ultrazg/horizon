@@ -9,7 +9,7 @@ import {
 import dayjs from 'dayjs'
 import { SlBubble, SlEarphones } from 'react-icons/sl'
 import { userType } from '@/types/user'
-import { Storage, toast } from '@/utils'
+import { Storage, fetchPrivateMediaUrl, toast } from '@/utils'
 import { playedList } from '@/api/played'
 import styles from './index.module.scss'
 import { usePlayer } from '@/hooks'
@@ -55,7 +55,7 @@ export const PlayedList: React.FC = () => {
               curPointer
               mask
               src={item?.image ? item.image.picUrl : item.podcast.image.picUrl}
-              onPlay={() => {
+              onPlay={async () => {
                 const episodeInfo: PlayerEpisodeInfoType = {
                   eid: item.eid,
                   pid: item.podcast.pid,
@@ -65,11 +65,33 @@ export const PlayedList: React.FC = () => {
                   title: item.title,
                   liked: item.isFavorited,
                 }
+                let url: string = ''
 
-                player.load(item.media.source.url, episodeInfo)
+                if (item.payType === 'FREE') {
+                  url = item.media.source.url
+                } else if (item.payType === 'PAY_EPISODE' && item.isOwned) {
+                  url = await fetchPrivateMediaUrl(item.eid)
+                } else if (
+                  item.payType === 'PAY_EPISODE' &&
+                  !item.isOwned &&
+                  item.trial?.segment
+                ) {
+                  url = item.trial?.segment
+                  toast('正在播放试听内容', {
+                    type: 'info',
+                    duration: 5000,
+                  })
+                } else {
+                  toast('播放失败', {
+                    type: 'warn',
+                  })
+                  return
+                }
+
+                player.load(url, episodeInfo)
                 player.play()
               }}
-              onAddToPlaylist={() => {
+              onAddToPlaylist={async () => {
                 const episodeInfo: PlayerEpisodeInfoType = {
                   eid: item.eid,
                   pid: item.podcast.pid,
@@ -79,11 +101,24 @@ export const PlayedList: React.FC = () => {
                   title: item.title,
                   liked: item.isFavorited,
                 }
+                let url: string = ''
 
-                const added = player.addToPlaylist(
-                  item.media.source.url,
-                  episodeInfo,
-                )
+                if (item.payType === 'FREE') {
+                  url = item.media.source.url
+                } else if (item.payType === 'PAY_EPISODE' && item.isOwned) {
+                  url = await fetchPrivateMediaUrl(item.eid)
+                } else if (
+                  item.payType === 'PAY_EPISODE' &&
+                  !item.isOwned &&
+                  item.trial?.segment
+                ) {
+                  url = item.trial?.segment
+                } else {
+                  toast('添加失败', { type: 'warn' })
+                  return
+                }
+
+                const added = player.addToPlaylist(url, episodeInfo)
                 toast(added ? '已添加到播放列表' : '已在播放列表中')
               }}
             />

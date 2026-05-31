@@ -34,6 +34,7 @@ import { isEmpty } from 'lodash'
 import {
   DialogType,
   ShowMessageDialog,
+  fetchPrivateMediaUrl,
   toast,
   showEpisodeDetailModal,
   ShowProfileModal,
@@ -467,7 +468,7 @@ export const PodcastDetail: React.FC = () => {
                           ? item.image.picUrl
                           : item.podcast.image.picUrl
                       }
-                      onPlay={() => {
+                      onPlay={async () => {
                         const episodeInfo: PlayerEpisodeInfoType = {
                           title: item.title,
                           eid: item.eid,
@@ -481,8 +482,11 @@ export const PodcastDetail: React.FC = () => {
 
                         if (item.payType === 'FREE') {
                           url = item.media.source.url
+                        } else if (item.payType === 'PAY_EPISODE' && item.isOwned) {
+                          url = await fetchPrivateMediaUrl(item.eid)
                         } else if (
                           item.payType === 'PAY_EPISODE' &&
+                          !item.isOwned &&
                           item.trial?.segment
                         ) {
                           url = item.trial?.segment
@@ -500,7 +504,7 @@ export const PodcastDetail: React.FC = () => {
                         player.load(url, episodeInfo)
                         player.play()
                       }}
-                      onAddToPlaylist={() => {
+                      onAddToPlaylist={async () => {
                         const episodeInfo: PlayerEpisodeInfoType = {
                           title: item.title,
                           eid: item.eid,
@@ -514,8 +518,11 @@ export const PodcastDetail: React.FC = () => {
 
                         if (item.payType === 'FREE') {
                           url = item.media.source.url
+                        } else if (item.payType === 'PAY_EPISODE' && item.isOwned) {
+                          url = await fetchPrivateMediaUrl(item.eid)
                         } else if (
                           item.payType === 'PAY_EPISODE' &&
+                          !item.isOwned &&
                           item.trial?.segment
                         ) {
                           url = item.trial?.segment

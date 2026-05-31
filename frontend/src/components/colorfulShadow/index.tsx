@@ -63,7 +63,10 @@ export const ColorfulShadow: React.FC<ColorfulShadowType> = ({
           <div className={styles['mask']}>
             <div
               className={styles['play-button']}
-              onClick={onPlay}
+              onClick={(e) => {
+                e.stopPropagation()
+                onPlay?.()
+              }}
             >
               <BsPlayFill />
             </div>

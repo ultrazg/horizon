@@ -41,6 +41,7 @@ import {
   ShowStickerModal,
   ShowSubscriptionModal,
   Storage,
+  fetchPrivateMediaUrl,
   toast,
   showEpisodeDetailModal,
 } from '@/utils'
@@ -690,7 +691,7 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
                           ? item.image.picUrl
                           : item.podcast.image.picUrl
                       }
-                      onPlay={() => {
+                      onPlay={async () => {
                         const episodeInfo: PlayerEpisodeInfoType = {
                           title: item.title,
                           eid: item.eid,
@@ -704,8 +705,11 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
 
                         if (item.payType === 'FREE') {
                           url = item.media.source.url
+                        } else if (item.payType === 'PAY_EPISODE' && item.isOwned) {
+                          url = await fetchPrivateMediaUrl(item.eid)
                         } else if (
                           item.payType === 'PAY_EPISODE' &&
+                          !item.isOwned &&
                           item.trial?.segment
                         ) {
                           url = item.trial?.segment
@@ -723,7 +727,7 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
                         player.load(url, episodeInfo)
                         player.play()
                       }}
-                      onAddToPlaylist={() => {
+                      onAddToPlaylist={async () => {
                         const episodeInfo: PlayerEpisodeInfoType = {
                           title: item.title,
                           eid: item.eid,
@@ -737,8 +741,11 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
 
                         if (item.payType === 'FREE') {
                           url = item.media.source.url
+                        } else if (item.payType === 'PAY_EPISODE' && item.isOwned) {
+                          url = await fetchPrivateMediaUrl(item.eid)
                         } else if (
                           item.payType === 'PAY_EPISODE' &&
+                          !item.isOwned &&
                           item.trial?.segment
                         ) {
                           url = item.trial?.segment

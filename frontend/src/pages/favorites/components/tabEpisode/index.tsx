@@ -18,6 +18,7 @@ import {
   showEpisodeDetailModal,
   ShowMessageDialog,
   toast,
+  fetchPrivateMediaUrl,
 } from '@/utils'
 import { usePlayer } from '@/hooks'
 import { PlayerEpisodeInfoType } from '@/utils/player'
@@ -89,7 +90,7 @@ const TabEpisode: React.FC = () => {
                 curPointer
                 mask
                 src={item.image ? item.image.picUrl : item.podcast.image.picUrl}
-                onPlay={() => {
+                onPlay={async () => {
                   const episodeInfo: PlayerEpisodeInfoType = {
                     title: item.title,
                     eid: item.eid,
@@ -103,8 +104,11 @@ const TabEpisode: React.FC = () => {
 
                   if (item.payType === 'FREE') {
                     url = item.media.source.url
+                  } else if (item.payType === 'PAY_EPISODE' && item.isOwned) {
+                    url = await fetchPrivateMediaUrl(item.eid)
                   } else if (
                     item.payType === 'PAY_EPISODE' &&
+                    !item.isOwned &&
                     item.trial?.segment
                   ) {
                     url = item.trial?.segment
@@ -122,7 +126,7 @@ const TabEpisode: React.FC = () => {
                   player.load(url, episodeInfo)
                   player.play()
                 }}
-                onAddToPlaylist={() => {
+                onAddToPlaylist={async () => {
                   const episodeInfo: PlayerEpisodeInfoType = {
                     title: item.title,
                     eid: item.eid,
@@ -136,8 +140,11 @@ const TabEpisode: React.FC = () => {
 
                   if (item.payType === 'FREE') {
                     url = item.media.source.url
+                  } else if (item.payType === 'PAY_EPISODE' && item.isOwned) {
+                    url = await fetchPrivateMediaUrl(item.eid)
                   } else if (
                     item.payType === 'PAY_EPISODE' &&
+                    !item.isOwned &&
                     item.trial?.segment
                   ) {
                     url = item.trial?.segment

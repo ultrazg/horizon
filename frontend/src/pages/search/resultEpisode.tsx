@@ -13,7 +13,7 @@ import { search, searchType } from '@/api/search'
 import { isEmpty } from 'lodash'
 import { PlayerEpisodeInfoType } from '@/utils/player'
 import { usePlayer } from '@/layouts/player'
-import { toast } from '@/utils'
+import { fetchPrivateMediaUrl, toast } from '@/utils'
 
 /**
  * 单集搜索结果页
@@ -99,7 +99,7 @@ export const ResultEpisode: React.FC = () => {
                   }
                   curPointer
                   mask
-                  onPlay={() => {
+                  onPlay={async () => {
                     const episodeInfo: PlayerEpisodeInfoType = {
                       title: item.title,
                       eid: item.eid,
@@ -113,8 +113,11 @@ export const ResultEpisode: React.FC = () => {
 
                     if (item.payType === 'FREE') {
                       url = item.media.source.url
+                    } else if (item.payType === 'PAY_EPISODE' && item.isOwned) {
+                      url = await fetchPrivateMediaUrl(item.eid)
                     } else if (
                       item.payType === 'PAY_EPISODE' &&
+                      !item.isOwned &&
                       item.trial?.segment
                     ) {
                       url = item.trial?.segment
@@ -132,7 +135,7 @@ export const ResultEpisode: React.FC = () => {
                     player.load(url, episodeInfo)
                     player.play()
                   }}
-                  onAddToPlaylist={() => {
+                  onAddToPlaylist={async () => {
                     const episodeInfo: PlayerEpisodeInfoType = {
                       title: item.title,
                       eid: item.eid,
@@ -146,8 +149,11 @@ export const ResultEpisode: React.FC = () => {
 
                     if (item.payType === 'FREE') {
                       url = item.media.source.url
+                    } else if (item.payType === 'PAY_EPISODE' && item.isOwned) {
+                      url = await fetchPrivateMediaUrl(item.eid)
                     } else if (
                       item.payType === 'PAY_EPISODE' &&
+                      !item.isOwned &&
                       item.trial?.segment
                     ) {
                       url = item.trial?.segment

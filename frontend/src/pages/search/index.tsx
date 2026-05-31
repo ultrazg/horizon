@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { Button, Spinner } from '@radix-ui/themes'
 import { search, type searchType } from '@/api/search'
 import styles from './index.module.scss'
-import { ShowPodcastDetailModal, ShowProfileModal, toast } from '@/utils'
+import { ShowPodcastDetailModal, ShowProfileModal, fetchPrivateMediaUrl, toast } from '@/utils'
 import {
   ColorfulShadow,
   Empty,
@@ -295,7 +295,7 @@ export const Search: React.FC = () => {
                     }
                     curPointer
                     mask
-                    onPlay={() => {
+                    onPlay={async () => {
                       const episodeInfo: PlayerEpisodeInfoType = {
                         title: item.title,
                         eid: item.eid,
@@ -309,8 +309,11 @@ export const Search: React.FC = () => {
 
                       if (item.payType === 'FREE') {
                         url = item.media.source.url
+                      } else if (item.payType === 'PAY_EPISODE' && item.isOwned) {
+                        url = await fetchPrivateMediaUrl(item.eid)
                       } else if (
                         item.payType === 'PAY_EPISODE' &&
+                        !item.isOwned &&
                         item.trial?.segment
                       ) {
                         url = item.trial?.segment
@@ -328,7 +331,7 @@ export const Search: React.FC = () => {
                       player.load(url, episodeInfo)
                       player.play()
                     }}
-                    onAddToPlaylist={() => {
+                    onAddToPlaylist={async () => {
                       const episodeInfo: PlayerEpisodeInfoType = {
                         title: item.title,
                         eid: item.eid,
@@ -342,8 +345,11 @@ export const Search: React.FC = () => {
 
                       if (item.payType === 'FREE') {
                         url = item.media.source.url
+                      } else if (item.payType === 'PAY_EPISODE' && item.isOwned) {
+                        url = await fetchPrivateMediaUrl(item.eid)
                       } else if (
                         item.payType === 'PAY_EPISODE' &&
+                        !item.isOwned &&
                         item.trial?.segment
                       ) {
                         url = item.trial?.segment
