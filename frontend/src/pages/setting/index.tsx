@@ -111,7 +111,9 @@ export const Setting: React.FC = () => {
         if (!res.isLatest) {
           setNewVersionModalInfo({
             open: true,
-            createdAt: dayjs(res.latest?.created_at).format('YYYY-MM-DD'),
+            createdAt: dayjs(res.latest?.created_at).format(
+              'YYYY-MM-DD HH:mm:ss',
+            ),
             tagName: res.latest?.tag_name || '',
             body: res.latest?.body || '',
           })

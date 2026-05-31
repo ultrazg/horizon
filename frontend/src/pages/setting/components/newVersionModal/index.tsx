@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { modalType } from '@/types/modal'
 import styles from './index.module.scss'
 import { Modal } from '@/components'
-import { APP_VERSION } from '@/utils'
-import { Button } from '@radix-ui/themes'
+import { APP_VERSION, ShowChangelog, toast } from '@/utils'
+import { Button, Spinner } from '@radix-ui/themes'
 import { UpdateIcon } from '@radix-ui/react-icons'
+import { MarkdownContent } from '@/components/markdownContent'
 
 type IProps = {
   newVersionInfo: {
@@ -28,6 +29,26 @@ export const NewVersionModal: React.FC<modalType & IProps> = ({
   onClose,
   newVersionInfo,
 }) => {
+  const [changelog, setChangelog] = useState<string>('')
+  const [loading, setLoading] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (open && !changelog) {
+      setLoading(true)
+      ShowChangelog()
+        .then((res) => {
+          if (res.flag) {
+            setChangelog(res.info)
+          } else {
+            toast(res.err, { type: 'warn', duration: 5000 })
+          }
+        })
+        .finally(() => {
+          setLoading(false)
+        })
+    }
+  }, [open, changelog])
+
   return (
     <Modal
       title="发现新版本"
@@ -47,18 +68,22 @@ export const NewVersionModal: React.FC<modalType & IProps> = ({
     >
       <div className={styles['wrapper']}>
         <p className={styles['label']}>
-          发布时间：<span>{newVersionInfo.createdAt}</span>
+          发布时间：<pre>{newVersionInfo.createdAt}</pre>
         </p>
         <p className={styles['label']}>
-          当前版本：<span>v{APP_VERSION}</span>
+          当前版本：<pre>v{APP_VERSION}</pre>
         </p>
         <p className={styles['label']}>
-          最新版本：<span>{newVersionInfo.tagName}</span>
+          最新版本：<pre>{newVersionInfo.tagName}</pre>
         </p>
-        <p className={styles['label']}>
-          更新内容：
-          <pre>{newVersionInfo.body}</pre>
-        </p>
+        <div className={styles['update-content']}>
+          <p className={styles['label']}>版本历史：</p>
+          <Spinner loading={loading}>
+            <div className={styles['markdown-wrapper']}>
+              <MarkdownContent content={changelog} />
+            </div>
+          </Spinner>
+        </div>
       </div>
     </Modal>
   )

@@ -6,19 +6,25 @@
   .label {
     color: $secondary-font-color;
 
-    span {
+    pre {
+      display: inline;
+      margin: 0;
+      padding: 0;
       color: $primary-font-color;
     }
+  }
 
-    pre {
-      font-size: 13px;
-      margin-top: .3rem;
-      color: $primary-font-color;
+  .update-content {
+    .markdown-wrapper {
+      margin-top: 0.3rem;
       max-height: 200px;
-      overflow-y: scroll;
-      white-space: pre-wrap;
-      word-break: break-word;
-      overflow-wrap: break-word;
+      overflow-y: auto;
+    }
+
+    .loading {
+      margin-top: 0.3rem;
+      font-size: 13px;
+      color: $secondary-font-color;
     }
   }
 }
