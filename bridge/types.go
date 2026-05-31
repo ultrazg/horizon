@@ -48,7 +48,6 @@ type CheckUpgradeInfo struct {
 type Latest struct {
 	TagName   string    `json:"tag_name"`
 	CreatedAt time.Time `json:"created_at"`
-	Body      string    `json:"body"`
 }
 
 type GithubReleaseInfo struct {

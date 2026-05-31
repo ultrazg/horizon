@@ -83,12 +83,10 @@ export const Setting: React.FC = () => {
     open: boolean
     createdAt: string
     tagName: string
-    body: string
   }>({
     open: false,
     createdAt: '',
     tagName: '',
-    body: '',
   })
   const player = usePlayer()
 
@@ -115,7 +113,6 @@ export const Setting: React.FC = () => {
               'YYYY-MM-DD HH:mm:ss',
             ),
             tagName: res.latest?.tag_name || '',
-            body: res.latest?.body || '',
           })
         } else {
           ShowMessageDialog(DialogType.INFO, '提示', '当前已是最新版本').then()
@@ -658,14 +655,12 @@ export const Setting: React.FC = () => {
         newVersionInfo={{
           createdAt: newVersionModalInfo.createdAt,
           tagName: newVersionModalInfo.tagName,
-          body: newVersionModalInfo.body,
         }}
         onOk={() => {
           setNewVersionModalInfo({
             open: false,
             createdAt: '',
             tagName: '',
-            body: '',
           })
           setUpgradeModal(true)
         }}
@@ -674,7 +669,6 @@ export const Setting: React.FC = () => {
             open: false,
             createdAt: '',
             tagName: '',
-            body: '',
           })
         }}
       />

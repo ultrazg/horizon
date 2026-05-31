@@ -11,7 +11,6 @@ type IProps = {
   newVersionInfo: {
     createdAt: string
     tagName: string
-    body: string
   }
 }
 

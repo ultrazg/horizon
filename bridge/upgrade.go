@@ -139,7 +139,6 @@ func GetGithubReleaseInfo(a *App) (*Latest, error) {
 	return &Latest{
 		TagName:   githubReleaseInfo.TagName,
 		CreatedAt: githubReleaseInfo.CreatedAt,
-		Body:      githubReleaseInfo.Body,
 	}, nil
 }
 
