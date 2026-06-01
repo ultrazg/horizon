@@ -386,12 +386,6 @@ func (a *App) upgradeForWindows() error {
 
 	RemoveFile(zipFilePath)
 
-	if _, err := os.Stat(unzipExecFilePath); err != nil {
-		log.Printf("更新包解压后未找到可执行文件: %v", err)
-
-		return fmt.Errorf("更新包解压后未找到可执行文件: %s", unzipExecFilePath)
-	}
-
 	oldExePath, err := os.Executable()
 	if err != nil {
 		log.Printf("获取当前可执行文件路径失败: %v", err)
@@ -399,58 +393,12 @@ func (a *App) upgradeForWindows() error {
 		return err
 	}
 
-	if !strings.HasSuffix(strings.ToLower(oldExePath), ".exe") {
-		return fmt.Errorf("当前不是 .exe 程序，无法升级: %s", oldExePath)
-	}
-
-	bakExePath := oldExePath + ".bak"
-	logPath := filepath.Join(os.TempDir(), "horizon_update.log")
-
-	// 路径通过命令行参数传入（%~1 = 去引号后的参数），避免拼接到脚本字面量带来的注入风险
-	batchScript := `@echo off
-setlocal enabledelayedexpansion
-set "NEW_EXE=%~1"
-set "OLD_EXE=%~2"
-set "BAK_EXE=%~3"
-set "LOG=%~4"
-
-echo [Update] start > "%LOG%"
-
-REM 1. 等待主程序退出并把旧 exe 重命名为 .bak（最多 10 次）
-set /a retry=0
-:rename_old
-if exist "%BAK_EXE%" del /f /q "%BAK_EXE%" >nul 2>&1
-move /y "%OLD_EXE%" "%BAK_EXE%" >nul 2>&1
-if not errorlevel 1 goto move_new
-set /a retry+=1
-if !retry! GEQ 10 (
-  echo [Update] failed: rename old after !retry! tries >> "%LOG%"
-  start "" "%OLD_EXE%"
-  goto cleanup
-)
+	batchScript := fmt.Sprintf(`@echo off
 timeout /t 1 /nobreak >nul
-goto rename_old
-
-REM 2. 把新 exe 移到旧位置；失败则回滚
-:move_new
-move /y "%NEW_EXE%" "%OLD_EXE%" >nul 2>&1
-if errorlevel 1 (
-  echo [Update] failed: move new, rolling back >> "%LOG%"
-  move /y "%BAK_EXE%" "%OLD_EXE%" >nul 2>&1
-  start "" "%OLD_EXE%"
-  goto cleanup
-)
-
-REM 3. 启动新版本，等旧进程退出后清理备份
-start "" "%OLD_EXE%"
-timeout /t 3 /nobreak >nul
-del /f /q "%BAK_EXE%" >nul 2>&1
-echo [Update] success >> "%LOG%"
-
-:cleanup
-del "%~f0"
-exit /b 0
-`
+move /y "%s" "%s"
+start "" "%s"
+del "%%~f0"
+`, unzipExecFilePath, oldExePath, oldExePath)
 
 	batchFilePath := filepath.Join(os.TempDir(), "horizon_update.bat")
 	err = os.WriteFile(batchFilePath, []byte(batchScript), 0644)
@@ -460,7 +408,7 @@ exit /b 0
 		return err
 	}
 
-	cmd := exec.Command("cmd", "/c", batchFilePath, unzipExecFilePath, oldExePath, bakExePath, logPath)
+	cmd := exec.Command("cmd", "/c", batchFilePath)
 	cmd.SysProcAttr = sysProcAttr
 	err = cmd.Start()
 	if err != nil {
@@ -470,6 +418,7 @@ exit /b 0
 	}
 
 	runtime.Quit(a.ctx)
+	os.Exit(0)
 
 	return nil
 }
