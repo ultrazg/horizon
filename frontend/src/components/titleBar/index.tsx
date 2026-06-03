@@ -3,11 +3,12 @@ import {
   MagnifyingGlassIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+  Cross2Icon,
 } from '@radix-ui/react-icons'
 import { Storage } from '@/utils'
 import styles from './index.module.scss'
 import { NavLink, useNavigate } from 'react-router-dom'
-import { Avatar, TextField } from '@radix-ui/themes'
+import { Avatar, TextField, IconButton } from '@radix-ui/themes'
 import { userType } from '@/types/user'
 import { useBack, useForward } from '@/hooks'
 
@@ -18,12 +19,13 @@ export const TitleBar = () => {
   const [info, setInfo] = useState<userType>({
     uid: '',
   })
+  const [keyword, setKeyword] = useState('')
 
   const onSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && keyword) {
       navigateTo('/search', {
         state: {
-          keyword: e.currentTarget.value,
+          keyword,
         },
       })
     }
@@ -112,6 +114,8 @@ export const TitleBar = () => {
           >
             <TextField.Root
               placeholder="搜索"
+              value={keyword}
+              onChange={(e) => setKeyword(e.currentTarget.value)}
               onKeyDown={onSearch}
             >
               <TextField.Slot>
@@ -120,6 +124,22 @@ export const TitleBar = () => {
                   width="16"
                 />
               </TextField.Slot>
+              {keyword && (
+                <TextField.Slot>
+                  <IconButton
+                    size="1"
+                    variant="ghost"
+                    color="gray"
+                    title="清除"
+                    onClick={() => setKeyword('')}
+                  >
+                    <Cross2Icon
+                      height="14"
+                      width="14"
+                    />
+                  </IconButton>
+                </TextField.Slot>
+              )}
             </TextField.Root>
           </div>
           <div

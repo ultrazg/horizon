@@ -13,6 +13,7 @@ import {
   Separator,
   Switch,
   Tooltip,
+  Spinner,
 } from '@radix-ui/themes'
 import {
   ChevronRightIcon,
@@ -72,6 +73,7 @@ export const Setting: React.FC = () => {
     rejectHotPush: false,
     rejectRecommendation: false,
   })
+  const [preferenceLoading, setPreferenceLoading] = useState<boolean>(false)
   const userInfo: userType = Storage.get('user_info')
   const [blockedModal, setBlockedModal] = useState<boolean>(false)
   const [upgradeModal, setUpgradeModal] = useState<boolean>(false)
@@ -184,11 +186,13 @@ export const Setting: React.FC = () => {
    * 获取用户偏好设置
    */
   const onGetUserPreference = () => {
+    setPreferenceLoading(true)
     getUserPreference()
       .then((res) => setPreferenceLists({ ...res.data.data }))
       .catch((err) => {
         console.error(err)
       })
+      .finally(() => setPreferenceLoading(false))
   }
 
   /**
@@ -310,137 +314,139 @@ export const Setting: React.FC = () => {
       </Card>
 
       <h4>隐私设置</h4>
-      <Card>
-        <Flex>
-          <Box width="100%">{CONSTANT.RECENT_PLAYED_HIDDEN}</Box>
-          <Box>
-            <Switch
-              checked={preferenceLists.isRecentPlayedHidden}
-              onCheckedChange={(checked) => {
-                onUpdateUserPreference(
-                  USER_PREFERENCE_ENUM.isRecentPlayedHidden,
-                  checked,
-                )
-              }}
-            />
-          </Box>
-        </Flex>
-        <Separator
-          my="3"
-          size="4"
-        />
-        <Flex>
-          <Box width="100%">{CONSTANT.LISTEN_MILEAGE_HIDDEN_IN_COMMENT}</Box>
-          <Box>
-            <Switch
-              checked={preferenceLists.isListenMileageHiddenInComment}
-              onCheckedChange={(checked) => {
-                onUpdateUserPreference(
-                  USER_PREFERENCE_ENUM.isListenMileageHiddenInComment,
-                  checked,
-                )
-              }}
-            />
-          </Box>
-        </Flex>
-        <Separator
-          my="3"
-          size="4"
-        />
-        <Flex>
-          <Box width="100%">{CONSTANT.STICKER_LIBRARY_HIDDEN}</Box>
-          <Box>
-            <Switch
-              checked={preferenceLists.isStickerLibraryHidden}
-              onCheckedChange={(checked) => {
-                onUpdateUserPreference(
-                  USER_PREFERENCE_ENUM.isStickerLibraryHidden,
-                  checked,
-                )
-              }}
-            />
-          </Box>
-        </Flex>
-        <Separator
-          my="3"
-          size="4"
-        />
-        <Flex>
-          <Box width="100%">{CONSTANT.STICKER_BOARD_HIDDEN}</Box>
-          <Box>
-            <Switch
-              checked={preferenceLists.isStickerBoardHidden}
-              onCheckedChange={(checked) => {
-                onUpdateUserPreference(
-                  USER_PREFERENCE_ENUM.isStickerBoardHidden,
-                  checked,
-                )
-              }}
-            />
-          </Box>
-        </Flex>
-        <Separator
-          my="3"
-          size="4"
-        />
-        <Flex>
-          <Box width="100%">{CONSTANT.REJECT_HOT_PUSH}</Box>
-          <Box>
-            <Switch
-              checked={preferenceLists.rejectHotPush}
-              onCheckedChange={(checked) => {
-                onUpdateUserPreference(
-                  USER_PREFERENCE_ENUM.rejectHotPush,
-                  checked,
-                )
-              }}
-            />
-          </Box>
-        </Flex>
-        <Separator
-          my="3"
-          size="4"
-        />
-        <Flex>
-          <Box width="100%">{CONSTANT.REJECT_RECOMMEND_ACTION}</Box>
-          <Box>
-            <Switch
-              checked={preferenceLists.rejectRecommendation}
-              onCheckedChange={(checked) => {
-                onUpdateUserPreference(
-                  USER_PREFERENCE_ENUM.rejectRecommendation,
-                  checked,
-                )
-              }}
-            />
-          </Box>
-        </Flex>
-        <Separator
-          my="3"
-          size="4"
-        />
-        <Flex
-          style={{ cursor: 'pointer' }}
-          onClick={() => {
-            setBlockedModal(true)
-          }}
-        >
-          <Box width="100%">
-            小黑屋
-            <Tooltip content="已拉黑的用户">
-              <QuestionMarkCircledIcon
-                style={{
-                  marginLeft: '6px',
-                  cursor: 'help',
+      <Spinner loading={preferenceLoading}>
+        <Card>
+          <Flex>
+            <Box width="100%">{CONSTANT.RECENT_PLAYED_HIDDEN}</Box>
+            <Box>
+              <Switch
+                checked={preferenceLists.isRecentPlayedHidden}
+                onCheckedChange={(checked) => {
+                  onUpdateUserPreference(
+                    USER_PREFERENCE_ENUM.isRecentPlayedHidden,
+                    checked,
+                  )
                 }}
               />
-            </Tooltip>
-          </Box>
-          <Box>
-            <ChevronRightIcon />
-          </Box>
-        </Flex>
-      </Card>
+            </Box>
+          </Flex>
+          <Separator
+            my="3"
+            size="4"
+          />
+          <Flex>
+            <Box width="100%">{CONSTANT.LISTEN_MILEAGE_HIDDEN_IN_COMMENT}</Box>
+            <Box>
+              <Switch
+                checked={preferenceLists.isListenMileageHiddenInComment}
+                onCheckedChange={(checked) => {
+                  onUpdateUserPreference(
+                    USER_PREFERENCE_ENUM.isListenMileageHiddenInComment,
+                    checked,
+                  )
+                }}
+              />
+            </Box>
+          </Flex>
+          <Separator
+            my="3"
+            size="4"
+          />
+          <Flex>
+            <Box width="100%">{CONSTANT.STICKER_LIBRARY_HIDDEN}</Box>
+            <Box>
+              <Switch
+                checked={preferenceLists.isStickerLibraryHidden}
+                onCheckedChange={(checked) => {
+                  onUpdateUserPreference(
+                    USER_PREFERENCE_ENUM.isStickerLibraryHidden,
+                    checked,
+                  )
+                }}
+              />
+            </Box>
+          </Flex>
+          <Separator
+            my="3"
+            size="4"
+          />
+          <Flex>
+            <Box width="100%">{CONSTANT.STICKER_BOARD_HIDDEN}</Box>
+            <Box>
+              <Switch
+                checked={preferenceLists.isStickerBoardHidden}
+                onCheckedChange={(checked) => {
+                  onUpdateUserPreference(
+                    USER_PREFERENCE_ENUM.isStickerBoardHidden,
+                    checked,
+                  )
+                }}
+              />
+            </Box>
+          </Flex>
+          <Separator
+            my="3"
+            size="4"
+          />
+          <Flex>
+            <Box width="100%">{CONSTANT.REJECT_HOT_PUSH}</Box>
+            <Box>
+              <Switch
+                checked={preferenceLists.rejectHotPush}
+                onCheckedChange={(checked) => {
+                  onUpdateUserPreference(
+                    USER_PREFERENCE_ENUM.rejectHotPush,
+                    checked,
+                  )
+                }}
+              />
+            </Box>
+          </Flex>
+          <Separator
+            my="3"
+            size="4"
+          />
+          <Flex>
+            <Box width="100%">{CONSTANT.REJECT_RECOMMEND_ACTION}</Box>
+            <Box>
+              <Switch
+                checked={preferenceLists.rejectRecommendation}
+                onCheckedChange={(checked) => {
+                  onUpdateUserPreference(
+                    USER_PREFERENCE_ENUM.rejectRecommendation,
+                    checked,
+                  )
+                }}
+              />
+            </Box>
+          </Flex>
+          <Separator
+            my="3"
+            size="4"
+          />
+          <Flex
+            style={{ cursor: 'pointer' }}
+            onClick={() => {
+              setBlockedModal(true)
+            }}
+          >
+            <Box width="100%">
+              小黑屋
+              <Tooltip content="已拉黑的用户">
+                <QuestionMarkCircledIcon
+                  style={{
+                    marginLeft: '6px',
+                    cursor: 'help',
+                  }}
+                />
+              </Tooltip>
+            </Box>
+            <Box>
+              <ChevronRightIcon />
+            </Box>
+          </Flex>
+        </Card>
+      </Spinner>
 
       <h4>其他</h4>
       <Card>

@@ -366,7 +366,7 @@ func (a *App) ShowChangelog() *ShowChangelogResult {
 	changelogInfo, err := GetChangelogInfo(a)
 	if err != nil {
 		log.Printf("获取更新日志失败: %v", err)
-		return &ShowChangelogResult{Flag: false, Err: "无法获取更新日志，请检查网络连接", Info: ""}
+		return &ShowChangelogResult{Flag: false, Err: "无法获取更新日志", Info: ""}
 	}
 
 	return &ShowChangelogResult{Flag: true, Err: "", Info: changelogInfo}
