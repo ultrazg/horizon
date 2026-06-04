@@ -16,7 +16,11 @@ import { CheckForUpgrade } from 'wailsjs/go/bridge/App'
 import { UpgradeModal } from '@/pages/setting/components/upgradeModal'
 import { Profile } from '@/api/profile'
 import { perspectiveType, userType } from '@/types/user'
-import { SETTING_CONFIG_ENUM, USER_CONFIG_ENUM } from '@/types/config'
+import {
+  PLAY_ENUM,
+  SETTING_CONFIG_ENUM,
+  USER_CONFIG_ENUM,
+} from '@/types/config'
 import { EventsOn } from 'wailsjs/runtime'
 import {
   showPodcastDetailModalType,
@@ -24,6 +28,7 @@ import {
   showStickerModalType,
   showSubscriptionModalType,
 } from '@/types/dialog'
+import { episodeDetail } from '@/api/episode'
 
 export const Root: React.FC = () => {
   const scrollRef = useRef<HTMLDivElement | null>(null)
@@ -87,14 +92,15 @@ export const Root: React.FC = () => {
       })
       .catch((err) => {
         console.error(err)
+        throw err
       })
   }
 
   const onReadConfigFunc = () => {
-    ReadConfig(USER_CONFIG_ENUM.accessToken)
+    const readAccessToken = ReadConfig(USER_CONFIG_ENUM.accessToken)
       .then(async (config) => {
         if (config) {
-          updateProfile()
+          return updateProfile()
             .then(() => {
               goHome()
             })
@@ -106,20 +112,18 @@ export const Root: React.FC = () => {
       .catch((err: any) => {
         console.error('error', err)
       })
-      .finally(() => {
-        setLoading(false)
-      })
 
-    ReadConfig(SETTING_CONFIG_ENUM.checkUpdateOnStartup)
+    const readCheckUpdate = ReadConfig(SETTING_CONFIG_ENUM.checkUpdateOnStartup)
       .then(async (config: boolean) => {
         setCheckUpgrade(() => config)
       })
       .catch((err: any) => {
         console.error('error', err)
       })
-      .finally(() => {
-        setLoading(false)
-      })
+
+    Promise.all([readAccessToken, readCheckUpdate]).finally(() => {
+      setLoading(false)
+    })
   }
 
   const onCheckForUpgrade = () => {
@@ -138,6 +142,13 @@ export const Root: React.FC = () => {
           type: 'warn',
         })
       })
+  }
+
+  async function getLastPlayEpisode() {
+    const eid = await ReadConfig(PLAY_ENUM.LAST_PLAY_EID)
+    const res = await episodeDetail({ eid })
+
+    console.log(res)
   }
 
   useEffect(() => {
@@ -204,6 +215,10 @@ export const Root: React.FC = () => {
       scrollRef.current.scrollTo({ top: 0, behavior: 'smooth' })
     }
   }, [location])
+
+  useEffect(() => {
+    getLastPlayEpisode()
+  }, [loading])
 
   return (
     <>
