@@ -25,15 +25,18 @@
 
     .name {
       height: 48px;
-      line-height: 48px;
       display: flex;
 
       span {
         max-width: 124px;
-        margin: 0 auto;
-        white-space: nowrap;
+        height: 48px;
+        margin: 6px auto;
         overflow: hidden;
-        text-overflow: ellipsis;
+        display: -webkit-box;
+        line-clamp: 2;
+        box-orient: vertical;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
       }
     }
   }
