@@ -25,8 +25,7 @@ type User struct {
 }
 
 type Setting struct {
-	CheckUpdateOnStartup bool   `mapstructure:"check_update_on_startup" json:"checkUpdateOnStartup"`
-	Theme                string `mapstructure:"theme" json:"theme"`
+	Theme string `mapstructure:"theme" json:"theme"`
 }
 
 type Proxy struct {

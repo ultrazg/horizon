@@ -1,5 +1,4 @@
 type settingConfigType = {
-  checkUpdateOnStartup: boolean
   theme: 'light' | 'dark' | 'system'
 }
 
@@ -9,7 +8,6 @@ type userConfigType = {
 }
 
 const SETTING_CONFIG_ENUM = {
-  checkUpdateOnStartup: 'setting.check_update_on_startup',
   theme: 'setting.theme',
 }
 

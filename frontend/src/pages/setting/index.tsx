@@ -62,9 +62,14 @@ import { BsFolder } from 'react-icons/bs'
 
 export const Setting: React.FC = () => {
   const [config, setConfig] = useState<settingConfigType>({
-    checkUpdateOnStartup: false,
     theme: 'light',
   })
+  const [isSpeaker, setIsSpeaker] = useState<boolean>(
+    () => !!Storage.get('isSpeaker'),
+  )
+  const [isOffline, setIsOffline] = useState<boolean>(
+    () => !!Storage.get('isOffline'),
+  )
   const [preferenceLists, setPreferenceLists] = useState<userPreferenceType>({
     isRecentPlayedHidden: false,
     isListenMileageHiddenInComment: false,
@@ -265,10 +270,6 @@ export const Setting: React.FC = () => {
 
     ReadConfig(SETTING_CONFIG_ENUM.theme).then((theme) => {
       setConfig((prevState) => ({ ...prevState, theme: theme || 'light' }))
-    })
-
-    ReadConfig(SETTING_CONFIG_ENUM.checkUpdateOnStartup).then((config) => {
-      setConfig((prevState) => ({ ...prevState, checkUpdateOnStartup: config }))
     })
   }, [])
 
@@ -496,28 +497,6 @@ export const Setting: React.FC = () => {
               <SymbolIcon />
               检查更新...
             </Button>
-          </Box>
-        </Flex>
-        <Separator
-          my="3"
-          size="4"
-        />
-        <Flex>
-          <Box width="100%">启动时检查更新</Box>
-          <Box>
-            <Switch
-              checked={config?.checkUpdateOnStartup}
-              onCheckedChange={(checked: boolean) => {
-                setConfig({
-                  ...config,
-                  checkUpdateOnStartup: checked,
-                })
-                onUpdateConfig(
-                  SETTING_CONFIG_ENUM.checkUpdateOnStartup,
-                  checked,
-                )
-              }}
-            />
           </Box>
         </Flex>
         <Separator

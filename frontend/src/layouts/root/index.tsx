@@ -16,11 +16,7 @@ import { CheckForUpgrade } from 'wailsjs/go/bridge/App'
 import { UpgradeModal } from '@/pages/setting/components/upgradeModal'
 import { Profile } from '@/api/profile'
 import { perspectiveType, userType } from '@/types/user'
-import {
-  PLAY_ENUM,
-  SETTING_CONFIG_ENUM,
-  USER_CONFIG_ENUM,
-} from '@/types/config'
+import { PLAY_ENUM, USER_CONFIG_ENUM } from '@/types/config'
 import { EventsOn } from 'wailsjs/runtime'
 import {
   showPodcastDetailModalType,
@@ -36,8 +32,8 @@ export const Root: React.FC = () => {
   const player = usePlayer()
   const scrollRef = useRef<HTMLDivElement | null>(null)
   const [loading, setLoading] = useState<boolean>(true)
-  const [checkUpgrade, setCheckUpgrade] = useState<boolean>(false)
   const [upgradeModal, setUpgradeModal] = useState<boolean>(false)
+  const [hasUpdate, setHasUpdate] = useState<boolean>(false)
   const location = useLocation()
   const [stickerModalOptions, setStickerModalOptions] = useState<{
     open: boolean
@@ -100,7 +96,7 @@ export const Root: React.FC = () => {
   }
 
   const onReadConfigFunc = () => {
-    const readAccessToken = ReadConfig(USER_CONFIG_ENUM.accessToken)
+    ReadConfig(USER_CONFIG_ENUM.accessToken)
       .then(async (config) => {
         if (config) {
           return updateProfile()
@@ -115,24 +111,16 @@ export const Root: React.FC = () => {
       .catch((err: any) => {
         console.error('error', err)
       })
-
-    const readCheckUpdate = ReadConfig(SETTING_CONFIG_ENUM.checkUpdateOnStartup)
-      .then(async (config: boolean) => {
-        setCheckUpgrade(() => config)
+      .finally(() => {
+        setLoading(false)
       })
-      .catch((err: any) => {
-        console.error('error', err)
-      })
-
-    Promise.all([readAccessToken, readCheckUpdate]).finally(() => {
-      setLoading(false)
-    })
   }
 
   const onCheckForUpgrade = () => {
     CheckForUpgrade()
       .then((res) => {
         if (!res.isLatest && !res.err) {
+          setHasUpdate(true)
           toast('发现新版本！', {
             type: 'info',
             duration: 15 * 1000,
@@ -248,19 +236,16 @@ export const Root: React.FC = () => {
   }, [])
 
   useEffect(() => {
-    if (checkUpgrade) {
-      onCheckForUpgrade()
-    }
-  }, [checkUpgrade])
-
-  useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTo({ top: 0, behavior: 'smooth' })
     }
   }, [location])
 
   useEffect(() => {
-    getLastPlayEpisode()
+    if (!loading) {
+      getLastPlayEpisode()
+      onCheckForUpgrade()
+    }
   }, [loading])
 
   return (
@@ -269,7 +254,7 @@ export const Root: React.FC = () => {
         <Launch />
       ) : (
         <>
-          <TitleBar />
+          <TitleBar hasUpdate={hasUpdate} />
 
           <div
             className={styles['outlet-layout']}

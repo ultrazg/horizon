@@ -13,7 +13,11 @@ import { userType } from '@/types/user'
 import { useBack, useForward } from '@/hooks'
 import { envType } from '@/types/env'
 
-export const TitleBar = () => {
+type TitleBarProps = {
+  hasUpdate?: boolean
+}
+
+export const TitleBar: React.FC<TitleBarProps> = ({ hasUpdate = false }) => {
   const back = useBack()
   const forward = useForward()
   const navigateTo = useNavigate()
@@ -109,7 +113,7 @@ export const TitleBar = () => {
                 收藏
               </NavLink>
             </li>
-            <li>
+            <li className={styles['setting-nav']}>
               <NavLink
                 to="setting"
                 className={({ isActive, isPending }) =>
@@ -118,6 +122,7 @@ export const TitleBar = () => {
               >
                 设置
               </NavLink>
+              {hasUpdate && <span className={styles['red-dot']} />}
             </li>
           </ul>
         </div>

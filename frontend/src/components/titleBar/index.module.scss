@@ -106,6 +106,22 @@
         }
       }
     }
+
+    .setting-nav {
+      position: relative;
+
+      .red-dot {
+        position: absolute;
+        top: -3px;
+        right: -3px;
+        width: 8px;
+        height: 8px;
+        font-size: 8px;
+        background: #e5484d;
+        border-radius: 50%;
+        pointer-events: none;
+      }
+    }
   }
 
   .right-part {
