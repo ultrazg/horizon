@@ -3,7 +3,12 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { Button, Spinner } from '@radix-ui/themes'
 import { search, type searchType } from '@/api/search'
 import styles from './index.module.scss'
-import { ShowPodcastDetailModal, ShowProfileModal, fetchPrivateMediaUrl, toast } from '@/utils'
+import {
+  ShowPodcastDetailModal,
+  ShowProfileModal,
+  fetchPrivateMediaUrl,
+  toast,
+} from '@/utils'
 import {
   ColorfulShadow,
   Empty,
@@ -309,7 +314,10 @@ export const Search: React.FC = () => {
 
                       if (item.payType === 'FREE') {
                         url = item.media.source.url
-                      } else if (item.payType === 'PAY_EPISODE' && item.isOwned) {
+                      } else if (
+                        item.payType === 'PAY_EPISODE' &&
+                        item.isOwned
+                      ) {
                         url = await fetchPrivateMediaUrl(item.eid)
                       } else if (
                         item.payType === 'PAY_EPISODE' &&
@@ -345,7 +353,10 @@ export const Search: React.FC = () => {
 
                       if (item.payType === 'FREE') {
                         url = item.media.source.url
-                      } else if (item.payType === 'PAY_EPISODE' && item.isOwned) {
+                      } else if (
+                        item.payType === 'PAY_EPISODE' &&
+                        item.isOwned
+                      ) {
                         url = await fetchPrivateMediaUrl(item.eid)
                       } else if (
                         item.payType === 'PAY_EPISODE' &&
