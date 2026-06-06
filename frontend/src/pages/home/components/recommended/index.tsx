@@ -24,10 +24,7 @@ const Recommended: React.FC<IProps> = ({ data, loading }) => {
             scrollbars="horizontal"
             style={{ paddingBottom: 6 }}
           >
-            <Flex
-              gap="7"
-              width="700px"
-            >
+            <Flex gap="7">
               {data?.target?.map((item) => (
                 <Box key={item.podcast.pid}>
                   <div className={styles['recommended-item']}>
