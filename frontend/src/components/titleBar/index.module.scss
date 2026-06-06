@@ -37,6 +37,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    --wails-draggable: 'none';
 
     &:hover {
       background: $nav-button-hover-color;
@@ -69,6 +70,7 @@
         height: 32px;
         line-height: 32px;
         display: flex;
+        --wails-draggable: 'none';
 
         &:nth-child(2) {
           margin-left: 6px;

@@ -26,6 +26,7 @@ import { SaveLastPlay } from './event'
 import { hexToRgba } from './string'
 import { formatRelativeDate } from './date'
 import { fetchPrivateMediaUrl } from './fetchPrivateMedia'
+import { getEnv } from './env'
 
 export {
   httpRequest,
@@ -58,4 +59,5 @@ export {
   ShowPodcastDetailModal,
   CleanOldLogs,
   fetchPrivateMediaUrl,
+  getEnv,
 }

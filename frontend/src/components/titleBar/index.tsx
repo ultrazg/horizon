@@ -5,12 +5,13 @@ import {
   ChevronRightIcon,
   Cross2Icon,
 } from '@radix-ui/react-icons'
-import { Storage } from '@/utils'
+import { Storage, getEnv } from '@/utils'
 import styles from './index.module.scss'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { Avatar, TextField, IconButton } from '@radix-ui/themes'
 import { userType } from '@/types/user'
 import { useBack, useForward } from '@/hooks'
+import { envType } from '@/types/env'
 
 export const TitleBar = () => {
   const back = useBack()
@@ -20,6 +21,7 @@ export const TitleBar = () => {
     uid: '',
   })
   const [keyword, setKeyword] = useState('')
+  const [envInfo, setEnvInfo] = useState<envType>()
 
   const onSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && keyword) {
@@ -31,14 +33,31 @@ export const TitleBar = () => {
     }
   }
 
+  async function getEnvInfo() {
+    const env = await getEnv()
+
+    setEnvInfo(env)
+  }
+
   useEffect(() => {
+    getEnvInfo()
+
     const data: userType = Storage.get('user_info')
 
     setInfo(data)
   }, [])
 
   return (
-    <div className={styles['title-bar-layout']}>
+    <div
+      className={styles['title-bar-layout']}
+      style={
+        envInfo?.platform === 'darwin'
+          ? ({
+              '--wails-draggable': 'drag',
+            } as any)
+          : {}
+      }
+    >
       <div className={styles['navbar-layout']}>
         <div className={styles['left-part']}>
           <a
@@ -117,6 +136,7 @@ export const TitleBar = () => {
               value={keyword}
               onChange={(e) => setKeyword(e.currentTarget.value)}
               onKeyDown={onSearch}
+              style={{ borderRadius: 6 }}
             >
               <TextField.Slot>
                 <MagnifyingGlassIcon

@@ -21,10 +21,12 @@ import {
   toast,
   hexToRgba,
   ShowPodcastDetailModal,
+  getEnv,
 } from '@/utils'
 import { CONSTANT } from '@/types/constant'
 import { PlayInfoType } from '@/utils/player'
 import { secondsToHms } from '@/components/playerController/components/episodeCover'
+import { envType } from '@/types/env'
 
 type IProps = {
   player: Player
@@ -47,6 +49,13 @@ export const PlayerDrawer: React.FC<IProps> = ({
   const [right, setRight] = useState<boolean>(false)
   const [progress, setProgress] = React.useState<number>(0)
   const [themeColor, setThemeColor] = useState<string>('')
+  const [envInfo, setEnvInfo] = useState<envType>()
+
+  async function getEnvInfo() {
+    const env = await getEnv()
+
+    setEnvInfo(env)
+  }
 
   /**
    * 标记精彩时刻
@@ -118,6 +127,8 @@ export const PlayerDrawer: React.FC<IProps> = ({
   }
 
   useEffect(() => {
+    getEnvInfo()
+
     if (open && playInfo.eid) {
       getEpisodeDetail()
     }
@@ -151,7 +162,17 @@ export const PlayerDrawer: React.FC<IProps> = ({
         }}
       />
 
-      <div className={styles['close-button']}>
+      <div
+        className={styles['close-button']}
+        style={
+          envInfo?.platform === 'darwin'
+            ? ({
+                '--wails-draggable': 'drag',
+                marginTop: 10,
+              } as any)
+            : {}
+        }
+      >
         <IconButton
           onClick={onClose}
           variant="ghost"
