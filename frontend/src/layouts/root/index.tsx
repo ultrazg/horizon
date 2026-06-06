@@ -9,7 +9,7 @@ import {
   PodcastDetailModal,
 } from '@/components'
 import { useNavigateTo } from '@/hooks'
-import { ReadConfig, Storage, toast } from '@/utils'
+import { fetchPrivateMediaUrl, ReadConfig, Storage, toast } from '@/utils'
 import { Launch } from '@/pages'
 import styles from './index.module.scss'
 import { CheckForUpgrade } from 'wailsjs/go/bridge/App'
@@ -28,9 +28,12 @@ import {
   showStickerModalType,
   showSubscriptionModalType,
 } from '@/types/dialog'
-import { episodeDetail } from '@/api/episode'
+import { episodeDetail, episodePlayProgress } from '@/api/episode'
+import { PlayerEpisodeInfoType } from '@/utils/player'
+import { usePlayer } from '@/layouts/player'
 
 export const Root: React.FC = () => {
+  const player = usePlayer()
   const scrollRef = useRef<HTMLDivElement | null>(null)
   const [loading, setLoading] = useState<boolean>(true)
   const [checkUpgrade, setCheckUpgrade] = useState<boolean>(false)
@@ -144,11 +147,52 @@ export const Root: React.FC = () => {
       })
   }
 
+  async function getEpisodePlayProgress(eid: string) {
+    let progress: number = 0
+    const result = await episodePlayProgress({ eids: [eid] })
+    if (result.data.data.length > 0) {
+      progress = result.data.data[0].progress
+    }
+    return progress
+  }
+
   async function getLastPlayEpisode() {
     const eid = await ReadConfig(PLAY_ENUM.LAST_PLAY_EID)
-    const res = await episodeDetail({ eid })
+    if (eid !== '') {
+      const res = await episodeDetail({ eid })
 
-    console.log(res)
+      const episodeInfo: PlayerEpisodeInfoType = {
+        title: res.data.data.title,
+        eid: res.data.data.eid,
+        pid: res.data.data.podcast.pid,
+        cover: res.data.data?.image
+          ? res.data.data.image.picUrl
+          : res.data.data.podcast.image.picUrl,
+        liked: res.data.data.isFavorited,
+      }
+      let url: string = ''
+      let progress: number = await getEpisodePlayProgress(res.data.data.eid)
+
+      if (res.data.data.payType === 'FREE') {
+        url = res.data.data.media.source.url
+      } else if (
+        res.data.data.payType === 'PAY_EPISODE' &&
+        res.data.data.isOwned
+      ) {
+        url = await fetchPrivateMediaUrl(res.data.data.eid)
+      } else if (
+        res.data.data.payType === 'PAY_EPISODE' &&
+        !res.data.data.isOwned &&
+        res.data.data.trial?.segment
+      ) {
+        url = res.data.data.trial?.segment
+      } else {
+        return
+      }
+
+      player.load(url, episodeInfo)
+      player.seek(progress)
+    }
   }
 
   useEffect(() => {

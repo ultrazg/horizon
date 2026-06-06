@@ -34,6 +34,19 @@ type episodePlayProgressUpdateType = {
   }[]
 }
 
+type episodePlayProgressReq = {
+  eids: string[]
+}
+
+type episodePlayProgressResp = {
+  data: {
+    eid: string
+    pid: string
+    playedAt: string
+    progress: number
+  }[]
+}
+
 type episodeClapCreateType = {
   eid: string
   timestamp: number
@@ -64,6 +77,10 @@ export const episodePlayProgressUpdate = (
   params: episodePlayProgressUpdateType,
 ): Promise<responseType> =>
   httpRequest.post(api.episodePlayProgressUpdate, params)
+
+/** 查询单集播放进度 */
+export const episodePlayProgress = (params: episodePlayProgressReq) =>
+  httpRequest.post<episodePlayProgressResp>(api.episodePlayProgress, params)
 
 /** 标记精彩时间点 */
 export const episodeClapCreate = (

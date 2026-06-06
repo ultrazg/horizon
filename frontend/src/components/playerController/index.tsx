@@ -87,19 +87,6 @@ export const PlayController: React.FC = () => {
     })
   }
 
-  // TODO: 继续上次播放的进度
-  // useEffect(() => {
-  //   ReadConfig()
-  //     .then((res) => {
-  //       if (res.play.last_play_eid && res.play.last_play_eid !== '') {
-  //         const eid = res.play.last_play_eid
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       console.error(err)
-  //     })
-  // }, [])
-
   useEffect(() => {
     const checkLoading = setInterval(() => {
       setPlayerLoading(player.isLoading)

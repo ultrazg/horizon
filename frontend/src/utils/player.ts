@@ -1,4 +1,4 @@
-import { toast, Log } from '@/utils'
+import { toast, Log, SaveLastPlay } from '@/utils'
 
 export type PlayerEpisodeInfoType = {
   title: string
@@ -101,6 +101,8 @@ class Player {
       this.playlist.push({ url, episodeInfo })
       this.notifyPlaylistChange()
     }
+
+    SaveLastPlay(episodeInfo.eid)
 
     console.log(`horizon player - 已加载远程地址 ${url}`)
     Log(`horizon player - 已加载远程地址 ${url}`).then()

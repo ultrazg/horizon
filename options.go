@@ -28,9 +28,8 @@ func AppOptions(app *bridge.App) *options.App {
 			Assets:  assets,
 			Handler: bridge.NewHttpRequest(),
 		},
-		OnStartup:     app.Start,
-		OnBeforeClose: app.BeforeClose,
-		OnShutdown:    app.Shutdown,
+		OnStartup:  app.Start,
+		OnShutdown: app.Shutdown,
 		Bind: []interface{}{
 			app,
 		},

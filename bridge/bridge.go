@@ -41,12 +41,6 @@ func IsMacOS() bool {
 	return runtime.GOOS == "darwin"
 }
 
-func (a *App) BeforeClose(ctx context.Context) bool {
-	r.EventsEmit(a.ctx, "SaveLastPlay")
-
-	return false
-}
-
 func (a *App) Shutdown(ctx context.Context) {
 	log.Println("Shutdown")
 
