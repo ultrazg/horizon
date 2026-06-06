@@ -190,8 +190,7 @@ export const Root: React.FC = () => {
         return
       }
 
-      player.load(url, episodeInfo)
-      player.seek(progress)
+      player.load(url, episodeInfo, progress)
     }
   }
 

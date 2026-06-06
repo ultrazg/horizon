@@ -24,6 +24,7 @@ class Player {
   private playlistListeners: PlaylistListener[] = []
   public playlist: PlaylistItem[] = []
   private audio: HTMLAudioElement
+  private pendingSeek: number | null = null
   public isLoading: boolean = false
   public episodeInfo: PlayerEpisodeInfoType = {
     title: '',
@@ -52,6 +53,12 @@ class Player {
       toast(`播放发生错误`, { type: 'warn' })
       console.error(`horizon player - 加载或播放错误：${e}`)
       Log(`horizon player - 加载或播放错误：${e}`).then()
+    }
+    this.audio.onloadedmetadata = () => {
+      if (this.pendingSeek !== null) {
+        this.audio.currentTime = this.pendingSeek
+        this.pendingSeek = null
+      }
     }
     this.audio.onloadstart = () => {
       this.isLoading = true
@@ -88,8 +95,13 @@ class Player {
    * @param url 远程音频地址
    * @param episodeInfo 单集信息
    */
-  load(url: string, episodeInfo: PlayerEpisodeInfoType): void {
+  load(
+    url: string,
+    episodeInfo: PlayerEpisodeInfoType,
+    startAt?: number,
+  ): void {
     this.isLoading = true
+    this.pendingSeek = startAt ?? null
     this.audio.src = url
     this.episodeInfo = episodeInfo
     this.audio.load()
