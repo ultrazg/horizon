@@ -10,6 +10,7 @@ import { PlayInfoType } from '@/utils/player'
 import { episodePlayProgressUpdate } from '@/api/episode'
 import { updatePlayedList, updatePlayedListType } from '@/api/played'
 import { mileageUpdate, type mileageUpdateType } from '@/api/mileage'
+import { Storage } from '@/utils'
 import dayjs from 'dayjs'
 
 export const PlayController: React.FC = () => {
@@ -39,8 +40,8 @@ export const PlayController: React.FC = () => {
           pid: playInfo.pid,
           startPlayingTimestamp: startTime,
           endPlayingTimestamp: endTime,
-          isSpeaker: false,
-          isOffline: false,
+          isSpeaker: !!Storage.get('isSpeaker'),
+          isOffline: !!Storage.get('isOffline'),
           isTrial: false,
           withSpeed: player.playbackRate,
         },

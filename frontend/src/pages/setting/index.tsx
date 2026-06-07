@@ -449,6 +449,58 @@ export const Setting: React.FC = () => {
         </Card>
       </Spinner>
 
+      <h4>实验性功能</h4>
+      <Card>
+        <Flex>
+          <Box width="100%">
+            是否外放
+            <Tooltip content="开启后将以外放方式请求小宇宙 API。此功能可用于获取「星际DJ」贴纸">
+              <QuestionMarkCircledIcon
+                style={{
+                  marginLeft: '6px',
+                  cursor: 'help',
+                }}
+              />
+            </Tooltip>
+          </Box>
+          <Box>
+            <Switch
+              checked={isSpeaker}
+              onCheckedChange={(checked) => {
+                setIsSpeaker(checked)
+                Storage.set('isSpeaker', checked)
+              }}
+            />
+          </Box>
+        </Flex>
+        <Separator
+          my="3"
+          size="4"
+        />
+        <Flex>
+          <Box width="100%">
+            是否离线
+            <Tooltip content="开启后将以离线方式请求小宇宙 API。此功能可用于获取「星际漫游者」贴纸">
+              <QuestionMarkCircledIcon
+                style={{
+                  marginLeft: '6px',
+                  cursor: 'help',
+                }}
+              />
+            </Tooltip>
+          </Box>
+          <Box>
+            <Switch
+              checked={isOffline}
+              onCheckedChange={(checked) => {
+                setIsOffline(checked)
+                Storage.set('isOffline', checked)
+              }}
+            />
+          </Box>
+        </Flex>
+      </Card>
+
       <h4>其他</h4>
       <Card>
         <Flex>
