@@ -128,6 +128,43 @@ export const PlayController: React.FC = () => {
     }
   }, [player.isPlaying])
 
+  useEffect(() => {
+    return player.onEnded(() => {
+      const endTime = dayjs().valueOf()
+      const startTime = dayjs().subtract(60, 'seconds').valueOf()
+
+      mileageUpdate({
+        tracking: [
+          {
+            eid: player.playInfo.eid,
+            pid: player.playInfo.pid,
+            startPlayingTimestamp: startTime,
+            endPlayingTimestamp: endTime,
+            isSpeaker: !!Storage.get('isSpeaker'),
+            isOffline: !!Storage.get('isOffline'),
+            isTrial: false,
+            withSpeed: player.playbackRate,
+          },
+        ],
+      }).catch((err) => {
+        console.error(err)
+      })
+
+      episodePlayProgressUpdate({
+        data: [
+          {
+            eid: player.playInfo.eid,
+            pid: player.playInfo.pid,
+            progress: Math.round(player.playInfo.duration),
+            playedAt: new Date().toISOString(),
+          },
+        ],
+      }).catch((err) => {
+        console.error(err)
+      })
+    })
+  }, [player])
+
   return (
     <>
       <div className={styles['play-controller-layout']}>

@@ -19,9 +19,11 @@ export type PlaylistItem = {
 }
 
 type PlaylistListener = () => void
+type EndedListener = () => void
 
 class Player {
   private playlistListeners: PlaylistListener[] = []
+  private endedListeners: EndedListener[] = []
   public playlist: PlaylistItem[] = []
   private audio: HTMLAudioElement
   private pendingSeek: number | null = null
@@ -69,6 +71,7 @@ class Player {
     this.audio.onended = () => {
       console.log('horizon player - 播放结束')
       Log('horizon player - 播放结束').then()
+      this.endedListeners.forEach((l) => l())
       this.playNextInPlaylist()
     }
   }
@@ -210,6 +213,14 @@ class Player {
    */
   updatePlayInfo(playInfo: PlayInfoType): void {
     this.episodeInfo = playInfo
+  }
+
+  /** 播放结束监听 */
+  onEnded(listener: EndedListener): () => void {
+    this.endedListeners.push(listener)
+    return () => {
+      this.endedListeners = this.endedListeners.filter((l) => l !== listener)
+    }
   }
 
   /** 播放列表变更监听 */
