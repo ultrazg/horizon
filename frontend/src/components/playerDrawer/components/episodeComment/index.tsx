@@ -106,7 +106,10 @@ export const EpisodeComment: React.FC<IProps> = ({ eid, open, themeColor }) => {
     setLoading(true)
 
     const params: commentPrimaryType = {
-      id: eid,
+      owner: {
+        id: eid,
+        type: 'EPISODE',
+      },
       order: 'HOT',
       loadMoreKey,
     }

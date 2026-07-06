@@ -11,9 +11,12 @@ const api = {
 }
 
 export type commentPrimaryType = {
-  id: string
   order: 'HOT' | 'TIME' | 'TIMESTAMP' // 全部评论（HOT）、最新评论（TIME）、时点评论（TIMESTAMP）
   loadMoreKey?: {}
+  owner: {
+    id: string
+    type: string
+  }
 }
 
 export type commentThreadType = {
