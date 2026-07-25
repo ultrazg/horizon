@@ -41,3 +41,14 @@
   color: #73d13d;
   border: 1px solid #73d13d;
 }
+
+.blocked-user-tag {
+  @include no-select;
+  font-weight: normal;
+  padding: 0 0.3rem;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #8c8c8c;
+  background: #d9d9d9;
+  border: 1px solid #8c8c8c;
+}

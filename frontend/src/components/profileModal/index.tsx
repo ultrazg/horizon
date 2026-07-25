@@ -25,6 +25,7 @@ import {
   Empty,
   PayEpisodeTag,
   OwnedEpisodeTag,
+  BlockedUserTag,
 } from '@/components'
 import {
   SlBubble,
@@ -55,7 +56,10 @@ import { playedList } from '@/api/played'
 import { EpisodeType } from '@/types/episode'
 import dayjs from 'dayjs'
 import { onRelationUpdate } from '@/pages/profile/components/followModal'
-import { onBlockedUserCreate } from '@/pages/setting/components/blockedModal'
+import {
+  onBlockedUserCreate,
+  onBlockedUserRemove,
+} from '@/pages/setting/components/blockedModal'
 import { CONSTANT } from '@/types/constant'
 import { pickListRecent } from '@/api/pick'
 import { ownedPodcasts, type ownedPodcastType } from '@/api/podcast'
@@ -190,7 +194,10 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
       uid,
     }
     getProfile(params)
-      .then((res) => setProfileData(res.data.data))
+      .then((res) => {
+        console.log('getUserProfile', res)
+        setProfileData(res.data.data)
+      })
       .catch(() => {
         toast('获取用户信息失败', { type: 'warn' })
       })
@@ -218,6 +225,20 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
           onClose(true)
         })
       }
+    })
+  }
+
+  /**
+   * 将用户从黑名单移除
+   * @param uid 用户的 uid
+   */
+  function onRemoveBlockHandle(uid: string) {
+    if (uid === userInfo.uid) {
+      return toast('操作失败')
+    }
+
+    onBlockedUserRemove(uid, () => {
+      getUserProfile()
     })
   }
 
@@ -348,16 +369,28 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
                     ? '取消关注'
                     : `关注${renderGender(profileData?.gender)}`}
                 </MyDropdownMenu.Item>
-                <MyDropdownMenu.Item
-                  danger
-                  onClick={() => {
-                    if (profileData?.uid) {
-                      onBlockHandle(profileData.uid, profileData?.nickname)
-                    }
-                  }}
-                >
-                  加入黑名单
-                </MyDropdownMenu.Item>
+                {profileData?.isBlockedByViewer ? (
+                  <MyDropdownMenu.Item
+                    onClick={() => {
+                      if (profileData?.uid) {
+                        onRemoveBlockHandle(profileData.uid)
+                      }
+                    }}
+                  >
+                    移出黑名单
+                  </MyDropdownMenu.Item>
+                ) : (
+                  <MyDropdownMenu.Item
+                    danger
+                    onClick={() => {
+                      if (profileData?.uid) {
+                        onBlockHandle(profileData.uid, profileData?.nickname)
+                      }
+                    }}
+                  >
+                    加入黑名单
+                  </MyDropdownMenu.Item>
+                )}
               </MyDropdownMenu>
             </div>
 
@@ -381,6 +414,11 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
             </div>
 
             <div className={styles['profile-detail-layout']}>
+              {profileData?.isBlockedByViewer && (
+                <div className={styles['blocked-tip']}>
+                  <BlockedUserTag />
+                </div>
+              )}
               <div className={styles['pm-nickname']}>
                 <Text
                   as="div"
@@ -705,7 +743,10 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
 
                         if (item.payType === 'FREE') {
                           url = item.media.source.url
-                        } else if (item.payType === 'PAY_EPISODE' && item.isOwned) {
+                        } else if (
+                          item.payType === 'PAY_EPISODE' &&
+                          item.isOwned
+                        ) {
                           url = await fetchPrivateMediaUrl(item.eid)
                         } else if (
                           item.payType === 'PAY_EPISODE' &&
@@ -741,7 +782,10 @@ export const ProfileModal: React.FC<IProps> = ({ uid, open, onClose }) => {
 
                         if (item.payType === 'FREE') {
                           url = item.media.source.url
-                        } else if (item.payType === 'PAY_EPISODE' && item.isOwned) {
+                        } else if (
+                          item.payType === 'PAY_EPISODE' &&
+                          item.isOwned
+                        ) {
                           url = await fetchPrivateMediaUrl(item.eid)
                         } else if (
                           item.payType === 'PAY_EPISODE' &&

@@ -16,6 +16,7 @@ import { PayEpisodeTag } from './tags/PayEpisodeTag'
 import { PlayedTag } from './tags/PlayedTag'
 import { FinishedTag } from './tags/FinishedTag'
 import { OwnedEpisodeTag } from './tags/OwnedEpisodeTag'
+import { BlockedUserTag } from './tags/BlockedUserTag'
 
 export {
   PlayController,
@@ -36,4 +37,5 @@ export {
   PlayedTag,
   FinishedTag,
   OwnedEpisodeTag,
+  BlockedUserTag,
 }
