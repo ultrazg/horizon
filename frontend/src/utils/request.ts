@@ -13,8 +13,23 @@ const httpRequest: AxiosInstance = axios.create({
   timeout: 15000,
 })
 
+/** 刷新 token 的接口地址 */
+const REFRESH_TOKEN_URL = '/refresh_token'
+
 let isRefreshing: boolean = false
-let queue: Array<any> = []
+let queue: Array<{
+  resolve: (token: string) => void
+  reject: (reason?: any) => void
+}> = []
+
+/**
+ * 清空等待队列并全部拒绝
+ * 只跳登录页而不处理队列的话，排队中的请求会永远挂起
+ */
+const rejectQueue = (reason?: any) => {
+  queue.forEach((item) => item.reject(reason))
+  queue = []
+}
 
 httpRequest.interceptors.response.use(
   (response: AxiosResponse) => {
@@ -29,27 +44,33 @@ httpRequest.interceptors.response.use(
       `response status:${response?.status} url:${response?.request?.responseURL} data:${response?.config?.data}`,
     ).then()
 
-    if (statusCode === 401) {
-      const XJikeAccessToken: string = await ReadConfig(
-        USER_CONFIG_ENUM.accessToken,
-      )
-      const XJikeRefreshToken: string = await ReadConfig(
-        USER_CONFIG_ENUM.refreshToken,
-      )
-
-      const params = {
-        'x-jike-access-token': XJikeAccessToken,
-        'x-jike-refresh-token': XJikeRefreshToken,
-      }
-
+    // 刷新 token 请求自身的 401 必须跳过，否则它也会走下面的逻辑排队等待刷新结果，形成死循环
+    if (statusCode === 401 && error.config?.url !== REFRESH_TOKEN_URL) {
       try {
         if (!isRefreshing) {
+          // 先置位再 await，避免并发请求同时触发多次刷新
           isRefreshing = true
+
+          const XJikeAccessToken: string = await ReadConfig(
+            USER_CONFIG_ENUM.accessToken,
+          )
+          const XJikeRefreshToken: string = await ReadConfig(
+            USER_CONFIG_ENUM.refreshToken,
+          )
+
+          const params = {
+            'x-jike-access-token': XJikeAccessToken,
+            'x-jike-refresh-token': XJikeRefreshToken,
+          }
 
           return refreshToken(params)
             .then(async (res) => {
               const XJikeAccessToken = res.data['x-jike-access-token']
               const XJikeRefreshToken = res.data['x-jike-refresh-token']
+
+              if (!XJikeAccessToken || !XJikeRefreshToken) {
+                throw new Error('刷新 token 响应缺少 token 字段')
+              }
 
               await UpdateConfig(USER_CONFIG_ENUM.accessToken, XJikeAccessToken)
               await UpdateConfig(
@@ -57,20 +78,19 @@ httpRequest.interceptors.response.use(
                 XJikeRefreshToken,
               )
 
+              // 唤醒队列中等待的请求，用新 token 重试
+              queue.forEach((item) => item.resolve(XJikeAccessToken))
+              queue = []
+
               if (response) {
                 response.headers['x-jike-access-token'] = XJikeAccessToken
-
-                queue.forEach((cb) => {
-                  cb(XJikeAccessToken)
-                })
-                queue = []
-
                 return httpRequest(response.config)
               }
             })
             .catch((err) => {
               console.error(err)
               Log(`refresh token 发生异常：${err}`).then()
+              rejectQueue(err)
               window.location.href = '/#/login'
               return Promise.reject(err)
             })
@@ -78,18 +98,22 @@ httpRequest.interceptors.response.use(
               isRefreshing = false
             })
         } else {
-          return new Promise((resolve) => {
-            if (response) {
-              queue.push((token: string) => {
-                response.headers['x-jike-access-token'] = token
-                resolve(httpRequest(response.config))
-              })
-            }
+          return new Promise((resolve, reject) => {
+            queue.push({
+              resolve: (token: string) => {
+                if (response) {
+                  response.headers['x-jike-access-token'] = token
+                  resolve(httpRequest(response.config))
+                }
+              },
+              reject,
+            })
           })
         }
       } catch (err) {
         console.error(err)
         Log(`httpRequest.interceptors.response error ${err}`).then()
+        isRefreshing = false
       }
     }
 
@@ -107,9 +131,7 @@ httpRequest.interceptors.response.use(
       ).then()
     }
 
-    if (response) {
-      return Promise.reject(response.data)
-    }
+    return Promise.reject(response ? response.data : error)
   },
 )
 
@@ -171,11 +193,12 @@ setInterval(async () => {
     await UpdateConfig(USER_CONFIG_ENUM.accessToken, newAccess)
     await UpdateConfig(USER_CONFIG_ENUM.refreshToken, newRefresh)
 
-    queue.forEach((cb) => cb(newAccess))
+    queue.forEach((item) => item.resolve(newAccess))
     queue = []
   } catch (err) {
     console.error('定时刷新 token 失败:', err)
     Log(`定时刷新 token 失败：${err}`).then()
+    rejectQueue(err)
   } finally {
     isRefreshing = false
   }
