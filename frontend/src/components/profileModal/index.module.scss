@@ -57,6 +57,11 @@
   .profile-detail-layout {
     margin-top: 1rem;
 
+    .blocked-tip {
+      text-align: center;
+      margin-bottom: 0.7rem;
+    }
+
     .pm-nickname {
       div {
         &:last-child {
