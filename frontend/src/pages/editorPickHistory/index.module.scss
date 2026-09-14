@@ -57,7 +57,10 @@
 
         .bottom-chunk {
           @include no-select;
-          height: 8rem;
+          min-height: 8rem;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
           background: rgba(245, 245, 245, 0.1);
           margin-top: 1rem;
           border-radius: 4px;

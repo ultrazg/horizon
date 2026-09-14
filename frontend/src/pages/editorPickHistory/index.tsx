@@ -130,14 +130,16 @@ export const EditorPickHistory: React.FC = () => {
                     </div>
                   </div>
                   <div className={styles['bottom-chunk']}>
-                    <div
-                      className={styles['comment']}
-                      title={`@${itm.comment.author.nickname}：${itm.comment.text}`}
-                    >
-                      <span>@{itm.comment.author.nickname}</span>：
-                      {itm.comment.text}
-                      <QuoteIcon />
-                    </div>
+                    {itm.comment && (
+                      <div
+                        className={styles['comment']}
+                        title={`@${itm.comment.author.nickname}：${itm.comment.text}`}
+                      >
+                        <span>@{itm.comment.author.nickname}</span>：
+                        {itm.comment.text}
+                        <QuoteIcon />
+                      </div>
+                    )}
 
                     <div className={styles['listen-data']}>
                       <div className={styles['avatar-group']}>

@@ -23,7 +23,7 @@ type EditorPickHistoryType = {
   date: string
   dateIsoStr: string
   picks: {
-    comment: CommentPrimaryType
+    comment?: CommentPrimaryType
     episode: EpisodeType
     recentAudiences: baseUserType[]
   }[]
